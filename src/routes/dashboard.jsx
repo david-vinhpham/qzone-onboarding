@@ -15,7 +15,7 @@ import Administration from "views/Administration/Administration.jsx";
 import BusinessDetails from "views/BusinessDetails/BusinessDetails.jsx";
 import Calendar from "views/Calendar/Calendar.jsx";
 import CustomerFlow from "views/CustomerFlow/CustomerFlow.jsx";
-import Provider from "views/Provider/Provider.jsx";
+import ProviderDetails from "views/Provider/ProviderDetails.jsx";
 import Reports from "views/Reports/Reports.jsx";
 import Services from "views/Services/Services.jsx";
 
@@ -67,7 +67,7 @@ const dashboardRoutes = [
     path: "/provider/list",
     name: "Provider Details",
     icon: Person,
-    component: Provider
+    component: ProviderDetails
   },
   { redirect: true, path: "/", pathTo: "/dashboard", name: "Dashboard" }
   
