@@ -16,8 +16,6 @@ import logo from "assets/img/logo-white.svg";
 const switchRoutes = (
   <Switch>
     {dashboardRoutes.map((prop, key) => {
-      console.log("oooooooooooo")
-      console.log(prop)
       if (prop.redirect)
         return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
       if (prop.collapse)

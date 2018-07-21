@@ -1,14 +1,13 @@
 // @material-ui/icons
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import Person from "@material-ui/icons/Person";
-import ContentPaste from "@material-ui/icons/ContentPaste";
-import BusinessCenter from "@material-ui/icons/BusinessCenter";
-import Report from "@material-ui/icons/Report";
-import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import BubbleChart from "@material-ui/icons/BubbleChart";
-import LocationOn from "@material-ui/icons/LocationOn";
-import Notifications from "@material-ui/icons/Notifications";
-import Unarchive from "@material-ui/icons/Unarchive";
+import {  Person,
+          ContentPaste,
+          BusinessCenter,
+          Report,
+          BubbleChart,
+          LocationOn,
+        } from "@material-ui/icons";
+
 // core components/views
 import Dashboard from "views/Dashboard/Dashboard.jsx";
 import Administration from "views/Administration/Administration.jsx";
@@ -61,7 +60,6 @@ const dashboardRoutes = [
     name: "Administration",
     icon: LocationOn,
     component: Administration
-
   },
   {
     path: "/provider/list",
@@ -69,8 +67,7 @@ const dashboardRoutes = [
     icon: Person,
     component: ProviderDetails
   },
-  { redirect: true, path: "/", pathTo: "/dashboard", name: "Dashboard" }
-  
+  { redirect: true, path: "/", pathTo: "/login", name: "Login" }
 ];
 
 export default dashboardRoutes;

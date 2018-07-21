@@ -94,14 +94,14 @@ class PagesHeader extends React.Component {
         <Toolbar className={classes.container}>
           <Hidden smDown implementation="css">
             <div className={classes.flex}>
-              <Button href="#" className={classes.title} color="transparent">
+              <Button href="/" className={classes.title} color="transparent">
                 QueZone
               </Button>
             </div>
           </Hidden>
           <Hidden mdUp>
             <div className={classes.flex}>
-              <Button href="#" className={classes.title} color="transparent">
+              <Button href="/" className={classes.title} color="transparent">
                 QueZone
               </Button>
             </div>

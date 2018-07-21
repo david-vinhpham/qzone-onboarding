@@ -8,10 +8,10 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 // @material-ui/icons
-import Timeline from "@material-ui/icons/Timeline";
-import Code from "@material-ui/icons/Code";
-import Group from "@material-ui/icons/Group";
-import Face from "@material-ui/icons/Face";
+// import Timeline from "@material-ui/icons/Timeline";
+// import Code from "@material-ui/icons/Code";
+// import Group from "@material-ui/icons/Group";
+// import Face from "@material-ui/icons/Face";
 import Email from "@material-ui/icons/Email";
 import LockOutline from "@material-ui/icons/LockOutline";
 import Check from "@material-ui/icons/Check";
