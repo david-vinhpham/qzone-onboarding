@@ -5,7 +5,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-import dashboardRoutes from "routes/dashboard.jsx";
+import { dashboardRoutes, otherRoutes } from "routes/dashboard.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -15,7 +15,7 @@ import logo from "assets/img/logo-white.svg";
 
 const switchRoutes = (
   <Switch>
-    {dashboardRoutes.map((prop, key) => {
+    {[...otherRoutes, ...dashboardRoutes].map((prop, key) => {
       if (prop.redirect)
         return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
       if (prop.collapse)

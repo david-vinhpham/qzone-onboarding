@@ -15,10 +15,12 @@ import BusinessDetails from "views/BusinessDetails/BusinessDetails.jsx";
 import Calendar from "views/Calendar/Calendar.jsx";
 import CustomerFlow from "views/CustomerFlow/CustomerFlow.jsx";
 import ProviderDetails from "views/Provider/ProviderDetails.jsx";
+import ProviderCreate from "views/Provider/ProviderCreate.jsx";
+
 import Reports from "views/Reports/Reports.jsx";
 import Services from "views/Services/Services.jsx";
 
-const dashboardRoutes = [
+export const dashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -70,4 +72,11 @@ const dashboardRoutes = [
   { redirect: true, path: "/", pathTo: "/login", name: "Login" }
 ];
 
-export default dashboardRoutes;
+export const otherRoutes=[
+  {
+    path: "/provider/create",
+    name: "Provider Create",
+    icon: Person,
+    component: ProviderCreate
+  }
+]

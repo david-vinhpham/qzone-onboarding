@@ -12,7 +12,7 @@ import Assignment from "@material-ui/icons/Assignment";
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-// import Button from "components/CustomButtons/Button.jsx";
+import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
@@ -46,6 +46,9 @@ class ProviderDetails extends React.Component{
 		            <Assignment />
 		          </CardIcon>
 		          <h4 className={classes.cardIconTitle}>Provider List</h4>
+		          <Button size="sm" href="/provider/create"> 
+                New Provider
+              </Button>
 		        </CardHeader>
 		        <CardBody>
 		          <ReactTable
