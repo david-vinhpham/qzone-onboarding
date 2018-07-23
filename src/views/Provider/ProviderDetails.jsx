@@ -27,7 +27,17 @@ const styles = {
     ...cardTitle,
     marginTop: "15px",
     marginBottom: "0px"
+  },
+  buttonDisplay:{
+  	position: "absolute",
+    right: 0,
+    top: 10,
+    backgroundColor: "#8e24aa",
+    "&:hover,&:focus": {
+      backgroundColor: "#8e24aa"
+    }
   }
+
 };
 
 class ProviderDetails extends React.Component{
@@ -46,7 +56,7 @@ class ProviderDetails extends React.Component{
 		            <Assignment />
 		          </CardIcon>
 		          <h4 className={classes.cardIconTitle}>Provider List</h4>
-		          <Button size="sm" href="/provider/create"> 
+		          <Button size="sm" href="/provider/create" className={classes.buttonDisplay}> 
                 New Provider
               </Button>
 		        </CardHeader>
