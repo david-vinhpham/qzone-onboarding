@@ -6,10 +6,10 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { AppBar, Toolbar, Hidden, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Dashboard, Menu } from "@material-ui/icons";
 import Button from "components/CustomButtons/Button";
-import pagesRoutes from "routes/pages.jsx";
-import pagesHeaderStyle from "assets/jss/material-dashboard-pro-react/components/pagesHeaderStyle.jsx";
+import authRoutes from "routes/auth.jsx";
+import authHeaderStyle from "assets/jss/material-dashboard-pro-react/components/authHeaderStyle.jsx";
 
-class PagesHeader extends React.Component {
+class AuthHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,7 +46,7 @@ class PagesHeader extends React.Component {
             />
           </NavLink>
         </ListItem>
-        {pagesRoutes.map((prop, key) => {
+        {authRoutes.map((prop, key) => {
           if (prop.redirect) {
             return null;
           }
@@ -127,9 +127,9 @@ class PagesHeader extends React.Component {
   }
 }
 
-PagesHeader.propTypes = {
+AuthHeader.propTypes = {
   classes: PropTypes.object.isRequired,
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
 };
 
-export default withStyles(pagesHeaderStyle)(PagesHeader);
+export default withStyles(authHeaderStyle)(AuthHeader);

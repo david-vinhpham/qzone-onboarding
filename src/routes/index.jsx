@@ -1,9 +1,9 @@
 import Dashboard from "layouts/Dashboard.jsx";
-import Pages from "layouts/Pages.jsx";
+import Auth from "layouts/Auth.jsx";
 
 var indexRoutes = [
-  { path: '/login', name: "Pages", component: Pages },
-  { path: '/register', name: "Pages", component: Pages },
+  { path: '/login', name: "Auth", component: Auth },
+  { path: '/register', name: "Auth", component: Auth },
   { path: "/", name: "Home", component: Dashboard },
 ];
 

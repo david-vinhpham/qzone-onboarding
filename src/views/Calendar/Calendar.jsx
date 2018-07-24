@@ -4,14 +4,11 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import CalendarStyle from 'assets/scss/material-dashboard-pro-react/views/calendarStyle.css';
 import '../../../node_modules/fullcalendar/dist/fullcalendar.min.css';
 import FullCalendar from 'fullcalendar-reactwrapper';
-import TimezonePicker from 'react-timezone';
 import {Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button} from '@material-ui/core';
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-
 
 class Calendar extends React.Component {
   constructor(props) {

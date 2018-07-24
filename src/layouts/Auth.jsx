@@ -2,21 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
-import PagesHeader from "components/Header/PagesHeader.jsx";
-import pagesRoutes from "routes/pages.jsx";
+import AuthHeader from "components/Header/AuthHeader.jsx";
+import authRoutes from "routes/auth.jsx";
 import pagesStyle from "assets/jss/material-dashboard-pro-react/layouts/pagesStyle.jsx";
 import bgImage from "assets/img/register.jpeg";
 
-class Pages extends React.Component {
+class Auth extends React.Component {
   render() {
     const { classes, ...rest } = this.props;
     return (
       <div>
-        <PagesHeader {...rest} />
+        <AuthHeader {...rest} />
         <div className={classes.wrapper} ref="wrapper">
           <div className={classes.fullPage}>
             <Switch>
-              {pagesRoutes.map((prop, key) => {
+              {authRoutes.map((prop, key) => {
                 if (prop.collapse) {
                   return null;
                 }
@@ -45,8 +45,8 @@ class Pages extends React.Component {
   }
 }
 
-Pages.propTypes = {
+Auth.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(pagesStyle)(Pages);
+export default withStyles(pagesStyle)(Auth);

@@ -185,6 +185,7 @@ class LoginPage extends React.Component {
                       inputProps={{
                         onChange: event =>
                           this.change(event, "loginPassword", "password"),
+                        type: "password",
                         endAdornment: (
                           <InputAdornment position="end">
                             <LockOutline
