@@ -1,15 +1,9 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import Check from "@material-ui/icons/Check";
-import Clear from "@material-ui/icons/Clear";
-// nodejs library to set properties for components
+import { FormControl, InputLabel, Input } from "@material-ui/core";
+import { Check, Clear } from "@material-ui/icons";
 import PropTypes from "prop-types";
-// nodejs library that concatenates classes
 import classNames from "classnames";
-
 import customInputStyle from "assets/jss/material-dashboard-pro-react/components/customInputStyle.jsx";
 
 function CustomInput({ ...props }) {

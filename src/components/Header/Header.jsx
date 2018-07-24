@@ -1,22 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
-
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Hidden from "@material-ui/core/Hidden";
-
-// material-ui icons
-import Menu from "@material-ui/icons/Menu";
-import MoreVert from "@material-ui/icons/MoreVert";
-import ViewList from "@material-ui/icons/ViewList";
-
-// core components
+import { AppBar, Toolbar, Hidden } from "@material-ui/core";
+import { Menu, MoreVert,ViewList } from "@material-ui/icons";
 import HeaderLinks from "./HeaderLinks";
 import Button from "components/CustomButtons/Button.jsx";
-
 import headerStyle from "assets/jss/material-dashboard-pro-react/components/headerStyle.jsx";
 
 function Header({ ...props }) {
@@ -38,16 +27,12 @@ function Header({ ...props }) {
     });
     return name;
   }
-  const { classes, color, rtlActive } = props;
+  const { classes, color } = props;
   const appBarClasses = cx({
     [" " + classes[color]]: color
   });
   const sidebarMinimize =
-    classes.sidebarMinimize +
-    " " +
-    cx({
-      [classes.sidebarMinimizeRTL]: rtlActive
-    });
+    classes.sidebarMinimize 
   return (
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
@@ -75,13 +60,12 @@ function Header({ ...props }) {
           </div>
         </Hidden>
         <div className={classes.flex}>
-          {/* Here we create navbar brand, based on route name */}
           <Button href="#" className={classes.title} color="transparent">
             {makeBrand()}
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          <HeaderLinks rtlActive={rtlActive} />
+          <HeaderLinks />
         </Hidden>
         <Hidden mdUp>
           <Button
@@ -101,8 +85,7 @@ function Header({ ...props }) {
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
-  rtlActive: PropTypes.bool
+  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
 };
 
 export default withStyles(headerStyle)(Header);

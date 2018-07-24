@@ -1,0 +1,22 @@
+.fc-toolbar .fc-state-active, .fc-toolbar .ui-state-active {
+  background-color: #9c27b0;
+  color: #fff
+}
+.fc-button-group .fc-prev-button .fc-button .fc-state-default .fc-corner-left {
+  background-color: #9c27b0;
+  color: #fff;
+}
+.fc-button-group .fc-prev-button .fc-button .fc-state-default .fc-corner-left {
+  background-color: #9c27b0;
+  color: #fff;
+}
+.fc-toolbar.fc-header-toolbar {
+  margin-bottom: 1em;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/*today
+background-color #999
+border-color #999*/

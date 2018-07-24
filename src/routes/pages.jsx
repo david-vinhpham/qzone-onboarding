@@ -1,7 +1,5 @@
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
-
-// @material-ui/icons
 import { PersonAdd, Fingerprint } from "@material-ui/icons";
 
 const pagesRoutes = [

@@ -2,27 +2,11 @@ import React from "react";
 import cx from "classnames";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
-
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Hidden from "@material-ui/core/Hidden";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-
-// @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
-import Menu from "@material-ui/icons/Menu";
-
-// core components
+import { AppBar, Toolbar, Hidden, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Dashboard, Menu } from "@material-ui/icons";
 import Button from "components/CustomButtons/Button";
-
 import pagesRoutes from "routes/pages.jsx";
-
 import pagesHeaderStyle from "assets/jss/material-dashboard-pro-react/components/pagesHeaderStyle.jsx";
 
 class PagesHeader extends React.Component {
@@ -35,7 +19,6 @@ class PagesHeader extends React.Component {
   handleDrawerToggle = () => {
     this.setState({ open: !this.state.open });
   };
-  // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }

@@ -1,29 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-
-// @material-ui/icons
-// import Timeline from "@material-ui/icons/Timeline";
-// import Code from "@material-ui/icons/Code";
-// import Group from "@material-ui/icons/Group";
-// import Face from "@material-ui/icons/Face";
-import Email from "@material-ui/icons/Email";
-import LockOutline from "@material-ui/icons/LockOutline";
-import Check from "@material-ui/icons/Check";
-
-// core components
+import { InputAdornment, Checkbox, FormControlLabel } from "@material-ui/core";
+import { Email, LockOutline, Check } from "@material-ui/icons";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-
 import registerPageStyle from "assets/jss/material-dashboard-pro-react/views/registerPageStyle";
 
 class RegisterPage extends React.Component {
@@ -39,7 +24,6 @@ class RegisterPage extends React.Component {
       registerCheckbox: false,
       registerCheckboxState: ""
     };
-    // this.handleToggle = this.handleToggle.bind(this);
     this.change = this.change.bind(this);
   }
   // handleToggle(value) {
@@ -66,7 +50,6 @@ class RegisterPage extends React.Component {
     return false;
   }
 
-  // function that verifies if a string has a given length or not
   verifyLength(value, length) {
     if (value.length >= length) {
       return true;
@@ -174,7 +157,6 @@ class RegisterPage extends React.Component {
                         labelText="Email"
                         success={this.state.registerEmailState === "success"}
                         error={this.state.registerEmailState === "error"}
-                        // id="email"
                         id="registeremail"
                         formControlProps={{
                           fullWidth: true

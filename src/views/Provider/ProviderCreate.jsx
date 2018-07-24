@@ -37,7 +37,6 @@ class ProviderCreate extends React.Component{
       isOpenChecked: ""
     };
 
-    // this.handleProvider = this.handleProvider.bind(this);
     this.change = this.change.bind(this);
   }
 

@@ -1,4 +1,3 @@
-// @material-ui/icons
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import {  Person,
           ContentPaste,
@@ -7,8 +6,6 @@ import {  Person,
           BubbleChart,
           LocationOn,
         } from "@material-ui/icons";
-
-// core components/views
 import Dashboard from "views/Dashboard/Dashboard.jsx";
 import Administration from "views/Administration/Administration.jsx";
 import BusinessDetails from "views/BusinessDetails/BusinessDetails.jsx";
@@ -16,7 +13,6 @@ import Calendar from "views/Calendar/Calendar.jsx";
 import CustomerFlow from "views/CustomerFlow/CustomerFlow.jsx";
 import ProviderDetails from "views/Provider/ProviderDetails.jsx";
 import ProviderCreate from "views/Provider/ProviderCreate.jsx";
-
 import Reports from "views/Reports/Reports.jsx";
 import Services from "views/Services/Services.jsx";
 
