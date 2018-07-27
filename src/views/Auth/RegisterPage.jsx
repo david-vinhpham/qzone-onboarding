@@ -164,6 +164,7 @@ class RegisterPage extends React.Component {
                         inputProps={{
                           onChange: event =>
                             this.change(event, "registerEmail", "email"),
+                          type: "email",
                           endAdornment: (
                             <InputAdornment position="end">
                               <Email className={classes.inputAdornmentIcon} />

@@ -167,6 +167,7 @@ class LoginPage extends React.Component {
                       inputProps={{
                         onChange: event =>
                           this.change(event, "loginEmail", "email"),
+                        type: "email",
                         endAdornment: (
                           <InputAdornment position="end">
                             <Email className={classes.inputAdornmentIcon} />

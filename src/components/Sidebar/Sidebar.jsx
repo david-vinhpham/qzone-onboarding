@@ -8,6 +8,7 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText,Hidden, Collapse } f
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
 import avatar from "assets/img/faces/avatar.jpg";
+import otherRoutes from "routes/dashboard.jsx";
 
 var ps;
 
@@ -144,17 +145,74 @@ class Sidebar extends React.Component {
                 </ListItem>
                 <ListItem className={classes.collapseItem}>
                   <NavLink
-                    to="#"
+                    to="/business_details"
                     className={
                       classes.itemLink + " " + classes.userCollapseLinks
                     }
                   >
                     <span className={collapseItemMini}>
-                      {"EP"}
+                      {"UBD"}
                     </span>
                     <ListItemText
                       primary={
-                        "Edit Profile"
+                        "Update Business Details"
+                      }
+                      disableTypography={true}
+                      className={collapseItemText}
+                    />
+                  </NavLink>
+                </ListItem>
+                <ListItem className={classes.collapseItem}>
+                  <NavLink
+                    to="/services"
+                    className={
+                      classes.itemLink + " " + classes.userCollapseLinks
+                    }
+                  >
+                    <span className={collapseItemMini}>
+                      {"MS"}
+                    </span>
+                    <ListItemText
+                      primary={
+                        "Manage Services"
+                      }
+                      disableTypography={true}
+                      className={collapseItemText}
+                    />
+                  </NavLink>
+                </ListItem>
+                <ListItem className={classes.collapseItem}>
+                  <NavLink
+                    to="/administration"
+                    className={
+                      classes.itemLink + " " + classes.userCollapseLinks
+                    }
+                  >
+                    <span className={collapseItemMini}>
+                      {"A"}
+                    </span>
+                    <ListItemText
+                      primary={
+                        "Administartion"
+                      }
+                      disableTypography={true}
+                      className={collapseItemText}
+                    />
+                  </NavLink>
+                </ListItem>
+                <ListItem className={classes.collapseItem}>
+                  <NavLink
+                    to="/provider/list"
+                    className={
+                      classes.itemLink + " " + classes.userCollapseLinks
+                    }
+                  >
+                    <span className={collapseItemMini}>
+                      {"PD"}
+                    </span>
+                    <ListItemText
+                      primary={
+                        "Provider Details"
                       }
                       disableTypography={true}
                       className={collapseItemText}

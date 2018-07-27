@@ -30,6 +30,28 @@ export const dashboardRoutes = [
     component: CustomerFlow    
   },
   {
+    path: "/reports",
+    name: "Reports",
+    icon: Report,
+    component: Reports
+  },
+  {
+    path: "/calendar",
+    name: "Manage Calendar",
+    icon: BubbleChart,
+    component: Calendar
+  },
+  { redirect: true, path: "/", pathTo: "/login", name: "Login" }
+];
+
+export const otherRoutes=[
+  {
+    path: "/provider/create",
+    name: "Provider Create",
+    icon: Person,
+    component: ProviderCreate
+  },
+  {
     path: "/business_details",
     name: "Update Business Details",
     icon: BusinessCenter,
@@ -42,18 +64,6 @@ export const dashboardRoutes = [
     component: Services
   },
   {
-    path: "/reports",
-    name: "Reports",
-    icon: Report,
-    component: Reports
-  },
-  {
-    path: "/calendar",
-    name: "Manage Calendar",
-    icon: BubbleChart,
-    component: Calendar
-  },
-  {
     path: "/administration",
     name: "Administration",
     icon: LocationOn,
@@ -64,15 +74,5 @@ export const dashboardRoutes = [
     name: "Provider Details",
     icon: Person,
     component: ProviderDetails
-  },
-  { redirect: true, path: "/", pathTo: "/login", name: "Login" }
-];
-
-export const otherRoutes=[
-  {
-    path: "/provider/create",
-    name: "Provider Create",
-    icon: Person,
-    component: ProviderCreate
   }
 ]
