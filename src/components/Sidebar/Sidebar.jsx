@@ -8,7 +8,6 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText,Hidden, Collapse } f
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
 import avatar from "assets/img/faces/avatar.jpg";
-import otherRoutes from "routes/dashboard.jsx";
 
 var ps;
 
