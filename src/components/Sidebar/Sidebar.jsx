@@ -42,11 +42,6 @@ class Sidebar extends React.Component {
     super(props);
     this.state = {
       openAvatar: false,
-      openComponents: this.activeRoute("/components"),
-      openForms: this.activeRoute("/forms"),
-      openTables: this.activeRoute("/tables"),
-      openMaps: this.activeRoute("/maps"),
-      openPages: this.activeRoute("-page"),
       miniActive: true
     };
     this.activeRoute.bind(this);

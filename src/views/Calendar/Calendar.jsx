@@ -42,8 +42,9 @@ class Calendar extends React.Component {
     };
   }
 
-  addNewEventAlert(startDate,endDate) {
+  addNewEventAlert(startDate,endDate,jsEvent,view) {
     this.setState({
+      view: view.type,
       alert: (
         <SweetAlert
           input
@@ -100,15 +101,16 @@ class Calendar extends React.Component {
 					              right: 'month,agendaWeek,agendaDay,list'
 					            }}
 					            defaultView= {this.state.view}
-					            defaultDate={'2018-07-09'}
 					            navLinks= {true} 
 					            editable= {true}
 					            droppable= {true}
 					            selectable= {true}
 					            eventLimit= {true} 
+                      nowIndicator= {true}
 					            events = {this.state.events} 
 					            dropAccept = {true}
-					            select= {(startDate,endDate) => this.addNewEventAlert(startDate,endDate)}
+					            select= {(startDate,endDate,jsEvent,view) => this.addNewEventAlert(startDate,endDate,jsEvent,view)}
+                      getView= {(view)=> this.setState({view})}
 					            
 					          />
 		              </CardBody>
