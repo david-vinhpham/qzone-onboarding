@@ -9,6 +9,7 @@ import {  Person,
 import Dashboard from "views/Dashboard/Dashboard.jsx";
 import Administration from "views/Administration/Administration.jsx";
 import BusinessDetails from "views/BusinessDetails/BusinessDetails.jsx";
+import BusinessEdit from "views/BusinessDetails/BusinessEdit.jsx";
 import Calendar from "views/Calendar/Calendar.jsx";
 import CustomerFlow from "views/CustomerFlow/CustomerFlow.jsx";
 import ProviderDetails from "views/Provider/ProviderDetails.jsx";
@@ -74,5 +75,11 @@ export const otherRoutes=[
     name: "Provider Details",
     icon: Person,
     component: ProviderDetails
-  }
+  },
+  {
+    path: "/business/edit",
+    name: "Business Edit",
+    icon: BusinessCenter,
+    component: BusinessEdit
+  },
 ]
