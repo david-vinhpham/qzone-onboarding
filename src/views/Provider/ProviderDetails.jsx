@@ -10,6 +10,9 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
+import { fetchProviders } from 'actions/provider';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 const styles = {
   cardIconTitle: {
@@ -34,8 +37,13 @@ class ProviderDetails extends React.Component{
     super(props);
     this.state = { data: []}
   }
+  componentWillMount(){
+  	this.props.fetchProviders()
+  }
+
 	render() {
 		const { classes } = this.props;
+		console.log(this.state.data)
 		return (
 		  <GridContainer>
 		    <GridItem xs={12}>
@@ -51,7 +59,7 @@ class ProviderDetails extends React.Component{
 		        </CardHeader>
 		        <CardBody>
 		          <ReactTable
-		            data={this.state.data}
+		            data={this.props.providerLists}
 		            filterable
 		            columns={[
 		              {
@@ -60,7 +68,7 @@ class ProviderDetails extends React.Component{
 		              },
 		              {
 		                Header: "Name",
-		                accessor: "name"
+		                accessor: "firstName"
 		              },
 		              {
 		                Header: "Email",
@@ -68,11 +76,11 @@ class ProviderDetails extends React.Component{
 		              },
 		              {
 		                Header: "Mobile",
-		                accessor: "mobile"
+		                accessor: "mobileNumber"
 		              },
 		              {
 		                Header: "Avg Service Time",
-		                accessor: "avg_service_time"
+		                accessor: "avgServiceTime"
 		              },
 		              {
 		                Header: "Current Wait Time",
@@ -92,4 +100,12 @@ class ProviderDetails extends React.Component{
 	}
 }
 
-export default withStyles(styles)(ProviderDetails);
+function mapStateToProps(state) {
+	return{providerLists: state.providers.data}
+}  
+
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, {fetchProviders}),
+)(ProviderDetails);
+// export default connect(mapStateToProps, mapDispatchToProps)(UsersIndex);

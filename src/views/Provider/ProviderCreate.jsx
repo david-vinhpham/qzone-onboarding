@@ -15,6 +15,9 @@ import CardText from "components/Card/CardText.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import validationFormStyle from "assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+import { createProvider } from 'actions/provider';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 
 class ProviderCreate extends React.Component{
@@ -29,12 +32,19 @@ class ProviderCreate extends React.Component{
       extProviderId: "",
       email: "",
       emailState:"",
-      avgCustomerPerHour: "",
-      mobile: "",
+      avgCustomersPerHour: "",
+      mobileNumber: "",
       credentials:"",
-      preferenceChecked: [],
+      emailPreference: "",
       waitlistChecked: "",
-      isOpenChecked: ""
+      isOpen: "",
+      createdBy: "",
+      createdOn: "",
+      id: "",
+      isDeleted: false,
+      "updatedBy": "",
+      "updatedOn": ""
+
     };
 
     this.change = this.change.bind(this);
@@ -81,21 +91,21 @@ class ProviderCreate extends React.Component{
         }
         this.setState({[stateName]: event.target.value})
         break;
-      case "preference":
-        const { preferenceChecked } = this.state;
-        const currentIndex = preferenceChecked.indexOf(value);
-        const newChecked = [...preferenceChecked];
+      // case "preference":
+      //   const { emailPreference } = this.state;
+      //   const currentIndex = emailPreference.indexOf(value);
+      //   const newChecked = [...emailPreference];
 
-        if (currentIndex === -1) {
-          newChecked.push(value);
-        } else {
-          newChecked.splice(currentIndex, 1);
-        }
+      //   if (currentIndex === -1) {
+      //     newChecked.push(value);
+      //   } else {
+      //     newChecked.splice(currentIndex, 1);
+      //   }
 
-        this.setState({
-          preferenceChecked: newChecked
-        });
-        break;
+      //   this.setState({
+      //     emailPreference: newChecked
+      //   });
+      //   break;
       case "waitlist":
         this.setState({[stateName]: event.target.checked})
         break;
@@ -117,10 +127,17 @@ class ProviderCreate extends React.Component{
       this.setState({ emailState: "error" });
     }
   	if (this.state.firstNameState === "success" && this.state.lastNameState === "success" && this.state.emailState === "success"){
-      if (option === "Save")
-  		  window.location = "/provider/list"
-      else
-        window.location = "/provider/create"
+      if (option === "Save"){
+        this.props.createProvider(this.state, () => {
+          this.props.history.push('/provider/list');
+        });
+        
+      }
+      else{
+        this.props.createProvider(this.state, () => {
+          window.location = "/provider/create"
+        });
+      }
     }
   }
 	render() {
@@ -173,7 +190,7 @@ class ProviderCreate extends React.Component{
                     inputProps={{
                       onChange: event =>
                         this.change(event, "extProviderId"),
-                      type: "text"
+                      type: "number"
                     }}
                   />
                 </GridItem>
@@ -215,7 +232,7 @@ class ProviderCreate extends React.Component{
                     inputProps={{
                       onChange: event =>
                         this.change(event, "avgServiceTime"),
-                      type: "text"
+                      type: "number"
                     }}
                   />
                 </GridItem>
@@ -250,14 +267,14 @@ class ProviderCreate extends React.Component{
                 <GridItem xs={12} sm={4}>
                   <CustomInput
                     labelText="Avg Customer Per Hour"
-                    id="avgCustomerPerHour"
+                    id="avgCustomersPerHour"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
                       onChange: event =>
-                        this.change(event, "avgCustomerPerHour"),
-                      type: "text"
+                        this.change(event, "avgCustomersPerHour"),
+                      type: "number"
                     }}
                   />
                 </GridItem>
@@ -287,8 +304,9 @@ class ProviderCreate extends React.Component{
                       control={
                         <Checkbox
                           tabIndex={-1}
+                          value="IN"
                           onClick={event =>
-                            this.change(event, "preferenceChecked", "preference", 0)
+                            this.change(event, "emailPreference", "preference", 0)
                           }
                           checkedIcon={
                             <Check className={classes.checkedIcon} />
@@ -316,9 +334,9 @@ class ProviderCreate extends React.Component{
                       control={
                         <Checkbox
                           tabIndex={-1}
-
+                          value="DS"
                           onClick={event =>
-                            this.change(event, "preferenceChecked", "preference", 1)
+                            this.change(event, "emailPreference", "preference", 1)
                           }
                           checkedIcon={
                             <Check className={classes.checkedIcon} />
@@ -346,8 +364,9 @@ class ProviderCreate extends React.Component{
                       control={
                         <Checkbox
                           tabIndex={-1}
+                          value="WS"
                           onClick={event =>
-                            this.change(event, "preferenceChecked", "preference", 2)
+                            this.change(event, "emailPreference", "preference", 2)
                           }
                           checkedIcon={
                             <Check className={classes.checkedIcon} />
@@ -417,13 +436,13 @@ class ProviderCreate extends React.Component{
                 <GridItem xs={12} sm={4}>
                   <CustomInput
                     labelText="Mobile No"
-                    id="mobile"
+                    id="mobileNumber"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
                       onChange: event =>
-                        this.change(event, "mobile"),
+                        this.change(event, "mobileNumber"),
                       type: "text"
                     }}
                   />
@@ -475,7 +494,7 @@ class ProviderCreate extends React.Component{
                         <Checkbox
                           tabIndex={-1}
                           onClick={event =>
-                            this.change(event, "isOpenChecked", "isOpen")
+                            this.change(event, "isOpen", "isOpen")
                           }
                           checkedIcon={
                             <Check className={classes.checkedIcon} />
@@ -513,4 +532,7 @@ ProviderCreate.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(validationFormStyle)(ProviderCreate);
+export default compose(
+  withStyles(validationFormStyle),
+  connect(null, {createProvider}),
+)(ProviderCreate);
