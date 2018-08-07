@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { FETCH_PROVIDERS } from 'actions/provider';
 
 export default function(state = {}, action) {

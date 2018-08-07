@@ -29,7 +29,7 @@ const styles = {
 
 };
 
-class ProviderDetails extends React.Component{
+class ServicesList extends React.Component{
 	constructor(props) {
     super(props);
     this.state = { data: []}
@@ -45,7 +45,7 @@ class ProviderDetails extends React.Component{
 		            <Assignment />
 		          </CardIcon>
 		          <h4 className={classes.cardIconTitle}>Service List</h4>
-		          <Button size="sm"  className={classes.buttonDisplay}> 
+		          <Button size="sm"  className={classes.buttonDisplay} href="/services/create"> 
                 New Service
               </Button>
 		        </CardHeader>
@@ -96,4 +96,4 @@ class ProviderDetails extends React.Component{
 	}
 }
 
-export default withStyles(styles)(ProviderDetails);
+export default withStyles(styles)(ServicesList);

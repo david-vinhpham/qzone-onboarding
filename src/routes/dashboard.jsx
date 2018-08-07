@@ -15,7 +15,9 @@ import CustomerFlow from "views/CustomerFlow/CustomerFlow.jsx";
 import ProviderDetails from "views/Provider/ProviderDetails.jsx";
 import ProviderCreate from "views/Provider/ProviderCreate.jsx";
 import Reports from "views/Reports/Reports.jsx";
-import Services from "views/Services/Services.jsx";
+import ServicesList from "views/Services/ServicesList.jsx";
+import ServiceCreate from "views/Services/ServiceCreate.jsx";
+
 
 export const dashboardRoutes = [
   {
@@ -59,10 +61,16 @@ export const otherRoutes=[
     component: BusinessDetails
   },
   {
-    path: "/services",
+    path: "/services/list",
     name: "Manage Services",
     icon: ContentPaste,
-    component: Services
+    component: ServicesList
+  },
+  {
+    path: "/services/create",
+    name: "Create Services",
+    icon: ContentPaste,
+    component: ServiceCreate
   },
   {
     path: "/administration",

@@ -47,9 +47,17 @@ function CustomInput({ ...props }) {
     formControlClasses = classes.formControl;
   }
   var feedbackClasses = classes.feedback;
+  var min_attr= ""
   if (inputProps !== undefined) {
     if (inputProps.endAdornment !== undefined) {
       feedbackClasses = feedbackClasses + " " + classes.feedbackRight;
+    }
+    if (inputProps.type === 'number') {
+      if (inputProps.min !== undefined)
+        min_attr = inputProps.min
+      else {
+        min_attr = ""
+      }
     }
   }
   return (
@@ -71,6 +79,9 @@ function CustomInput({ ...props }) {
           underline: underlineClasses
         }}
         id={id}
+        inputProps={{
+          min: min_attr
+        }}
         {...inputProps}
       />
       {error ? (
