@@ -17,11 +17,18 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import CustomRadio from 'components/CustomRadio/CustomRadio.jsx';
 import _ from 'lodash';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
 class ServiceCreate extends React.Component{
 
 	constructor(props){
 		super(props);
 		this.state = {
+			standardName: "",
 			name: "",
 			nameState: "",
 			avgServiceTime: "",
@@ -62,6 +69,18 @@ class ServiceCreate extends React.Component{
 
 	render(){
 		const { classes } = this.props;
+		const standardNames = [
+		  'Oliver Hansen',
+		  'Van Henry',
+		  'April Tucker',
+		  'Ralph Hubbard',
+		  'Omar Alexander',
+		  'Carlos Abbott',
+		  'Miriam Wagner',
+		  'Bradley Wilkerson',
+		  'Virginia Andrews',
+		  'Kelly Snyder',
+		];
 		return(
 			<GridItem xs={12} sm={12} md={12}>
 			  <Card>
@@ -72,7 +91,43 @@ class ServiceCreate extends React.Component{
           </CardHeader>
 			    <CardBody>
 			    	<form>
-              
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>             
+                    Standard Name
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <FormControl
+                    fullWidth
+                    className={classes.selectFormControl}
+                  >
+                    <InputLabel
+                      htmlFor="simple-select"
+                      className={classes.selectLabel}
+                    >
+                      Choose Standard Name
+                    </InputLabel>
+                    <Select
+                      value={this.state.standardName}
+                      onChange={event =>
+                      	this.change(event, "standardName")}
+                    >
+                      
+                      {standardNames.map(standardName => (
+                        <MenuItem
+                          key={standardName}
+                          value={standardName}
+                          
+                        >
+                          {standardName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </GridItem>
+                
+              </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={3}>
                   <FormLabel className={classes.labelHorizontal}>

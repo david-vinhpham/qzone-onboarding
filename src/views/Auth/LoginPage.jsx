@@ -18,8 +18,6 @@ class LoginPage extends React.Component {
     super(props);
     this.state = {
       cardAnimaton: "cardHidden",
-      loginFirstName: "",
-      loginFirstNameState: "",
       loginEmail: "",
       loginEmailState: "",
       loginPassword: "",
@@ -53,29 +51,19 @@ class LoginPage extends React.Component {
   }
 
   loginClick() {
-    if (this.state.loginFirstNameState === "") {
-      this.setState({ loginFirstNameState: "error" });
-    }
     if (this.state.loginEmailState === "") {
       this.setState({ loginEmailState: "error" });
     }
     if (this.state.loginPasswordState === "") {
       this.setState({ loginPasswordState: "error" });
     }
-    if (this.state.loginFirstNameState === "success" && this.state.loginEmailState === "success" && this.state.loginPasswordState === "success") {
+    if (this.state.loginEmailState === "success" && this.state.loginPasswordState === "success") {
       window.location = '/dashboard'
     }
   }
 
   change(event, stateName, type, stateNameEqualTo, maxValue) {
     switch (type) {
-      case "first-name":
-        if (this.verifyLength(event.target.value, 3)) {
-          this.setState({ [stateName + "State"]: "success" });
-        } else {
-          this.setState({ [stateName + "State"]: "error" });
-        }
-        break;
       case "email":
         if (this.verifyEmail(event.target.value)) {
           this.setState({ [stateName + "State"]: "success" });
@@ -138,24 +126,6 @@ class LoginPage extends React.Component {
                     </div>
                   </CardHeader>
                   <CardBody>
-                    <CustomInput
-                      labelText="First Name.."
-                      success={this.state.loginFirstNameState === "success"}
-                      error={this.state.loginFirstNameState === "error"}
-                      id="firstname"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        onChange: event =>
-                          this.change(event, "loginFirstName", "first-name"),
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Face className={classes.inputAdornmentIcon} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
                     <CustomInput
                       labelText="Email..."
                       success={this.state.loginEmailState === "success"}
