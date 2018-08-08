@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormControlLabel,
-         FormLabel,
-         Checkbox}  from "@material-ui/core";
-import Check from "@material-ui/icons/Check";
+import { FormLabel}  from "@material-ui/core";      
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -18,7 +15,8 @@ import validationFormStyle from "assets/jss/material-dashboard-pro-react/views/v
 import { createProvider } from 'actions/provider';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-
+import CustomCheckbox from "components/CustomCheckbox/CustomCheckbox.jsx"
+import {verifyLength, verifyEmail} from "validation/validation.jsx"
 
 class ProviderCreate extends React.Component{
 	constructor(props) {
@@ -29,91 +27,68 @@ class ProviderCreate extends React.Component{
       lastName: "",
       lastNameState: "",
       avgserviceTime: "",
-      extProviderId: "",
+      externalProviderId: "",
       email: "",
       emailState:"",
       avgCustomersPerHour: "",
       mobileNumber: "",
       credentials:"",
-      emailPreference: "",
-      waitlistChecked: "",
+      emailPreference: [],
+      enableWaitListAppointment: "",
       isOpen: "",
       createdBy: "",
       createdOn: "",
       id: "",
       isDeleted: false,
-      "updatedBy": "",
-      "updatedOn": ""
+      updatedBy: "",
+      updatedOn: ""
 
     };
 
     this.change = this.change.bind(this);
   }
 
-  verifyEmail(value) {
-    var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (emailRex.test(value)) {
-      return true;
-    }
-    return false;
-  }
-
-  verifyLength(value, length) {
-    if (value.length >= length) {
-      return true;
-    }
-    return false;
-  }
-
   change(event, stateName,type,value){
+    this.setState({[stateName]: (event.target.value || event.target.checked)})
   	switch (type) {
       case "first-name":
-        if (this.verifyLength(event.target.value, 3)) {
+        if (verifyLength(event.target.value, 3)) {
           this.setState({ [stateName + "State"]: "success" });
         } else {
           this.setState({ [stateName + "State"]: "error" });
         }
-        this.setState({[stateName]: event.target.value})
         break;
       case "email":
-        if (this.verifyEmail(event.target.value)) {
+        if (verifyEmail(event.target.value)) {
           this.setState({ [stateName + "State"]: "success" });
         } else {
           this.setState({ [stateName + "State"]: "error" });
         }
-        this.setState({[stateName]: event.target.value})
         break;
       case "last-name":
-        if (this.verifyLength(event.target.value, 3)) {
+        if (verifyLength(event.target.value, 3)) {
           this.setState({ [stateName + "State"]: "success" });
         } else {
           this.setState({ [stateName + "State"]: "error" });
         }
-        this.setState({[stateName]: event.target.value})
         break;
-      // case "preference":
-      //   const { emailPreference } = this.state;
-      //   const currentIndex = emailPreference.indexOf(value);
-      //   const newChecked = [...emailPreference];
+      case "preference":
+        const { emailPreference } = this.state;
+        const currentIndex = emailPreference.indexOf(value);
+        const newChecked = [...emailPreference];
 
-      //   if (currentIndex === -1) {
-      //     newChecked.push(value);
-      //   } else {
-      //     newChecked.splice(currentIndex, 1);
-      //   }
+        if (currentIndex === -1) {
+          newChecked.push(event.target.value);
+        } else {
+          newChecked.splice(currentIndex, 1);
+        }
 
-      //   this.setState({
-      //     emailPreference: newChecked
-      //   });
-      //   break;
-      case "waitlist":
-        this.setState({[stateName]: event.target.checked})
+        this.setState({
+          emailPreference: newChecked
+        });
         break;
-      case "isOpen":
-        this.setState({[stateName]: event.target.checked})
-        break;
+      
       default:
-        this.setState({[stateName]: event.target.value})
         break;
     }
   }
@@ -142,7 +117,6 @@ class ProviderCreate extends React.Component{
   }
 	render() {
     const { classes } = this.props;
-
 		return(
 			<GridItem xs={12} sm={12} md={12}>
         <Card>
@@ -183,13 +157,13 @@ class ProviderCreate extends React.Component{
                 <GridItem xs={12} sm={4}>
                   <CustomInput
                     labelText="External Provider Id"
-                    id="extProviderId"
+                    id="externalProviderId"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
                       onChange: event =>
-                        this.change(event, "extProviderId"),
+                        this.change(event, "externalProviderId"),
                       type: "number"
                     }}
                   />
@@ -279,7 +253,6 @@ class ProviderCreate extends React.Component{
                   />
                 </GridItem>
               </GridContainer>
-
               <GridContainer>
                 <GridItem xs={12} sm={2}>
                   <FormLabel
@@ -293,96 +266,24 @@ class ProviderCreate extends React.Component{
                   </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={4}>
-                  <div
-                    className={
-                      classes.checkboxAndRadio +
-                      " " +
-                      classes.checkboxAndRadioHorizontal
-                    }
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          tabIndex={-1}
-                          value="IN"
-                          onClick={event =>
-                            this.change(event, "emailPreference", "preference", 0)
-                          }
-                          checkedIcon={
-                            <Check className={classes.checkedIcon} />
-                          }
-                          icon={<Check className={classes.uncheckedIcon} />}
-                          classes={{
-                            checked: classes.checked
-                          }}
-                        />
-                      }
-                      classes={{
-                        label: classes.label
-                      }}
-                      label="Individual Appointment Alert"
-                    />
-                  </div>
-                  <div
-                    className={
-                      classes.checkboxAndRadio +
-                      " " +
-                      classes.checkboxAndRadioHorizontal
-                    }
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          tabIndex={-1}
-                          value="DS"
-                          onClick={event =>
-                            this.change(event, "emailPreference", "preference", 1)
-                          }
-                          checkedIcon={
-                            <Check className={classes.checkedIcon} />
-                          }
-                          icon={<Check className={classes.uncheckedIcon} />}
-                          classes={{
-                            checked: classes.checked
-                          }}
-                        />
-                      }
-                      classes={{
-                        label: classes.label
-                      }}
-                      label="Daily Summary"
-                    />
-                  </div>
-                  <div
-                    className={
-                      classes.checkboxAndRadio +
-                      " " +
-                      classes.checkboxAndRadioHorizontal
-                    }
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          tabIndex={-1}
-                          value="WS"
-                          onClick={event =>
-                            this.change(event, "emailPreference", "preference", 2)
-                          }
-                          checkedIcon={
-                            <Check className={classes.checkedIcon} />
-                          }
-                          icon={<Check className={classes.uncheckedIcon} />}
-                          classes={{
-                            checked: classes.checked
-                          }}
-                        />
-                      }
-                      classes={{
-                        label: classes.label
-                      }}
-                      label="Weekly Summary"
-                    />
-                  </div>
+                  <CustomCheckbox 
+                    value="IN" 
+                    label="Individual Appointment Alert" 
+                    onClick={event =>this.change(event, "emailPreference", "preference", 2)}
+                    classes={classes}
+                  />
+                  <CustomCheckbox 
+                    value="DS" 
+                    label="Daily Summary" 
+                    onClick={event =>this.change(event, "emailPreference", "preference", 2)}
+                    classes={classes}
+                  />
+                  <CustomCheckbox 
+                    value="WS" 
+                    label="Weekly Summary" 
+                    onClick={event =>this.change(event, "emailPreference", "preference", 2)}
+                    classes={classes}
+                  />
                 </GridItem>
                 <GridItem xs={12} sm={2}>
                   <FormLabel
@@ -395,36 +296,13 @@ class ProviderCreate extends React.Component{
                     Enable WaitList
                   </FormLabel>
                 </GridItem>
-                <GridItem xs={12} sm={2}>
-                  <div
-                    className={
-                      classes.checkboxAndRadio +
-                      " " +
-                      classes.checkboxAndRadioHorizontal
-                    }
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          tabIndex={-1}
-                          onClick={event =>
-                            this.change(event, "waitlistChecked", "waitlist")
-                          }
-                          checkedIcon={
-                            <Check className={classes.checkedIcon} />
-                          }
-                          icon={<Check className={classes.uncheckedIcon} />}
-                          classes={{
-                            checked: classes.checked
-                          }}
-                        />
-                      }
-                      classes={{
-                        label: classes.label
-                      }}
-                      
-                    />
-                  </div>
+                <GridItem xs={12} sm={4}>
+                  <CustomCheckbox 
+                    value="" 
+                    label="" 
+                    onClick={event =>this.change(event, "enableWaitListAppointment", "waitlist")}
+                    classes={classes}
+                  />
                 </GridItem>
               </GridContainer>
               <GridContainer>
@@ -482,34 +360,10 @@ class ProviderCreate extends React.Component{
                   </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={2}>
-                  <div
-                    className={
-                      classes.checkboxAndRadio +
-                      " " +
-                      classes.checkboxAndRadioHorizontal
-                    }
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          tabIndex={-1}
-                          onClick={event =>
-                            this.change(event, "isOpen", "isOpen")
-                          }
-                          checkedIcon={
-                            <Check className={classes.checkedIcon} />
-                          }
-                          icon={<Check className={classes.uncheckedIcon} />}
-                          classes={{
-                            checked: classes.checked
-                          }}
-                        />
-                        }
-                        classes={{
-                          label: classes.label
-                        }}  
-                    />
-                  </div>
+                  <CustomCheckbox 
+                    onClick={event =>this.change(event, "isOpen", "isOpen")}
+                    classes={classes}
+                  />
                 </GridItem>
               </GridContainer>
             </form>

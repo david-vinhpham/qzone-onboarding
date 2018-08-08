@@ -31,19 +31,40 @@ const styles = {
   }
 
 };
-
-class ProviderDetails extends React.Component{
-	constructor(props) {
-    super(props);
-    this.state = { data: []}
+const columns=[
+  {
+    Header: "Id",
+    accessor: "id"
+  },
+  {
+    Header: "Name",
+    accessor: "firstName"
+  },
+  {
+    Header: "Email",
+    accessor: "email"
+  },
+  {
+    Header: "Mobile",
+    accessor: "mobileNumber"
+  },
+  {
+    Header: "Avg Service Time",
+    accessor: "avgServiceTime"
+  },
+  {
+    Header: "Current Wait Time",
+    accessor: "current_wait_time"
   }
+]
+class ProviderDetails extends React.Component{
+	
   componentWillMount(){
   	this.props.fetchProviders()
   }
 
 	render() {
 		const { classes } = this.props;
-		console.log(this.state.data)
 		return (
 		  <GridContainer>
 		    <GridItem xs={12}>
@@ -61,32 +82,7 @@ class ProviderDetails extends React.Component{
 		          <ReactTable
 		            data={this.props.providerLists}
 		            filterable
-		            columns={[
-		              {
-		                Header: "Id",
-		                accessor: "id"
-		              },
-		              {
-		                Header: "Name",
-		                accessor: "firstName"
-		              },
-		              {
-		                Header: "Email",
-		                accessor: "email"
-		              },
-		              {
-		                Header: "Mobile",
-		                accessor: "mobileNumber"
-		              },
-		              {
-		                Header: "Avg Service Time",
-		                accessor: "avgServiceTime"
-		              },
-		              {
-		                Header: "Current Wait Time",
-		                accessor: "current_wait_time"
-		              }
-		            ]}
+		            columns={columns}
 		            defaultPageSize={10}
 		            showPaginationTop
 		            showPaginationBottom={false}
@@ -108,4 +104,3 @@ export default compose(
   withStyles(styles),
   connect(mapStateToProps, {fetchProviders}),
 )(ProviderDetails);
-// export default connect(mapStateToProps, mapDispatchToProps)(UsersIndex);
