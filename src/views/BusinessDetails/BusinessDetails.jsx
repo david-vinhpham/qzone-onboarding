@@ -9,23 +9,20 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
+import CardText from "components/Card/CardText.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
 
 class BusinessDetails extends React.Component{
 
-	handleEdit(){
-    window.location = "/business/edit"		
-	}
 	render() {
 		const { classes } = this.props;
 	  return (
       <Card>
         <CardHeader color="rose" icon>
-          <CardIcon color="rose">
-            <Assignment />
-          </CardIcon>
-          <h4 className={classes.cardIconTitle}>Show Business Details</h4>
+          <CardText color="rose">
+            <h4 className={classes.cardTitle}>Show Business Details</h4>
+          </CardText>
         </CardHeader>
         <CardBody>
         	<GridContainer>
@@ -176,7 +173,7 @@ class BusinessDetails extends React.Component{
         	</GridContainer>
         </CardBody>
         <CardFooter className={classes.justifyContentCenter}>
-        	<Button color="rose" onClick={this.handleEdit.bind(this)}>
+        	<Button color="rose" href="/business/edit">
           	Edit
           </Button>
           <Button color="rose">

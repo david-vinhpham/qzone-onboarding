@@ -7,6 +7,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import CardText from "components/Card/CardText.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
@@ -21,9 +22,9 @@ const styles = {
   	position: "absolute",
     right: 0,
     top: 10,
-    backgroundColor: "#8e24aa",
+    backgroundColor: "#d81b60",
     "&:hover,&:focus": {
-      backgroundColor: "#8e24aa"
+      backgroundColor: "#d81b60"
     }
   }
 
@@ -41,10 +42,9 @@ class ServicesList extends React.Component{
 		    <GridItem xs={12}>
 		      <Card>
 		        <CardHeader color="primary" icon>
-		          <CardIcon color="primary">
-		            <Assignment />
-		          </CardIcon>
-		          <h4 className={classes.cardIconTitle}>Service List</h4>
+		         <CardText color="rose">
+	              <h4 className={classes.cardTitle}>Service List</h4>
+	            </CardText>
 		          <Button size="sm"  className={classes.buttonDisplay} href="/services/create"> 
                 New Service
               </Button>

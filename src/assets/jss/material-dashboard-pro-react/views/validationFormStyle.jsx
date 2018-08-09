@@ -3,10 +3,14 @@
 // #############################
 
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
+import customSelectStyle from "assets/jss/material-dashboard-pro-react/customSelectStyle.jsx";
+import modalStyle from "assets/jss/material-dashboard-pro-react/modalStyle.jsx";
 import customCheckboxRadioSwitch from "assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.jsx";
 
-const validationFormsStyle = {
+const validationFormsStyle = theme => ({
   ...customCheckboxRadioSwitch,
+  ...customSelectStyle,
+  ...modalStyle,
   cardTitle: {
     ...cardTitle,
     color: "#FFFFFF"
@@ -30,7 +34,9 @@ const validationFormsStyle = {
   },
   registerButton: {
     float: "right"
-  }
-};
+  },
+  ...modalStyle(theme)
+});
 
 export default validationFormsStyle;
+
