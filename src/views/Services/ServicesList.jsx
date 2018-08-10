@@ -1,14 +1,12 @@
 import React from "react";
 import ReactTable from "react-table";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Assignment from "@material-ui/icons/Assignment";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardText from "components/Card/CardText.jsx";
-import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
 

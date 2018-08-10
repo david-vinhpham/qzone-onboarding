@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel, Input, InputLabel, MenuItem, FormControl, Select }  from "@material-ui/core";  
+import { FormLabel, InputLabel, MenuItem, FormControl, Select }  from "@material-ui/core";  
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";

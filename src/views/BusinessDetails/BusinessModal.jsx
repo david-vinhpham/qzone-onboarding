@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import GridContainer from "components/Grid/GridContainer.jsx";
 import Close from "@material-ui/icons/Close";
-import GridItem from "components/Grid/GridItem.jsx";
-import { FormLabel, InputLabel, MenuItem, FormControl, Select, Modal, Dialog, DialogTitle, DialogContent, DialogActions }  from "@material-ui/core";  
+import { Dialog, DialogTitle, DialogContent, DialogActions }  from "@material-ui/core";  
 import validationFormStyle from "assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import Table from "components/Table/Table.jsx";
 
 class BusinessModal extends React.Component {
   state = {
@@ -60,19 +56,7 @@ class BusinessModal extends React.Component {
           id="classic-modal-slide-description"
           className={classes.modalBody}
         >
-          <Table
-            tableHeaderColor="primary"
-            tableData={[
-              ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
-              ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
-              ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
-              ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
-              ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-              ["Mason Porter", "Chile", "Gloucester", "$78,615"]
-            ]}
-            coloredColls={[3]}
-            colorsColls={["primary"]}
-          />
+          <h6>In Development</h6>
         </DialogContent>
         <DialogActions className={classes.modalFooter}>
           <Button color="transparent">Nice Button</Button>
@@ -92,7 +76,5 @@ class BusinessModal extends React.Component {
 BusinessModal.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-// We need an intermediary variable for handling the recursive nesting.
 
 export default withStyles(validationFormStyle)(BusinessModal);;

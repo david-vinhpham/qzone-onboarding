@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel, InputLabel, MenuItem, FormControl, Select, Modal, Dialog, DialogTitle, DialogContent, DialogActions }  from "@material-ui/core";  
+import { FormLabel, InputLabel, MenuItem, FormControl, Select }  from "@material-ui/core";  
 import GridContainer from "components/Grid/GridContainer.jsx";
-import Close from "@material-ui/icons/Close";
 import GridItem from "components/Grid/GridItem.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
@@ -14,15 +13,14 @@ import CardText from "components/Card/CardText.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import _ from 'lodash';
-import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import validationFormStyle from "assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import CustomRadio from 'components/CustomRadio/CustomRadio.jsx';
 import CustomCheckbox from 'components/CustomCheckbox/CustomCheckbox.jsx';
-import SweetAlert from "react-bootstrap-sweetalert";
 import BusinessModal from "views/BusinessDetails/BusinessModal.jsx";
-
+import * as countryList from "views/BusinessDetails/CountryAndRegion.jsx"
+var regionList = countryList.COUNTRY_REGION[0].regions
 class BusinessEdit extends React.Component{
-	constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       standardName: '',
@@ -43,8 +41,8 @@ class BusinessEdit extends React.Component{
       zipState: '',
       allowGuest: '',
       preferGuest: '',
-      country: 'India',
-      region: 'Rajasthan',
+      country: countryList.COUNTRY_REGION[0].countryName,
+      region: '',
       userId: '',
       enableWaitlist: '',
       telephone: '',
@@ -57,7 +55,7 @@ class BusinessEdit extends React.Component{
       category: '',
       smartNotification: '',
       website: '',
-     	avgRating: '',
+      avgRating: '',
       open: false
 
     };
@@ -66,39 +64,53 @@ class BusinessEdit extends React.Component{
   }
 
   change(event, stateName,type,value){
-  	if (_.isEmpty(event.target.value))
-  		this.setState({[stateName + "State"]: "error"})
-  	else {
+    if (_.isEmpty(event.target.value))
+      this.setState({[stateName + "State"]: "error"})
+    else {
       this.setState({ [stateName + "State"]: "success" });
     }
-  	this.setState({[stateName]: (event.target.value || event.target.checked)})
+    if (stateName === 'country'){
+      countryList.COUNTRY_REGION.map(function(arrVal)
+      {
+        if (arrVal.countryName === event.target.value){
+          regionList = arrVal.regions 
+          return true
+        }
+        return false
+      });
+    }
+    this.setState({[stateName]: (event.target.value || event.target.checked)})
+    
   }
 
-  handleDropdown(event,stateName){
-  	this.setState({[stateName]: event})
+  editBusiness(option) {
+    const {name, address1,city, zip, nameState, address1State, cityState, zipState} = this.state
+    if (_.isEmpty(name))
+      this.setState({nameState: "error"})
+    if (_.isEmpty(address1))
+      this.setState({address1State: "error"})
+    if (_.isEmpty(city))
+      this.setState({cityState: "error"})
+    if (_.isEmpty(zip))
+      this.setState({zipState: "error"})
+    if(nameState === 'success' && address1State === 'success' && cityState === 'success' && zipState === 'success'){
+      window.location = '/business_details'
+    }
   }
 
-  handleProvider(option) {
-  	if (_.isEmpty(this.state.name))
-  		this.setState({nameState: "error"})
-  	if (_.isEmpty(this.state.address1))
-  		this.setState({address1State: "error"})
-  	if (_.isEmpty(this.state.city))
-  		this.setState({cityState: "error"})
-  	if (_.isEmpty(this.state.zip))
-  		this.setState({zipState: "error"})
-  	console.log(this.state)
+  deleteBusiness(){
+
   }
 
   handleModal(){
     this.setState({open: true})
   }
   
-	render() {
+  render() {
     const { classes } = this.props;
     const options = []
-		return(
-			<GridItem xs={12} sm={12} md={12}>
+    return(
+      <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="rose" text>
             <CardText color="rose">
@@ -115,7 +127,7 @@ class BusinessEdit extends React.Component{
                 </GridItem>
                 <GridItem xs={12} sm={7}>
                   <CustomInput
-                  	labelText="Name"
+                    labelText="Name"
                     success={this.state.nameState === "success"}
                     error={this.state.nameState === "error"}
                     id="name"
@@ -123,8 +135,8 @@ class BusinessEdit extends React.Component{
                       fullWidth: true
                     }}
                     inputProps={{
-                    	onChange: event =>
-                      	this.change(event, "name"),
+                      onChange: event =>
+                        this.change(event, "name"),
                       type: "text"
                     }}
                   />
@@ -252,11 +264,27 @@ class BusinessEdit extends React.Component{
                     fullWidth
                     className={classes.selectFormControl}
                   >
-                    <CountryDropdown
+                    <InputLabel
+                      htmlFor="simple-select"
+                      className={classes.selectLabel}
+                    >
+                      Country Name
+                    </InputLabel>
+                    <Select
                       value={this.state.country}
                       onChange={event =>
-                              this.handleDropdown(event, "country")
-                            } />
+                        this.change(event, "country")}
+                      classes={{ select: classes.select }}
+                    > 
+                      {countryList.COUNTRY_REGION.map(country => (
+                        <MenuItem
+                          key={country.countryName}
+                          value={country.countryName} 
+                        >
+                          {country.countryName}
+                        </MenuItem>
+                      ))}
+                    </Select>     
                   </FormControl>
                 </GridItem>
               </GridContainer>
@@ -267,12 +295,32 @@ class BusinessEdit extends React.Component{
                   </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={7}>
-                  <RegionDropdown
-                    country={this.state.country}
-                    value={this.state.region}
-                    onChange={event =>
-                            this.handleDropdown(event, "region")
-                          } />
+                  <FormControl
+                    fullWidth
+                    className={classes.selectFormControl}
+                  >
+                    <InputLabel
+                      htmlFor="simple-select"
+                      className={classes.selectLabel}
+                    >
+                      State Name
+                    </InputLabel>
+                    <Select
+                      value={this.state.region}
+                      onChange={event =>
+                        this.change(event, "region")}
+                      classes={{ select: classes.select }}
+                    > 
+                      {regionList.map(region => (
+                        <MenuItem
+                          key={region.name}
+                          value={region.name}
+                        >
+                          {region.name}
+                        </MenuItem>
+                      ))}
+                    </Select>     
+                  </FormControl>
                 </GridItem>
               </GridContainer>
               <GridContainer>
@@ -320,8 +368,6 @@ class BusinessEdit extends React.Component{
                 <GridItem xs={12} sm={7}>
                   <CustomInput
                     labelText="Telephone"
-                    success={this.state.telephoneState === "success"}
-                    error={this.state.telephoneState === "error"}
                     id="telephone"
                     formControlProps={{
                       fullWidth: true
@@ -343,8 +389,6 @@ class BusinessEdit extends React.Component{
                 <GridItem xs={12} sm={7}>
                   <CustomInput
                     labelText="Extension"
-                    success={this.state.extensionState === "success"}
-                    error={this.state.extensionState === "error"}
                     id="extension"
                     formControlProps={{
                       fullWidth: true
@@ -366,8 +410,6 @@ class BusinessEdit extends React.Component{
                 <GridItem xs={12} sm={7}>
                   <CustomInput
                     labelText="Corporate Code"
-                    success={this.state.corporateCodeState === "success"}
-                    error={this.state.corporateCodeState === "error"}
                     id="corporateCode"
                     formControlProps={{
                       fullWidth: true
@@ -446,7 +488,7 @@ class BusinessEdit extends React.Component{
               <GridContainer>
                 <GridItem xs={12} sm={3}>
                   <FormLabel className={classes.labelHorizontal}>
-                  	Logo
+                    Logo
                   </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={7}>
@@ -475,10 +517,10 @@ class BusinessEdit extends React.Component{
                     }
                   >
                     Service Type
-                	</FormLabel>
+                  </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={2}>
-                	<CustomRadio 
+                  <CustomRadio 
                     checkedValue={this.state.serviceType}
                     label="Counter" 
                     value="counter" 
@@ -487,7 +529,7 @@ class BusinessEdit extends React.Component{
                       this.change(event, "serviceType")}/>
                 </GridItem>
                 <GridItem xs={12} sm={2}>
-                	<CustomRadio 
+                  <CustomRadio 
                     checkedValue={this.state.serviceType}
                     label="Provider" 
                     value="provider" 
@@ -505,15 +547,15 @@ class BusinessEdit extends React.Component{
                 </GridItem>
                 <GridItem xs={12} sm={7}>
                   <CustomInput
-                  	labelText="Number Of Counter"   
+                    labelText="Number Of Counter"   
                     id="counter"
                     
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
-                    	onChange: event =>
-                      	this.change(event, "counter"),
+                      onChange: event =>
+                        this.change(event, "counter"),
                       type: "number",
                       min: "0"
 
@@ -528,9 +570,7 @@ class BusinessEdit extends React.Component{
                   </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={7}>
-
-                  <Link to="#">Update Customer Addi Data</Link>
-                       
+                  <Link to="#" onClick={this.handleModal.bind(this)}>Update Customer Addi Data</Link>                     
                 </GridItem>
                 { this.state.open ? <BusinessModal open={this.state.open} onClose={()=> this.setState({open: false})}/> : ''}
               </GridContainer>    
@@ -645,14 +685,14 @@ class BusinessEdit extends React.Component{
                 </GridItem>
                 <GridItem xs={12} sm={7}>
                   <CustomInput
-                  	labelText="Notification Window"
+                    labelText="Notification Window"
                     id="notificationWindow"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
-                    	onChange: event =>
-                      	this.change(event, "notificationWindow"),
+                      onChange: event =>
+                        this.change(event, "notificationWindow"),
                       type: "text"
                     }}
                   />
@@ -685,14 +725,14 @@ class BusinessEdit extends React.Component{
                 </GridItem>
                 <GridItem xs={12} sm={7}>
                   <CustomInput
-                  	labelText="Avg Rating"
+                    labelText="Avg Rating"
                     id="avg_rating"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
-                    	onChange: event =>
-                      	this.change(event, "avgRating"),
+                      onChange: event =>
+                        this.change(event, "avgRating"),
                       type: "text"
                     }}
                   />
@@ -701,17 +741,17 @@ class BusinessEdit extends React.Component{
             </form>
           </CardBody>
           <CardFooter className={classes.justifyContentCenter}>
-          	<Button color="rose" onClick={this.handleProvider.bind(this)}>
+            <Button color="rose" onClick={this.editBusiness.bind(this)}>
               Update
             </Button>
-            <Button color="rose" onClick={this.handleProvider.bind(this, "Save")}>
+            <Button color="rose" onClick={this.deleteBusiness.bind(this, "Save")}>
               Delete
             </Button>
           </CardFooter>
         </Card>
       </GridItem>
-		)
-	}
+    )
+  }
 }
 
 BusinessEdit.propTypes = {

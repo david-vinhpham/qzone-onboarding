@@ -38,7 +38,6 @@ class ProviderCreate extends React.Component{
       isOpen: "",
       createdBy: "",
       createdOn: "",
-      id: "",
       isDeleted: false,
       updatedBy: "",
       updatedOn: ""
@@ -103,10 +102,9 @@ class ProviderCreate extends React.Component{
     }
   	if (this.state.firstNameState === "success" && this.state.lastNameState === "success" && this.state.emailState === "success"){
       if (option === "Save"){
-        this.props.createProvider(this.state, () => {
-          this.props.history.push('/provider/list');
+        this.props.createProvider(this.state, (response) => {
+          window.location = "/provider/list";
         });
-        
       }
       else{
         this.props.createProvider(this.state, () => {
