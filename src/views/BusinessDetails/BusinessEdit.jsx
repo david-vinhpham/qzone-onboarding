@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel, InputLabel, MenuItem, FormControl, Select }  from "@material-ui/core";  
+import { FormLabel, MenuItem, FormControl, Select }  from "@material-ui/core";  
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -264,12 +264,6 @@ class BusinessEdit extends React.Component{
                     fullWidth
                     className={classes.selectFormControl}
                   >
-                    <InputLabel
-                      htmlFor="simple-select"
-                      className={classes.selectLabel}
-                    >
-                      Country Name
-                    </InputLabel>
                     <Select
                       value={this.state.country}
                       onChange={event =>
@@ -299,12 +293,6 @@ class BusinessEdit extends React.Component{
                     fullWidth
                     className={classes.selectFormControl}
                   >
-                    <InputLabel
-                      htmlFor="simple-select"
-                      className={classes.selectLabel}
-                    >
-                      State Name
-                    </InputLabel>
                     <Select
                       value={this.state.region}
                       onChange={event =>
@@ -334,12 +322,6 @@ class BusinessEdit extends React.Component{
                     fullWidth
                     className={classes.selectFormControl}
                   >
-                    <InputLabel
-                      htmlFor="simple-select"
-                      className={classes.selectLabel}
-                    >
-                      Admin UserId
-                    </InputLabel>
                     <Select
                       value={this.state.standardName}
                       onChange={event =>

@@ -9,30 +9,13 @@ import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardText from "components/Card/CardText.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
-import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
 import { fetchProviders } from 'actions/provider';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Search from "@material-ui/icons/Search";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
+import listPageStyle from "assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
-const styles = {
-  cardIconTitle: {
-    ...cardTitle,
-    marginTop: "15px",
-    marginBottom: "0px"
-  },
-  buttonDisplay:{
-    position: "absolute",
-    right: 0,
-    top: 10,
-    backgroundColor: "#d81b60",
-    "&:hover,&:focus": {
-      backgroundColor: "#d81b60"
-    }
-  }
-
-};
 const columns=[
   {
     Header: "Id",
@@ -63,6 +46,7 @@ const columns=[
   }
 
 ]
+
 class ProviderDetails extends React.Component{
   constructor(props){
     super(props)
@@ -70,20 +54,17 @@ class ProviderDetails extends React.Component{
       data: []
     }
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState({data: nextProps.providerLists})
   }
+
   componentDidMount(){
     this.props.fetchProviders()
   }
 
     render() {
       const { classes } = this.props;
-      const searchButton =
-        classes.top +
-        " " +
-        classes.searchButton +
-        " " 
       if(!this.state.data)
         return null;
       return (
@@ -112,8 +93,7 @@ class ProviderDetails extends React.Component{
                   aria-label="edit"
                   justIcon
                   round
-                  className={searchButton}
-                >
+                  className={classes.top + " " + classes.searchButton} >
                   <Search
                     className={classes.headerLinksSvg + " " + classes.searchIcon}
                   />
@@ -146,6 +126,6 @@ function mapStateToProps(state) {
 }  
 
 export default compose(
-  withStyles(styles),
+  withStyles(listPageStyle),
   connect(mapStateToProps, {fetchProviders}),
 )(ProviderDetails);

@@ -162,21 +162,21 @@ class ProviderForm extends React.Component{
             <CustomCheckbox 
               value="IN" 
               label="Individual Appointment Alert" 
-              checked={this.props.handleCheckbox("IN")}
+              checked={provider.emailPreference.includes("IN") || false}
               onClick={event =>this.props.changeCheckbox(event, "emailPreference", "preference")}
               classes={classes}
             />
             <CustomCheckbox 
               value="DS" 
               label="Daily Summary" 
-              checked={this.props.handleCheckbox("DS")}
+              checked={provider.emailPreference.includes("DS") || false}
               onClick={event =>this.props.changeCheckbox(event, "emailPreference", "preference")}
               classes={classes}
             />
             <CustomCheckbox 
               value="WS" 
               label="Weekly Summary" 
-              checked={this.props.handleCheckbox("WS")}
+              checked={provider.emailPreference.includes("WS") || false}
               onClick={event =>this.props.changeCheckbox(event, "emailPreference", "preference")}
               classes={classes}
             />

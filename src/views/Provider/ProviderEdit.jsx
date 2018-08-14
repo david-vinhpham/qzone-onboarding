@@ -44,7 +44,6 @@ class ProviderEdit extends React.Component{
     };
 
     this.change = this.change.bind(this);
-    this.handleCheckbox = this.handleCheckbox.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
   }
 
@@ -116,13 +115,6 @@ class ProviderEdit extends React.Component{
     }
   }
 
-  handleCheckbox(value){
-    if (this.state.provider.emailPreference)
-      return this.state.provider.emailPreference.includes(value)
-    else
-      return false
-  }
-
   changeCheckbox(event, stateName,type){
     const { emailPreference } = this.state.provider;
     const currentIndex = emailPreference.indexOf(event.target.value || '') ;
@@ -151,7 +143,7 @@ class ProviderEdit extends React.Component{
           </CardText>
         </CardHeader>
         <CardBody>
-          <ProviderForm providerInfo={this.state} change={this.change} changeCheckbox={this.changeCheckbox} handleCheckbox={this.handleCheckbox} classes={this.props.classes}/>
+          <ProviderForm providerInfo={this.state} change={this.change} changeCheckbox={this.changeCheckbox} classes={this.props.classes}/>
         </CardBody>
         <CardFooter className={classes.justifyContentCenter}>
         	<Button color="rose" onClick={this.handleUpdate.bind(this)}>

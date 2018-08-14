@@ -35,7 +35,6 @@ class ProviderCreate extends React.Component{
         isDeleted: false,
         updatedBy: "",
         updatedOn: ""
-        
       },
       firstNameState: "",
       lastNameState: "",
@@ -44,7 +43,6 @@ class ProviderCreate extends React.Component{
     };
 
     this.change = this.change.bind(this);
-    this.handleCheckbox = this.handleCheckbox.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
   }
 
@@ -77,13 +75,6 @@ class ProviderCreate extends React.Component{
       default:
         break;
     }
-  }
-
-  handleCheckbox(value){
-    if (this.state.provider.emailPreference)
-      return this.state.provider.emailPreference.includes(value)
-    else
-      return false
   }
 
   changeCheckbox(event, stateName,type){
@@ -133,7 +124,7 @@ class ProviderCreate extends React.Component{
           </CardText>
         </CardHeader>
         <CardBody>
-          <ProviderForm providerInfo={this.state} change={this.change} changeCheckbox={this.changeCheckbox} handleCheckbox={this.handleCheckbox} classes={this.props.classes}/>
+          <ProviderForm providerInfo={this.state} change={this.change} changeCheckbox={this.changeCheckbox} classes={this.props.classes}/>
         </CardBody>
         <CardFooter className={classes.justifyContentCenter}>
         	<Button color="rose" onClick={this.handleProvider.bind(this)}>
