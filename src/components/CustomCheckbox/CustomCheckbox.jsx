@@ -8,6 +8,7 @@ export default function CustomCheckbox({...props}) {
     label,
     value,
     classes,
+    checked,
     onClick
   } = props;
   return (
@@ -24,6 +25,7 @@ export default function CustomCheckbox({...props}) {
             tabIndex={-1}
             value={value}
             onClick={onClick}
+            checked={checked}
             checkedIcon={
               <Check className={classes.checkedIcon} />
             }
@@ -46,5 +48,7 @@ CustomCheckbox.propTypes = {
   classes: PropTypes.object.isRequired,
   label: PropTypes.node,
   value: PropTypes.string,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  checked: PropTypes.bool
+  
 };  

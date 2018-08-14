@@ -17,7 +17,8 @@ function CustomInput({ ...props }) {
     error,
     white,
     inputRootCustomClasses,
-    success
+    success,
+    value
   } = props;
 
   const labelClasses = classNames({
@@ -79,6 +80,7 @@ function CustomInput({ ...props }) {
           underline: underlineClasses
         }}
         id={id}
+        value={value}
         inputProps={{
           min: min_attr
         }}
@@ -103,7 +105,11 @@ CustomInput.propTypes = {
   inputRootCustomClasses: PropTypes.string,
   error: PropTypes.bool,
   success: PropTypes.bool,
-  white: PropTypes.bool
+  white: PropTypes.bool,
+  value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+          ]),
 };
 
 export default withStyles(customInputStyle)(CustomInput);

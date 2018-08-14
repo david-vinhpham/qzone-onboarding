@@ -1,5 +1,6 @@
 import React from "react";
 import ReactTable from "react-table";
+import { Link } from 'react-router-dom';
 import withStyles from "@material-ui/core/styles/withStyles";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -56,78 +57,92 @@ const columns=[
   {
     Header: "Current Wait Time",
     accessor: "current_wait_time"
+  },
+  {
+    Cell: ({row}) => (<Link to={`/provider/edit/${row.id}`}>Edit</Link>),
   }
+
 ]
 class ProviderDetails extends React.Component{
-    
-  componentWillMount(){
+  constructor(props){
+    super(props)
+    this.state={
+      data: []
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({data: nextProps.providerLists})
+  }
+  componentDidMount(){
     this.props.fetchProviders()
   }
 
     render() {
-        const { classes } = this.props;
-        const searchButton =
-      classes.top +
-      " " +
-      classes.searchButton +
-      " " 
-        return (
-          <GridContainer>
-            <GridItem xs={12}>
-              <Card>
-                <CardHeader color="primary" icon>
-                <CardText color="rose">
-                  <h4 className={classes.cardTitle}>Provider List</h4>
-                </CardText>
-                <div className="search">
-                    <CustomInput
-                          formControlProps={{
-                            className: classes.top + " " + classes.search
-                          }}
-                          inputProps={{
-                            placeholder: "Search",
-                            inputProps: {
-                              "aria-label": "Search",
-                              className: classes.searchInput
-                            }
-                          }}
-                        />
-                        <Button
-                          color="white"
-                          aria-label="edit"
-                          justIcon
-                          round
-                          className={searchButton}
-                        >
-                          <Search
-                            className={classes.headerLinksSvg + " " + classes.searchIcon}
-                          />
-                        </Button>
-                       </div>
-                  <Button size="sm" href="/provider/create" className={classes.buttonDisplay}> 
+      const { classes } = this.props;
+      const searchButton =
+        classes.top +
+        " " +
+        classes.searchButton +
+        " " 
+      if(!this.state.data)
+        return null;
+      return (
+        <GridContainer>
+          <GridItem xs={12}>
+            <Card>
+              <CardHeader color="primary" icon>
+              <CardText color="rose">
+                <h4 className={classes.cardTitle}>Provider List</h4>
+              </CardText>
+              <div className="search">
+                <CustomInput
+                  formControlProps={{
+                    className: classes.top + " " + classes.search
+                  }}
+                  inputProps={{
+                    placeholder: "Search",
+                    inputProps: {
+                      "aria-label": "Search",
+                      className: classes.searchInput
+                    }
+                  }}
+                />
+                <Button
+                  color="white"
+                  aria-label="edit"
+                  justIcon
+                  round
+                  className={searchButton}
+                >
+                  <Search
+                    className={classes.headerLinksSvg + " " + classes.searchIcon}
+                  />
+                </Button>
+              </div>
+              <Button size="sm" href="/provider/create" className={classes.buttonDisplay}> 
                 New Provider
               </Button>
-                </CardHeader>
-                <CardBody>
-                  <ReactTable
-                    data={this.props.providerLists}
-                    filterable
-                    columns={columns}
-                    defaultPageSize={10}
-                    showPaginationTop
-                    showPaginationBottom={false}
-                    className="-striped -highlight"
-                  />
-                </CardBody>
-              </Card>
-            </GridItem>
-          </GridContainer>
-        );
+              </CardHeader>
+              <CardBody>
+                <ReactTable
+                  data={this.state.data}
+                  filterable
+                  columns={columns}
+                  defaultPageSize={10}
+                  showPaginationTop
+                  showPaginationBottom={false}
+                  className="-striped -highlight"
+                />
+              </CardBody>
+            </Card>
+          </GridItem>
+        </GridContainer>
+      );
     }
 }
 
 function mapStateToProps(state) {
-    return{providerLists: state.providers.data}
+  return{providerLists: state.providers.data}
 }  
 
 export default compose(
