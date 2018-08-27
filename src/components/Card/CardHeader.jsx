@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import cardHeaderStyle from "assets/jss/material-dashboard-pro-react/components/cardHeaderStyle.jsx";
+import cardHeaderStyle from "../../assets/jss/material-dashboard-pro-react/components/cardHeaderStyle.jsx";
 
 function CardHeader({ ...props }) {
   const {

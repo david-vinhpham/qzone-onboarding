@@ -7,7 +7,7 @@ import {
   dangerColor,
   primaryColor,
   primaryBoxShadow
-} from "assets/jss/material-dashboard-pro-react.jsx";
+} from "../../material-dashboard-pro-react";
 
 const headerLinksStyle = theme => ({
   popperClose: {

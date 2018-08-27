@@ -1,14 +1,14 @@
 import React from "react";
 import ReactTable from "react-table";
 import withStyles from "@material-ui/core/styles/withStyles";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardText from "components/Card/CardText.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import listPageStyle from "assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import CardText from "../../components/Card/CardText.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
 
 const columns=[
   {

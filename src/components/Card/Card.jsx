@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import cardStyle from "assets/jss/material-dashboard-pro-react/components/cardStyle.jsx";
+import cardStyle from "../../assets/jss/material-dashboard-pro-react/components/cardStyle.jsx";
 
 function Card({ ...props }) {
   const {

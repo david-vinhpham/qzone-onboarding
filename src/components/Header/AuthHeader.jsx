@@ -5,9 +5,9 @@ import { NavLink } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { AppBar, Toolbar, Hidden, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Dashboard, Menu } from "@material-ui/icons";
-import Button from "components/CustomButtons/Button";
-import authRoutes from "routes/auth.jsx";
-import authHeaderStyle from "assets/jss/material-dashboard-pro-react/components/authHeaderStyle.jsx";
+import Button from "../CustomButtons/Button";
+import authRoutes from "../../routes/auth.jsx";
+import authHeaderStyle from "../../assets/jss/material-dashboard-pro-react/components/authHeaderStyle.jsx";
 
 class AuthHeader extends React.Component {
   constructor(props) {

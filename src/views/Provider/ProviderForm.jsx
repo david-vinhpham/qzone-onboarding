@@ -1,11 +1,11 @@
 import React from 'react';
 import withStyles from "@material-ui/core/styles/withStyles";
 import { FormLabel}  from "@material-ui/core";      
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import CustomCheckbox from "components/CustomCheckbox/CustomCheckbox.jsx";
-import validationFormStyle from "assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+import CustomCheckbox from "../../components/CustomCheckbox/CustomCheckbox.jsx";
+import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 
 class ProviderForm extends React.Component{
   

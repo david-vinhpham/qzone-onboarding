@@ -11,7 +11,7 @@ import {
   successColor,
   warningColor,
   dangerColor
-} from "assets/jss/material-dashboard-pro-react.jsx";
+} from "../../material-dashboard-pro-react";
 
 const headerStyle = theme => ({
   appBar: {

@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import promise from 'redux-promise';
 
-import indexRoutes from "routes/index.jsx";
+import indexRoutes from "./routes/index.jsx";
 import reducers from './reducers';
-import "assets/scss/material-dashboard-pro-react.css?v=1.2.0";
+import "./assets/scss/material-dashboard-pro-react.css?v=1.2.0";
 
 const hist = createBrowserHistory();
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);

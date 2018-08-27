@@ -1,18 +1,20 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardText from "components/Card/CardText.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-import validationFormStyle from "assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import { fetchProvider, createProvider } from 'actions/provider';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import {verifyLength, verifyEmail} from "validation/validation.jsx"
-import ProviderForm from "views/Provider/ProviderForm"
+
+import Button from "../../components/CustomButtons/Button.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardText from "../../components/Card/CardText.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import CardFooter from "../../components/Card/CardFooter.jsx";
+import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+import { fetchProvider, createProvider } from '../../actions/provider';
+import {verifyLength, verifyEmail} from "../../validation/validation.jsx"
+import ProviderForm from "./ProviderForm"
+
 class ProviderEdit extends React.Component{
 	constructor(props) {
     super(props);

@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { InputAdornment, Checkbox, FormControlLabel } from "@material-ui/core";
 import { Email, LockOutline, Check } from "@material-ui/icons";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import registerPageStyle from "assets/jss/material-dashboard-pro-react/views/registerPageStyle";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import registerPageStyle from "../../assets/jss/material-dashboard-pro-react/views/registerPageStyle";
 
 class RegisterPage extends React.Component {
   constructor(props) {

@@ -4,13 +4,13 @@ import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-import { dashboardRoutes, otherRoutes } from "routes/dashboard.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
-import Header from "components/Header/Header.jsx";
+import { dashboardRoutes, otherRoutes } from "./../routes/dashboard.jsx";
+import Sidebar from "./../components/Sidebar/Sidebar.jsx";
+import Header from "./../components/Header/Header.jsx";
 import withStyles from "@material-ui/core/styles/withStyles";
-import appStyle from "assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx";
-import image from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/logo-white.svg";
+import appStyle from "./../assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx";
+import image from "./../assets/img/sidebar-2.jpg";
+import logo from "./../assets/img/logo-white.svg";
 
 const switchRoutes = (
   <Switch>

@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Close from "@material-ui/icons/Close";
 import { Dialog, DialogTitle, DialogContent, DialogActions }  from "@material-ui/core";  
-import validationFormStyle from "assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 
 class BusinessModal extends React.Component {
   state = {

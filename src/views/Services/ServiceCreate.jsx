@@ -4,19 +4,20 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import withStyles from "@material-ui/core/styles/withStyles";
 import { FormLabel, InputLabel, MenuItem, FormControl, Select }  from "@material-ui/core";  
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardText from "components/Card/CardText.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-import CustomRadio from 'components/CustomRadio/CustomRadio.jsx';
-import validationFormStyle from "assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import { createProvider } from 'actions/provider';
 import _ from 'lodash';
+
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardText from "../../components/Card/CardText.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import CardFooter from "../../components/Card/CardFooter.jsx";
+import CustomRadio from '../../components/CustomRadio/CustomRadio.jsx';
+import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+import { createProvider } from '../../actions/provider';
 
 class ServiceCreate extends React.Component{
 

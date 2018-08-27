@@ -4,7 +4,7 @@ import { FormControl, InputLabel, Input } from "@material-ui/core";
 import { Check, Clear } from "@material-ui/icons";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import customInputStyle from "assets/jss/material-dashboard-pro-react/components/customInputStyle.jsx";
+import customInputStyle from "../../assets/jss/material-dashboard-pro-react/components/customInputStyle.jsx";
 
 function CustomInput({ ...props }) {
   const {

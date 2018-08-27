@@ -2,10 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
-import AuthHeader from "components/Header/AuthHeader.jsx";
-import authRoutes from "routes/auth.jsx";
-import pagesStyle from "assets/jss/material-dashboard-pro-react/layouts/pagesStyle.jsx";
-import bgImage from "assets/img/register.jpeg";
+import AuthHeader from "../components/Header/AuthHeader.jsx";
+import authRoutes from "../routes/auth.jsx";
+import pagesStyle from "../assets/jss/material-dashboard-pro-react/layouts/pagesStyle.jsx";
+import bgImage from "../assets/img/register.jpeg";
 
 class Auth extends React.Component {
   render() {

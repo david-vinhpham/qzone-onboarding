@@ -2,14 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import SweetAlert from "react-bootstrap-sweetalert";
 import withStyles from "@material-ui/core/styles/withStyles";
-import CalendarStyle from 'assets/scss/material-dashboard-pro-react/views/calendarStyle.css';
+import CalendarStyle from '../../assets/scss/material-dashboard-pro-react/views/calendarStyle.css';
 import '../../../node_modules/fullcalendar/dist/fullcalendar.min.css';
 import FullCalendar from 'fullcalendar-reactwrapper';
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import buttonStyle from "assets/jss/material-dashboard-pro-react/components/buttonStyle.jsx";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import buttonStyle from "../../assets/jss/material-dashboard-pro-react/components/buttonStyle.jsx";
 
 class Calendar extends React.Component {
   constructor(props) {

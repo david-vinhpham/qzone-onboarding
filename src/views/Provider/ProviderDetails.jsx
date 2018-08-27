@@ -1,20 +1,21 @@
 import React from "react";
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
-import withStyles from "@material-ui/core/styles/withStyles";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardText from "components/Card/CardText.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import { fetchProviders } from 'actions/provider';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Search from "@material-ui/icons/Search";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import listPageStyle from "assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
+import withStyles from "@material-ui/core/styles/withStyles";
+
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import CardText from "../../components/Card/CardText.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import { fetchProviders } from '../../actions/provider';
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
 const columns=[
   {

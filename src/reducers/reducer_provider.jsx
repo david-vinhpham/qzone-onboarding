@@ -1,4 +1,4 @@
-import { FETCH_PROVIDERS, FETCH_PROVIDER } from 'actions/provider';
+import { FETCH_PROVIDERS, FETCH_PROVIDER } from './../actions/provider';
 
 export default function(state = {}, action) {
   switch (action.type) {

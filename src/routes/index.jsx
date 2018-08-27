@@ -1,5 +1,5 @@
-import Dashboard from "layouts/Dashboard.jsx";
-import Auth from "layouts/Auth.jsx";
+import Dashboard from "./../layouts/Dashboard.jsx";
+import Auth from "./../layouts/Auth.jsx";
 
 var indexRoutes = [
   { path: '/login', name: "Auth", component: Auth },

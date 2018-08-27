@@ -5,9 +5,9 @@ import { NavLink } from "react-router-dom";
 import cx from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Drawer, List, ListItem, ListItemIcon, ListItemText,Hidden, Collapse } from "@material-ui/core";
-import HeaderLinks from "components/Header/HeaderLinks.jsx";
-import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
-import avatar from "assets/img/faces/avatar.jpg";
+import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
+import sidebarStyle from "../../assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
+import avatar from "../../assets/img/faces/avatar.jpg";
 
 var ps;
 
