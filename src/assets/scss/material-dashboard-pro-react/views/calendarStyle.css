@@ -1,14 +1,38 @@
+.fc-state-default  {
+  margin: 0 0 0 2px;
+  border-radius: 30px;
+  background-color: #14b40f;
+  color: #fff;
+}
+.ui-state-active {
+  margin: 0 0 0 2px;
+  border-radius: 30px;
+  background-color: #14b40f;
+  color: #fff;
+}
+.fc-month-button .fc-button-group .fc-prev-button .fc-button .fc-state-default {
+  margin: 0 0 0 2px;
+  border-radius: 30px;
+  background-color: #14b40f;
+  color: #fff;
+}
 .fc-toolbar .fc-state-active, .fc-toolbar .ui-state-active {
   background-color: #9c27b0;
-  color: #fff
+  color: #fff;
+  margin: 0 0 0 2px;
+  border-radius: 30px;
 }
 .fc-button-group .fc-prev-button .fc-button .fc-state-default .fc-corner-left {
   background-color: #9c27b0;
   color: #fff;
+  margin: 0 0 0 2px;
+  border-radius: 30px;
 }
 .fc-button-group .fc-prev-button .fc-button .fc-state-default .fc-corner-left {
   background-color: #9c27b0;
   color: #fff;
+  margin: 0 0 0 2px;
+  border-radius: 30px;
 }
 .fc-toolbar.fc-header-toolbar {
   margin-bottom: 1em;
@@ -16,6 +40,21 @@
   padding-left: 20px;
   padding-right: 20px;
 }
+
+
+
+.rbc-btn-group button {
+  margin: 0 0 0 2px;
+  border-radius: 30px; }
+
+  .rbc-btn-group {
+    display: inline-block; }
+/* .fc-prev-button .fc-button .fc-state-default .fc-corner-left {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+} */
 
 /*today
 background-color #999

@@ -9,7 +9,6 @@ export default function(state = {}, action) {
       // return {data: action.payload.data.data}
       return state;
     default:
-
       return state;
   }
 }

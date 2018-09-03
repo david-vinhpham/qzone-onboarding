@@ -10,6 +10,8 @@ import GridItem from "../../components/Grid/GridItem.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import buttonStyle from "../../assets/jss/material-dashboard-pro-react/components/buttonStyle.jsx";
+import {fetchEvents, fetchEventsSuccess, fetchEventsFailure} from "../../actions/events";
+import { connect } from 'react-redux';
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -18,28 +20,11 @@ class Calendar extends React.Component {
     this.state = {
       view: 'month',  
       alert: null,
-      events: [
-
-                {
-                  id: 0,
-                  title: 'All Day Event very long title',
-                  allDay: true,
-                  start: new Date(2018, 6, 6),
-                  end: new Date(2018, 6, 7),
-                },
-                {
-                  id: 1,
-                  title: 'Long Event',
-                  start: new Date(2018, 6, 6),
-                },
-                {
-                  id: 2,
-                  title: "Birthday",
-                  start: new Date(2018, 6, 30),
-                  end: new Date(2018, 6, 31),
-                }
-              ]
     };
+  }
+
+  componentWillMount(){
+    this.props.fetchEvents();
   }
 
   addNewEventAlert(startDate,endDate,jsEvent,view) {
@@ -84,6 +69,14 @@ class Calendar extends React.Component {
   }
 
   render() {
+    const { events, loading, error } = this.props.eventsList;
+
+    if(loading) {
+      return <div className="container"><h1>Events</h1><h3>Loading...</h3></div>      
+    } else if(error) {
+      return <div className="alert alert-danger">Error: {error.message}</div>
+    }
+
     return (
       <div className="row">
         <div className="col-md-10 ml-auto mr-auto">
@@ -107,7 +100,7 @@ class Calendar extends React.Component {
 					            selectable= {true}
 					            eventLimit= {true} 
                       nowIndicator= {true}
-					            events = {this.state.events} 
+					            events = {events} 
 					            dropAccept = {true}
 					            select= {(startDate,endDate,jsEvent,view) => this.addNewEventAlert(startDate,endDate,jsEvent,view)}
                       getView= {(view)=> this.setState({view})}
@@ -127,6 +120,21 @@ Calendar.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(buttonStyle,CalendarStyle)(Calendar);
+const mapStateToProps = (state) => {
+  return { 
+    eventsList: state.events.eventsList
+  };
+}
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchEvents: () => {
+      dispatch(fetchEvents()).then((response) => {
+            console.log("response from fetchevents",response);
+            !response.error ? dispatch(fetchEventsSuccess(response.payload.data)) : dispatch(fetchEventsFailure(response.payload.data));
+          });
+    }
+  }
+}
 
+export default connect(mapStateToProps, mapDispatchToProps) (withStyles(buttonStyle,CalendarStyle)(Calendar));

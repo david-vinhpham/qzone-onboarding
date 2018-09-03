@@ -85,7 +85,7 @@ const headerStyle = theme => ({
   sidebarMinimizeRTL: {
     padding: "0 15px 0 0 !important"
   },
-  sidebarMiniIcon: {
+  miniIcon: {
     width: "20px",
     height: "17px"
   }

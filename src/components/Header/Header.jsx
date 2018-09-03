@@ -45,7 +45,7 @@ function Header({ ...props }) {
                 color="white"
                 onClick={props.sidebarMinimize}
               >
-                <ViewList className={classes.sidebarMiniIcon} />
+                <ViewList className={classes.miniIcon} />
               </Button>
             ) : (
               <Button
@@ -54,7 +54,7 @@ function Header({ ...props }) {
                 color="white"
                 onClick={props.sidebarMinimize}
               >
-                <MoreVert className={classes.sidebarMiniIcon} />
+                <MoreVert className={classes.miniIcon} />
               </Button>
             )}
           </div>

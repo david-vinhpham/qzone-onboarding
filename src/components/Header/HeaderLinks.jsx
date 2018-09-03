@@ -3,8 +3,8 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Manager, Target, Popper } from "react-popper";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { MenuItem, MenuList, ClickAwayListener, Paper, Grow, Hidden } from "@material-ui/core";
-import { Person, Notifications, Dashboard } from "@material-ui/icons";
+import { MenuItem, MenuList, ClickAwayListener, Paper, Grow, Hidden, TextField } from "@material-ui/core";
+import { Person, Notifications, Dashboard, Search } from "@material-ui/icons";
 import Button from "../CustomButtons/Button";
 import headerLinksStyle from "../../assets/jss/material-dashboard-pro-react/components/headerLinksStyle";
 
@@ -40,6 +40,13 @@ class HeaderLinks extends React.Component {
     });
     return (
       <div>
+        <TextField id="time" placeholder="Search"  />
+        <Button
+          justIcon
+          round
+          color="white">
+            <Search className={classes.miniIcon} />
+        </Button>
         <Button
           color="transparent"
           simple
@@ -64,6 +71,7 @@ class HeaderLinks extends React.Component {
             </span>
           </Hidden>
         </Button>
+        
         <Manager className={managerClasses}>
           <Target>
             <Button
