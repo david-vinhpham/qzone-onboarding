@@ -1,11 +1,14 @@
 import axios from 'axios';
 
-export const FETCH_PROVIDERS = 'fetch_providers';
-export const CREATE_PROVIDER = 'create_provider';
-export const FETCH_PROVIDER = 'fetch_provider';
+export const FETCH_PROVIDERS = 'FETCH_PROVIDERS';
+export const CREATE_PROVIDER = 'CREATE_PROVIDER';
+export const FETCH_PROVIDER = 'FETCH_PROVIDER';
+export const FETCH_PROVIDER_SUCCESS = 'FETCH_PROVIDER_SUCCESS';
+export const FETCH_PROVIDER_FAILURE = 'FETCH_PROVIDER_FAILURE';
 
 
-const ROOT_URL = `http://5947f71e.ngrok.io/providers`
+const ROOT_URL = `http://5947f71e.ngrok.io/providers`;
+
 export function fetchProviders() {
   const request = axios.get(ROOT_URL)
   return {

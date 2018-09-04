@@ -20,10 +20,11 @@ class Calendar extends React.Component {
     this.state = {
       view: 'month',  
       alert: null,
+      eventsArray: []
     };
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.props.fetchEvents();
   }
 
@@ -89,7 +90,7 @@ class Calendar extends React.Component {
 		                <FullCalendar
 					            id = "fullCalendarContainer"
 					            header = {{
-					              left: 'prev,next today myCustomButton',
+					              left: 'prev,next today',
 					              center: 'title',
 					              right: 'month,agendaWeek,agendaDay,list'
 					            }}
@@ -100,11 +101,10 @@ class Calendar extends React.Component {
 					            selectable= {true}
 					            eventLimit= {true} 
                       nowIndicator= {true}
-					            events = {events} 
+					            events = {events}
 					            dropAccept = {true}
 					            select= {(startDate,endDate,jsEvent,view) => this.addNewEventAlert(startDate,endDate,jsEvent,view)}
                       getView= {(view)=> this.setState({view})}
-					            
 					          />
 		              </CardBody>
 		            </Card>
@@ -131,7 +131,11 @@ const mapDispatchToProps = (dispatch) => {
     fetchEvents: () => {
       dispatch(fetchEvents()).then((response) => {
             console.log("response from fetchevents",response);
-            !response.error ? dispatch(fetchEventsSuccess(response.payload.data)) : dispatch(fetchEventsFailure(response.payload.data));
+            if(!response.error) {
+              dispatch(fetchEventsSuccess(response.payload.data));
+            }  else{
+              dispatch(fetchEventsFailure(response.payload.data));
+            } 
           });
     }
   }

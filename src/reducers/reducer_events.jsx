@@ -1,8 +1,20 @@
 import { FETCH_EVENTS, FETCH_EVENTS_SUCCESS, FETCH_EVENTS_FAILURE, RESET_EVENTS} from './../actions/events';
+//import events from './../models/events.model';
 
 const INITIAL_STATE = 
 { 
-    eventsList:{events: [], error:null, loading: false},  
+    eventsList:{
+      events: [
+        {
+          id: Number,
+          title: String,
+	        start: new Date(),
+	        end: new Date(),
+        }
+    ], 
+    error:null, 
+    loading: false
+  },  
 };
 
 export default function(state = INITIAL_STATE, action) {
