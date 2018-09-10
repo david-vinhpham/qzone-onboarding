@@ -124,7 +124,7 @@
    border-radius: 30px;
 }
 .fc-state-default.fc-corner-left {
-    border-top-left-radius: 30px;
+    border-top-left-radius: 30px !important;
     border-bottom-left-radius: 30px;
 }
 .fc-state-default.fc-corner-right {

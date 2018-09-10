@@ -4,14 +4,15 @@ import { createBrowserHistory } from "history";
 import { Router, Route, Switch } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import promise from 'redux-promise';
+//import promise from 'redux-promise';
+import thunk from 'redux-thunk';
 
 import indexRoutes from "./routes/index.jsx";
 import reducers from './reducers';
 import "./assets/scss/material-dashboard-pro-react.css?v=1.2.0";
 
 const hist = createBrowserHistory();
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(reducers)
 ReactDOM.render(
 	<Provider store={store}>

@@ -5,12 +5,13 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import CalendarStyle from '../../assets/scss/material-dashboard-pro-react/views/calendarStyle.css';
 import '../../../node_modules/fullcalendar/dist/fullcalendar.min.css';
 import FullCalendar from 'fullcalendar-reactwrapper';
+//import '../../assets/scss/full-calender.css'
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import buttonStyle from "../../assets/jss/material-dashboard-pro-react/components/buttonStyle.jsx";
-import {fetchEvents, fetchEventsSuccess, fetchEventsFailure} from "../../actions/events";
+import {fetchEvents, createEvent} from "../../actions/events";
 import { connect } from 'react-redux';
 
 class Calendar extends React.Component {
@@ -18,9 +19,8 @@ class Calendar extends React.Component {
     super(props);
 
     this.state = {
-      view: 'month',  
-      alert: null,
-      eventsArray: []
+      view: 'agendaWeek',  
+      alert: null
     };
   }
 
@@ -71,7 +71,8 @@ class Calendar extends React.Component {
 
   render() {
     const { events, loading, error } = this.props.eventsList;
-
+    const { breakEvent } = this.props.breakEvent;
+    console.log("business hours--------", breakEvent)
     if(loading) {
       return <div className="container"><h1>Events</h1><h3>Loading...</h3></div>      
     } else if(error) {
@@ -93,15 +94,18 @@ class Calendar extends React.Component {
 					              left: 'prev,next today',
 					              center: 'title',
 					              right: 'month,agendaWeek,agendaDay,list'
-					            }}
+                      }}
+                      //businessHours= {this.state.businessHours}
+                      //selectConstraint= 'businessHours'
 					            defaultView= {this.state.view}
 					            navLinks= {true} 
 					            editable= {true}
 					            droppable= {true}
-					            selectable= {true}
+                      selectable= {true}
 					            eventLimit= {true} 
                       nowIndicator= {true}
-					            events = {events}
+                      //events = {this.state.events}
+                      eventSources = {[events, breakEvent]}
 					            dropAccept = {true}
 					            select= {(startDate,endDate,jsEvent,view) => this.addNewEventAlert(startDate,endDate,jsEvent,view)}
                       getView= {(view)=> this.setState({view})}
@@ -122,23 +126,16 @@ Calendar.propTypes = {
 
 const mapStateToProps = (state) => {
   return { 
-    eventsList: state.events.eventsList
+    eventsList: state.events.eventsList,
+    breakEvent: state.events.breakEvent,
+    appointmentEvent: state.events.appointmentEvent
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchEvents: () => {
-      dispatch(fetchEvents()).then((response) => {
-            console.log("response from fetchevents",response);
-            if(!response.error) {
-              dispatch(fetchEventsSuccess(response.payload.data));
-            }  else{
-              dispatch(fetchEventsFailure(response.payload.data));
-            } 
-          });
-    }
+    fetchEvents: () => dispatch(fetchEvents()),
+    createEvent: (e) => dispatch(createEvent(e))
   }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps) (withStyles(buttonStyle,CalendarStyle)(Calendar));

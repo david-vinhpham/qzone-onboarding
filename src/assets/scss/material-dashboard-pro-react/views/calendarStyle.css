@@ -1,20 +1,17 @@
 .fc-state-default  {
   margin: 0 0 0 2px;
-  border-radius: 30px;
-  background-color: #14b40f;
-  color: #fff;
+  border-radius: 30px !important;
+    color: #333;
 }
 .ui-state-active {
   margin: 0 0 0 2px;
   border-radius: 30px;
-  background-color: #14b40f;
-  color: #fff;
+  color: #333;
 }
 .fc-month-button .fc-button-group .fc-prev-button .fc-button .fc-state-default {
   margin: 0 0 0 2px;
   border-radius: 30px;
-  background-color: #14b40f;
-  color: #fff;
+  color: #333;
 }
 .fc-toolbar .fc-state-active, .fc-toolbar .ui-state-active {
   background-color: #9c27b0;
@@ -24,13 +21,13 @@
 }
 .fc-button-group .fc-prev-button .fc-button .fc-state-default .fc-corner-left {
   background-color: #9c27b0;
-  color: #fff;
+  color: #333;
   margin: 0 0 0 2px;
   border-radius: 30px;
 }
 .fc-button-group .fc-prev-button .fc-button .fc-state-default .fc-corner-left {
   background-color: #9c27b0;
-  color: #fff;
+  color: #333;
   margin: 0 0 0 2px;
   border-radius: 30px;
 }
@@ -42,13 +39,6 @@
 }
 
 
-
-.rbc-btn-group button {
-  margin: 0 0 0 2px;
-  border-radius: 30px; }
-
-  .rbc-btn-group {
-    display: inline-block; }
 /* .fc-prev-button .fc-button .fc-state-default .fc-corner-left {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
