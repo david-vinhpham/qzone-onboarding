@@ -20,14 +20,29 @@ export const fetchEvents = () => {
   return (dispatch) => {
     return axios.get(ROOT_URL + '/events')
       .then(response => {
+        let eventsArray = [];
         let appointmentArray = {};
-        appointmentArray.events = []
         let breakArray = {};
+        let vacationArray = {};
+        let holidayArray = {};
+        let offHoursArray = {};
+        eventsArray.push(appointmentArray, breakArray, vacationArray, holidayArray, offHoursArray);
+        
+        appointmentArray.events = []
         breakArray.events = [];
+        vacationArray.events = [];
+        holidayArray.events = [];
+        offHoursArray.events = [];
+       
         breakArray.color = 'grey';
-        breakArray.eventBackgroundColor = 'grey';
+        breakArray.rendering = 'background'
+       // breakArray.eventBackgroundColor = '#C5C1C0';
         breakArray.overlap = false;
+        breakArray.textColor = 'white';
 
+        offHoursArray.color = 'grey';
+        offHoursArray.rendering = 'background';
+        appointmentArray.color = 'light blue';
         console.log('response data---------',response.data);
         response.data.events.forEach(function(event) {
           switch (event.type) {
@@ -39,13 +54,15 @@ export const fetchEvents = () => {
               breakArray.events.push(event);
               break;
 
+            case 'Off-hours':
+              offHoursArray.events.push(event);
+              break;
+
             default:
               break;
           }
         })
-        dispatch(fetchEventsSuccess(appointmentArray))
-        dispatch(fetchBreakEventsSuccess(breakArray))
-        //dispatch(fetchAppoitmentEventSuccess(appointmentArray))
+        dispatch(fetchEventsSuccess(eventsArray));
       })
       .catch(error => {
         dispatch(fetchEventsFailure(error))

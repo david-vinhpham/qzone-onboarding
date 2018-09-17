@@ -11,7 +11,7 @@ import GridItem from "../../components/Grid/GridItem.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import buttonStyle from "../../assets/jss/material-dashboard-pro-react/components/buttonStyle.jsx";
-import {fetchEvents, createEvent} from "../../actions/events";
+import { fetchEvents, createEvent } from "../../actions/events";
 import { connect } from 'react-redux';
 
 class Calendar extends React.Component {
@@ -19,16 +19,16 @@ class Calendar extends React.Component {
     super(props);
 
     this.state = {
-      view: 'agendaWeek',  
+      view: 'agendaWeek',
       alert: null
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.fetchEvents();
   }
 
-  addNewEventAlert(startDate,endDate,jsEvent,view) {
+  addNewEventAlert(startDate, endDate, jsEvent, view) {
     this.setState({
       view: view.type,
       alert: (
@@ -69,13 +69,22 @@ class Calendar extends React.Component {
     });
   }
 
+  eventRendering(event, element) {
+    console.log("over here------", event)
+    console.log(element);
+    if (event.source.rendering === 'background') {
+      console.log("event", event)
+      element.append(event.title);
+    }
+  }
+
   render() {
     const { events, loading, error } = this.props.eventsList;
-    const { breakEvent } = this.props.breakEvent;
-    console.log("business hours--------", breakEvent)
-    if(loading) {
-      return <div className="container"><h1>Events</h1><h3>Loading...</h3></div>      
-    } else if(error) {
+    //const { breakEvent } = this.props.breakEvent;
+    console.log("business hours--------", events);
+    if (loading) {
+      return <div className="container"><h1>Events</h1><h3>Loading...</h3></div>
+    } else if (error) {
       return <div className="alert alert-danger">Error: {error.message}</div>
     }
 
@@ -85,35 +94,37 @@ class Calendar extends React.Component {
           <div className="card card-calendar">
             {this.state.alert}
             <GridContainer justify="center">
-		          <GridItem xs={12} sm={12} md={10}>
-		            <Card>
-		              <CardBody calendar>
-		                <FullCalendar
-					            id = "fullCalendarContainer"
-					            header = {{
-					              left: 'prev,next today',
-					              center: 'title',
-					              right: 'month,agendaWeek,agendaDay,list'
+              <GridItem xs={12} sm={12} md={10}>
+                <Card>
+                  <CardBody calendar>
+                    <FullCalendar
+                      id="fullCalendarContainer"
+                      header={{
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay,listMonth'
                       }}
+                      contentHeight='auto'
                       //businessHours= {this.state.businessHours}
-                      //selectConstraint= 'businessHours'
-					            defaultView= {this.state.view}
-					            navLinks= {true} 
-					            editable= {true}
-					            droppable= {true}
-                      selectable= {true}
-					            eventLimit= {true} 
-                      nowIndicator= {true}
+                      selectConstraint= 'background'
+                      defaultView={this.state.view}
+                      navLinks={true}
+                      editable={true}
+                      droppable={true}
+                      selectable={true}
+                      eventLimit={true}
+                      nowIndicator={true}
                       //events = {this.state.events}
-                      eventSources = {[events, breakEvent]}
-					            dropAccept = {true}
-					            select= {(startDate,endDate,jsEvent,view) => this.addNewEventAlert(startDate,endDate,jsEvent,view)}
-                      getView= {(view)=> this.setState({view})}
-					          />
-		              </CardBody>
-		            </Card>
-		          </GridItem>
-        		</GridContainer>
+                      eventRender={(event, element) => this.eventRendering(event, element)}
+                      eventSources={[events[0], events[1], events[2], events[3], events[4]]}
+                      dropAccept={true}
+                      select={(startDate, endDate, jsEvent, view) => this.addNewEventAlert(startDate, endDate, jsEvent, view)}
+                      getView={(view) => this.setState({ view })}
+                    />
+                  </CardBody>
+                </Card>
+              </GridItem>
+            </GridContainer>
           </div>
         </div>
       </div>
@@ -125,7 +136,7 @@ Calendar.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     eventsList: state.events.eventsList,
     breakEvent: state.events.breakEvent,
     appointmentEvent: state.events.appointmentEvent
@@ -138,4 +149,4 @@ const mapDispatchToProps = (dispatch) => {
     createEvent: (e) => dispatch(createEvent(e))
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps) (withStyles(buttonStyle,CalendarStyle)(Calendar));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(buttonStyle, CalendarStyle)(Calendar));

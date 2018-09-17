@@ -31,30 +31,7 @@ const INITIAL_STATE =
     error: null, 
     loading: false
   }, 
-  breakEvent: {
-    breakEvent: [
-      {
-        id: Number,
-        title: String,
-        start: new Date(),
-        end: new Date(),
-      }
-    ], 
-    error:null, 
-    loading: false
-  },
-  appointmentEvent: {
-    events: [
-      {
-        id: Number,
-        title: String,
-        start: new Date(),
-        end: new Date(),
-      }
-    ], 
-    error:null, 
-    loading: false
-  }
+  
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -62,16 +39,16 @@ export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
       
     case FETCH_EVENTS:
-      return { ...state, eventsList: {events:[], error: null, loading: true} }; 
+      return { ...state, eventsList: {events:[], error: null, loading: true}}; 
     case FETCH_EVENTS_SUCCESS:
-      return { ...state, eventsList: {events: action.payload, error:null, loading: false} };
+      return { ...state, eventsList: {events: action.payload, error:null, loading: false}};
     case FETCH_EVENTS_FAILURE:
       error = action.payload || {message: action.payload.message};
-      return { ...state, eventsList: {events: [], error: error, loading: false} };
+      return { ...state, eventsList: {events: [], error: error, loading: false}};
     case FETCH_APPOINTMENT_EVENT_SUCCESS:
-      return { ...state, appointmentEvent: {events: action.payload, error: null, loading: false}}
+      return { ...state, appointmentEvent: {events: action.payload, error: null, loading: false}};
     case FETCH_BREAK_EVENT_SUCCESS:
-      return { ...state, breakEvent: {breakEvent: action.payload, error:null, loading: false}}
+      return { ...state, breakEvent: {breakEvent: action.payload, error:null, loading: false}};
     case RESET_EVENTS:
       return { ...state, eventsList: {events: [], error:null, loading: false} };
 
@@ -81,9 +58,9 @@ export default function(state = INITIAL_STATE, action) {
       return {...state, newEvent: {event:action.payload, error:null, loading: false}};
     case CREATE_EVENT_FAILURE:
       error = action.payload || {message: action.payload.message};//2nd one is network or server down errors
-      return {...state, newEvent: {event:null, error:error, loading: false}}  
+      return {...state, newEvent: {event:null, error:error, loading: false}};
     case RESET_NEW_EVENT:
-      return {...state, newEvent:{event:null, error:null, loading: false}}
+      return {...state, newEvent:{event:null, error:null, loading: false}};
     default:
       return state;
   }
