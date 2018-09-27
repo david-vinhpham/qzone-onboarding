@@ -8,6 +8,7 @@ import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Card from "../../components/Card/Card.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import registerPageStyle from "../../assets/jss/material-dashboard-pro-react/views/registerPageStyle";
 
@@ -15,6 +16,7 @@ class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      cardAnimaton: "cardHidden",
       registerEmail: "",
       registerEmailState: "",
       registerPassword: "",
@@ -129,131 +131,141 @@ class RegisterPage extends React.Component {
   render() {
     const { classes } = this.props;
     return (
+      <div className={classes.content}>
       <div className={classes.container}>
         <GridContainer justify="center">
-          <GridItem xs={12} sm={12} md={10}>
-            <Card className={classes.cardSignup}>
-              <h2 className={classes.cardTitle}>Register</h2>
-              <CardBody>
-                <GridContainer justify="center">
-                  <GridItem xs={12} sm={12} md={6}>
-                    <div className={classes.center}>
-                      <Button justIcon round color="twitter" >
-                        <i className="fab fa-twitter" />
-                      </Button>
-                      {` `}
-                      <Button justIcon round color="dribbble">
-                        <i className="fab fa-dribbble" />
-                      </Button>
-                      {` `}
-                      <Button justIcon round color="facebook">
-                        <i className="fab fa-facebook-f" />
-                      </Button>
-                      {` `}
-                      <h4 className={classes.socialTitle}>or be classical</h4>
-                    </div>
-                    <form className={classes.form}>
-                      <CustomInput
-                        labelText="Email"
-                        success={this.state.registerEmailState === "success"}
-                        error={this.state.registerEmailState === "error"}
-                        id="registeremail"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          onChange: event =>
-                            this.change(event, "registerEmail", "email"),
-                          type: "email",
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <Email className={classes.inputAdornmentIcon} />
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                      <CustomInput
-                        labelText="Password"
-                        success={this.state.registerPasswordState === "success"}
-                        error={this.state.registerPasswordState === "error"}
-                        id="registerPassword"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          onChange: event =>
-                            this.change(event, "registerPassword", "password", "registerConfirmPassword"),
-                          type: "password",
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <LockOutline
-                                className={classes.inputAdornmentIcon}
-                              />
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                      <CustomInput
-                        labelText="Confirm Password"
-                        success={this.state.registerConfirmPasswordState === "success"}
-                        error={this.state.registerConfirmPasswordState === "error"}
-                        id="registerConfirmPassword"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          onChange: event =>
-                            this.change(event,"registerConfirmPassword", "equalTo","registerPassword"),
-                          type: "password",
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <LockOutline
-                                className={classes.inputAdornmentIcon}
-                              />
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            tabIndex={-1}
-                            onClick={event =>
-                              this.change(event, "registerCheckbox", "checkbox")
-                            }
-                            checkedIcon={<Check className={classes.checkedIcon} />}
-                            icon={<Check className={classes.uncheckedIcon} />}
-                            classes={{
-                              checked: classes.checked
-                            }}
+          <GridItem xs={12} sm={6} md={4}>
+            <form>
+              <Card className={classes[this.state.cardAnimaton]}>
+                <CardHeader
+                  className={`${classes.cardHeader} ${classes.textCenter}`}
+                  color="rose">
+                  <h4 className={classes.cardTitle}>Register</h4>
+                  <div className={classes.socialLine}>
+                    <Button
+                      justIcon
+                      href="https://www.twitter.com"
+                      target="_blank"
+                      color="transparent">
+                      <i className={"fab fa-twitter"} />
+                    </Button>
+                    <Button
+                      justIcon
+                      href="https://www.facebook.com"
+                      target="_blank"
+                      color="transparent">
+                      <i className={"fab fa-facebook"} />
+                    </Button>
+                    <Button
+                      justIcon
+                      href="https://www.plus.google.com"
+                      target="_blank"
+                      color="transparent">
+                      <i className={"fab fa-google-plus-g"} />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  <CustomInput
+                    labelText="Email"
+                    success={this.state.registerEmailState === "success"}
+                    error={this.state.registerEmailState === "error"}
+                    id="registeremail"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event =>
+                        this.change(event, "registerEmail", "email"),
+                      type: "email",
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Email className={classes.inputAdornmentIcon} />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <CustomInput
+                    labelText="Password"
+                    success={this.state.registerPasswordState === "success"}
+                    error={this.state.registerPasswordState === "error"}
+                    id="registerPassword"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event =>
+                        this.change(event, "registerPassword", "password", "registerConfirmPassword"),
+                      type: "password",
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <LockOutline
+                            className={classes.inputAdornmentIcon}
                           />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <CustomInput
+                    labelText="Confirm Password"
+                    success={this.state.registerConfirmPasswordState === "success"}
+                    error={this.state.registerConfirmPasswordState === "error"}
+                    id="registerConfirmPassword"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event =>
+                        this.change(event,"registerConfirmPassword", "equalTo","registerPassword"),
+                      type: "password",
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <LockOutline
+                            className={classes.inputAdornmentIcon}
+                          />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        tabIndex={-1}
+                        onClick={event =>
+                          this.change(event, "registerCheckbox", "checkbox")
                         }
+                        checkedIcon={<Check className={classes.checkedIcon} />}
+                        icon={<Check className={classes.uncheckedIcon} />}
                         classes={{
-                          label:
-                            classes.label +
-                            (this.state.registerCheckboxState === "error"
-                              ? " " + classes.labelError
-                              : "")
+                          checked: classes.checked
                         }}
-                        label={
-                          <span>
-                            I agree to the terms and conditions
-                            
-                          </span>
-                        }
                       />
-                      <div className={classes.center}>
-                        <Button round color="primary" onClick={this.registerClick.bind(this)}>
-                          Get started
-                        </Button>
-                      </div>
-                    </form>
-                  </GridItem>
-                </GridContainer>
-              </CardBody>
-            </Card>
+                    }
+                    classes={{
+                      label:
+                        classes.label +
+                        (this.state.registerCheckboxState === "error"
+                          ? " " + classes.labelError
+                          : "")
+                    }}
+                    label={
+                      <span>
+                        I agree to the terms and conditions
+                        
+                      </span>
+                    }
+                  />
+                  <div className={classes.center}>
+                    <Button round color="primary" onClick={this.registerClick.bind(this)}>
+                      Get started
+                    </Button>
+                  </div>
+                </CardBody>
+              </Card>
+            </form>
           </GridItem>
         </GridContainer>
+      </div>
       </div>
     );
   }

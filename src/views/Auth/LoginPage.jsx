@@ -95,7 +95,7 @@ class LoginPage extends React.Component {
                   <CardHeader
                     className={`${classes.cardHeader} ${classes.textCenter}`}
                     color="rose"
-                  >
+                    >
                     <h4 className={classes.cardTitle}>Log in</h4>
                     <div className={classes.socialLine}>
                       <Button
