@@ -45,11 +45,11 @@ const modalStyle = theme => ({
     textShadow: "none",
     fontWeight: "700",
     lineHeight: "1",
-    float: "right"
+    float: "right",
   },
   modalClose: {
     width: "16px",
-    height: "16px"
+    height: "16px",
   },
   modalBody: {
     paddingTop: "24px",
@@ -57,39 +57,39 @@ const modalStyle = theme => ({
     paddingBottom: "16px",
     paddingLeft: "24px",
     position: "relative",
-    overflow: "visible"
+    overflow: "visible",
   },
   modalFooter: {
     padding: "15px",
     textAlign: "right",
     paddingTop: "0",
-    margin: "0"
+    margin: "0",
   },
   modalFooterCenter: {
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
   },
   instructionNoticeModal: {
-    marginBottom: "25px"
+    marginBottom: "25px",
   },
   imageNoticeModal: {
-    maxWidth: "150px"
+    maxWidth: "150px",
   },
   modalSmall: {
-    width: "300px"
+    width: "300px",
   },
   modalSmallBody: {
-    paddingTop: "0"
+    paddingTop: "0",
   },
   modalSmallFooterFirstButton: {
     margin: "0",
     paddingLeft: "16px",
     paddingRight: "16px",
-    width: "auto"
+    width: "auto",
   },
   modalSmallFooterSecondButton: {
     marginBottom: "0",
-    marginLeft: "5px"
+    marginLeft: "5px",
   }
 });
 

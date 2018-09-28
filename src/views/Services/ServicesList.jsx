@@ -52,7 +52,7 @@ class ServicesList extends React.Component{
         <GridItem xs={12}>
           <Card>
             <CardHeader color="primary" icon>
-             <CardText color="rose">
+              <CardText color="rose">
                 <h4 className={classes.cardTitle}>Service List</h4>
               </CardText>
               <Button size="sm"  className={classes.buttonDisplay} href="/services/create"> 

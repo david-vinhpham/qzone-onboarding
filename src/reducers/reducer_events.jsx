@@ -1,9 +1,7 @@
 import { 
   FETCH_EVENTS, 
   FETCH_EVENTS_SUCCESS, 
-  FETCH_EVENTS_FAILURE, 
-  FETCH_APPOINTMENT_EVENT_SUCCESS,
-  FETCH_BREAK_EVENT_SUCCESS,
+  FETCH_EVENTS_FAILURE,
   RESET_EVENTS,
   CREATE_EVENT, 
   CREATE_EVENT_SUCCESS, 
@@ -45,13 +43,8 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_EVENTS_FAILURE:
       error = action.payload || {message: action.payload.message};
       return { ...state, eventsList: {events: [], error: error, loading: false}};
-    case FETCH_APPOINTMENT_EVENT_SUCCESS:
-      return { ...state, appointmentEvent: {events: action.payload, error: null, loading: false}};
-    case FETCH_BREAK_EVENT_SUCCESS:
-      return { ...state, breakEvent: {breakEvent: action.payload, error:null, loading: false}};
     case RESET_EVENTS:
-      return { ...state, eventsList: {events: [], error:null, loading: false} };
-
+      return { ...state, eventsList: {events: [], error:null, loading: false}};
     case CREATE_EVENT:
       return {...state, newEvent: {...state.newEvent, loading: true}};
     case CREATE_EVENT_SUCCESS:

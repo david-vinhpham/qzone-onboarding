@@ -51,16 +51,17 @@ class Calendar extends React.Component {
   }
 
   addNewEvent(e, startDate, endDate) {
-    var newEvents = this.state.events;
-    newEvents.push({
-      title: e,
-      start: startDate,
-      end: endDate
-    });
-    this.setState({
-      alert: null,
-      events: newEvents
-    });
+    console.log(e, startDate, endDate);
+    // var newEvents = this.state.events;
+    // newEvents.push({
+    //   title: e,
+    //   start: startDate,
+    //   end: endDate
+    // });
+    // this.setState({
+    //   alert: null,
+    //   events: newEvents
+    // });
   }
 
   hideAlert() {
@@ -81,7 +82,7 @@ class Calendar extends React.Component {
   render() {
     const { events, loading, error } = this.props.eventsList;
     //const { breakEvent } = this.props.breakEvent;
-    console.log("business hours--------", events);
+   // console.log("business hours--------", events);
     if (loading) {
       return <div className="container"><h1>Events</h1><h3>Loading...</h3></div>
     } else if (error) {

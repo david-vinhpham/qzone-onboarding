@@ -14,11 +14,16 @@ export const CREATE_EVENT_SUCCESS = 'CREATE_EVENT_SUCCESS';
 export const CREATE_EVENT_FAILURE = 'CREATE_EVENT_FAILURE';
 export const RESET_NEW_EVENT = 'RESET_NEW_EVENT';
 
-const ROOT_URL = 'http://demo3959727.mockable.io';
-
+//const ROOT_URL = 'http://demo3959727.mockable.io';
+const ROOT_URL = 'http://localhost:8080/appointment'
 export const fetchEvents = () => {
   return (dispatch) => {
-    return axios.get(ROOT_URL + '/events')
+    return axios.get('http://localhost:8080/appointment/listAllEvents',{
+      data: null,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => {
         let eventsArray = [];
         let appointmentArray = {};
@@ -28,28 +33,29 @@ export const fetchEvents = () => {
         let offHoursArray = {};
         eventsArray.push(appointmentArray, breakArray, vacationArray, holidayArray, offHoursArray);
         
-        appointmentArray.events = []
+        appointmentArray.events = [];
         breakArray.events = [];
         vacationArray.events = [];
         holidayArray.events = [];
         offHoursArray.events = [];
-       
+
         breakArray.color = 'grey';
         breakArray.rendering = 'background'
-       // breakArray.eventBackgroundColor = '#C5C1C0';
         breakArray.overlap = false;
         breakArray.textColor = 'white';
 
         offHoursArray.color = 'grey';
         offHoursArray.rendering = 'background';
+
         appointmentArray.color = 'light blue';
+        
         console.log('response data---------',response.data);
         response.data.events.forEach(function(event) {
           switch (event.type) {
             case 'Appointment':
               appointmentArray.events.push(event);
               break;
-            
+
             case 'Break':
               breakArray.events.push(event);
               break;
@@ -65,6 +71,7 @@ export const fetchEvents = () => {
         dispatch(fetchEventsSuccess(eventsArray));
       })
       .catch(error => {
+        console.log("error--------", error)
         dispatch(fetchEventsFailure(error))
       });
   };
