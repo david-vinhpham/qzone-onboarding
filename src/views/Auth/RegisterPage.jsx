@@ -256,7 +256,7 @@ class RegisterPage extends React.Component {
                     }
                   />
                   <div className={classes.center}>
-                    <Button round color="primary" onClick={this.registerClick.bind(this)}>
+                    <Button color="rose" simple size="lg" block onClick={this.registerClick.bind(this)}>
                       Get started
                     </Button>
                   </div>
