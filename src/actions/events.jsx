@@ -18,8 +18,7 @@ export const RESET_NEW_EVENT = 'RESET_NEW_EVENT';
 const ROOT_URL = 'http://localhost:8080/appointment'
 export const fetchEvents = () => {
   return (dispatch) => {
-    return axios.get('http://localhost:8080/appointment/listAllEvents',{
-      data: null,
+    return axios.get('https://demo3959727.mockable.io/events',{
       headers: {
         'Content-Type': 'application/json'
       }
