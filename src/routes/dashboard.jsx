@@ -92,6 +92,12 @@ export const otherRoutes=[
     component: ProviderDetails
   },
   {
+    path: "/provider/card",
+    name: "Provider Card",
+    icon: Person,
+    component: ProviderDetails
+  },
+  {
     path: "/business/edit",
     name: "Business Edit",
     icon: BusinessCenter,

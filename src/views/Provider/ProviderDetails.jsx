@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Search from "@material-ui/icons/Search";
 import withStyles from "@material-ui/core/styles/withStyles";
+import ContentCopy from "@material-ui/icons/ContentCopy";
+import Warning from "@material-ui/icons/Warning";
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -13,6 +15,8 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardFooter from "../../components/Card/CardFooter.jsx";
+import CardIcon from "../../components/Card/CardIcon";
 import { fetchProviders } from '../../actions/provider';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
@@ -70,6 +74,27 @@ class ProviderDetails extends React.Component{
         return null;
       return (
         <GridContainer>
+          <GridItem xs={12} sm={6} md={6} lg={3}>
+            <Card>
+              <CardHeader color="warning" stats icon>
+                <CardIcon color="warning">
+                  <ContentCopy />
+                </CardIcon>
+                <p className={classes.cardCategory}>Used Space</p>
+                <h3 className={classes.cardTitle}>
+                  49/50 <small>GB</small>
+                </h3>
+              </CardHeader>
+              <CardFooter stats>
+                <div className={classes.stats}>
+                  
+                  <a href="#pablo" onClick={e => e.preventDefault()}>
+                    Get more space
+                  </a>
+                </div>
+              </CardFooter>
+            </Card>
+          </GridItem>
           <GridItem xs={12}>
             <Card>
               <CardHeader color="primary" icon>
