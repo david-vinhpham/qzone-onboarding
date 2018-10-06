@@ -12,3 +12,9 @@ export function verifyLength(value, length) {
   }
   return false;
 }
+
+export const validatePassword = (pwd) =>
+  (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)
+    .test(pwd);
+
+export default validatePassword;

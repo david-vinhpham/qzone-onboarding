@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { Email, LockOutline } from "@material-ui/icons";
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
@@ -12,6 +15,8 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import loginPageStyle from "../../assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
+import VerificationPage from "./VerificationPage";
+import { loginUser } from '../../actions/auth';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -58,7 +63,7 @@ class LoginPage extends React.Component {
       this.setState({ loginPasswordState: "error" });
     }
     if (this.state.loginEmailState === "success" && this.state.loginPasswordState === "success") {
-      window.location = '/dashboard'
+      this.props.loginUser(this.state, this.props.history);
     }
   }
 
@@ -66,14 +71,14 @@ class LoginPage extends React.Component {
     switch (type) {
       case "email":
         if (this.verifyEmail(event.target.value)) {
-          this.setState({ [stateName + "State"]: "success" });
+          this.setState({ [stateName]: event.target.value, [stateName + "State"]: "success" });
         } else {
           this.setState({ [stateName + "State"]: "error" });
         }
         break;
       case "password":
         if (this.verifyLength(event.target.value, 1)) {
-          this.setState({ [stateName + "State"]: "success" });
+          this.setState({ [stateName]: event.target.value, [stateName + "State"]: "success" });
         } else {
           this.setState({ [stateName + "State"]: "error" });
         }
@@ -186,4 +191,22 @@ LoginPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(loginPageStyle)(LoginPage);
+const mapStateToProps = state => {
+  return {
+    userDetail: state.user.userDetail,
+    userLoading: state.user.userLoading,
+    userError: state.user.userError,
+    verify: state.user.verify
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginUser: (value, history) => dispatch(loginUser(value, history)),
+  }
+}
+
+export default compose(
+  withStyles(loginPageStyle),
+  connect(mapStateToProps, mapDispatchToProps)
+)(LoginPage);

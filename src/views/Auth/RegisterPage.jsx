@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { InputAdornment, Checkbox, FormControlLabel } from "@material-ui/core";
 import { Email, LockOutline, Check } from "@material-ui/icons";
+//import SweetAlert from "react-bootstrap-sweetalert";
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
@@ -11,6 +15,9 @@ import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import registerPageStyle from "../../assets/jss/material-dashboard-pro-react/views/registerPageStyle";
+import VerificationPage from "./VerificationPage";
+import validatePassword from "../../validation/validation";
+  import { registerUser } from '../../actions/auth';
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -24,25 +31,19 @@ class RegisterPage extends React.Component {
       registerConfirmPassword: "",
       registerConfirmPasswordState: "",
       registerCheckbox: false,
-      registerCheckboxState: ""
+      registerCheckboxState: "",
+      openVerificationModal: false,
+      code: '',
+      loading: false
     };
     this.change = this.change.bind(this);
   }
-  // handleToggle(value) {
-  //   const { checked } = this.state;
-  //   const currentIndex = checked.indexOf(value);
-  //   const newChecked = [...checked];
-
-  //   if (currentIndex === -1) {
-  //     newChecked.push(value);
-  //   } else {
-  //     newChecked.splice(currentIndex, 1);
-  //   }
-
-  //   this.setState({
-  //     checked: newChecked
-  //   });
-  // }
+  
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ cardAnimaton: '' });
+    }, 200);
+  }
 
   verifyEmail(value) {
     var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -80,7 +81,10 @@ class RegisterPage extends React.Component {
       this.setState({ registerCheckboxState: "error" });
     }
     if (this.state.registerEmailState === "success" && this.state.registerPasswordState === "success" && this.state.registerConfirmPasswordState === "success" && this.state.registerCheckboxState === "success") {
-      window.location = '/dashboard'
+      //window.location = '/dashboard'
+      this.setState({ loading: true }, () => {
+        this.props.registerUser(this.state);
+      });
     }
   }
 
@@ -96,7 +100,7 @@ class RegisterPage extends React.Component {
         this.setState({[stateName]: event.target.value})
         break;
       case "password":
-        if (this.verifyLength(event.target.value, 3)) {
+        if (this.verifyLength(event.target.value, 3) && validatePassword(event.target.value)) {
           this.setState({ [stateName + "State"]: "success" });
           if (this.compare(event.target.value, this.state[stateNameEqualTo])) {
             this.setState({ [stateNameEqualTo + "State"]: "success" });
@@ -129,7 +133,7 @@ class RegisterPage extends React.Component {
     }
   }
   render() {
-    const { classes } = this.props;
+    const { classes, history } = this.props;
     return (
       <div className={classes.content}>
       <div className={classes.container}>
@@ -255,6 +259,12 @@ class RegisterPage extends React.Component {
                       </span>
                     }
                   />
+                  <VerificationPage
+                      open={this.props.verify}
+                      email={this.state.registerEmail}
+                      history={history}
+                      page="register"
+                    />
                   <div className={classes.center}>
                     <Button color="rose" simple size="lg" block onClick={this.registerClick.bind(this)}>
                       Get started
@@ -275,4 +285,22 @@ RegisterPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(registerPageStyle)(RegisterPage);
+const mapStateToProps = state => {
+  return {
+    userDetail: state.user.userDetail,
+    userLoading: state.user.userLoading,
+    userError: state.user.userError,
+    verify: state.user.verify
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    registerUser: (value) => dispatch(registerUser(value)),
+  }
+}
+
+export default compose(
+  withStyles(registerPageStyle),
+  connect(mapStateToProps, mapDispatchToProps)
+)(RegisterPage);
