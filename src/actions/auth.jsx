@@ -20,6 +20,57 @@ export const FETCH_USER_BY_USERID = 'fetch_user_by_userid';
 
 const ROOT_URL = `http://45.117.170.211:8091/api/user`
 
+export function facebookSignIn() {
+  return (dispatch) => {
+    window.FB.login(function(response) {
+      if (response.authResponse) {
+       console.log('Welcome!  Fetching your information.... ');
+       window.FB.api('/me', function(response) {
+         console.log('Good to see you, ' + response.name + '.');
+       });
+      } else {
+       console.log('User cancelled login or did not fully authorize.');
+      }
+  }, {scope: 'email,user_likes'});
+  }
+}
+
+export function googleSignIn() {
+  return (dispatch) => {
+    window.gapi.load('auth2', function () { // Ready. 
+      window.gapi.auth2.init({ "client_id": "1075505092107-j8821j05r48pco773m0mqb16g1po5gtj.apps.googleusercontent.com" })
+        .then((onInit, onError) => {
+          const ga = window.gapi.auth2.getAuthInstance();
+          ga.signIn().then(googleUser => {
+            const { id_token, expires_at } = googleUser.getAuthResponse();
+            const profile = googleUser.getBasicProfile();
+            const user = {
+              email: profile.getEmail(),
+              name: profile.getName()
+            };
+
+            return Auth.federatedSignIn(
+              // Initiate federated sign-in with Google identity provider 
+              'google',
+              {
+                // the JWT token
+                token: id_token,
+                // the expiration time
+                expires_at
+              },
+              // a user object
+              { email: user.email }
+            ).then(credentials => {
+              console.log('get aws credentials', credentials);
+            }).catch(e => {
+              console.log(e);
+            });
+          });
+        })
+    });
+  }
+}
+
 export function registerUser(values) {
   console.log("values-------", values);
   return (dispatch) => {

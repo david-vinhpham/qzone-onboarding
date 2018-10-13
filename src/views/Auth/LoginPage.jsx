@@ -15,7 +15,6 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import loginPageStyle from "../../assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
-import VerificationPage from "./VerificationPage";
 import { loginUser } from '../../actions/auth';
 
 class LoginPage extends React.Component {

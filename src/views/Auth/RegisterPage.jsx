@@ -17,7 +17,7 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import registerPageStyle from "../../assets/jss/material-dashboard-pro-react/views/registerPageStyle";
 import VerificationPage from "./VerificationPage";
 import validatePassword from "../../validation/validation";
-  import { registerUser } from '../../actions/auth';
+import { registerUser, googleSignIn, facebookSignIn } from '../../actions/auth';
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -155,14 +155,14 @@ class RegisterPage extends React.Component {
                     </Button>
                     <Button
                       justIcon
-                      href="https://www.facebook.com"
+                      onClick={this.props.facebookSignIn}
                       target="_blank"
                       color="transparent">
                       <i className={"fab fa-facebook"} />
                     </Button>
                     <Button
                       justIcon
-                      href="https://www.plus.google.com"
+                      onClick={this.props.googleSignIn}
                       target="_blank"
                       color="transparent">
                       <i className={"fab fa-google-plus-g"} />
@@ -297,6 +297,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
   return {
     registerUser: (value) => dispatch(registerUser(value)),
+    googleSignIn: () => dispatch(googleSignIn()),
+    facebookSignIn: () => dispatch(facebookSignIn())
   }
 }
 
