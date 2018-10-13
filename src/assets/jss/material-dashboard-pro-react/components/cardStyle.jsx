@@ -1,8 +1,10 @@
 // import {
 //
 // } from "assets/jss/material-dashboard-pro-react.jsx";
+import hoverCardStyle from "../hoverCardStyle.jsx";
 
 const cardStyle = {
+  ...hoverCardStyle,
   card: {
     border: "0",
     marginBottom: "30px",

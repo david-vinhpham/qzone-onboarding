@@ -1,12 +1,13 @@
 import React from 'react';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel}  from "@material-ui/core";      
+import { FormLabel,  Input}  from "@material-ui/core";      
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import CustomCheckbox from "../../components/CustomCheckbox/CustomCheckbox.jsx";
+import CustomButton from "../../components/CustomButtons/Button.jsx"
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-
+import PictureUpload from "../../components/CustomUpload/PictureUpload";
 class ProviderForm extends React.Component{
   
 	render() {
@@ -14,6 +15,11 @@ class ProviderForm extends React.Component{
     const {provider, firstNameState, lastNameState, emailState} = providerInfo
 		return(
       <form>
+        <GridContainer>
+        <GridItem md={12}>
+            <PictureUpload changeProfileImage = {this.props.changeProfileImage} provider={provider}/>
+          </GridItem>
+        </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={2}>
             <FormLabel className={classes.labelHorizontal}>
@@ -266,6 +272,7 @@ class ProviderForm extends React.Component{
               classes={classes}
             />
           </GridItem>
+          
         </GridContainer>
       </form>
 		)

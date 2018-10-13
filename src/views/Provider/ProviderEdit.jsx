@@ -14,6 +14,7 @@ import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/v
 import { fetchProvider, createProvider } from '../../actions/provider';
 import {verifyLength, verifyEmail} from "../../validation/validation.jsx"
 import ProviderForm from "./ProviderForm"
+import defaultImage from "../../assets/img/default-avatar.png";
 
 class ProviderEdit extends React.Component{
 	constructor(props) {
@@ -37,33 +38,36 @@ class ProviderEdit extends React.Component{
         updatedOn: "",
         id: "",
         avgCustomersPerHour: "",
-        
+        file: null,
+        imagePreviewUrl: defaultImage
       },
       firstNameState: "",
       lastNameState: "",
       emailState:"",
-
     };
 
     this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
+    this.changeProfileImage = this.changeProfileImage.bind(this);
   }
 
   componentWillMount(){
     const { id } = this.props.match.params
+    console.log("id------", id)
     this.props.fetchProvider(id);
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("next props---------", nextProps)
     const { provider } = this.state;
     for(var key in nextProps.provider) {
       provider[key]= nextProps.provider[key]
       this.setState({provider: provider})
     };
-    
   }
 
   change(event, stateName,type){
+    console.log("state--", this.state);
     const { provider } = this.state
     provider[stateName]= (event.target.value || event.target.checked)
     this.setState({provider: provider})
@@ -95,6 +99,7 @@ class ProviderEdit extends React.Component{
   }
 
   handleUpdate(option) {
+    
   	if (this.state.provider.firstName === "")
   		this.setState({firstNameState: "error"})
     else
@@ -110,14 +115,11 @@ class ProviderEdit extends React.Component{
       this.setState({emailState: "success"})
     
   	if (this.state.firstNameState === "success" && this.state.lastNameState === "success" && this.state.emailState === "success"){
-      this.props.createProvider(this.state.provider, () => {
-        window.location = "/provider/list"
-      });
-      
+      this.props.createProvider(this.state.provider, this.state.file);
     }
   }
 
-  changeCheckbox(event, stateName,type){
+  changeCheckbox(event, stateName, type){
     const { emailPreference } = this.state.provider;
     const currentIndex = emailPreference.indexOf(event.target.value || '') ;
     const newChecked = [...emailPreference];
@@ -133,6 +135,27 @@ class ProviderEdit extends React.Component{
     });
   }
 
+  changeProfileImage(e) {
+    const {file, imagePreviewUrl} = this.state.provider;
+    console.log("inside change image function", e);
+    console.log("event---", e)
+    e.preventDefault();
+    let reader = new FileReader();
+    let files = e.target.files[0];
+    const {provider} = this.state
+    console.log("file-------", files)
+    reader.onloadend = () => {
+      provider['file'] = files
+      provider['imagePreviewUrl'] = reader.result
+      this.setState({
+        // file: file,
+        // imagePreviewUrl: reader.result
+        provider: provider
+      });
+    };
+    reader.readAsDataURL(files);
+  }
+
 	render() {
     const { classes } = this.props;
     if(!this.state.provider)
@@ -145,7 +168,13 @@ class ProviderEdit extends React.Component{
           </CardText>
         </CardHeader>
         <CardBody>
-          <ProviderForm providerInfo={this.state} change={this.change} changeCheckbox={this.changeCheckbox} classes={this.props.classes}/>
+          <ProviderForm 
+            providerInfo={this.state} 
+            change={this.change} 
+            changeCheckbox={this.changeCheckbox} 
+            changeProfileImage={this.changeProfileImage}
+            classes={this.props.classes}
+          />
         </CardBody>
         <CardFooter className={classes.justifyContentCenter}>
         	<Button color="rose" onClick={this.handleUpdate.bind(this)}>
@@ -165,7 +194,14 @@ function mapStateToProps(state) {
   return{provider: state.providers.data}
 } 
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchProvider: (id) => dispatch(fetchProvider(id)),
+    createProvider: (provider) => dispatch(createProvider(provider))
+  }
+}
+
 export default compose(
   withStyles(validationFormStyle),
-  connect(mapStateToProps, {fetchProvider, createProvider}),
+  connect(mapStateToProps, mapDispatchToProps),
 )(ProviderEdit);
