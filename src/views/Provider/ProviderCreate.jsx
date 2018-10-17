@@ -13,7 +13,9 @@ import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import { createProvider } from '../../actions/provider';
 import {verifyLength, verifyEmail} from "../../validation/validation.jsx";
-import ProviderForm from "./ProviderForm"
+import ProviderForm from "./ProviderForm";
+import defaultImage from "../../assets/img/default-avatar.png";
+
 
 class ProviderCreate extends React.Component{
 	constructor(props) {
@@ -35,7 +37,9 @@ class ProviderCreate extends React.Component{
         createdOn: "",
         isDeleted: false,
         updatedBy: "",
-        updatedOn: ""
+        updatedOn: "",
+        file: null,
+        imagePreviewUrl: defaultImage
       },
       firstNameState: "",
       lastNameState: "",
@@ -45,6 +49,8 @@ class ProviderCreate extends React.Component{
 
     this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
+    this.changeProfileImage = this.changeProfileImage.bind(this);
+
   }
 
   change(event, stateName,type){
@@ -94,6 +100,27 @@ class ProviderCreate extends React.Component{
     });
   }
 
+  changeProfileImage(e) {
+    //const { file, imagePreviewUrl } = this.state.provider;
+    console.log("inside change image function", e);
+    console.log("event---", e)
+    e.preventDefault();
+    let reader = new FileReader();
+    let files = e.target.files[0];
+    const { provider } = this.state
+    console.log("file-------", files)
+    reader.onloadend = () => {
+      provider['file'] = files
+      provider['imagePreviewUrl'] = reader.result
+      this.setState({
+        // file: file,
+        // imagePreviewUrl: reader.result
+        provider: provider
+      });
+    };
+    reader.readAsDataURL(files);
+  }
+
   handleProvider(option) {
   	if (this.state.firstNameState === "")
   		this.setState({firstNameState: "error"})
@@ -125,7 +152,13 @@ class ProviderCreate extends React.Component{
           </CardText>
         </CardHeader>
         <CardBody>
-          <ProviderForm providerInfo={this.state} change={this.change} changeCheckbox={this.changeCheckbox} classes={this.props.classes}/>
+          <ProviderForm 
+            providerInfo={this.state} 
+            change={this.change} 
+            changeCheckbox={this.changeCheckbox}
+            changeProfileImage={this.changeProfileImage} 
+            classes={this.props.classes}
+          />
         </CardBody>
         <CardFooter className={classes.justifyContentCenter}>
         	<Button color="rose" onClick={this.handleProvider.bind(this)}>
@@ -144,7 +177,13 @@ ProviderCreate.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createProvider: (provider) => dispatch(createProvider(provider))
+  }
+}
+
 export default compose(
   withStyles(validationFormStyle),
-  connect(null, {createProvider}),
+  connect(null, mapDispatchToProps),
 )(ProviderCreate);

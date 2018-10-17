@@ -136,7 +136,7 @@ class ProviderEdit extends React.Component{
   }
 
   changeProfileImage(e) {
-    const {file, imagePreviewUrl} = this.state.provider;
+    //const {file, imagePreviewUrl} = this.state.provider;
     console.log("inside change image function", e);
     console.log("event---", e)
     e.preventDefault();

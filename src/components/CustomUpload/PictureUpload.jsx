@@ -34,7 +34,7 @@ class PictureUpload extends React.Component {
       <div className="picture-container">
         <div className="picture">
           <img
-            src={this.props.provider.imagePreviewUrl}
+            src={this.props.imagePreviewUrl}
             className="picture-src"
             alt="..."
           />
