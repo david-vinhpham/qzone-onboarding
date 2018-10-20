@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Loan",
+        "profile_pic": "",
+        "description": "Lorem Ipsum.Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain"
+    },
+    {
+        "id": 2,
+        "name": "New Account",
+        "profile_pic": "",
+        "description": "Lorem Ipsum.Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain"
+    },
+    {
+        "id": 3,
+        "name": "Credit Card",
+        "profile_pic": "",
+        "description": "Lorem Ipsum.Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain"
+    }
+]

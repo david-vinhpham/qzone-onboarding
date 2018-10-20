@@ -8,6 +8,7 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import CustomRadio from "../../components/CustomRadio/CustomRadio.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import PictureUpload from "../../components/CustomUpload/PictureUpload";
+import ImageUpload from "../../components/CustomUpload/ImageUpload"
 
 class ServiceForm extends React.Component {
 
@@ -27,11 +28,6 @@ class ServiceForm extends React.Component {
         ];
         return (
             <form>
-                <GridContainer>
-                    <GridItem xs={12}>
-                        <PictureUpload changeProfileImage={this.props.changeProfileImage} imagePreviewUrl={serviceInfo.imagePreviewUrl} />
-                    </GridItem>
-                </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
@@ -144,8 +140,8 @@ class ServiceForm extends React.Component {
                                 classes.labelHorizontalRadioCheckbox
                             }
                         >
-                            Service Mode
-                            </FormLabel>
+                        Service Mode
+                        </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={2}>
                         <CustomRadio
@@ -154,7 +150,8 @@ class ServiceForm extends React.Component {
                             value="queue"
                             classes={classes}
                             onClick={event =>
-                                this.props.change(event, "serviceMode")} />
+                            this.props.change(event, "serviceMode")} 
+                        />
                     </GridItem>
                     <GridItem xs={12} sm={2}>
                         <CustomRadio
@@ -208,6 +205,11 @@ class ServiceForm extends React.Component {
                                 min: "0"
                             }}
                         />
+                    </GridItem>
+                </GridContainer>
+                <GridContainer>
+                    <GridItem xs={12} md={12}>
+                        <ImageUpload changeProfileImage={this.props.changeProfileImage} imagePreviewUrl={serviceInfo.imagePreviewUrl} />
                     </GridItem>
                 </GridContainer>
             </form>

@@ -14,6 +14,9 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import { createProvider } from '../../actions/provider';
+import defaultImage from "../../assets/img/image_placeholder.jpg";
+//import defaultAvatar from "../../assets/img/placeholder.jpg";
+
 import ServiceForm from './ServiceForm';
 
 class ServiceEdit extends React.Component {
@@ -29,7 +32,9 @@ class ServiceEdit extends React.Component {
             serviceMode: null,
             avgCustomersPerHour: "",
             avgProviderCount: "",
-            avgServiceTimeState: ""
+            avgServiceTimeState: "",
+            file: null,
+            imagePreviewUrl: defaultImage
         }
     }
 
@@ -42,11 +47,9 @@ class ServiceEdit extends React.Component {
         if (this.state.nameState === "success" && this.state.avgServiceTimeState === "success") {
             if (option === "Save") {
                 window.location = "/services/list"
-
             }
             else {
                 window.location = "/services/create"
-
             }
         }
     }
@@ -102,10 +105,10 @@ class ServiceEdit extends React.Component {
                     <CardFooter className={classes.justifyContentCenter}>
                         <Button color="rose" onClick={this.handleService.bind(this)}>
                             Add Another Service
-            </Button>
+                        </Button>
                         <Button color="rose" onClick={this.handleService.bind(this, "save")}>
                             Save & Exit
-            </Button>
+                        </Button>
                     </CardFooter>
                 </Card>
             </GridItem>
@@ -113,7 +116,7 @@ class ServiceEdit extends React.Component {
     }
 }
 
-ServiceCreate.propTypes = {
+ServiceEdit.propTypes = {
     classes: PropTypes.object.isRequired
 };
 

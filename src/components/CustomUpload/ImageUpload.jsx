@@ -3,17 +3,17 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // core components
-import Button from "components/CustomButtons/Button.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
 
-import defaultImage from "assets/img/image_placeholder.jpg";
-import defaultAvatar from "assets/img/placeholder.jpg";
+import defaultImage from "../../assets/img/image_placeholder.jpg";
+//import defaultAvatar from "assets/img/placeholder.jpg";
 
 class ImageUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       file: null,
-      imagePreviewUrl: this.props.avatar ? defaultAvatar : defaultImage
+      imagePreviewUrl: defaultImage
     };
     this.handleImageChange = this.handleImageChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,7 +44,7 @@ class ImageUpload extends React.Component {
   handleRemove() {
     this.setState({
       file: null,
-      imagePreviewUrl: this.props.avatar ? defaultAvatar : defaultImage
+      imagePreviewUrl: defaultImage
     });
     this.refs.fileInput.value = null;
   }

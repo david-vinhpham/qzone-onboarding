@@ -156,6 +156,27 @@ class Sidebar extends React.Component {
                     />
                   </NavLink>
                 </ListItem>
+
+                <ListItem className={classes.collapseItem}>
+                  <NavLink
+                    to="/location/list"
+                    className={
+                      classes.itemLink + " " + classes.userCollapseLinks
+                    }
+                  >
+                    <span className={collapseItemMini}>
+                      {"BL"}
+                    </span>
+                    <ListItemText
+                      primary={
+                        "Business Locations"
+                      }
+                      disableTypography={true}
+                      className={collapseItemText}
+                    />
+                  </NavLink>
+                </ListItem>
+
                 <ListItem className={classes.collapseItem}>
                   <NavLink
                     to="/services/list"

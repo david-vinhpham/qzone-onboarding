@@ -15,7 +15,7 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
 import priceImage1 from "../../assets/img/faces/profile.jpg";
-import providers from "../../assets/provider.json";
+import services from "../../assets/service.json";
 
 class ServicesList extends React.Component{
   constructor(props) {
@@ -41,7 +41,7 @@ class ServicesList extends React.Component{
           </GridItem>
         </GridContainer>
         <GridContainer>
-          {providers.map((provider, index) => {
+          {services.map((service, index) => {
             return (
               <GridItem xs={12} sm={12} md={3}>
                 <Card product className={classes.cardHover} >
@@ -81,7 +81,7 @@ class ServicesList extends React.Component{
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Link to={`/provider/edit/${provider.id}`}>
+                        <Link to={`/service/edit/${service.id}`}>
                           <Button color="success" simple justIcon >
                             <Edit className={classes.underChartIcons} />
                           </Button>
@@ -90,11 +90,11 @@ class ServicesList extends React.Component{
                     </div>
                     <h4 className={classes.cardProductTitle}>
                       <a href="#pablo" onClick={e => e.preventDefault()}>
-                        {provider.name}
+                        {service.name}
                       </a>
                     </h4>
                     <p className={classes.cardProductDesciprion}>
-                      {provider.description}
+                      {service.description}
                     </p>
                   </CardBody>
                 </Card>

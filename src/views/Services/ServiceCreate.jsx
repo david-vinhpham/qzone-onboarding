@@ -45,11 +45,9 @@ class ServiceCreate extends React.Component{
  		if (this.state.nameState === "success" && this.state.avgServiceTimeState === "success" ){
       if (option === "Save"){
         window.location = "/services/list"
-        
       }
       else{
         window.location = "/services/create"
-        
       }
     }
 	}
@@ -61,15 +59,12 @@ class ServiceCreate extends React.Component{
 		e.preventDefault();
 		let reader = new FileReader();
 		let files = e.target.files[0];
-		const { provider } = this.state
 		console.log("file-------", files)
 		reader.onloadend = () => {
-			provider['file'] = files
-			provider['imagePreviewUrl'] = reader.result
 			this.setState({
-				// file: file,
-				// imagePreviewUrl: reader.result
-				provider: provider
+				file: files,
+				imagePreviewUrl: reader.result
+				//provider: provider
 			});
 		};
 		reader.readAsDataURL(files);
