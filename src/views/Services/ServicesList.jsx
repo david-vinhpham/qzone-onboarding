@@ -5,6 +5,7 @@ import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import ArtTrack from "@material-ui/icons/ArtTrack";
 import { Link } from 'react-router-dom';
+import Search from "@material-ui/icons/Search";
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -13,6 +14,7 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
 import priceImage1 from "../../assets/img/faces/profile.jpg";
 import services from "../../assets/service.json";
@@ -33,6 +35,32 @@ class ServicesList extends React.Component{
                 <CardText color="rose">
                   <h4 className={classes.cardTitle}>Service List</h4>
                 </CardText>
+                <div className="centerDiv">
+                  <div className="search" md={3}>
+                    <CustomInput
+                      formControlProps={{
+                        className: classes.top + " " + classes.search
+                      }}
+                      inputProps={{
+                        placeholder: "Search",
+                        inputProps: {
+                          "aria-label": "Search",
+                          className: classes.searchInput
+                        }
+                      }}
+                    />
+                    <Button
+                      color="white"
+                      aria-label="edit"
+                      justIcon
+                      round
+                      className={classes.top + " " + classes.searchButton} >
+                      <Search
+                        className={classes.headerLinksSvg + " " + classes.searchIcon}
+                      />
+                    </Button>
+                  </div>
+                </div>
                 <Button size="sm" className={classes.buttonDisplay} href="/services/create">
                   New Service
               </Button>

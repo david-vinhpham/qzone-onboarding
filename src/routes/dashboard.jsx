@@ -18,7 +18,8 @@ import ProviderEdit from "../views/Provider/ProviderEdit.jsx";
 import Reports from "../views/Reports/Reports.jsx";
 import ServicesList from "../views/Services/ServicesList.jsx";
 import ServiceCreate from "../views/Services/ServiceCreate.jsx";
-
+import ServiceEdit from "../views/Services/ServiceEdit.jsx";
+import LocationList from "../views/Location/LocationList.jsx";
 
 export const dashboardRoutes = [
   {
@@ -50,6 +51,12 @@ export const dashboardRoutes = [
 
 export const otherRoutes=[
   {
+    path: "/location/list",
+    name: "Location List",
+    icon: LocationOn,
+    component: LocationList
+  },
+  {
     path: "/provider/create",
     name: "Provider Create",
     icon: Person,
@@ -78,6 +85,12 @@ export const otherRoutes=[
     name: "Create Services",
     icon: ContentPaste,
     component: ServiceCreate
+  },
+  {
+    path: "/service/edit/:id",
+    name: "Service Edit",
+    icon: ContentPaste,
+    component: ServiceEdit
   },
   {
     path: "/administration",

@@ -86,7 +86,6 @@ class ServiceEdit extends React.Component {
 
     render() {
         const { classes } = this.props;
-
         return (
             <GridItem xs={12} sm={12} md={12}>
                 <Card>
