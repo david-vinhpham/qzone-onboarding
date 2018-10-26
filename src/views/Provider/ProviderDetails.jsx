@@ -36,7 +36,7 @@ class ProviderDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchProviders()
+    //this.props.fetchProviders()
   }
 
   render() {
@@ -79,9 +79,12 @@ class ProviderDetails extends React.Component {
                     </Button>
                   </div>
                 </div>
-                <Button size="sm" href="/provider/create" className={classes.buttonDisplay}>
-                  New Provider
-                </Button>
+                <Link to={`/provider/create`}>
+                  <Button size="sm" className={classes.buttonDisplay}>
+                    New Provider
+                  </Button>
+                </Link>
+                
               </CardHeader>
             </Card>
           </GridItem>

@@ -61,9 +61,11 @@ class ServicesList extends React.Component{
                     </Button>
                   </div>
                 </div>
-                <Button size="sm" className={classes.buttonDisplay} href="/services/create">
-                  New Service
-              </Button>
+                <Link to={`/services/create`}>
+                  <Button size="sm" className={classes.buttonDisplay} >
+                    New Service
+                  </Button>
+                </Link>
               </CardHeader>
             </Card>
           </GridItem>
