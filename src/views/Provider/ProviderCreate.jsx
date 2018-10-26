@@ -44,13 +44,19 @@ class ProviderCreate extends React.Component{
       firstNameState: "",
       lastNameState: "",
       emailState:"",
-
+      isEditMode: null
     };
 
     this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
     this.changeProfileImage = this.changeProfileImage.bind(this);
+    this.doubleClick = this.doubleClick.bind(this);
 
+  }
+
+  doubleClick(fieldName) {
+    console.log("This has been clicked");
+    this.setState({ isEditMode: fieldName });
   }
 
   change(event, stateName,type){
@@ -84,7 +90,7 @@ class ProviderCreate extends React.Component{
     }
   }
 
-  changeCheckbox(event, stateName,type){
+  changeCheckbox(event, stateName, type){
     const { emailPreference } = this.state.provider;
     const currentIndex = emailPreference.indexOf(event.target.value);
     const newChecked = [...emailPreference];
@@ -156,6 +162,7 @@ class ProviderCreate extends React.Component{
             providerInfo={this.state} 
             change={this.change} 
             changeCheckbox={this.changeCheckbox}
+            onDoubleClick={this.doubleClick}
             changeProfileImage={this.changeProfileImage} 
             classes={this.props.classes}
           />

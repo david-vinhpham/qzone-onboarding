@@ -36,7 +36,7 @@ class ProviderDetails extends React.Component {
   }
 
   componentDidMount() {
-    //this.props.fetchProviders()
+    this.props.fetchProviders()
   }
 
   render() {
@@ -138,9 +138,7 @@ class ProviderDetails extends React.Component {
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>
-                      <a href="#pablo" onClick={e => e.preventDefault()}>
-                        {provider.name}
-                      </a>
+                      {provider.name}
                     </h4>
                     <p className={classes.cardProductDesciprion}>
                       {provider.description}

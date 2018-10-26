@@ -12,7 +12,7 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import { fetchProvider, createProvider } from '../../actions/provider';
-import {verifyLength, verifyEmail} from "../../validation/validation.jsx"
+import { verifyLength, verifyEmail } from "../../validation/validation.jsx"
 import ProviderForm from "./ProviderForm"
 import defaultImage from "../../assets/img/default-avatar.png";
 
@@ -44,11 +44,13 @@ class ProviderEdit extends React.Component{
       firstNameState: "",
       lastNameState: "",
       emailState:"",
+      isEditMode: null
     };
 
     this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
     this.changeProfileImage = this.changeProfileImage.bind(this);
+    this.doubleClick = this.doubleClick.bind(this);
   }
 
   componentWillMount(){
@@ -64,6 +66,11 @@ class ProviderEdit extends React.Component{
       provider[key]= nextProps.provider[key]
       this.setState({provider: provider})
     };
+  }
+
+  doubleClick(fieldName) {
+    console.log("This has been clicked");
+   this.setState({isEditMode: fieldName});
   }
 
   change(event, stateName,type){
@@ -171,6 +178,7 @@ class ProviderEdit extends React.Component{
           <ProviderForm 
             providerInfo={this.state} 
             change={this.change} 
+            onDoubleClick={this.doubleClick}
             changeCheckbox={this.changeCheckbox} 
             changeProfileImage={this.changeProfileImage}
             classes={this.props.classes}
@@ -191,7 +199,9 @@ ProviderEdit.propTypes = {
 };
 
 function mapStateToProps(state) {
-  return{provider: state.providers.data}
+  return {
+    provider: state.providers.data
+  }
 } 
 
 const mapDispatchToProps = (dispatch) => {

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
+import { Link } from 'react-router-dom';
+
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Card from "../../components/Card/Card.jsx";
@@ -171,9 +173,11 @@ class BusinessDetails extends React.Component{
         	</GridContainer>
         </CardBody>
         <CardFooter className={classes.justifyContentCenter}>
-        	<Button color="rose" href="/business/edit">
-          	Edit
-          </Button>
+          <Link to={`/business/edit`}>
+            <Button color="rose">
+              Edit
+            </Button>
+          </Link>
           <Button color="rose">
             Delete
           </Button>

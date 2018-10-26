@@ -58,7 +58,7 @@ const customCheckboxRadioSwitch = {
     transition: "0.3s ease all"
   },
   labelHorizontal: {
-    color: "rgba(0, 0, 0, 0.26)",
+    color: "rgba(37, 35, 35, 0.85)",
     cursor: "pointer",
     display: "inline-flex",
     fontSize: "14px",
@@ -81,7 +81,8 @@ const customCheckboxRadioSwitch = {
     lineHeight: "1.428571429",
     fontWeight: "400",
     paddingTop: "22px",
-    marginRight: "0"
+    marginRight: "0",
+    marginTop: "16px",
   },
   labelError: {
     color: dangerColor
