@@ -12,7 +12,7 @@ class ProviderForm extends React.Component{
   
 	render() {
     const { classes,providerInfo} = this.props;
-    const {provider, firstNameState, lastNameState, emailState, isEditMode} = providerInfo
+    const {provider, firstNameState, lastNameState, emailState} = providerInfo
 		return(
       <form>
         <GridContainer>

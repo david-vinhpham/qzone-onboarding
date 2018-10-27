@@ -2,6 +2,9 @@ import axios from 'axios';
 import { sessionService } from 'redux-react-session';
 import { Auth } from 'aws-amplify';
 
+export const AUTH_REMOVE_TOKEN = 'AUTH_REMOVE_TOKEN';
+export const AUTH_SET_TOKEN = 'AUTH_SET_TOKEN';
+
 export const REGISTER_USER = 'REGISTER_USER';
 export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
@@ -19,6 +22,33 @@ export const FETCH_USERTYPE_LIST = 'fetch_usertype_list';
 export const FETCH_USER_BY_USERID = 'fetch_user_by_userid';
 
 const ROOT_URL = `http://45.117.170.211:8091/api/user`
+const client_id = '3ov1blo2eji4acnqfcv88tcidn'
+
+export const authGetToken = () => {
+  return (dispatch, getState) => {
+    const promise = new Promise((resolve, reject) => {
+      var username = localStorage.getItem('username');
+      var token = localStorage.getItem('CognitoIdentityServiceProvider.'+ client_id +'.'+ username +'.idToken');
+        console.log("token---------", token);
+        if(token) {
+          resolve(token)
+        } else {
+          console.log("please login first")
+          reject();
+        }
+    });
+    return promise;
+  }
+}
+
+export function logout() {
+  Auth.signOut({ global: true })
+    .then(data => {
+      console.log(data);
+      window.location = "/login";
+    })
+    .catch(err => console.log(err));
+}
 
 export function facebookSignIn() {
   return (dispatch) => {
@@ -71,7 +101,60 @@ export function googleSignIn() {
   }
 }
 
+export function register(values) {
+  console.log("values-------", values);
+  return (dispatch) => {
+    dispatch(getUser())
+    Auth.signUp({
+      username: values.registerEmail,
+      password: values.registerPassword,
+      attributes: {
+        email: values.registerEmail
+      },
+      validationData: []
+    })
+      .then(json => {
+        console.log("json-------")
+        if (json) {
+          localStorage.setItem('username', json.username);
+          dispatch(registerUserSuccess(json));
+        } else {
+          dispatch(registerUserFailure("Topology Error"))
+        }
+        return json;
+      })
+      .catch(err => dispatch(registerUserFailure(err)))
+  };
+}
+
 export function registerUser(values) {
+  return (dispatch) => {
+  if (values.registrationType === 'Organization') {
+    //Call organization api
+    fetch('http://35.189.61.189:8080/api/organizations/validate?name=' + values.registerOrganizationName, {
+      method: 'GET',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log("json-------", json)
+        if (json.object === 'VALID') {
+          dispatch(register(values));
+        } else {
+          alert("ALready registered organization please login");
+        }
+      })
+      .catch(err => console.log("error", err))
+  }
+  else // for customer
+    dispatch(register(values));
+}
+}
+
+/* export function registerUser(values) {
   console.log("values-------", values);
   return (dispatch) => {
     dispatch(getUser())
@@ -83,10 +166,10 @@ export function registerUser(values) {
       },
       validationData: [] 
     })
-      //.then(res => res.json())
       .then(json => {
         console.log("json-------")
         if(json) {
+            localStorage.setItem('username', json.username);
             dispatch(registerUserSuccess(json));                    
         } else {
             dispatch(registerUserFailure("Topology Error"))
@@ -95,7 +178,7 @@ export function registerUser(values) {
       })  
       .catch(err => dispatch(registerUserFailure(err)))
   };
-}
+} */
 
 export function getUser() {
   return {
@@ -179,10 +262,10 @@ export function loginUser(values, history) {
   return (dispatch) => {
     dispatch(getUser())
     Auth.signIn(values.loginEmail, values.loginPassword)
-      //.then(res => res.json())
       .then(json => {
-        console.log("json-------")
+        console.log("json-------", json);
         if(json) {
+            localStorage.setItem('username', json.username);
             dispatch(registerUserSuccess(json)); 
             history.push('/dashboard')                   
         } else {

@@ -24,6 +24,8 @@ class RegisterPage extends React.Component {
     super(props);
     this.state = {
       cardAnimaton: "cardHidden",
+      registerOrganizationName: "",
+      registerOrganizationNameState: "",
       registerEmail: "",
       registerEmailState: "",
       registerPassword: "",
@@ -34,7 +36,8 @@ class RegisterPage extends React.Component {
       registerCheckboxState: "",
       openVerificationModal: false,
       code: '',
-      loading: false
+      loading: false,
+      registrationType: "Customer"
     };
     this.change = this.change.bind(this);
   }
@@ -74,11 +77,20 @@ class RegisterPage extends React.Component {
     if (this.state.registerPasswordState === "") {
       this.setState({ registerPasswordState: "error" });
     }
+    if (this.state.registerOrganizationName === "") {
+      this.setState({ registerOrganizationNameState: "error" })
+    }
     if (this.state.registerConfirmPasswordState === "" || this.state.registerPassword !== this.state.registerConfirmPassword) {
       this.setState({ registerConfirmPasswordState: "error" });
     }
     if (this.state.registerCheckboxState === "" ) {
       this.setState({ registerCheckboxState: "error" });
+    }
+    if (this.state.registrationType === "Organization" && this.state.registerEmailState === "success" && this.state.registerPasswordState === "success" && this.state.registerConfirmPasswordState === "success" && this.state.registerCheckboxState === "success" && this.state.registerOrganizationName === "success") {
+      //window.location = '/dashboard'
+      this.setState({ loading: true }, () => {
+        this.props.registerUser(this.state);
+      });
     }
     if (this.state.registerEmailState === "success" && this.state.registerPasswordState === "success" && this.state.registerConfirmPasswordState === "success" && this.state.registerCheckboxState === "success") {
       //window.location = '/dashboard'
@@ -86,6 +98,10 @@ class RegisterPage extends React.Component {
         this.props.registerUser(this.state);
       });
     }
+  }
+
+  registerAsClick(registrationType) {
+    this.setState({ registrationType: registrationType })
   }
 
   change(event, stateName, type, stateNameEqualTo, maxValue) {
@@ -129,6 +145,12 @@ class RegisterPage extends React.Component {
         this.setState({[stateName]: event.target.value})
         break;
       default:
+        if (event.target.value) {
+          this.setState({ [stateName + "State"]: "success" });
+        } else {
+          this.setState({ [stateName + "State"]: "error" });
+        }
+        this.setState({ [stateName]: event.target.value })
         break;
     }
   }
@@ -169,7 +191,28 @@ class RegisterPage extends React.Component {
                     </Button>
                   </div>
                 </CardHeader>
+
                 <CardBody>
+                    {this.state.registrationType === 'Organization' &&
+                      (<CustomInput
+                        labelText="Organization Name"
+                        success={this.state.registerOrganizationNameState === "success"}
+                        error={this.state.registerOrganizationNameState === "error"}
+                        id="registerorganizationname"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event =>
+                            this.change(event, "registerOrganizationName"),
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Email className={classes.inputAdornmentIcon} />
+                            </InputAdornment>
+                          )
+                        }}
+                      />)}
+
                   <CustomInput
                     labelText="Email"
                     success={this.state.registerEmailState === "success"}
@@ -270,6 +313,20 @@ class RegisterPage extends React.Component {
                       Get started
                     </Button>
                   </div>
+
+                    {this.state.registrationType === 'Customer' &&
+                      (<div className={classes.center}>
+                        <Button color="rose" simple size="lg" block onClick={this.registerAsClick.bind(this, 'Organization')}>
+                          Register As Organization
+                  </Button>
+                      </div>)}
+
+                    {this.state.registrationType === 'Organization' &&
+                      (<div className={classes.center}>
+                        <Button color="rose" simple size="lg" block onClick={this.registerAsClick.bind(this, 'Customer')}>
+                          Register As Customer
+                    </Button>
+                      </div>)}
                 </CardBody>
               </Card>
             </form>

@@ -7,7 +7,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import ArtTrack from "@material-ui/icons/ArtTrack";
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -90,7 +89,7 @@ class ProviderDetails extends React.Component {
           </GridItem>
         </GridContainer>
         <GridContainer>
-          {providers.map((provider, index) => {
+          {this.state.data.map((provider, index) => {
             return (
               <GridItem xs={12} sm={12} md={3}>
                 <Card product className={classes.cardHover} >
@@ -101,16 +100,6 @@ class ProviderDetails extends React.Component {
                   </CardHeader>
                   <CardBody>
                     <div className={classes.cardHoverUnder}>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="View"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button color="transparent" simple justIcon>
-                          <ArtTrack className={classes.underChartIcons} />
-                        </Button>
-                      </Tooltip>
                       <Tooltip
                         id="tooltip-top"
                         title="Remove"
@@ -138,10 +127,10 @@ class ProviderDetails extends React.Component {
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>
-                      {provider.name}
+                      {provider.firstName} {provider.lastName}
                     </h4>
                     <p className={classes.cardProductDesciprion}>
-                      {provider.description}
+                      {provider.id}
                     </p>
                   </CardBody>
                 </Card>
@@ -155,7 +144,7 @@ class ProviderDetails extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { providerLists: state.providers.data }
+  return { providerLists: state.providers.providers }
 }
 
 const mapDispatchToProps = (dispatch) => {

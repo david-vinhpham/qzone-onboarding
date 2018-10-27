@@ -4,10 +4,13 @@ import {
     REGISTER_USER_SUCCESS,
     VERIFY_USER,
     VERIFY_USER_FAILURE,
-    VERIFY_USER_SUCCESS
+    VERIFY_USER_SUCCESS,
+  AUTH_SET_TOKEN,
+  AUTH_REMOVE_TOKEN
   } from './../actions/auth';
   
   const initialState = {
+    token: null,
     userDetails: [],
     userError: null,
     userLoading: false,
@@ -19,6 +22,10 @@ import {
   
   const reducer = (state = initialState, action) => {
     switch (action.type) {
+      case AUTH_SET_TOKEN:
+        return { ...state, token: action.token };
+      case AUTH_REMOVE_TOKEN:
+        return { ...state, token: null };
     case REGISTER_USER:// start fetching posts and set loading = true
       return { ...state,  userError: null, userLoading: true }; 
     case REGISTER_USER_SUCCESS:// return list of posts and make loading = false

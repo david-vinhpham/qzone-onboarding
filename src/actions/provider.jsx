@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import {authGetToken} from './auth'
 export const FETCH_PROVIDERS = 'FETCH_PROVIDERS';
 export const FETCH_PROVIDERS_SUCCESS = 'FETCH_PROVIDERS_SUCCESS';
 export const FETCH_PROVIDERS_FAILURE = 'FETCH_PROVIDERS_FAILURE';
@@ -12,21 +12,32 @@ export const FETCH_PROVIDER = 'FETCH_PROVIDER';
 export const FETCH_PROVIDER_SUCCESS = 'FETCH_PROVIDER_SUCCESS';
 export const FETCH_PROVIDER_FAILURE = 'FETCH_PROVIDER_FAILURE';
 
-const ROOT_URL = `http://35.189.61.189:8080/`;
+const ROOT_URL = `http://35.189.61.189:8080/api/`;
 
 export function fetchProviders() {
   return (dispatch) => {
-    fetch(ROOT_URL + `providers`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
+    dispatch(getProviders());
+    dispatch(authGetToken())
+      .then(token => {
+        console.log("token inside provider--------", token)
+        return (
+          fetch(ROOT_URL + `providers`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer '+token
+            }
+          })
+        )
+      })
+      .catch(() => {
+        alert("No token found");
+      })
     .then(res => res.json())
     .then(json => {
-      if (json.success) {
-        dispatch(fetchProvidersSuccess(json.success));
+      console.log("json-----------", json)
+      if (json.objects) {
+        dispatch(fetchProvidersSuccess(json.objects));
       } else {
         dispatch(fetchProvidersFailure("Topology Error"))
       }
@@ -68,8 +79,9 @@ export function createProvider(values) {
     })
       .then(res => res.json())
       .then(json => {
-        if (json.success) {
-          dispatch(createProviderSuccess(json.success));
+        console.log("json-------", json)
+        if (json) {
+          dispatch(createProviderSuccess(json));
         } else {
           dispatch(createProviderFailure("Topology Error"))
         }
@@ -100,25 +112,34 @@ export function createProviderFailure(error) {
 }
 
 export function fetchProvider(id) {
-  const request = axios.get(`${ROOT_URL}/${id}`)
   return (dispatch) => {
-    fetch(ROOT_URL + `${id}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    })
+    dispatch(authGetToken())
+      .then(token => {
+        console.log("token inside provider--------", token)
+        return (
+          fetch(ROOT_URL + `providers/` + `${id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            }
+          })
+        )
+      })
+      .catch(() => {
+        alert("No token found");
+      })
       .then(res => res.json())
       .then(json => {
-        if (json.success) {
-          dispatch(createProviderSuccess(json.success));
+        console.log("jaon-----", json)
+        if (json.object) {
+          dispatch(fetchProviderSuccess(json.object));
         } else {
-          dispatch(createProviderFailure("Topology Error"))
+          dispatch(fetchProviderFailure("Topology Error"))
         }
         return json;
       })
-      .catch(err => dispatch(createProviderFailure(err)))
+      .catch(err => dispatch(fetchProviderFailure(err)))
   };
 }
 

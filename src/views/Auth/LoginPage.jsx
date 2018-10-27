@@ -123,7 +123,6 @@ class LoginPage extends React.Component {
                         href="https://www.plus.google.com"
                         target="_blank"
                         color="transparent"
-
                       >
                         <i className={"fab fa-google-plus-g"} />
                       </Button>

@@ -5,8 +5,10 @@ import { Manager, Target, Popper } from "react-popper";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { MenuItem, MenuList, ClickAwayListener, Paper, Grow, Hidden, TextField } from "@material-ui/core";
 import { Person, Notifications, Dashboard, Search } from "@material-ui/icons";
+import { Auth } from 'aws-amplify'
 import Button from "../CustomButtons/Button";
 import headerLinksStyle from "../../assets/jss/material-dashboard-pro-react/components/headerLinksStyle";
+import { logout} from '../../actions/auth';
 
 class HeaderLinks extends React.Component {
   state = {
@@ -26,8 +28,11 @@ class HeaderLinks extends React.Component {
     this.setState({ userOpen: false });
   };
   handleLogout = () => {
-    this.setState({ userOpen: false });
-    window.location = "/login"
+    Auth.signOut({ global: true })
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
+    //this.setState({ userOpen: false });
+    //window.location = "/login"
   }
   render() {
     const { classes } = this.props;
@@ -207,7 +212,7 @@ class HeaderLinks extends React.Component {
                       {"Profile"}
                     </MenuItem>
                     <MenuItem
-                      onClick={this.handleLogout}
+                      onClick={logout}
                       className={dropdownItem}
                     >
                       {"Logout"}

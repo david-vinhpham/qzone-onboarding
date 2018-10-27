@@ -200,7 +200,7 @@ ProviderEdit.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    provider: state.providers.data
+    provider: state.providers.provider
   }
 } 
 
