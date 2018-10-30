@@ -10,9 +10,13 @@
     "axios": "^0.18.0",
     "contentful": "^6.1.1",
     "e": "0.0.4",
+    "express": "^4.16.4",
+    "express-favicon": "^2.0.1",
+    "forever": "^0.15.3",
     "fullcalendar-reactwrapper": "^1.0.7",
     "history": "^4.7.2",
     "lodash": "^4.17.10",
+    "path": "^0.12.7",
     "perfect-scrollbar": "^1.4.0",
     "react": "^16.4.1",
     "react-bootstrap-sweetalert": "^4.4.1",
@@ -36,9 +40,10 @@
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
-    "start": "react-scripts start",
+    "start": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "homepage": "/build"
 }
