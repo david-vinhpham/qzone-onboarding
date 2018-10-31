@@ -220,15 +220,38 @@ class ProviderForm extends React.Component{
           <GridItem xs={12} sm={2}>
             <FormLabel
               className={
-                classes.labelHorizontal +
-                " " +
-                classes.labelHorizontalRadioCheckbox
+                classes.labelHorizontal 
               }
             >
               Email Preference
             </FormLabel>
           </GridItem>
           <GridItem xs={12} sm={4}>
+            {providerInfo.isEditMode === 'emailPreference'
+              ?
+              <CustomInput
+                labelText="Email Preference"
+                value={provider.emailPreference || ''}
+                id="emailPreference"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  onChange: event =>
+                    this.props.change(event, "emailPreference")
+                }}
+              />
+              :
+              <FormLabel
+                className={classes.labelLeftHorizontal}
+                onClick={() => this.props.onDoubleClick('emailPreference')}
+              >
+                {provider.emailPreference || 'emailPreference'}
+              </FormLabel>
+            }
+          </GridItem>
+
+          {/* <GridItem xs={12} sm={4}>
             <CustomCheckbox 
               value="IN" 
               label="Individual Appointment Alert" 
@@ -250,7 +273,7 @@ class ProviderForm extends React.Component{
               onClick={event =>this.props.changeCheckbox(event, "emailPreference", "preference")}
               classes={classes}
             />
-          </GridItem>
+          </GridItem> */}
           <GridItem xs={12} sm={2}>
             <FormLabel
               className={

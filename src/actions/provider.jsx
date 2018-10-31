@@ -68,15 +68,26 @@ export function fetchProvidersFailure(error) {
 }
 
 export function createProvider(values) {
+  console.log("values-", values)
   return (dispatch) => {
-    fetch(ROOT_URL + `providers`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: values
-    })
+    dispatch(authGetToken())
+      .then(token => {
+        console.log("token inside provider--------", token)
+        return (
+          fetch(ROOT_URL + `providers`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({provider: values})
+          })
+        )
+      })
+      .catch(() => {
+        alert("No token found");
+      })
       .then(res => res.json())
       .then(json => {
         console.log("json-------", json)

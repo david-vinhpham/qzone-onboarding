@@ -30,7 +30,7 @@ class ProviderCreate extends React.Component{
         avgCustomersPerHour: "",
         mobileNumber: "",
         credentials:"",
-        emailPreference: [],
+        emailPreference: "",
         enableWaitListAppointment: "",
         isOpen: "",
         createdBy: "",
