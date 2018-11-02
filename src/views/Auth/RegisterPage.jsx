@@ -37,7 +37,7 @@ class RegisterPage extends React.Component {
       openVerificationModal: false,
       code: '',
       loading: false,
-      registrationType: "Customer"
+      registrationType: "Organization"
     };
     this.change = this.change.bind(this);
   }
@@ -298,7 +298,6 @@ class RegisterPage extends React.Component {
                     label={
                       <span>
                         I agree to the terms and conditions
-                        
                       </span>
                     }
                   />

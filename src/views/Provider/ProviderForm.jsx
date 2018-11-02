@@ -152,6 +152,7 @@ class ProviderForm extends React.Component{
             }
           </GridItem>
         </GridContainer>
+        
         <GridContainer>
           <GridItem xs={12} sm={2}>
             <FormLabel className={classes.labelHorizontal}>

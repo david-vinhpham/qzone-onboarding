@@ -5,6 +5,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import { Email, LockOutline } from "@material-ui/icons";
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -169,12 +170,19 @@ class LoginPage extends React.Component {
                         )
                       }}
                     />
-                  </CardBody>
-                  <CardFooter className={classes.justifyContentCenter}>
-                    <Button color="rose" simple size="lg" block onClick={this.loginClick}>
-                      Let's Go
+                    <div>
+                      <Button color="rose" simple size="lg" block onClick={this.loginClick}>
+                        Let's Go
                     </Button>
-                  </CardFooter>
+                    </div>
+                    <div>
+                      <Link to={`/register`}>
+                        <Button color="rose" simple size="lg" block>
+                          Register as new User
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardBody>
                 </Card>
               </form>
             </GridItem>
