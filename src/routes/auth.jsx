@@ -13,7 +13,10 @@ const authRoutes = [
   },
   {
     path: "/register",
-    
+    name: "Register Page",
+    short: "Register",  
+    mini: "RP",
+    icon: PersonAdd,
     component: RegisterPage
   },
 ];
