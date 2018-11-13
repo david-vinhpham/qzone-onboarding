@@ -5,6 +5,7 @@ import {  Person,
           Report,
           BubbleChart,
           LocationOn,
+  PersonAdd
         } from "@material-ui/icons";
 import Dashboard from "../views/Dashboard/Dashboard.jsx";
 import Administration from "../views/Administration/Administration.jsx";
@@ -13,13 +14,14 @@ import BusinessEdit from "../views/BusinessDetails/BusinessEdit.jsx";
 import Calendar from "../views/Calendar/Calendar.jsx";
 import CustomerFlow from "../views/CustomerFlow/CustomerFlow.jsx";
 import ProviderDetails from "../views/Provider/ProviderDetails.jsx";
-import ProviderCreate from "../views/Provider/ProviderCreate.jsx";
+import ProviderCreate from "../views/Provider/ProviderWizard.jsx";
 import ProviderEdit from "../views/Provider/ProviderEdit.jsx";
 import Reports from "../views/Reports/Reports.jsx";
 import ServicesList from "../views/Services/ServicesList.jsx";
 import ServiceCreate from "../views/Services/ServiceCreate.jsx";
 import ServiceEdit from "../views/Services/ServiceEdit.jsx";
 import LocationList from "../views/Location/LocationList.jsx";
+import RegisterPage from "../views/Auth/RegisterPage.jsx";
 
 export const dashboardRoutes = [
   {
@@ -116,4 +118,12 @@ export const otherRoutes=[
     icon: BusinessCenter,
     component: BusinessEdit
   },
+  {
+    path: "/register",
+    name: "Register Page",
+    short: "Register",
+    mini: "RP",
+    icon: PersonAdd,
+    component: RegisterPage
+  }
 ]

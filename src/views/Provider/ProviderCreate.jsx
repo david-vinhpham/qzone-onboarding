@@ -24,12 +24,16 @@ class ProviderCreate extends React.Component{
       provider:{
         firstName: "",
         lastName: "",
-        avgserviceTime: "",
-        externalProviderId: "",
+        middleName: "",
         email: "",
-        avgCustomersPerHour: "",
         mobileNumber: "",
-        credentials:"",
+        phoneNumber: "",
+        file: null,
+        imagePreviewUrl: defaultImage,
+        tags: [],
+        qualifications: [],
+        description: ""
+         /* credentials:"",
         emailPreference: "",
         enableWaitListAppointment: "",
         isOpen: "",
@@ -37,9 +41,10 @@ class ProviderCreate extends React.Component{
         createdOn: "",
         isDeleted: false,
         updatedBy: "",
-        updatedOn: "",
-        file: null,
-        imagePreviewUrl: defaultImage
+        updatedOn: "", */
+         //avgserviceTime: "",
+        //externalProviderId: "",
+        //avgCustomersPerHour: "",
       },
       firstNameState: "",
       lastNameState: "",
@@ -59,7 +64,7 @@ class ProviderCreate extends React.Component{
     this.setState({ isEditMode: fieldName });
   }
 
-  change(event, stateName,type){
+  change(event, stateName, type){
     const { provider } = this.state
     provider[stateName]= (event.target.value || event.target.checked)
     this.setState({provider: provider})
