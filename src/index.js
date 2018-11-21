@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createBrowserHistory } from "history";
 import { Router, Route, Switch } from "react-router-dom";
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import Amplify from 'aws-amplify';
 
 //import promise from 'redux-promise';
@@ -17,6 +17,7 @@ import App from './App';
 import { withAuthenticator } from 'aws-amplify-react';
 //const AppWithAuth = withAuthenticator(App);
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const federated = {
     google_client_id: '1075505092107-j8821j05r48pco773m0mqb16g1po5gtj.apps.googleusercontent.com',
     facebook_app_id: '243175483037775',
@@ -55,8 +56,8 @@ Amplify.configure({
 });
 
 const hist = createBrowserHistory();
-const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
-const store = createStoreWithMiddleware(reducers)
+const createStoreWithMiddleware = composeEnhancers(applyMiddleware(thunk, logger))(createStore);
+const store = createStoreWithMiddleware(reducers);
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={hist}>

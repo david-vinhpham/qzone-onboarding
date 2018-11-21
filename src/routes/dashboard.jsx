@@ -5,7 +5,8 @@ import {  Person,
           Report,
           BubbleChart,
           LocationOn,
-  PersonAdd
+  PersonAdd,
+    Email
         } from "@material-ui/icons";
 import Dashboard from "../views/Dashboard/Dashboard.jsx";
 import Administration from "../views/Administration/Administration.jsx";
@@ -22,6 +23,7 @@ import ServiceCreate from "../views/Services/ServiceCreate.jsx";
 import ServiceEdit from "../views/Services/ServiceEdit.jsx";
 import LocationList from "../views/Location/LocationList.jsx";
 import RegisterPage from "../views/Auth/RegisterPage.jsx";
+import EmailTemplates from '../views/EmailTemplates/EmailTemplates';
 
 export const dashboardRoutes = [
   {
@@ -47,6 +49,12 @@ export const dashboardRoutes = [
     name: "Manage Calendar",
     icon: BubbleChart,
     component: Calendar
+  },
+  {
+    path: "/email-templates",
+    name: "Email Templates Page",
+    icon: Email,
+    component: EmailTemplates
   },
   { redirect: true, path: "/", pathTo: "/login", name: "Login" }
 ];
@@ -126,4 +134,5 @@ export const otherRoutes=[
     icon: PersonAdd,
     component: RegisterPage
   }
+
 ]
