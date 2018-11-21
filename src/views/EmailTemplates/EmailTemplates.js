@@ -28,7 +28,7 @@ class EmailTemplates extends Component {
   componentWillReceiveProps(nextProps) {
     const { templates } = nextProps;
     let togglePanel = null;
-    if (templates.length !== this.props.templates.length) {
+    if (templates.length) {
       togglePanel = templates.map(template => ({ [template.id]: false }));
     }
     this.setState({ togglePanel });
@@ -41,7 +41,6 @@ class EmailTemplates extends Component {
 
   render() {
     const { classes, loading, error, templates } = this.props;
-    const { togglePanel } = this.state;
     const emailTemplates = loading ? <RingLoader size={30} color="rose" />
       : (<Card>
         <CardHeader color="rose" icon>
@@ -51,7 +50,7 @@ class EmailTemplates extends Component {
         </CardHeader>
         <CardBody>
           { templates.length && templates.map(template => (
-            <ExpansionPanel keys={template.id} onChange={() => this.expandHandler(template.id)}>
+            <ExpansionPanel key={template.id} onChange={() => this.expandHandler(template.id)}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                 <Typography>{template.name}</Typography>
               </ExpansionPanelSummary>
