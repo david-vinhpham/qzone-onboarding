@@ -1,6 +1,7 @@
 import {
   FETCH_EMAIL_TEMPLATES_START, FETCH_EMAIL_TEMPLATES_SUCCESS, FETCH_EMAIL_TEMPLATES_ERROR,
   FETCH_TEMPLATE_START, FETCH_TEMPLATE_SUCCESS, FETCH_TEMPLATE_ERROR,
+  DELETE_TEMPLATE_START, DELETE_TEMPLATE_SUCCESS, DELETE_TEMPLATE_ERROR,
 } from "../actions/email_templates";
 
 const initialState = {
@@ -25,9 +26,14 @@ const reducer = (state = initialState, action) => {
       return { ...state, loading: false, templateContent: action.payload.object.content, templateName: action.payload.object.name };
     case FETCH_TEMPLATE_ERROR:
       return { ...state, loading: false, error: action.payload };
+    case DELETE_TEMPLATE_START:
+      return { loading: true };
+    case DELETE_TEMPLATE_SUCCESS:
+      return { loading: false };
+    case DELETE_TEMPLATE_ERROR:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }
 };
-
 export default reducer;

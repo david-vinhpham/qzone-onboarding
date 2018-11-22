@@ -14,7 +14,7 @@ import CardFooter from "../../components/Card/CardFooter.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import gridSystemStyle from "../../assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
-import { fetchTemplates } from "../../actions/email_templates";
+import { fetchTemplates, deleteTemplate } from "../../actions/email_templates";
 
 import { connect } from 'react-redux';
 
@@ -38,6 +38,10 @@ class EmailTemplates extends Component {
     const { togglePanel } = this.state;
     const newTogglePanel = Object.keys(togglePanel).map(keyId => ({ [keyId]: false }));
     this.setState({ ...newTogglePanel, [newTogglePanel[id]]: true });
+  };
+
+  deleteTemplateHandler = (id) => {
+    this.props.deleteTemplate(id);
   };
 
   render() {
@@ -64,9 +68,7 @@ class EmailTemplates extends Component {
                     Edit
                   </Button>
                 </Link>
-                <Link to={'/email-templates'}>
-                  <Button>Delete</Button>
-                </Link>
+                <Button onClick={() => this.deleteTemplateHandler(template.id)}>Delete</Button>
               </ExpansionPanelActions>
             </ExpansionPanel>
           ))}
@@ -86,6 +88,7 @@ class EmailTemplates extends Component {
 const mapStateToProps = state => ({ templates: state.email.templates, loading: state.email.loading, error: state.email.error });
 const mapDispatchToProps = dispatch => ({
   fetchTemplates: () => dispatch(fetchTemplates()),
+  deleteTemplate: (id) => dispatch(deleteTemplate(id))
 });
 
 export default withStyles(gridSystemStyle)(connect(mapStateToProps, mapDispatchToProps)(EmailTemplates));
