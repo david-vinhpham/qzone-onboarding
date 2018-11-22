@@ -24,19 +24,20 @@ import ServiceEdit from "../views/Services/ServiceEdit.jsx";
 import LocationList from "../views/Location/LocationList.jsx";
 import RegisterPage from "../views/Auth/RegisterPage.jsx";
 import EmailTemplates from '../views/EmailTemplates/EmailTemplates';
+import EditEmailTemplate from "../views/EmailTemplates/EditEmailTemplate";
 
 export const dashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
     icon: DashboardIcon,
-    component: Dashboard    
+    component: Dashboard
   },
   {
     path: "/customer_flow",
     name: "Manage Customer Flow",
     icon: DashboardIcon,
-    component: CustomerFlow    
+    component: CustomerFlow
   },
   {
     path: "/reports",
@@ -133,6 +134,14 @@ export const otherRoutes=[
     mini: "RP",
     icon: PersonAdd,
     component: RegisterPage
+  },
+  {
+    path: "/email-templates/edit/:id",
+    name: "Email Template Edit",
+    short: "Edit Email Template",
+    mini: "EET",
+    icon: Email,
+    component: EditEmailTemplate
   }
 
 ]

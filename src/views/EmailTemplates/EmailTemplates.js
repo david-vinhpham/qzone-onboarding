@@ -59,7 +59,7 @@ class EmailTemplates extends Component {
                 {template.content}
               </ExpansionPanelDetails>
               <ExpansionPanelActions>
-                <Link to={'/email-templates/edit'}>
+                <Link to={`/email-templates/edit/${template.id}`}>
                   <Button color="rose">
                     Edit
                   </Button>
