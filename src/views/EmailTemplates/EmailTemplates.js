@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, ExpansionPanelActions } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import { RingLoader } from 'react-spinners';
@@ -57,9 +58,21 @@ class EmailTemplates extends Component {
               <ExpansionPanelDetails>
                 {template.content}
               </ExpansionPanelDetails>
+              <ExpansionPanelActions>
+                <Link to={'/email-templates/edit'}>
+                  <Button color="rose">
+                    Edit
+                  </Button>
+                </Link>
+                <Link to={'/email-templates'}>
+                  <Button>Delete</Button>
+                </Link>
+              </ExpansionPanelActions>
             </ExpansionPanel>
           ))}
         </CardBody>
+        <CardFooter>
+        </CardFooter>
       </Card>);
     return (
       <React.Fragment>
