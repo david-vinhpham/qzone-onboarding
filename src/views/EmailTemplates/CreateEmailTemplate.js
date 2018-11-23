@@ -1,9 +1,6 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import withStyles from "@material-ui/core/styles/withStyles";
-import GridContainer from "../../components/Grid/GridContainer.jsx";
-import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
@@ -12,7 +9,7 @@ import CardFooter from "../../components/Card/CardFooter.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import gridSystemStyle from "../../assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
-import { createTemplate } from '../../actions/email_templates';
+import {createTemplate} from '../../actions/email_templates';
 
 class CreateEmailTemplate extends Component {
   state = {
@@ -38,7 +35,8 @@ class CreateEmailTemplate extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { history } = this.props;
-    const { templateId } = nextProps;
+    const { templateId, isCreatedSuccessful } = nextProps;
+    console.log('next', nextProps);
     if (templateId) {
       history.push('/email-templates');
     }
@@ -86,6 +84,7 @@ class CreateEmailTemplate extends Component {
 const mapStateToProps = state => ({
   loading: state.email.loading,
   templateId: state.email.templateId,
+  isCreatedSuccessful: state.email.isCreatedSuccessful,
 });
 
 const mapDispatchToProps = dispatch => ({

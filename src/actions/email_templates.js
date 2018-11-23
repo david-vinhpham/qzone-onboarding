@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const emailTemplateUrl = 'http://54.252.134.87:8999/api/email-temlplates';
+export const emailTemplateUrl = 'http://54.252.134.87:8999/api/email-templates';
 
 export const FETCH_EMAIL_TEMPLATES_START = 'FETCH_EMAIL_TEMPLATES_START';
 export const FETCH_EMAIL_TEMPLATES_SUCCESS = 'FETCH_EMAIL_TEMPLATES_SUCCESS';
@@ -30,8 +30,8 @@ export const deleteTemplateStart = () => ({ type: DELETE_TEMPLATE_START });
 export const deleteTemplateError = (error) => ({ type: DELETE_TEMPLATE_ERROR, payload: error.response.data });
 
 export const createTemplateStart = () => ({ type: CREATE_TEMPLATE_START });
-export const createTemplateSuccess = (response) => ({ type: CREATE_TEMPLATE_SUCCESS, payload: response });
-export const createTemplateError = (error) => ({ type: CREATE_TEMPLATE_ERROR, payload: error });
+export const createTemplateSuccess = (response) => ({ type: CREATE_TEMPLATE_SUCCESS, payload: response.data });
+export const createTemplateError = (error) => ({ type: CREATE_TEMPLATE_ERROR, payload: error.response.data });
 
 export const fetchTemplates = () => dispatch => {
   dispatch(fetchEmailTemplatesStart());
