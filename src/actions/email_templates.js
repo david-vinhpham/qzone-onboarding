@@ -14,6 +14,10 @@ export const DELETE_TEMPLATE_START = 'DELETE_TEMPLATE_START';
 export const DELETE_TEMPLATE_SUCCESS = 'DELETE_TEMPLATE_SUCCESS';
 export const DELETE_TEMPLATE_ERROR = 'DELETE_TEMPLATE_ERROR';
 
+export const CREATE_TEMPLATE_START = 'CREATE_TEMPLATE_START';
+export const CREATE_TEMPLATE_SUCCESS = 'CREATE_TEMPLATE_SUCCESS';
+export const CREATE_TEMPLATE_ERROR = 'CREATE_TEMPLATE_ERROR';
+
 export const fetchEmailTemplatesStart = () => ({ type: FETCH_EMAIL_TEMPLATES_START });
 export const fetchEmailTemplatesSuccess = (response) => ({ type: FETCH_EMAIL_TEMPLATES_SUCCESS, payload: response.data });
 export const fetchEmailTemplatesError = (error) => ({ type: FETCH_EMAIL_TEMPLATES_ERROR, payload: error.response.data });
@@ -23,8 +27,11 @@ export const fetchTemplateSuccess = (response) => ({ type: FETCH_TEMPLATE_SUCCES
 export const fetchTemplateError = (error) => ({ type: FETCH_TEMPLATE_ERROR, payload: error.response.data });
 
 export const deleteTemplateStart = () => ({ type: DELETE_TEMPLATE_START });
-export const deleteTemplateSuccess = (response) => ({ type: DELETE_TEMPLATE_SUCCESS, payload: response.data });
 export const deleteTemplateError = (error) => ({ type: DELETE_TEMPLATE_ERROR, payload: error.response.data });
+
+export const createTemplateStart = () => ({ type: CREATE_TEMPLATE_START });
+export const createTemplateSuccess = (response) => ({ type: CREATE_TEMPLATE_SUCCESS, payload: response });
+export const createTemplateError = (error) => ({ type: CREATE_TEMPLATE_ERROR, payload: error });
 
 export const fetchTemplates = () => dispatch => {
   dispatch(fetchEmailTemplatesStart());
@@ -43,7 +50,14 @@ export const fetchTemplate = (id) => dispatch => {
 export const deleteTemplate = (id) => dispatch => {
   dispatch(deleteTemplateStart());
   axios.delete(`${emailTemplateUrl}/{id}?id=${id}`)
-    .then(response => dispatch(deleteTemplateSuccess(response)))
+    .then(() => fetchTemplates())
     .catch(error => dispatch(deleteTemplateError(error)));
+};
+
+export const createTemplate = (name, content) => dispatch => {
+  dispatch(createTemplateStart());
+  axios.post(`${emailTemplateUrl}/${name}`, content)
+    .then(response => dispatch(createTemplateSuccess(response)))
+    .catch(error => dispatch(createTemplateError(error)));
 };
 

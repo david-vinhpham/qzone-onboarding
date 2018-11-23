@@ -25,6 +25,7 @@ import LocationList from "../views/Location/LocationList.jsx";
 import RegisterPage from "../views/Auth/RegisterPage.jsx";
 import EmailTemplates from '../views/EmailTemplates/EmailTemplates';
 import EditEmailTemplate from "../views/EmailTemplates/EditEmailTemplate";
+import CreateEmailTemplate from "../views/EmailTemplates/CreateEmailTemplate";
 
 export const dashboardRoutes = [
   {
@@ -137,11 +138,15 @@ export const otherRoutes=[
   },
   {
     path: "/email-templates/edit/:id",
-    name: "Email Template Edit",
+    name: "Edit Email Template",
     short: "Edit Email Template",
-    mini: "EET",
-    icon: Email,
     component: EditEmailTemplate
+  },
+  {
+    path: "/email-templates/create",
+    name: "Create Email Template",
+    short: "Create Template",
+    component: CreateEmailTemplate
   }
 
-]
+];

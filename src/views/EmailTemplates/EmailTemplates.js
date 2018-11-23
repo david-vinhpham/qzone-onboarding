@@ -27,9 +27,9 @@ class EmailTemplates extends Component {
     this.props.fetchTemplates();
   }
   componentWillReceiveProps(nextProps) {
-    const { templates } = nextProps;
+    const { templates, loading } = nextProps;
     let togglePanel = null;
-    if (templates.length) {
+    if (!loading && templates.length) {
       togglePanel = templates.map(template => ({ [template.id]: false }));
     }
     this.setState({ togglePanel });
@@ -64,9 +64,7 @@ class EmailTemplates extends Component {
               </ExpansionPanelDetails>
               <ExpansionPanelActions>
                 <Link to={`/email-templates/edit/${template.id}`}>
-                  <Button color="rose">
-                    Edit
-                  </Button>
+                  <Button color="rose">Edit</Button>
                 </Link>
                 <Button onClick={() => this.deleteTemplateHandler(template.id)}>Delete</Button>
               </ExpansionPanelActions>
@@ -74,6 +72,11 @@ class EmailTemplates extends Component {
           ))}
         </CardBody>
         <CardFooter>
+          <Link to={`/email-templates/create`}>
+            <Button color="rose">
+              New template
+            </Button>
+          </Link>
         </CardFooter>
       </Card>);
     return (

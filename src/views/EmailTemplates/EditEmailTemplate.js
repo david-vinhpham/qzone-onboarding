@@ -39,6 +39,7 @@ class EditEmailTemplate extends Component {
         </CardBody>
 
         <CardFooter>
+          <Button color="rose" onClick={this.saveEditHandler}>Save</Button>
           <Button onClick={this.cancelEditHandler}>Cancel</Button>
         </CardFooter>
       </Card>
