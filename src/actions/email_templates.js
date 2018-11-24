@@ -11,6 +11,7 @@ export const UPDATE_EMAIL_TEMPLATES = 'UPDATE_EMAIL_TEMPLATES';
 export const FETCH_TEMPLATE_START = 'FETCH_TEMPLATE_START';
 export const FETCH_TEMPLATE_SUCCESS = 'FETCH_TEMPLATE_SUCCESS';
 export const FETCH_TEMPLATE_ERROR = 'FETCH_TEMPLATE_ERROR';
+export const CLEAN_TEMPLATE_EDIT_STATUS = 'CLEAN_TEMPLATE_EDIT_STATUS';
 
 export const DELETE_TEMPLATE_START = 'DELETE_TEMPLATE_START';
 export const DELETE_TEMPLATE_SUCCESS = 'DELETE_TEMPLATE_SUCCESS';
@@ -29,6 +30,7 @@ export const fetchEmailTemplatesError = (error) => ({ type: FETCH_EMAIL_TEMPLATE
 export const fetchTemplateStart = () => ({ type: FETCH_TEMPLATE_START });
 export const fetchTemplateSuccess = (response) => ({ type: FETCH_TEMPLATE_SUCCESS, payload: response.data });
 export const fetchTemplateError = (error) => ({ type: FETCH_TEMPLATE_ERROR, payload: error.response.data });
+export const cleanTemplateStatus = () => ({ type: CLEAN_TEMPLATE_EDIT_STATUS });
 
 export const deleteTemplateStart = (id) => ({ type: DELETE_TEMPLATE_START, payload: id });
 export const deleteTemplateSuccess = (response) => ({ type: DELETE_TEMPLATE_SUCCESS, payload: response });
