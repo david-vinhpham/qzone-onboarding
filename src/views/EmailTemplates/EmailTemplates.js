@@ -47,6 +47,11 @@ class EmailTemplates extends Component {
     this.props.deleteTemplate(id);
   };
 
+  createTemplateHandler = () => {
+    const { history } = this.props;
+    history.push('/email-templates/create');
+  };
+
   render() {
     const { classes, loading, error, templates } = this.props;
     const templateList = templates.length ? templates.map(template => (
@@ -76,11 +81,9 @@ class EmailTemplates extends Component {
           { templateList }
         </CardBody>
         <CardFooter>
-          <Link to={`/email-templates/create`}>
-            <Button color="rose">
-              New template
-            </Button>
-          </Link>
+          <Button onClick={this.createTemplateHandler} color="rose">
+            New template
+          </Button>
         </CardFooter>
       </Card>);
     return (

@@ -8,7 +8,7 @@ const loading = {
   height: '100vh',
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center',
+  margin: '5em auto',
 };
 
 class Loading extends Component {

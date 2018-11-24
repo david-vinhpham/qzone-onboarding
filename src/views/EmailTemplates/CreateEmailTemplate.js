@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import withStyles from "@material-ui/core/styles/withStyles";
-import CustomInput from "../../components/CustomInput/CustomInput";
-import Card from "../../components/Card/Card.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";
-import CardBody from "../../components/Card/CardBody.jsx";
-import CardFooter from "../../components/Card/CardFooter.jsx";
-import CardText from "../../components/Card/CardText.jsx";
-import Button from "../../components/CustomButtons/Button.jsx";
-import gridSystemStyle from "../../assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
-import { createTemplate, fetchTemplates, cleanCreateTemplateError } from '../../actions/email_templates';
 import Error from 'components/Error/Error';
+import CustomInput from "components/CustomInput/CustomInput";
+import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
+import CardText from "components/Card/CardText.jsx";
+import Button from "components/CustomButtons/Button.jsx";
+import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
+import { createTemplate, fetchTemplates, cleanCreateTemplateError } from 'actions/email_templates';
 
 class CreateEmailTemplate extends Component {
   state = {
@@ -50,8 +50,6 @@ class CreateEmailTemplate extends Component {
   render() {
     const { classes, error } = this.props;
     const { templateName, templateContent } = this.state;
-    console.log('templatename', templateName);
-    console.log('templateContent', templateContent);
     const createdTemplate = error ? <Error cancelError={this.cleanTemplateCreateError}>{error.message}</Error>
       : (<Card>
         <CardHeader color="rose" icon>

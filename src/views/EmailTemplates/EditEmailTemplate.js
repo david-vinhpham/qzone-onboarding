@@ -23,8 +23,6 @@ class EditEmailTemplate extends Component {
 
   cancelEditHandler = () => {
     const { history, cleanTemplateStatus } = this.props;
-    // TODO: should clean old state of name and content
-    console.log('clean the redux state of name and content');
     cleanTemplateStatus();
     history.push('/email-templates');
   };
