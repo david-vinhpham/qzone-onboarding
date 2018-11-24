@@ -8,9 +8,11 @@ import {
   FETCH_EMAIL_TEMPLATES_ERROR,
   FETCH_EMAIL_TEMPLATES_START,
   FETCH_EMAIL_TEMPLATES_SUCCESS,
+  UPDATE_EMAIL_TEMPLATES,
   FETCH_TEMPLATE_ERROR,
   FETCH_TEMPLATE_START,
   FETCH_TEMPLATE_SUCCESS,
+  RESET_DELETE_STATUS,
 } from "../actions/email_templates";
 
 const initialState = {
@@ -19,6 +21,8 @@ const initialState = {
   templateContent: '',
   loading: false,
   error: null,
+  deleteStatus: 404,
+  isTemplateCreated: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -29,27 +33,28 @@ const reducer = (state = initialState, action) => {
       return { ...state, loading: false, templates: action.payload.objects };
     case FETCH_EMAIL_TEMPLATES_ERROR:
       return { ...state, loading: false, error: action.payload };
+    case UPDATE_EMAIL_TEMPLATES:
+      return { ...state, templates: action.payload };
     case FETCH_TEMPLATE_START:
       return { ...state, loading: true };
-    case FETCH_TEMPLATE_SUCCESS: {
-      console.log('edit template', action.payload);
+    case FETCH_TEMPLATE_SUCCESS:
       return { ...state, loading: false, templateContent: action.payload.object.content, templateName: action.payload.object.name };
-    }
     case FETCH_TEMPLATE_ERROR:
       return { ...state, loading: false, error: action.payload };
     case DELETE_TEMPLATE_START:
-      return { loading: true };
+      return { ...state, loading: true, templateIdDeleted: action.payload };
     case DELETE_TEMPLATE_SUCCESS:
-      return { loading: false };
+      return { ...state, loading: false, deleteStatus: action.payload.status };
     case DELETE_TEMPLATE_ERROR:
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     case CREATE_TEMPLATE_START:
       return { ...state, loading: true };
-    case CREATE_TEMPLATE_SUCCESS: {
-      return { ...state, loading: false, templateId: action.payload.object.id, isCreatedSuccessful: action.payload.success };
-    }
+    case CREATE_TEMPLATE_SUCCESS:
+      return { ...state, loading: false, templateId: action.payload.object.id, isTemplateCreated: action.payload.success };
     case CREATE_TEMPLATE_ERROR:
       return { ...state, loading: false, error: action.payload };
+    case RESET_DELETE_STATUS: 
+      return { ...state, deleteStatus: 404 };
     default:
       return state;
   }

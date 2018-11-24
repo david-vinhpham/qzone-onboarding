@@ -9,7 +9,7 @@ import CardFooter from "../../components/Card/CardFooter.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import gridSystemStyle from "../../assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
-import {createTemplate} from '../../actions/email_templates';
+import {createTemplate, fetchTemplates } from '../../actions/email_templates';
 
 class CreateEmailTemplate extends Component {
   state = {
@@ -30,14 +30,11 @@ class CreateEmailTemplate extends Component {
     this.setState({ [type]: event.target.value });
   };
 
-  componentDidMount() {
-  }
-
   componentWillReceiveProps(nextProps) {
     const { history } = this.props;
-    const { templateId, isCreatedSuccessful } = nextProps;
-    console.log('next', nextProps);
-    if (templateId) {
+    const { templateId, isTemplateCreated } = nextProps;
+    if (templateId && isTemplateCreated) {
+      this.props.fetchTemplates();
       history.push('/email-templates');
     }
   }
@@ -84,11 +81,12 @@ class CreateEmailTemplate extends Component {
 const mapStateToProps = state => ({
   loading: state.email.loading,
   templateId: state.email.templateId,
-  isCreatedSuccessful: state.email.isCreatedSuccessful,
+  isTemplateCreated: state.email.isTemplateCreated,
 });
 
 const mapDispatchToProps = dispatch => ({
   createTemplate: (name, content)=> dispatch(createTemplate(name, content)),
+  fetchTemplates: () => dispatch(fetchTemplates()),
 });
 
 export default withStyles(gridSystemStyle)(connect(mapStateToProps,mapDispatchToProps)(CreateEmailTemplate));

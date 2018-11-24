@@ -54,7 +54,7 @@ export const dashboardRoutes = [
   },
   {
     path: "/email-templates",
-    name: "Email Templates Page",
+    name: "Email Templates",
     icon: Email,
     component: EmailTemplates
   },
