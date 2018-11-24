@@ -2,6 +2,7 @@ import {
   CREATE_TEMPLATE_ERROR,
   CREATE_TEMPLATE_START,
   CREATE_TEMPLATE_SUCCESS,
+  CLEAN_CREATE_TEMPLATE_ERROR,
   DELETE_TEMPLATE_ERROR,
   DELETE_TEMPLATE_START,
   DELETE_TEMPLATE_SUCCESS,
@@ -56,6 +57,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, loading: false, templateId: action.payload.object.id, isTemplateCreated: action.payload.success };
     case CREATE_TEMPLATE_ERROR:
       return { ...state, loading: false, error: action.payload };
+    case CLEAN_CREATE_TEMPLATE_ERROR:
+      return { ...state, error: ''};
     case RESET_DELETE_STATUS: 
       return { ...state, deleteStatus: 404 };
     default:

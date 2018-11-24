@@ -9,7 +9,8 @@ import CardFooter from "../../components/Card/CardFooter.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import gridSystemStyle from "../../assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
-import {createTemplate, fetchTemplates } from '../../actions/email_templates';
+import {createTemplate, fetchTemplates, cleanCreateTemplateError } from '../../actions/email_templates';
+import Error from 'components/Error/Error';
 
 class CreateEmailTemplate extends Component {
   state = {
@@ -17,13 +18,21 @@ class CreateEmailTemplate extends Component {
     templateContent: '',
   };
 
+  cleanTemplateCreateError = () => {
+    const { history, cleanCreateTemplateError } = this.props;
+    cleanCreateTemplateError();
+    history.push('/email-templates');
+  };
+
   cancelEditHandler = () => {
     const { history } = this.props;
+
     history.push('/email-templates');
   };
 
   createTemplateHandler = () => {
-    this.props.createTemplate(this.state.templateName, `"${this.state.templateContent}"`);
+    const { templateName, templateContent } = this.props;
+    this.props.createTemplate(templateName, templateContent);
   };
 
   changeHandler = (event, type) => {
@@ -40,9 +49,10 @@ class CreateEmailTemplate extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    return(
-      <Card>
+    const { classes, error } = this.props;
+    const { templateName, templateContent } = this.state;
+    const createdTemplate = error ? <Error cancelError={this.cleanTemplateCreateError}>{error.message}</Error>
+      : (<Card>
         <CardHeader color="rose" icon>
           <CardText color="rose">
             <h4 className={classes.cardTitle}>Creating your own template</h4>
@@ -70,11 +80,12 @@ class CreateEmailTemplate extends Component {
           />
         </CardBody>
         <CardFooter>
-          <Button color="rose" onClick={this.createTemplateHandler}>Create</Button>
+          <Button disabled={!templateName || !templateContent} color="rose" onClick={this.createTemplateHandler}>Create</Button>
           <Button onClick={this.cancelEditHandler}>Cancel</Button>
         </CardFooter>
-      </Card>
-    )
+      </Card>);
+
+    return(createdTemplate)
   }
 }
 
@@ -82,11 +93,13 @@ const mapStateToProps = state => ({
   loading: state.email.loading,
   templateId: state.email.templateId,
   isTemplateCreated: state.email.isTemplateCreated,
+  error: state.email.error,
 });
 
 const mapDispatchToProps = dispatch => ({
   createTemplate: (name, content)=> dispatch(createTemplate(name, content)),
   fetchTemplates: () => dispatch(fetchTemplates()),
+  cleanCreateTemplateError: () => dispatch(cleanCreateTemplateError()),
 });
 
 export default withStyles(gridSystemStyle)(connect(mapStateToProps,mapDispatchToProps)(CreateEmailTemplate));

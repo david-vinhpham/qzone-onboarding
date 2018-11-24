@@ -21,6 +21,7 @@ export const RESET_DELETE_STATUS= 'RESET_DELETE_STATUS';
 export const CREATE_TEMPLATE_START = 'CREATE_TEMPLATE_START';
 export const CREATE_TEMPLATE_SUCCESS = 'CREATE_TEMPLATE_SUCCESS';
 export const CREATE_TEMPLATE_ERROR = 'CREATE_TEMPLATE_ERROR';
+export const CLEAN_CREATE_TEMPLATE_ERROR = 'CLEAN_CREATE_TEMPLATE_ERROR';
 
 export const fetchEmailTemplatesStart = () => ({ type: FETCH_EMAIL_TEMPLATES_START });
 export const updateEmailTemplate = (templates) => ({ type: UPDATE_EMAIL_TEMPLATES, payload: templates });
@@ -40,6 +41,7 @@ export const resetDeleteStatus = () => ({ type: RESET_DELETE_STATUS });
 export const createTemplateStart = () => ({ type: CREATE_TEMPLATE_START });
 export const createTemplateSuccess = (response) => ({ type: CREATE_TEMPLATE_SUCCESS, payload: response.data });
 export const createTemplateError = (error) => ({ type: CREATE_TEMPLATE_ERROR, payload: error.response.data });
+export const cleanCreateTemplateError = () => ({ type: CLEAN_CREATE_TEMPLATE_ERROR });
 
 export const fetchTemplates = () => dispatch => {
   dispatch(fetchEmailTemplatesStart());
