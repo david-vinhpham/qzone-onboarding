@@ -9,7 +9,7 @@ import CardFooter from "../../components/Card/CardFooter.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import gridSystemStyle from "../../assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
-import {createTemplate, fetchTemplates, cleanCreateTemplateError } from '../../actions/email_templates';
+import { createTemplate, fetchTemplates, cleanCreateTemplateError } from '../../actions/email_templates';
 import Error from 'components/Error/Error';
 
 class CreateEmailTemplate extends Component {
@@ -26,12 +26,11 @@ class CreateEmailTemplate extends Component {
 
   cancelEditHandler = () => {
     const { history } = this.props;
-
     history.push('/email-templates');
   };
 
   createTemplateHandler = () => {
-    const { templateName, templateContent } = this.props;
+    const { templateName, templateContent } = this.state;
     this.props.createTemplate(templateName, templateContent);
   };
 
@@ -51,6 +50,8 @@ class CreateEmailTemplate extends Component {
   render() {
     const { classes, error } = this.props;
     const { templateName, templateContent } = this.state;
+    console.log('templatename', templateName);
+    console.log('templateContent', templateContent);
     const createdTemplate = error ? <Error cancelError={this.cleanTemplateCreateError}>{error.message}</Error>
       : (<Card>
         <CardHeader color="rose" icon>
@@ -63,7 +64,7 @@ class CreateEmailTemplate extends Component {
             labelText="Template Name"
             id="Template Name"
             required
-            value={this.state.templateName}
+            value={templateName}
             inputProps={{
               onChange: (event) => this.changeHandler(event, "templateName"),
             }}
@@ -73,7 +74,7 @@ class CreateEmailTemplate extends Component {
             labelText="Template Content"
             id="Template Content"
             required
-            value={this.state.templateContent}
+            value={templateContent}
             inputProps={{
               onChange: (event) => this.changeHandler(event, "templateContent"),
             }}
