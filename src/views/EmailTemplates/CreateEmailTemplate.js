@@ -53,6 +53,10 @@ class CreateEmailTemplate extends Component {
     this.props.createTemplate(templateName, templateContent);
   };
 
+  submitHandler = (event) => {
+    event.preventDefault();
+  };
+
   changeHandler = (event, type) => {
     this.setState({ [type]: event.target.value });
   };
@@ -77,12 +81,13 @@ class CreateEmailTemplate extends Component {
           </CardText>
         </CardHeader>
         <CardBody>
-          <form>
+          <form onSubmit={this.submitHandler}>
             <div>
               <h4 className={classes.cardTitle}>Template Name</h4>
               <TextField
                 id="template-name"
                 value={templateName}
+                autoFocus
                 onChange={(event) => this.changeHandler(event, "templateName")}
                 margin="normal"
                 fullWidth

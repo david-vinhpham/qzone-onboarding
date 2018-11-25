@@ -2,6 +2,10 @@ import {
   CREATE_TEMPLATE_ERROR,
   CREATE_TEMPLATE_START,
   CREATE_TEMPLATE_SUCCESS,
+  EDIT_TEMPLATE_ERROR,
+  EDIT_TEMPLATE_START,
+  EDIT_TEMPLATE_SUCCESS,
+  CLEAN_EDIT_TEMPLATE_STATUS,
   CLEAN_CREATE_TEMPLATE_ERROR,
   DELETE_TEMPLATE_ERROR,
   DELETE_TEMPLATE_START,
@@ -51,6 +55,14 @@ const reducer = (state = initialState, action) => {
       return { ...state, loading: false, deleteStatus: action.payload.status };
     case DELETE_TEMPLATE_ERROR:
       return { ...state, loading: false, error: action.payload };
+    case EDIT_TEMPLATE_START:
+      return { ...state, loading: true };
+    case EDIT_TEMPLATE_SUCCESS:
+      return { ...state, loading: false, templateId: action.payload.object.id, isTemplateEdited: action.payload.success };
+    case EDIT_TEMPLATE_ERROR:
+      return { ...state, loading: false, error: action.payload };
+    case CLEAN_EDIT_TEMPLATE_STATUS:
+      return { ...state, isTemplateEdited: false };
     case CREATE_TEMPLATE_START:
       return { ...state, loading: true };
     case CREATE_TEMPLATE_SUCCESS:

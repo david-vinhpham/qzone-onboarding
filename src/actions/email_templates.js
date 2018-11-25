@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { restApiResponseCodes } from "../constants";
 
 const axiosConfig = {
   headers: {
@@ -29,6 +28,11 @@ export const CREATE_TEMPLATE_SUCCESS = 'CREATE_TEMPLATE_SUCCESS';
 export const CREATE_TEMPLATE_ERROR = 'CREATE_TEMPLATE_ERROR';
 export const CLEAN_CREATE_TEMPLATE_ERROR = 'CLEAN_CREATE_TEMPLATE_ERROR';
 
+export const EDIT_TEMPLATE_START = 'EDIT_TEMPLATE_START';
+export const EDIT_TEMPLATE_SUCCESS = 'EDIT_TEMPLATE_SUCCESS';
+export const EDIT_TEMPLATE_ERROR = 'EDIT_TEMPLATE_ERROR';
+export const CLEAN_EDIT_TEMPLATE_STATUS = 'CLEAN_EDIT_TEMPLATE_STATUS';
+
 export const fetchEmailTemplatesStart = () => ({ type: FETCH_EMAIL_TEMPLATES_START });
 export const updateEmailTemplate = (templates) => ({ type: UPDATE_EMAIL_TEMPLATES, payload: templates });
 export const fetchEmailTemplatesSuccess = (response) => ({ type: FETCH_EMAIL_TEMPLATES_SUCCESS, payload: response.data });
@@ -48,6 +52,12 @@ export const createTemplateStart = () => ({ type: CREATE_TEMPLATE_START });
 export const createTemplateSuccess = (response) => ({ type: CREATE_TEMPLATE_SUCCESS, payload: response.data });
 export const createTemplateError = (error) => ({ type: CREATE_TEMPLATE_ERROR, payload: error.response.data });
 export const cleanCreateTemplateError = () => ({ type: CLEAN_CREATE_TEMPLATE_ERROR });
+export const cleanEditTemplateStatus = () => ({ type: CLEAN_EDIT_TEMPLATE_STATUS });
+
+export const editTemplateStart = () => ({ type: EDIT_TEMPLATE_START });
+export const editTemplateSuccess = (response) => ({ type: EDIT_TEMPLATE_SUCCESS, payload: response.data });
+export const editTemplateError = (error) => ({ type: EDIT_TEMPLATE_ERROR, payload: error.response.data });
+
 
 export const fetchTemplates = () => dispatch => {
   dispatch(fetchEmailTemplatesStart());
@@ -71,10 +81,16 @@ export const deleteTemplate = (id) => dispatch => {
 };
 
 export const createTemplate = (name, content) => dispatch => {
-  console.log('content', content);
   dispatch(createTemplateStart());
   axios.post(`${emailTemplateUrl}/${name}`, content, axiosConfig)
     .then(response => dispatch(createTemplateSuccess(response)))
     .catch(error => dispatch(createTemplateError(error)));
+};
+
+export const editTemplate = (id, name, content) => dispatch => {
+  dispatch(editTemplateStart());
+  axios.put(`${emailTemplateUrl}/${id}/${name}`, content, axiosConfig)
+    .then(response => dispatch(editTemplateSuccess(response)))
+    .catch(error => dispatch(editTemplateError(error)));
 };
 

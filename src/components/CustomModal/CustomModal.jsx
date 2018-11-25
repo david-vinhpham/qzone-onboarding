@@ -8,11 +8,15 @@ import CardBody from 'components/Card/CardBody';
 import CardFooter from 'components/Card/CardFooter';
 import Typography from '@material-ui/core/Typography';
 
-const styles = () => ({
+const styles = (theme) => ({
   root: {
-    width: '35%',
+    width: '70%',
     top: '30%',
-    left: '40%',
+    left: '15%',
+    [theme.breakpoints.up('sm')]: {
+      width: '35%',
+      left: '40%',
+    }
   },
 });
 

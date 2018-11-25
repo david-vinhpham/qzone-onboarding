@@ -14,7 +14,7 @@ import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
 import Loading from 'components/Loading/Loading';
 import CustomModal from 'components/CustomModal/CustomModal';
-import { fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus } from "actions/email_templates";
+import { fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus, editTemplate } from "actions/email_templates";
 
 import { connect } from 'react-redux';
 import { restApiResponseCodes, eTemplateUrl } from "../../constants";
