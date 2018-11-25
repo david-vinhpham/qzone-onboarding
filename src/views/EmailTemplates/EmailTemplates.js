@@ -5,31 +5,36 @@ import { Link } from 'react-router-dom';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Card from "../../components/Card/Card.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";
-import CardBody from "../../components/Card/CardBody.jsx";
-import CardFooter from "../../components/Card/CardFooter.jsx";
-import CardText from "../../components/Card/CardText.jsx";
-import Button from "../../components/CustomButtons/Button.jsx";
-import gridSystemStyle from "../../assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
-import Loading from '../../components/Loading/Loading';
-import { fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus } from "../../actions/email_templates";
+import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
+import CardText from "components/Card/CardText.jsx";
+import Button from "components/CustomButtons/Button.jsx";
+import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
+import Loading from 'components/Loading/Loading';
+import CustomModal from 'components/CustomModal/CustomModal';
+import { fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus } from "actions/email_templates";
 
 import { connect } from 'react-redux';
 import { restApiResponseCodes, eTemplateUrl } from "../../constants";
 
 const styles = () => ({
-  templateContent: {
-    '&:before': {
+  inputBox: {
+    '&:before, &:after': {
       border: 'none !important',
     }
-
+  },
+  contentBox: {
+    overflow: 'hidden',
   },
 });
 
 class EmailTemplates extends Component {
   state = {
     templates: [],
+    isDeleting: false,
+    templateIdTobeDeleted: null,
   };
 
   componentDidMount() {
@@ -54,7 +59,26 @@ class EmailTemplates extends Component {
   }
 
   deleteTemplateHandler = (id) => {
-    this.props.deleteTemplate(id);
+    this.setState({
+      isDeleting: true,
+      templateIdTobeDeleted: id,
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      isDeleting: false,
+      templateTobeDeleted: null,
+    });
+  };
+
+  confirmDeletion = () => {
+    const { templateIdTobeDeleted } = this.state;
+    this.props.deleteTemplate(templateIdTobeDeleted);
+    this.setState({
+      isDeleting: false,
+      templateIdTobeDeleted: null,
+    });
   };
 
   createTemplateHandler = () => {
@@ -63,7 +87,9 @@ class EmailTemplates extends Component {
   };
 
   render() {
+    console.log('this.state', this.state);
     const { classes, loading, error, templates } = this.props;
+    const { isDeleting } = this.state;
     const templateList = templates.length ? templates.map(template => (
       <ExpansionPanel key={template.id}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
@@ -76,8 +102,11 @@ class EmailTemplates extends Component {
             disabled
             multiline
             fullWidth
+            inputProps={{
+              className: classes.contentBox,
+            }}
             InputProps={{
-              className: classes.templateContent,
+              className: classes.inputBox,
             }}
           />
         </ExpansionPanelDetails>
@@ -91,6 +120,11 @@ class EmailTemplates extends Component {
     )) : <Typography variant="display1">There is no email template!</Typography>;
     const emailTemplates = loading ? <Loading />
       : (<Card>
+        <CustomModal
+          openModal={isDeleting}
+          closeModal={this.closeModal}
+          confirmDeletion={this.confirmDeletion}
+        />
         <CardHeader color="rose" icon>
           <CardText color="rose">
             <h4 className={classes.cardTitle}>Available Templates</h4>
