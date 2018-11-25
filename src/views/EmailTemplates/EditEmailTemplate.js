@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import withStyles from "@material-ui/core/styles/withStyles";
+import TextField from '@material-ui/core/TextField';
 import Card from "components/Card/Card.jsx";
 import Typography from "@material-ui/core/Typography";
 import CardHeader from "components/Card/CardHeader.jsx";
@@ -33,6 +34,10 @@ class EditEmailTemplate extends Component {
     });
   };
 
+  submitHandler = (event) => {
+    event.preventDefault();
+  };
+
   fieldDirty = () => {
     const { editTemplateContent, editTemplateName, templateContent, templateName } = this.state;
     return editTemplateContent === templateContent && editTemplateName === templateName;
@@ -54,25 +59,27 @@ class EditEmailTemplate extends Component {
     const editTemplate = templateName ? (<Card>
         <CardHeader color="rose" icon>
           <CardText color="rose">
-            <Typography variant="subheading">{templateName}</Typography>
+            <Typography noWrap color={classes.cardTitle} variant="display1">{templateName}</Typography>
           </CardText>
         </CardHeader>
         <CardBody>
-          <label>Name:</label>
-          <CustomInput
-            className={classes.cardTitle}
-            inputProps={{
-              onChange: (event) => this.changeHandler(event, 'templateName'),
-              value: templateName,
-            }}
-          />
-          <br />
-          <CustomInput
-            inputProps={{
-              onChange: (event) => this.changeHandler(event, 'templateContent'),
-              value: templateContent,
-            }}
-          />
+          <form onSubmit={this.submitHandler}>
+            <TextField
+              id="template-name"
+              label="Template Name"
+              onChange={(event) => this.changeHandler(event, 'templateName')}
+              value={templateName}
+              margin="normal"
+            />
+            <TextField
+              id="template-content"
+              value={templateContent}
+              margin="normal"
+              onChange={(event) => this.changeHandler(event, 'templateContent')}
+              multiline
+              fullWidth
+            />
+          </form>
         </CardBody>
         <CardFooter>
           <Button disabled={this.fieldDirty()} color="rose" onClick={this.saveEditHandler}>Save</Button>

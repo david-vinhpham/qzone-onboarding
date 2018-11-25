@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { restApiResponseCodes } from "../constants";
 
+const axiosConfig = {
+  headers: {
+    'Content-Type': 'text/plain',
+  },
+};
+
 export const emailTemplateUrl = 'http://54.252.134.87:8999/api/email-templates';
 
 export const FETCH_EMAIL_TEMPLATES_START = 'FETCH_EMAIL_TEMPLATES_START';
@@ -65,8 +71,9 @@ export const deleteTemplate = (id) => dispatch => {
 };
 
 export const createTemplate = (name, content) => dispatch => {
+  console.log('content', content);
   dispatch(createTemplateStart());
-  axios.post(`${emailTemplateUrl}/${name}`, content)
+  axios.post(`${emailTemplateUrl}/${name}`, content, axiosConfig)
     .then(response => dispatch(createTemplateSuccess(response)))
     .catch(error => dispatch(createTemplateError(error)));
 };

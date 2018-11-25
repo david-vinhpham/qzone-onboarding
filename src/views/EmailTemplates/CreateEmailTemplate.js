@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import withStyles from "@material-ui/core/styles/withStyles";
+import TextField from '@material-ui/core/TextField';
 import Error from 'components/Error/Error';
-import CustomInput from "components/CustomInput/CustomInput";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
@@ -11,6 +11,25 @@ import CardText from "components/Card/CardText.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
 import { createTemplate, fetchTemplates, cleanCreateTemplateError } from 'actions/email_templates';
+import { eTemplateUrl, eTemplateNameMax, eTemplateContentMax } from '../../constants';
+
+const styles = () => ({
+  borderLess: {
+    '&:before, &:after': {
+      border: 'none !important',
+    }
+  },
+  templateBox: {
+    border: '1px solid #ccc',
+    padding: '0 1em',
+  },
+  inputBox: {
+    overflow: 'hidden',
+  },
+  contentBox: {
+    minHeight: '250px',
+  },
+});
 
 class CreateEmailTemplate extends Component {
   state = {
@@ -21,12 +40,12 @@ class CreateEmailTemplate extends Component {
   cleanTemplateCreateError = () => {
     const { history, cleanCreateTemplateError } = this.props;
     cleanCreateTemplateError();
-    history.push('/email-templates');
+    history.push(eTemplateUrl);
   };
 
   cancelEditHandler = () => {
     const { history } = this.props;
-    history.push('/email-templates');
+    history.push(eTemplateUrl);
   };
 
   createTemplateHandler = () => {
@@ -43,7 +62,7 @@ class CreateEmailTemplate extends Component {
     const { templateId, isTemplateCreated } = nextProps;
     if (templateId && isTemplateCreated) {
       this.props.fetchTemplates();
-      history.push('/email-templates');
+      history.push(eTemplateUrl);
     }
   }
 
@@ -58,25 +77,45 @@ class CreateEmailTemplate extends Component {
           </CardText>
         </CardHeader>
         <CardBody>
-          <CustomInput
-            labelText="Template Name"
-            id="Template Name"
-            required
-            value={templateName}
-            inputProps={{
-              onChange: (event) => this.changeHandler(event, "templateName"),
-            }}
-          />
-          <h4>To</h4>
-          <CustomInput
-            labelText="Template Content"
-            id="Template Content"
-            required
-            value={templateContent}
-            inputProps={{
-              onChange: (event) => this.changeHandler(event, "templateContent"),
-            }}
-          />
+          <form>
+            <div>
+              <h4 className={classes.cardTitle}>Template Name</h4>
+              <TextField
+                id="template-name"
+                value={templateName}
+                onChange={(event) => this.changeHandler(event, "templateName")}
+                margin="normal"
+                fullWidth
+                className={classes.templateBox}
+                inputProps={{
+                  maxlength: eTemplateNameMax ,
+                }}
+                InputProps={{
+                  className: classes.borderLess,
+                }}
+              />
+            </div>
+            <div className={classes.templateContent}>
+              <h4 className={classes.cardTitle}>Template Content</h4>
+              <TextField
+                id="template-content"
+                value={templateContent}
+                onChange={(event) => this.changeHandler(event, "templateContent")}
+                margin="normal"
+                multiline
+                fullWidth
+                className={classes.templateBox}
+                inputProps={{
+                  className: classes.inputBox,
+                  maxlength: eTemplateContentMax,
+                  placeholder: 'Click here to start!'
+                }}
+                InputProps={{
+                  className: [classes.borderLess, classes.contentBox].join(' '),
+                }}
+              />
+            </div>
+          </form>
         </CardBody>
         <CardFooter>
           <Button disabled={!templateName || !templateContent} color="rose" onClick={this.createTemplateHandler}>Create</Button>
@@ -101,4 +140,4 @@ const mapDispatchToProps = dispatch => ({
   cleanCreateTemplateError: () => dispatch(cleanCreateTemplateError()),
 });
 
-export default withStyles(gridSystemStyle)(connect(mapStateToProps,mapDispatchToProps)(CreateEmailTemplate));
+export default withStyles({...gridSystemStyle, ...styles()})(connect(mapStateToProps,mapDispatchToProps)(CreateEmailTemplate));

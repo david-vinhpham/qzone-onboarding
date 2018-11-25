@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, ExpansionPanelActions } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
@@ -15,7 +16,16 @@ import Loading from '../../components/Loading/Loading';
 import { fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus } from "../../actions/email_templates";
 
 import { connect } from 'react-redux';
-import { restApiResponseCodes } from "../../constants";
+import { restApiResponseCodes, eTemplateUrl } from "../../constants";
+
+const styles = () => ({
+  templateContent: {
+    '&:before': {
+      border: 'none !important',
+    }
+
+  },
+});
 
 class EmailTemplates extends Component {
   state = {
@@ -49,7 +59,7 @@ class EmailTemplates extends Component {
 
   createTemplateHandler = () => {
     const { history } = this.props;
-    history.push('/email-templates/create');
+    history.push(`${eTemplateUrl}/create`);
   };
 
   render() {
@@ -60,7 +70,16 @@ class EmailTemplates extends Component {
           <Typography>{template.name}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          {template.content}
+          <TextField
+            id="filled-expansion-template-content"
+            value={template.content}
+            disabled
+            multiline
+            fullWidth
+            InputProps={{
+              className: classes.templateContent,
+            }}
+          />
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
           <Link to={`/email-templates/edit/${template.id}`}>
@@ -109,4 +128,4 @@ const mapDispatchToProps = dispatch => ({
   updateEmailTemplate: (templates) => dispatch(updateEmailTemplate(templates))
 });
 
-export default withStyles(gridSystemStyle)(connect(mapStateToProps, mapDispatchToProps)(EmailTemplates));
+export default withStyles({...gridSystemStyle, ...styles()})(connect(mapStateToProps, mapDispatchToProps)(EmailTemplates));
