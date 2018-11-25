@@ -14,7 +14,7 @@ import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
 import Loading from 'components/Loading/Loading';
 import CustomModal from 'components/CustomModal/CustomModal';
-import { fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus, editTemplate } from "actions/email_templates";
+import { fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus } from "actions/email_templates";
 
 import { connect } from 'react-redux';
 import { restApiResponseCodes, eTemplateUrl } from "../../constants";
@@ -45,7 +45,7 @@ class EmailTemplates extends Component {
     const { templates, loading, deleteStatus, templateIdDeleted } = nextProps;
     let computedTemplates = [];
     if (!loading && templates.length) {
-      if (deleteStatus == restApiResponseCodes.success && templateIdDeleted) {
+      if (deleteStatus === restApiResponseCodes.success && templateIdDeleted) {
         computedTemplates = templates.slice().filter(template => template.id !== templateIdDeleted);
         this.props.resetDeleteStatus();
         this.props.updateEmailTemplate(computedTemplates);
@@ -88,7 +88,7 @@ class EmailTemplates extends Component {
 
   render() {
     console.log('this.state', this.state);
-    const { classes, loading, error, templates } = this.props;
+    const { classes, loading, templates } = this.props;
     const { isDeleting } = this.state;
     const templateList = templates.length ? templates.map(template => (
       <ExpansionPanel key={template.id}>

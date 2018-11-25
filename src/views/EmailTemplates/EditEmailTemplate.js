@@ -111,7 +111,7 @@ class EditEmailTemplate extends Component {
                 fullWidth
                 className={classes.templateBox}
                 inputProps={{
-                  maxlength: eTemplateNameMax ,
+                  maxLength: eTemplateNameMax ,
                 }}
                 InputProps={{
                   className: classes.borderLess,
@@ -130,7 +130,7 @@ class EditEmailTemplate extends Component {
                 className={classes.templateBox}
                 inputProps={{
                   className: classes.inputBox,
-                  maxlength: eTemplateContentMax,
+                  maxLength: eTemplateContentMax,
                   placeholder: 'Click here to start!'
                 }}
                 InputProps={{
