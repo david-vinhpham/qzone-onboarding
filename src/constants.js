@@ -8,4 +8,4 @@ export const restApiResponseCodes = {
 // Email Templates
 export const eTemplateUrl = '/email-templates';
 export const eTemplateNameMax = 250;
-export const eTemplateContentMax = 1200;
+export const eTemplateContentMax = 5200;
