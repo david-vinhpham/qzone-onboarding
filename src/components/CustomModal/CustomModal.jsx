@@ -34,7 +34,7 @@ class CustomModal extends Component {
       >
         <Card>
           <CardHeader>
-            <Typography variant="headline" color="textPrimary">Do you want to delete this email template?</Typography>
+            <Typography variant="headline">Do you want to delete this email template?</Typography>
           </CardHeader>
           <CardBody>
             <Typography variant="subheading" color="textSecondary">You will not be able to recovery this template anymore. As it is permanently deleted!</Typography>
