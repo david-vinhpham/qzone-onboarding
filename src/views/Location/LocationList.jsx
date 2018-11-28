@@ -50,7 +50,7 @@ class LocationList extends React.Component {
                         <Card>
                             <CardHeader color="primary" icon>
                                 <CardText color="rose" md={3}>
-                                    <h4 className={classes.cardTitle}>Provider List</h4>
+                                    <h4 className={classes.cardTitle}>Location List</h4>
                                 </CardText>
                                 <div className="centerDiv" md={3}>
                                     <div className="search">
@@ -93,12 +93,42 @@ class LocationList extends React.Component {
                         return (
                             <GridItem xs={12} sm={12} md={3}>
                                 <Card product className={classes.cardHover} >
-                                    
+                                    <CardHeader image className={classes.cardHeaderHover}>
+                                        <a href="#pablo" onClick={e => e.preventDefault()}>
+                                            <img src={priceImage1} alt="..." />
+                                        </a>
+                                    </CardHeader>
                                     <CardBody>
+                                        <div className={classes.cardHoverUnder}>
+                                            <Tooltip
+                                                id="tooltip-top"
+                                                title="Remove"
+                                                placement="bottom"
+                                                classes={{ tooltip: classes.tooltip }}
+                                            >
+                                                <Button
+                                                    color="danger"
+                                                    simple
+                                                    justIcon>
+                                                    <Delete className={classes.underChartIcons} />
+                                                </Button>
+                                            </Tooltip>
+                                            <Tooltip
+                                                id="tooltip-top"
+                                                title="Edit"
+                                                placement="bottom"
+                                                classes={{ tooltip: classes.tooltip }}
+                                            >
+                                                <Link to={`/provider/edit/${location.id}`}>
+                                                    <Button color="success" simple justIcon >
+                                                        <Edit className={classes.underChartIcons} />
+                                                    </Button>
+                                                </Link>
+                                            </Tooltip>
+                                        </div>
+
                                         <h4 className={classes.cardProductTitle}>
-                                            <a href="#pablo" onClick={e => e.preventDefault()}>
-                                                {location.address1}
-                                            </a>
+                                            {location.address1}
                                         </h4>
                                         <p className={classes.cardProductDesciprion}>
                                             {location.address2}

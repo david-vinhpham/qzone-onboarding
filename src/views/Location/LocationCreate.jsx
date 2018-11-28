@@ -44,6 +44,22 @@ class LocationCreate extends React.Component {
 
     }
 
+    changeCheckbox(event, stateName, type) {
+        //const { stateName } = this.state.location;
+        const currentIndex = stateName.indexOf(event.target.value);
+        const newChecked = [...stateName];
+        if (event.target.checked) {
+            newChecked.push(event.target.value);
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+        const { location } = this.state
+        location[stateName] = newChecked
+        this.setState({
+            location: location
+        });
+    }
+
     doubleClick(fieldName) {
         console.log("This has been clicked");
         this.setState({ isEditMode: fieldName });

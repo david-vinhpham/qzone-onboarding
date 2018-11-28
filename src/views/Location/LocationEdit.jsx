@@ -44,6 +44,10 @@ class LocationEdit extends React.Component {
 
     }
 
+    componentDidMount() {
+        //Api call for that location
+    }
+
     doubleClick(fieldName) {
         console.log("This has been clicked");
         this.setState({ isEditMode: fieldName });
