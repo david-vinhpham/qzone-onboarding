@@ -21,7 +21,7 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
 import priceImage1 from "../../assets/img/faces/profile.jpg";
-import providers from "../../assets/provider.json";
+import locations from "../../assets/location.json";
 
 class LocationList extends React.Component {
     constructor(props) {
@@ -78,15 +78,18 @@ class LocationList extends React.Component {
                                         </Button>
                                     </div>
                                 </div>
-                                <Button size="sm" href="/provider/create" className={classes.buttonDisplay} md={3}>
-                                    New Provider
-                                </Button>
+                                <Link to={`/location/create`}>
+                                    <Button size="sm" className={classes.buttonDisplay} md={3}>
+                                        New Location
+                                    </Button>
+                                </Link>
+                                
                             </CardHeader>
                         </Card>
                     </GridItem>
                 </GridContainer>
                 <GridContainer>
-                    {providers.map((provider, index) => {
+                    {locations.map((location, index) => {
                         return (
                             <GridItem xs={12} sm={12} md={3}>
                                 <Card product className={classes.cardHover} >
@@ -94,11 +97,11 @@ class LocationList extends React.Component {
                                     <CardBody>
                                         <h4 className={classes.cardProductTitle}>
                                             <a href="#pablo" onClick={e => e.preventDefault()}>
-                                                {provider.name}
+                                                {location.address1}
                                             </a>
                                         </h4>
                                         <p className={classes.cardProductDesciprion}>
-                                            {provider.description}
+                                            {location.address2}
                                         </p>
                                     </CardBody>
                                 </Card>

@@ -16,7 +16,7 @@ import { verifyLength, verifyEmail } from "../../validation/validation.jsx";
 import LocationForm from "./LocationForm";
 
 
-class LocationCreate extends React.Component {
+class LocationEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,7 +39,7 @@ class LocationCreate extends React.Component {
         };
 
         this.change = this.change.bind(this);
-        
+
         this.doubleClick = this.doubleClick.bind(this);
 
     }
@@ -134,4 +134,4 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
     withStyles(validationFormStyle),
     connect(null, mapDispatchToProps),
-)(LocationCreate);
+)(LocationEdit);

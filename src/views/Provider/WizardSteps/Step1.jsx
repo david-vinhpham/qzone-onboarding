@@ -7,6 +7,7 @@ import RecordVoiceOver from "@material-ui/icons/RecordVoiceOver";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import { FormLabel, InputLabel } from "@material-ui/core";      
 
 // core components
 import GridContainer from "../../../components/Grid/GridContainer.jsx";
@@ -37,7 +38,8 @@ class Step1 extends React.Component {
       firstnameState: "",
       lastname: "",
       lastnameState: "",
-      middleName: ""
+      middleName: "",
+      isEditMode: null
     };
   }
   sendState() {
@@ -89,6 +91,9 @@ class Step1 extends React.Component {
     }
     return false;
   }
+  onDoubleClick = (fieldname) => {
+    this.setState({isEditMode: fieldname})
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -126,6 +131,7 @@ class Step1 extends React.Component {
               )
             }}
           />
+            
           <CustomInput
             labelText={
               <span>

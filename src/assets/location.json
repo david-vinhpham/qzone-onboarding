@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "address1": "104 Kanchan Bag",
+        "address2": "South tukoganj",
+        "address3": "",
+        "city": "Indore",
+        "countryCode": "91",
+        "district": "Indore",
+        "postCode": "452001",
+        "state": "MP",
+        "isBillingAddress": true,
+        "isHeadOffice": true
+    },
+    {
+        "id": 2,
+        "address1": "104 Kanchan Bag",
+        "address2": "South tukoganj",
+        "address3": "",
+        "city": "Indore",
+        "countryCode": "91",
+        "district": "Indore",
+        "postCode": "452001",
+        "state": "MP",
+        "isBillingAddress": true,
+        "isHeadOffice": true
+    },
+    {
+        "id": 3,
+        "address1": "104 Kanchan Bag",
+        "address2": "South tukoganj",
+        "address3": "",
+        "city": "Indore",
+        "countryCode": "91",
+        "district": "Indore",
+        "postCode": "452001",
+        "state": "MP",
+        "isBillingAddress": true,
+        "isHeadOffice": true
+    }
+    
+]

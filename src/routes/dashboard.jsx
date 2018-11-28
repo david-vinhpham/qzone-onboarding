@@ -14,15 +14,22 @@ import BusinessDetails from "../views/BusinessDetails/BusinessDetails.jsx";
 import BusinessEdit from "../views/BusinessDetails/BusinessEdit.jsx";
 import Calendar from "../views/Calendar/Calendar.jsx";
 import CustomerFlow from "../views/CustomerFlow/CustomerFlow.jsx";
+
 import ProviderDetails from "../views/Provider/ProviderDetails.jsx";
 import ProviderCreate from "../views/Provider/ProviderCreateWizard.jsx";
 import ProviderEdit from "../views/Provider/ProviderEdit.jsx";
+
 import Reports from "../views/Reports/Reports.jsx";
+
 import ServicesList from "../views/Services/ServicesList.jsx";
 import ServiceCreate from "../views/Services/ServiceCreate.jsx";
 import ServiceEdit from "../views/Services/ServiceEdit.jsx";
+
 import LocationList from "../views/Location/LocationList.jsx";
+import LocationCreate from "../views/Location/LocationCreate.jsx";
+
 import RegisterPage from "../views/Auth/RegisterPage.jsx";
+
 import EmailTemplates from '../views/EmailTemplates/EmailTemplates';
 import EditEmailTemplate from "../views/EmailTemplates/EditEmailTemplate";
 import CreateEmailTemplate from "../views/EmailTemplates/CreateEmailTemplate";
@@ -62,6 +69,12 @@ export const dashboardRoutes = [
 ];
 
 export const otherRoutes=[
+  {
+    path: "/location/create",
+    name: "Location Create",
+    icon: LocationOn,
+    component: LocationCreate
+  },
   {
     path: "/location/list",
     name: "Location List",
