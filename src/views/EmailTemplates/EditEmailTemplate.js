@@ -11,6 +11,7 @@ import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
 import { fetchTemplate, cleanTemplateStatus, editTemplate, cleanEditTemplateStatus } from 'actions/email_templates';
 import Loading from 'components/Loading/Loading';
+import { isDirty } from "../../validation/validation";
 import { eTemplateContentMax, eTemplateNameMax, eTemplateUrl } from "../../constants";
 
 const styles = () => ({
@@ -58,11 +59,6 @@ class EditEmailTemplate extends Component {
     event.preventDefault();
   };
 
-  fieldDirty = () => {
-    const { editTemplateContent, editTemplateName, templateContent, templateName } = this.state;
-    return editTemplateContent === templateContent && editTemplateName === templateName;
-  };
-
   componentDidMount() {
     const { match } = this.props;
     this.props.fetchTemplate(match.params.id);
@@ -91,8 +87,9 @@ class EditEmailTemplate extends Component {
 
   render() {
     const { classes } = this.props;
-    const { editTemplateName, templateName, templateContent } = this.state;
-    const editTemplate = templateName ? (<Card>
+    const { editTemplateName, templateName, templateContent, editTemplateContent } = this.state;
+    const saveEnabled = isDirty(editTemplateName, templateName) || isDirty(editTemplateContent, templateContent);
+    const editTemplate = editTemplateName ? (<Card>
         <CardHeader color="rose" icon>
           <CardText color="rose">
             <h4 className={classes.cardTitle}>Editing {editTemplateName}</h4>
@@ -141,7 +138,13 @@ class EditEmailTemplate extends Component {
           </form>
         </CardBody>
         <CardFooter>
-          <Button disabled={this.fieldDirty()} color="rose" onClick={this.saveTemplateHandler}>Save</Button>
+          <Button
+            disabled={!saveEnabled}
+            color="rose"
+            onClick={this.saveTemplateHandler}
+          >
+            Save
+          </Button>
           <Button onClick={this.cancelEditHandler}>Cancel</Button>
         </CardFooter>
       </Card>)
