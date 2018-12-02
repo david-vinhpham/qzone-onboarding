@@ -14,7 +14,10 @@ import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
 import Loading from 'components/Loading/Loading';
 import CustomModal from 'components/CustomModal/CustomModal';
-import { fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus } from "actions/email_templates";
+import {
+  fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus,
+  saveTemplateNameList,
+} from "actions/email_templates";
 
 import { connect } from 'react-redux';
 import { restApiResponseCodes, eTemplateUrl } from "../../constants";
@@ -53,6 +56,8 @@ class EmailTemplates extends Component {
         computedTemplates = templates.slice();
       }
     }
+    const nameList = computedTemplates.map(template => template.name);
+    this.props.saveTemplateNameList(nameList);
     this.setState({
       templates: computedTemplates,
     });
@@ -159,7 +164,8 @@ const mapDispatchToProps = dispatch => ({
   fetchTemplates: () => dispatch(fetchTemplates()),
   deleteTemplate: (id) => dispatch(deleteTemplate(id)),
   resetDeleteStatus: () => dispatch(resetDeleteStatus()),
-  updateEmailTemplate: (templates) => dispatch(updateEmailTemplate(templates))
+  updateEmailTemplate: (templates) => dispatch(updateEmailTemplate(templates)),
+  saveTemplateNameList: (list) => dispatch(saveTemplateNameList(list)),
 });
 
 export default withStyles({...gridSystemStyle, ...styles()})(connect(mapStateToProps, mapDispatchToProps)(EmailTemplates));

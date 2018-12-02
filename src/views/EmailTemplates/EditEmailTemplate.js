@@ -9,6 +9,7 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import CardText from "components/Card/CardText.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
+import { dangerColor } from '../../assets/jss/material-dashboard-pro-react'
 import { fetchTemplate, cleanTemplateStatus, editTemplate, cleanEditTemplateStatus } from 'actions/email_templates';
 import Loading from 'components/Loading/Loading';
 import { isDirty } from "../../validation/validation";
@@ -24,6 +25,9 @@ const styles = () => ({
     border: '1px solid #ccc',
     padding: '0 1em',
   },
+  templateBoxError: {
+    color: dangerColor,
+  },
   inputBox: {
     overflow: 'hidden',
   },
@@ -31,7 +35,6 @@ const styles = () => ({
     minHeight: '250px',
   },
 });
-
 
 class EditEmailTemplate extends Component {
     state = {
@@ -86,9 +89,15 @@ class EditEmailTemplate extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, templateNameList } = this.props;
     const { editTemplateName, templateName, templateContent, editTemplateContent } = this.state;
-    const saveEnabled = isDirty(editTemplateName, templateName) || isDirty(editTemplateContent, templateContent);
+    const saveEnabled = (isDirty(editTemplateName, templateName.trim()) || isDirty(editTemplateContent, templateContent.trim()))
+    && templateName && templateContent;
+    const editNameList = templateNameList.filter(name => name !== editTemplateName);
+    const uniqName = editNameList.indexOf(templateName.trim());
+    const [templateNameLabel, templateNameClass] = uniqName > 1
+      ? ['Template Name is not unique! Try another name.', `${classes.templateBoxError} ${classes.templateBoxError}`]
+      : ['Template Name', ''];
     const editTemplate = editTemplateName ? (<Card>
         <CardHeader color="rose" icon>
           <CardText color="rose">
@@ -98,7 +107,7 @@ class EditEmailTemplate extends Component {
         <CardBody>
           <form onSubmit={this.submitHandler}>
             <div>
-              <h4 className={classes.cardTitle}>Template Name</h4>
+              <h4 className={templateNameClass}>{templateNameLabel}</h4>
               <TextField
                 id="template-name"
                 value={templateName}
@@ -139,7 +148,7 @@ class EditEmailTemplate extends Component {
         </CardBody>
         <CardFooter>
           <Button
-            disabled={!saveEnabled}
+            disabled={!saveEnabled || uniqName > 1}
             color="rose"
             onClick={this.saveTemplateHandler}
           >
@@ -157,6 +166,7 @@ const mapStateToProps = state => ({
   templateContent: state.email.templateContent,
   templateName: state.email.templateName,
   isTemplateEdited: state.email.isTemplateEdited,
+  templateNameList: state.email.templateNameList || [],
 });
 
 const mapDispatchToProps = dispatch => ({

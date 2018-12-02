@@ -63,6 +63,7 @@ export const dashboardRoutes = [
     path: "/email-templates",
     name: "Email Templates",
     icon: Email,
+    guarded: true,
     component: EmailTemplates
   },
   { redirect: true, path: "/", pathTo: "/login", name: "Login" }

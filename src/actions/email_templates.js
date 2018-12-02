@@ -1,12 +1,11 @@
 import axios from 'axios';
+import { eTemplateApi } from "../constants";
 
 const axiosConfig = {
   headers: {
     'Content-Type': 'text/plain',
   },
 };
-
-export const emailTemplateUrl = 'http://54.252.134.87:8999/api/email-templates';
 
 export const FETCH_EMAIL_TEMPLATES_START = 'FETCH_EMAIL_TEMPLATES_START';
 export const FETCH_EMAIL_TEMPLATES_SUCCESS = 'FETCH_EMAIL_TEMPLATES_SUCCESS';
@@ -33,6 +32,8 @@ export const EDIT_TEMPLATE_SUCCESS = 'EDIT_TEMPLATE_SUCCESS';
 export const EDIT_TEMPLATE_ERROR = 'EDIT_TEMPLATE_ERROR';
 export const CLEAN_EDIT_TEMPLATE_STATUS = 'CLEAN_EDIT_TEMPLATE_STATUS';
 
+export const SAVE_TEMPLATE_NAME_LIST = 'SAVE_TEMPLATE_NAME_LIST';
+
 export const fetchEmailTemplatesStart = () => ({ type: FETCH_EMAIL_TEMPLATES_START });
 export const updateEmailTemplate = (templates) => ({ type: UPDATE_EMAIL_TEMPLATES, payload: templates });
 export const fetchEmailTemplatesSuccess = (response) => ({ type: FETCH_EMAIL_TEMPLATES_SUCCESS, payload: response.data });
@@ -58,38 +59,39 @@ export const editTemplateStart = () => ({ type: EDIT_TEMPLATE_START });
 export const editTemplateSuccess = (response) => ({ type: EDIT_TEMPLATE_SUCCESS, payload: response.data });
 export const editTemplateError = (error) => ({ type: EDIT_TEMPLATE_ERROR, payload: error.response.data });
 
+export const saveTemplateNameList = (list) => ({ type: SAVE_TEMPLATE_NAME_LIST, payload: list })
 
 export const fetchTemplates = () => dispatch => {
   dispatch(fetchEmailTemplatesStart());
-  axios.get(emailTemplateUrl)
+  axios.get(eTemplateApi)
     .then(response => dispatch(fetchEmailTemplatesSuccess(response)))
     .catch(error => dispatch(fetchEmailTemplatesError(error)));
 };
 
 export const fetchTemplate = (id) => dispatch => {
   dispatch(fetchTemplateStart());
-  axios.get(`${emailTemplateUrl}/${id}`)
+  axios.get(`${eTemplateApi}/${id}`)
     .then(response => dispatch(fetchTemplateSuccess(response)))
     .catch(error => dispatch(fetchTemplateError(error)));
 };
 
 export const deleteTemplate = (id) => dispatch => {
   dispatch(deleteTemplateStart(id));
-  axios.delete(`${emailTemplateUrl}/{id}?id=${id}`)
+  axios.delete(`${eTemplateApi}/{id}?id=${id}`)
     .then((response) => dispatch(deleteTemplateSuccess(response)))
     .catch(error => dispatch(deleteTemplateError(error)));
 };
 
 export const createTemplate = (name, content) => dispatch => {
   dispatch(createTemplateStart());
-  axios.post(`${emailTemplateUrl}/${name}`, content, axiosConfig)
+  axios.post(`${eTemplateApi}/${name}`, content, axiosConfig)
     .then(response => dispatch(createTemplateSuccess(response)))
     .catch(error => dispatch(createTemplateError(error)));
 };
 
 export const editTemplate = (id, name, content) => dispatch => {
   dispatch(editTemplateStart());
-  axios.put(`${emailTemplateUrl}/${id}/${name}`, content, axiosConfig)
+  axios.put(`${eTemplateApi}/${id}/${name}`, content, axiosConfig)
     .then(response => dispatch(editTemplateSuccess(response)))
     .catch(error => dispatch(editTemplateError(error)));
 };

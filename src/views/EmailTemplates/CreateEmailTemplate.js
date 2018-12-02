@@ -12,6 +12,7 @@ import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
 import { createTemplate, fetchTemplates, cleanCreateTemplateError } from 'actions/email_templates';
 import { eTemplateUrl, eTemplateNameMax, eTemplateContentMax } from '../../constants';
+import { dangerColor } from "../../assets/jss/material-dashboard-pro-react";
 
 const styles = () => ({
   borderLess: {
@@ -22,6 +23,9 @@ const styles = () => ({
   templateBox: {
     border: '1px solid #ccc',
     padding: '0 1em',
+  },
+  templateBoxError: {
+    color: dangerColor,
   },
   inputBox: {
     overflow: 'hidden',
@@ -71,8 +75,13 @@ class CreateEmailTemplate extends Component {
   }
 
   render() {
-    const { classes, error } = this.props;
+      const { classes, error, templateNameList } = this.props;
     const { templateName, templateContent } = this.state;
+    const uniqName = templateNameList.indexOf(templateName.trim());
+    const createEnabled = templateName && templateContent;
+    const [templateNameLabel, templateNameClass] = uniqName > 0
+      ? ['Template Name is not unique! Try another name.', `${classes.templateBoxError}`]
+      : ['Template Name', ''];
     const createdTemplate = error ? <Error cancelError={this.cleanTemplateCreateError}>{error.message}</Error>
       : (<Card>
         <CardHeader color="rose" icon>
@@ -83,7 +92,7 @@ class CreateEmailTemplate extends Component {
         <CardBody>
           <form onSubmit={this.submitHandler}>
             <div>
-              <h4 className={classes.cardTitle}>Template Name</h4>
+              <h4 className={templateNameClass}>{templateNameLabel}</h4>
               <TextField
                 id="template-name"
                 value={templateName}
@@ -123,7 +132,7 @@ class CreateEmailTemplate extends Component {
           </form>
         </CardBody>
         <CardFooter>
-          <Button disabled={!templateName || !templateContent} color="rose" onClick={this.createTemplateHandler}>Create</Button>
+          <Button disabled={!createEnabled || uniqName > 0} color="rose" onClick={this.createTemplateHandler}>Create</Button>
           <Button onClick={this.cancelEditHandler}>Cancel</Button>
         </CardFooter>
       </Card>);
@@ -137,6 +146,7 @@ const mapStateToProps = state => ({
   templateId: state.email.templateId,
   isTemplateCreated: state.email.isTemplateCreated,
   error: state.email.error,
+  templateNameList: state.email.templateNameList || [],
 });
 
 const mapDispatchToProps = dispatch => ({
