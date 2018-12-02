@@ -18,7 +18,7 @@ const authRoutes = [
     mini: "RP",
     icon: PersonAdd,
     component: RegisterPage
-  },
+  }
 ];
 
 export default authRoutes;

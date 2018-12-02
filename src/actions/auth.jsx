@@ -21,7 +21,7 @@ export const VERIFY_RESEND_USER = 'verify_resend_user';
 export const FETCH_USERTYPE_LIST = 'fetch_usertype_list';
 export const FETCH_USER_BY_USERID = 'fetch_user_by_userid';
 
-const ROOT_URL = `http://45.117.170.211:8091/api/user`
+const ROOT_URL = `http://13.238.116.171:8080/api`
 const client_id = '3ov1blo2eji4acnqfcv88tcidn'
 
 export const authGetToken = () => {
@@ -129,56 +129,50 @@ export function register(values) {
 
 export function registerUser(values) {
   return (dispatch) => {
-  if (values.registrationType === 'Organization') {
-    //Call organization api
-    fetch('http://35.189.61.189:8080/api/organizations/validate?name=' + values.registerOrganizationName, {
-      method: 'GET',
-      headers: {
-        'Accept': '*/*',
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        console.log("json-------", json)
-        if (json.object === 'VALID') {
-          dispatch(register(values));
-        } else {
-          alert("ALready registered organization please login");
+    if (values.registrationType === 'Organization') {
+      //Call organization api
+      fetch(ROOT_URL+ '/validate?name=' + values.registerOrganizationName, {
+        method: 'GET',
+        headers: {
+          'Accept': '*/*',
+          'Content-Type': 'application/json'
         }
       })
-      .catch(err => console.log("error", err))
+        .then(res => res.json())
+        .then(json => {
+          console.log("json-------", json)
+          if (json.object === 'VALID') {
+            dispatch(register(values));
+          } else {
+            alert("Already registered organization please login");
+          }
+        })
+        .catch(err => console.log("error", err))
+    }
+    else // for customer
+      dispatch(register(values));
   }
-  else // for customer
-    dispatch(register(values));
-}
 }
 
-/* export function registerUser(values) {
+export function loginUser(values, history) {
   console.log("values-------", values);
   return (dispatch) => {
     dispatch(getUser())
-    Auth.signUp({
-      username: values.registerEmail,
-      password: values.registerPassword,
-      attributes: {
-          email: values.registerEmail  
-      },
-      validationData: [] 
-    })
+    Auth.signIn(values.loginEmail, values.loginPassword)
       .then(json => {
-        console.log("json-------")
-        if(json) {
-            localStorage.setItem('username', json.username);
-            dispatch(registerUserSuccess(json));                    
+        console.log("json-------", json);
+        if (json) {
+          localStorage.setItem('username', json.username);
+          dispatch(registerUserSuccess(json));
+          history.push('/dashboard')
         } else {
-            dispatch(registerUserFailure("Topology Error"))
+          dispatch(registerUserFailure("Topology Error"))
         }
         return json;
-      })  
+      })
       .catch(err => dispatch(registerUserFailure(err)))
   };
-} */
+}
 
 export function getUser() {
   return {
@@ -211,7 +205,7 @@ export function verifyUserCode(user, email, code, history) {
         console.log("json-------")
         if(json) {
             dispatch(verifyUserSuccess(json)); 
-            history.push('/login');
+            history.push('/registerorganization');
         } else {
             dispatch(verifyUserFailure("Topology Error"))
         }
@@ -257,98 +251,3 @@ export function verifyResendUser(values, callback) {
   }
 }
 
-export function loginUser(values, history) {
-  console.log("values-------", values);
-  return (dispatch) => {
-    dispatch(getUser())
-    Auth.signIn(values.loginEmail, values.loginPassword)
-      .then(json => {
-        console.log("json-------", json);
-        if(json) {
-            localStorage.setItem('username', json.username);
-            dispatch(registerUserSuccess(json)); 
-            history.push('/dashboard')                   
-        } else {
-            dispatch(registerUserFailure("Topology Error"))
-        }
-        return json;
-      })  
-      .catch(err => dispatch(registerUserFailure(err)))
-  };
-}
-
-export function checkAuth(values,callback) {
-  sessionService.loadSession()
-    .then(
-      currentSession => {
-        callback(currentSession)
-      })
-    .catch( error => {
-        callback(false)
-      }
-    ) 
-  return{
-    type: CHECK_AUTH
-  }
-}
-
-export function resetPassword(value,callback){
-  axios.post(`${ROOT_URL}/resetPassword`, value)
-    .then(
-      response => {
-        callback(response);
-      },
-      error => {
-        callback(error.response)
-      }
-    )
-  return{
-    type: RESET_PASSWORD
-  }
-}
-
-export function changePassword(value,callback){
-  axios.post(`${ROOT_URL}/changePassword`, value)
-    .then(
-      response => {
-        callback(response);
-      },
-      error => {
-        callback(error.response)
-      }
-    )
-  return{
-    type: CHANGE_PASSWORD
-  }
-}
-
-export function fetchUserTypeList(value,callback){
-  const token = value.token
-  let axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer '+token
-    }
-  };
-  const request = axios.post(`${ROOT_URL}/getListUsersByUserType`, value, axiosConfig)
-  return{
-    type: FETCH_USERTYPE_LIST,
-    payload: request
-  }
-}
-
-export function fetchUserByUserId(id,token,callback){
-  let axiosConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer '+token
-    }
-  };
-  const request = axios.get(`${ROOT_URL}/getUserByUserId/${id}`, axiosConfig)
-  return{
-    type: FETCH_USER_BY_USERID,
-    payload: request
-  }
-}

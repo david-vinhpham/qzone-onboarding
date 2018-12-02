@@ -16,7 +16,7 @@ import _ from 'lodash';
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import CustomRadio from '../../components/CustomRadio/CustomRadio.jsx';
 import CustomCheckbox from '../../components/CustomCheckbox/CustomCheckbox.jsx';
-import BusinessModal from "./BusinessModal";
+import BusinessModal from "./OrganizationModal";
 import * as countryList from "./CountryAndRegion"
 var regionList = countryList.COUNTRY_REGION[0].regions
 class BusinessEdit extends React.Component{

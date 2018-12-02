@@ -10,8 +10,8 @@ import {  Person,
         } from "@material-ui/icons";
 import Dashboard from "../views/Dashboard/Dashboard.jsx";
 import Administration from "../views/Administration/Administration.jsx";
-import BusinessDetails from "../views/BusinessDetails/BusinessDetails.jsx";
-import BusinessEdit from "../views/BusinessDetails/BusinessEdit.jsx";
+import BusinessDetails from "../views/Organization/OrganizationDetails.jsx";
+import BusinessEdit from "../views/Organization/OrganizationEdit.jsx";
 import Calendar from "../views/Calendar/Calendar.jsx";
 import CustomerFlow from "../views/CustomerFlow/CustomerFlow.jsx";
 
