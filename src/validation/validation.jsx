@@ -18,3 +18,5 @@ export const validatePassword = (pwd) =>
     .test(pwd);
 
 export default validatePassword;
+
+export const isDirty = (oldValue, newValue) => oldValue !== newValue;

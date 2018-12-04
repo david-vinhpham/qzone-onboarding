@@ -19,6 +19,7 @@ import {
   FETCH_TEMPLATE_START,
   FETCH_TEMPLATE_SUCCESS,
   RESET_DELETE_STATUS,
+  SAVE_TEMPLATE_NAME_LIST,
 } from "../actions/email_templates";
 
 const initialState = {
@@ -73,6 +74,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, error: ''};
     case RESET_DELETE_STATUS: 
       return { ...state, deleteStatus: 404 };
+    case SAVE_TEMPLATE_NAME_LIST:
+      return { ...state, templateNameList: action.payload };
     default:
       return state;
   }
