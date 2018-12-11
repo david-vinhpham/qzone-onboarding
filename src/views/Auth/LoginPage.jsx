@@ -172,7 +172,7 @@ class LoginPage extends React.Component {
                     />
                     <div>
                       <Button color="rose" simple size="lg" block onClick={this.loginClick}>
-                        Let's Go
+                        Submit
                     </Button>
                     </div>
                     <div>

@@ -131,7 +131,16 @@ class Step1 extends React.Component {
               )
             }}
           />
-            
+          :
+              <InputLabel
+            className={classes.labelLeftHorizontal}
+            sm={4}
+            onClick={() => this.props.onDoubleClick('firstName')}
+          >
+            {'provider.firstName' || 'firstName'}
+          </InputLabel> 
+            }
+          
           <CustomInput
             labelText={
               <span>

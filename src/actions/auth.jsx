@@ -13,6 +13,8 @@ export const VERIFY_USER = 'VERIFY_USER';
 export const VERIFY_USER_SUCCESS = 'VERIFY_USER_SUCCESS';
 export const VERIFY_USER_FAILURE = 'VERIFY_USER_FAILURE';
 
+export const STORE_EMAIL = 'STORE_EMAIL';
+
 export const LOGIN_USER = 'login_user';
 export const CHECK_AUTH = 'check_auth';
 export const RESET_PASSWORD = 'reset_password';
@@ -101,9 +103,17 @@ export function googleSignIn() {
   }
 }
 
+export const storeEmail = (email)  =>{
+  return {
+    type: STORE_EMAIL,
+    payload: {email}
+  }
+}
+
 export function register(values) {
   console.log("values-------", values);
   return (dispatch) => {
+    dispatch(storeEmail(values.registerEmail))
     dispatch(getUser())
     Auth.signUp({
       username: values.registerEmail,
@@ -114,7 +124,7 @@ export function register(values) {
       validationData: []
     })
       .then(json => {
-        console.log("json-------")
+        console.log("json-------", json)
         if (json) {
           localStorage.setItem('username', json.username);
           dispatch(registerUserSuccess(json));
@@ -138,16 +148,16 @@ export function registerUser(values) {
           'Content-Type': 'application/json'
         }
       })
-        .then(res => res.json())
-        .then(json => {
-          console.log("json-------", json)
-          if (json.object === 'VALID') {
-            dispatch(register(values));
-          } else {
-            alert("Already registered organization please login");
-          }
-        })
-        .catch(err => console.log("error", err))
+      .then(res => res.json())
+      .then(json => {
+        console.log("json-------", json)
+        if (json.object === 'VALID') {
+          dispatch(register(values));
+        } else {
+          alert("Already registered organization please login");
+        }
+      })
+      .catch(err => console.log("error", err))
     }
     else // for customer
       dispatch(register(values));
@@ -157,6 +167,7 @@ export function registerUser(values) {
 export function loginUser(values, history) {
   console.log("values-------", values);
   return (dispatch) => {
+    dispatch(storeEmail(values.loginEmail))
     dispatch(getUser())
     Auth.signIn(values.loginEmail, values.loginPassword)
       .then(json => {

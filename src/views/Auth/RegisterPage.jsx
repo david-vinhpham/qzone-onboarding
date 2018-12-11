@@ -309,21 +309,21 @@ class RegisterPage extends React.Component {
                     />
                   <div className={classes.center}>
                     <Button color="rose" simple size="lg" block onClick={this.registerClick.bind(this)}>
-                      Get started
+                      Submit
                     </Button>
                   </div>
 
                     {this.state.registrationType === 'Customer' &&
                       (<div className={classes.center}>
                         <Button color="rose" simple size="lg" block onClick={this.registerAsClick.bind(this, 'Organization')}>
-                          Register As Organization
+                           Or Register As Organization
                   </Button>
                       </div>)}
 
                     {this.state.registrationType === 'Organization' &&
                       (<div className={classes.center}>
                         <Button color="rose" simple size="lg" block onClick={this.registerAsClick.bind(this, 'Customer')}>
-                          Register As Customer
+                          Or Register As Customer
                     </Button>
                       </div>)}
                 </CardBody>
