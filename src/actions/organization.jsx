@@ -1,17 +1,11 @@
-export const FETCH_BUSINESS = 'FETCH_BUSINESS'
-export const FETCH_BUSINESS_SUCCESS = 'FETCH_BUSINESS_SUCCESS'
-export const FETCH_BUSINESS_FAILURE = 'FETCH_BUSINESS_FAILURE'
+import {organization} from '../constants/Organization.constants';
+import {API_ROOT, URL} from '../config/config';
 
-export const CREATE_ORGANIZATION_LOADING = 'CREATE_ORGANIZATION_LOADING'
-export const CREATE_ORGANIZATION_SUCCESS = 'CREATE_ORGANIZATION_SUCCESS'
-export const CREATE_ORGANIZATION_FAILURE = 'CREATE_ORGANIZATION_FAILURE'
-
-const API = 'http://13.238.116.171:8080/api/'
 
 export const createOrganization = (values) => {
     return (dispatch) => {
         dispatch(createOrganizationLoading())
-        fetch(API + 'organizations', {
+        fetch(API_ROOT + URL.ORGANIZATIONS, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,20 +24,20 @@ export const createOrganization = (values) => {
 
 export const createOrganizationLoading = () => {
     return {
-        type: CREATE_ORGANIZATION_LOADING
+        type: organization.CREATE_ORGANIZATION_LOADING
     }
 }
 
 export const createOrganizationSuccess = (data) => {
     return {
-        type: CREATE_ORGANIZATION_SUCCESS,
+        type: organization.CREATE_ORGANIZATION_SUCCESS,
         payload: {data}
     }
 }
 
 export const createOrganizationFailure = (error) => {
     return {
-        type: CREATE_ORGANIZATION_FAILURE,
+        type: organization.CREATE_ORGANIZATION_FAILURE,
         payload: {error}
     }
 }
@@ -51,7 +45,7 @@ export const createOrganizationFailure = (error) => {
 export const fetchBusinessCategory = () => {
     return (dispatch) => {
         dispatch(fetchBusiness())
-        fetch(API + 'business-categories', {
+        fetch(API_ROOT + URL.BUSINESS_CATEGORY , {
             method: 'GET',
         })
         .then(res => res.json())
@@ -66,20 +60,20 @@ export const fetchBusinessCategory = () => {
 
 export const fetchBusiness = () => {
     return {
-        type: FETCH_BUSINESS
+        type: organization.FETCH_BUSINESS
     }
 }
 
 export const fetchBusinessSucess = (data) => {
     return {
-        type: FETCH_BUSINESS_SUCCESS,
+        type: organization.FETCH_BUSINESS_SUCCESS,
         payload: {data}
     }
 }
 
 export const fetchBusinessFailure = (err) => {
     return {
-        type: FETCH_BUSINESS_FAILURE,
+        type: organization.FETCH_BUSINESS_FAILURE,
         payload: { err }
     }
 }

@@ -1,0 +1,22 @@
+export const auth = {
+    AUTH_REMOVE_TOKEN : 'AUTH_REMOVE_TOKEN',
+    AUTH_SET_TOKEN : 'AUTH_SET_TOKEN',
+
+    REGISTER_USER : 'REGISTER_USER',
+    REGISTER_USER_SUCCESS : 'REGISTER_USER_SUCCESS',
+    REGISTER_USER_FAILURE : 'REGISTER_USER_FAILURE',
+
+    VERIFY_USER : 'VERIFY_USER',
+    VERIFY_USER_SUCCESS : 'VERIFY_USER_SUCCESS',
+    VERIFY_USER_FAILURE : 'VERIFY_USER_FAILURE',
+
+    STORE_EMAIL : 'STORE_EMAIL',
+    
+    LOGIN_USER : 'login_user',
+    CHECK_AUTH : 'check_auth',
+    RESET_PASSWORD : 'reset_password',
+    CHANGE_PASSWORD : 'change_password',
+    VERIFY_RESEND_USER : 'verify_resend_user',
+    FETCH_USERTYPE_LIST : 'fetch_usertype_list',
+    FETCH_USER_BY_USERID : 'fetch_user_by_userid'
+}

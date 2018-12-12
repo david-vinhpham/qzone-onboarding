@@ -31,7 +31,7 @@ class OrganizationEdit extends React.Component {
       name: this.props.userDetails ? this.props.userDetails.registerOrganizationName : '',
       organizationNameState: null,
       orgMode: "PROVIDER_BASED",
-      businessCategory: '',
+      businessCategoryId: '',
       preferences: {
         allowListingOnQuezone: false,
         allowReschedule: true,
@@ -43,9 +43,15 @@ class OrganizationEdit extends React.Component {
         trackManualTime: true,
         bookingHorizon: 0,
         dataRetention: 0,
-        serviceHours: ""
+        serviceHours: [
+          {
+            "day": "Monday",
+            "endTime": "string",
+            "startTime": "string"
+          }
+        ],
       },
-      phoneNumber: {
+      phone: {
         areaCode: '',
         countryCode: '',
         number:''
@@ -199,8 +205,8 @@ class OrganizationEdit extends React.Component {
                           classes={{
                             select: classes.select
                           }}
-                          value={this.state.businessCategory}
-                          onChange={(event) => { this.change(event, "businessCategory") }}
+                          value={this.state.businessCategoryId}
+                          onChange={(event) => { this.change(event, "businessCategoryId") }}
                           inputProps={{
                             name: "simpleSelect",
                             id: "simple-select"
@@ -514,7 +520,7 @@ class OrganizationEdit extends React.Component {
                           id="countryCode"
                           inputProps={{
                             onChange: event =>
-                              this.change(event, "phoneNumber", "countryCode"),
+                              this.change(event, "phone", "countryCode"),
                             type: "text"
                           }}
                         />
@@ -523,7 +529,7 @@ class OrganizationEdit extends React.Component {
                           id="areaCode"
                           inputProps={{
                             onChange: event =>
-                              this.change(event,"phoneNumber", "areaCode"),
+                              this.change(event,"phone", "areaCode"),
                             type: "text"
                           }}
                         />
@@ -532,7 +538,7 @@ class OrganizationEdit extends React.Component {
                           id="number"
                           inputProps={{
                             onChange: event =>
-                              this.change(event,"phoneNumber", "number"),
+                              this.change(event,"phone", "number"),
                             type: "text"
                           }}
                         />
