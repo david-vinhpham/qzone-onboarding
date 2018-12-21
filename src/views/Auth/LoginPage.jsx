@@ -6,6 +6,8 @@ import { Email, LockOutline } from "@material-ui/icons";
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
+import { css } from 'react-emotion';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -14,9 +16,14 @@ import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import CardFooter from "../../components/Card/CardFooter.jsx";
 import loginPageStyle from "../../assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import { loginUser } from '../../actions/auth';
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -87,110 +94,126 @@ class LoginPage extends React.Component {
         break;
     }
   }
-
+  
   render() {
-    const { classes } = this.props;
+    const { classes, userLoading } = this.props;
     return (
-      <div className={classes.content}>
-        <div className={classes.container}>
-          <GridContainer justify="center">
-            <GridItem xs={12} sm={6} md={4}>
-              <form>
-                <Card login className={classes[this.state.cardAnimaton]}>
-                  <CardHeader
-                    className={`${classes.cardHeader} ${classes.textCenter}`}
-                    color="rose"
-                    >
-                    <h4 className={classes.cardTitle}>Log in</h4>
-                    <div className={classes.socialLine}>
-                      <Button
-                        justIcon
-                        href="https://www.twitter.com"
-                        target="_blank"
-                        color="transparent"
+      
+       <div className={classes.content}>
+          <div className={classes.container}>
+            <GridContainer justify="center">
+              <GridItem xs={12} sm={6} md={4}>
+                {userLoading === true ? 
+                (
+                  < ClipLoader
+                    className={override}
+                    sizeUnit={"px"}
+                    size={150}
+                    color={'#123abc'}
+                    loading={userLoading}
+                  />
+                )  
+                :
+                  (
+                  <form>
+                    <Card login className={classes[this.state.cardAnimaton]}>
+                      <CardHeader
+                        className={`${classes.cardHeader} ${classes.textCenter}`}
+                        color="rose"
                       >
-                        <i className={"fab fa-twitter"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="https://www.facebook.com"
-                        target="_blank"
-                        color="transparent"
-                      >
-                        <i className={"fab fa-facebook"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="https://www.plus.google.com"
-                        target="_blank"
-                        color="transparent"
-                      >
-                        <i className={"fab fa-google-plus-g"} />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardBody>
-                    <CustomInput
-                      labelText="Email..."
-                      success={this.state.loginEmailState === "success"}
-                      error={this.state.loginEmailState === "error"}
-                      id="loginemail"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        onChange: event =>
-                          this.change(event, "loginEmail", "email"),
-                        type: "email",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Email className={classes.inputAdornmentIcon} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <CustomInput
-                      labelText="Password"
-                      success={this.state.loginPasswordState === "success"}
-                      error={this.state.loginPasswordState === "error"}
-                      id="loginPassword"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        onChange: event =>
-                          this.change(event, "loginPassword", "password"),
-                        type: "password",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <LockOutline
-                              className={classes.inputAdornmentIcon}
-                            />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <div>
-                      <Button color="rose" simple size="lg" block onClick={this.loginClick}>
-                        Submit
+                        <h4 className={classes.cardTitle}>Log in</h4>
+                        <div className={classes.socialLine}>
+                          <Button
+                            justIcon
+                            href="https://www.twitter.com"
+                            target="_blank"
+                            color="transparent"
+                          >
+                            <i className={"fab fa-twitter"} />
+                          </Button>
+                          <Button
+                            justIcon
+                            href="https://www.facebook.com"
+                            target="_blank"
+                            color="transparent"
+                          >
+                            <i className={"fab fa-facebook"} />
+                          </Button>
+                          <Button
+                            justIcon
+                            href="https://www.plus.google.com"
+                            target="_blank"
+                            color="transparent"
+                          >
+                            <i className={"fab fa-google-plus-g"} />
+                          </Button>
+                        </div>
+                      </CardHeader>
+                      <CardBody>
+                        <CustomInput
+                          labelText="Email..."
+                          success={this.state.loginEmailState === "success"}
+                          error={this.state.loginEmailState === "error"}
+                          id="loginemail"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            onChange: event =>
+                              this.change(event, "loginEmail", "email"),
+                            type: "email",
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <Email className={classes.inputAdornmentIcon} />
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                        <CustomInput
+                          labelText="Password"
+                          success={this.state.loginPasswordState === "success"}
+                          error={this.state.loginPasswordState === "error"}
+                          id="loginPassword"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            onChange: event =>
+                              this.change(event, "loginPassword", "password"),
+                            type: "password",
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <LockOutline
+                                  className={classes.inputAdornmentIcon}
+                                />
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                        <div>
+                          <Button color="rose" simple size="lg" block onClick={this.loginClick}>
+                            Submit
                     </Button>
-                    </div>
-                    <div>
-                      <Link to={`/register`}>
-                        <Button color="rose" simple size="lg" block>
-                          Register as new User
+                        </div>
+                        <div>
+                          <Link to={`/register`}>
+                            <Button color="rose" simple size="lg" block>
+                              Register as new User
                         </Button>
-                      </Link>
-                    </div>
-                  </CardBody>
-                </Card>
-              </form>
-            </GridItem>
-          </GridContainer>
+                          </Link>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </form>
+                  )
+              }
+                
+              </GridItem>
+            </GridContainer>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+  } 
 }
 
 LoginPage.propTypes = {

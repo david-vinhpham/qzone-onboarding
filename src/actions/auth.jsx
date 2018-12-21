@@ -56,6 +56,7 @@ export function register(values) {
         if (json) {
           localStorage.setItem('username', json.username);
           dispatch(registerUserSuccess(json));
+          
         } else {
           dispatch(registerUserFailure("Topology Error"))
         }
@@ -102,12 +103,32 @@ export function loginUser(values, history) {
         console.log("json-------", json);
         if (json) {
           localStorage.setItem('username', json.username);
-          dispatch(registerUserSuccess(json));
-          history.push('/business/edit')
+          fetch(API_ROOT + URL.LOGIN + '/' + json.username, {
+            method: 'GET',
+            headers: {
+              'Accept': '*/*',
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(res => res.json())
+          .then(json => {
+            if(json.success === true) {
+              console.log("User exists. Fetch the user details and store in local storage");
+              dispatch(registerUserSuccess(json));
+              localStorage.setItem('user', JSON.stringify(json));
+              history.push('dashboard');
+            } else {
+              console.log("User logins for the 1st time. Navigate to business edit to add the organization.")
+              history.push('/business/edit')
+            }
+          })
+          .catch(err => {
+            dispatch(registerUserFailure(err))
+          })
         } else {
           dispatch(registerUserFailure("Topology Error"))
         }
-        return json;
+        //return json;
       })
       .catch(err => dispatch(registerUserFailure(err)))
   };

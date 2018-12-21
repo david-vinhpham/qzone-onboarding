@@ -16,13 +16,13 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
 import CustomRadio from "components/CustomRadio/CustomRadio.jsx";
-import { fetchBusinessCategory, createOrganization } from "../../actions/organization.jsx"
+import { fetchBusinessCategory, createOrganization, getOrganizationByAdmin } from "../../actions/organization.jsx"
 
 import _ from 'lodash';
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import * as countryList from "./CountryAndRegion";
 
-var regionList = countryList.COUNTRY_REGION[0].regions
+const userDetail = JSON.parse(localStorage.getItem('user'));
+
 class OrganizationEdit extends React.Component {
   constructor(props) {
     super(props);
@@ -60,10 +60,10 @@ class OrganizationEdit extends React.Component {
       website: '',
       queueModel: '',
       businessAdmin: {
-        cognitoToken: localStorage.getItem('CognitoIdentityServiceProvider.3ov1blo2eji4acnqfcv88tcidn.' + (this.props.userDetails ? this.props.userDetails.username : '') + '.idToken'),
+        cognitoToken: localStorage.getItem('CognitoIdentityServiceProvider.3ov1blo2eji4acnqfcv88tcidn.' + (localStorage.getItem('username')) + '.idToken'),
         email: this.props.email ? this.props.email : '',
-        userSub: this.props.userDetails ? this.props.userDetails.username : '',
-        userName: this.props.userDetails ? this.props.userDetails.username : ''
+        userSub: localStorage.getItem('username'),
+        userName: localStorage.getItem('username')
       }
     };
 
@@ -96,15 +96,20 @@ class OrganizationEdit extends React.Component {
   }
 
   componentDidMount() {
+    console.log("user details------", this.userDetails)
+    if (this.userDetails.object.id !== null) {
+      this.props.getOrganizationByAdmin(this.userDetails.object.id);
+    }
     this.props.getBusinessCategory()
   }
 
   submit = () => {
+    
     this.props.createOrganization(this.state);
   }
 
   render() {
-    const { classes, businessCategory } = this.props;
+    const { classes, businessCategory, userDetails } = this.props;
     let categoryOptions = [];
     if(businessCategory && businessCategory.objects) {
       categoryOptions = businessCategory.objects;
@@ -127,7 +132,7 @@ class OrganizationEdit extends React.Component {
                     <GridContainer>
                       <GridItem>
                         <FormLabel className={classes.labelHorizontal}>
-                          *Name
+                          Name
                         </FormLabel>
                       </GridItem>
                       <GridItem >
@@ -586,7 +591,7 @@ class OrganizationEdit extends React.Component {
             />
           </CardBody>
           <CardFooter className={classes.justifyContentCenter}>
-            <Button color="rose" onClick={() => this.submit()}>
+            <Button color="rose" onClick={() => this.submit(userDetails)}>
               Update
             </Button>
             <Button color="rose" >
@@ -610,13 +615,17 @@ const mapsStateToProp = (state) => ({
   email: state.user.email,
   businessCategory: state.organization.businessCategory,
   businessCategoryLoading: state.organization.businessCategoryLoading,
-  businessCategoryError: state.organization.businessCategoryError
+  businessCategoryError: state.organization.businessCategoryError,
+  organizationByAdmin: state.organization.organizationByAdmin,
+  organizationByAdminLoading: state.organization.organizationByAdminLoading,
+  organizationByAdminError: state.organization.organizationByAdminError
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getBusinessCategory: () => dispatch(fetchBusinessCategory()),
-    createOrganization: (data) => dispatch(createOrganization(data))
+    createOrganization: (data) => dispatch(createOrganization(data)),
+    getOrganizationByAdmin: (id) => dispatch(getOrganizationByAdmin(id))
   }
 }
 
