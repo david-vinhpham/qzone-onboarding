@@ -17,7 +17,7 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
 import CustomRadio from "components/CustomRadio/CustomRadio.jsx";
-import { fetchBusinessCategory, createOrganization, getOrganizationByAdmin } from "../../actions/organization.jsx"
+import { fetchBusinessCategory, editOrganization, getOrganizationByAdmin } from "../../actions/organization.jsx"
 //import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
 
 import _ from 'lodash';
@@ -102,9 +102,7 @@ class OrganizationEdit extends React.Component {
 
   submit = () => {
     // this is the case of 1st time registering the organization along with admin
-    if (userDetail.success === false) {
-      this.props.createOrganization(this.state);
-    }
+    this.props.editOrganization(this.state);
   }
 
   moveToCreate = () => {
@@ -668,7 +666,7 @@ const mapsStateToProp = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     getBusinessCategory: () => dispatch(fetchBusinessCategory()),
-    createOrganization: (data) => dispatch(createOrganization(data)),
+    editOrganization: (data) => dispatch(editOrganization(data)),
     getOrganizationByAdmin: (id) => dispatch(getOrganizationByAdmin(id))
   }
 }
