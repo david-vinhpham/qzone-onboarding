@@ -26,6 +26,7 @@ export function logout() {
   Auth.signOut({ global: true })
     .then(data => {
       console.log(data);
+      localStorage.clear();
       window.location = "/login";
     })
     .catch(err => console.log(err));
@@ -119,7 +120,7 @@ export function loginUser(values, history) {
               history.push('dashboard');
             } else {
               console.log("User logins for the 1st time. Navigate to business edit to add the organization.")
-              history.push('/business/edit')
+              history.push('/organization/create')
             }
           })
           .catch(err => {

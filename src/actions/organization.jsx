@@ -5,7 +5,7 @@ export const editOrganization = (values) => {
     return (dispatch) => {
         dispatch(editOrganizationLoading())
         fetch(API_ROOT + URL.ORGANIZATIONS, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -79,8 +79,6 @@ export const getOrganizationByAdminFailure = (error) => {
         payload: { error }
     }
 }
-
-
 
 export const createOrganization = (values) => {
     return (dispatch) => {
