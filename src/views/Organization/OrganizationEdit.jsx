@@ -110,16 +110,6 @@ class OrganizationEdit extends React.Component {
   }
 
   render() {
-    let alert = null;
-    if (userDetail === null || organizationByAdmin.success === false) {
-      alert =  (
-        <SweetAlert
-          info
-          title="Please create an organization before editing."
-          onConfirm={this.moveToCreate}
-        />
-      )
-    }
     const {
       classes,
       businessCategory,
