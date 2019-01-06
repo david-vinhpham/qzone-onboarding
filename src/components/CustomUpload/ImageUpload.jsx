@@ -1,12 +1,13 @@
 import React from "react";
-// used for making the prop types of this component
 import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 // core components
 import Button from "../../components/CustomButtons/Button.jsx";
 
 import defaultImage from "../../assets/img/image_placeholder.jpg";
-//import defaultAvatar from "assets/img/placeholder.jpg";
+import { uploadImage } from '../../actions/imageUpload';
 
 class ImageUpload extends React.Component {
   constructor(props) {
@@ -48,6 +49,13 @@ class ImageUpload extends React.Component {
     });
     this.refs.fileInput.value = null;
   }
+  uploadImage = () => {
+    console.log("file---", this.state.file);
+    var data = new FormData
+    data.append("file", this.state.file);
+    this.props.uploadImage(data);
+  }
+
   render() {
     var {
       avatar,
@@ -68,8 +76,8 @@ class ImageUpload extends React.Component {
             </Button>
           ) : (
             <span>
-              <Button {...changeButtonProps} onClick={() => this.handleClick()}>
-                Change
+              <Button onClick={() => this.uploadImage()}>
+                Upload
               </Button>
               {avatar ? <br /> : null}
               <Button
@@ -86,6 +94,16 @@ class ImageUpload extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  
+})
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    uploadImage: (formdata) => dispatch(uploadImage(formdata))
+  }
+}
+
 ImageUpload.propTypes = {
   avatar: PropTypes.bool,
   addButtonProps: PropTypes.object,
@@ -93,4 +111,6 @@ ImageUpload.propTypes = {
   removeButtonProps: PropTypes.object
 };
 
-export default ImageUpload;
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+)(ImageUpload);

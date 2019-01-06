@@ -4,6 +4,9 @@ export const URL = {
     ORGANIZATIONS: 'organizations',
     BUSINESS_CATEGORY: 'business-categories',
     ORGANIZATION_BY_ADMIN_ID: 'organizations-by-admin-id/',
+    
+    GET_SERVICES: 'services-by-org-id/',
+
 
     LOGIN: 'business-admins-by-usersub'
 }

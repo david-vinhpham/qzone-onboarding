@@ -6,6 +6,8 @@ import Edit from "@material-ui/icons/Edit";
 import ArtTrack from "@material-ui/icons/ArtTrack";
 import { Link } from 'react-router-dom';
 import Search from "@material-ui/icons/Search";
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -17,15 +19,36 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
 import priceImage1 from "../../assets/img/faces/profile.jpg";
-import services from "../../assets/service.json";
+import { getServicesByOrganization } from '../../actions/service';
 
 class ServicesList extends React.Component{
   constructor(props) {
     super(props);
-    this.state = { data: []}
+    this.state = { 
+      data: [],
+      imageLoadError: true
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ data: nextProps.services })
+  }
+
+  componentDidMount() {
+    this.props.getServicesByOrganization()
   }
   render() {
-    const { classes } = this.props;
+    const { 
+      classes,
+      services,
+      serviceError,
+      serviceLoading 
+    } = this.props;
+
+    if(!this.state.data ) {
+      return null;
+    }
+    let self = this;
     return (
       <div>
         <GridContainer>
@@ -71,13 +94,24 @@ class ServicesList extends React.Component{
           </GridItem>
         </GridContainer>
         <GridContainer>
-          {services.map((service, index) => {
+          {this.state.data.map((service, index) => {
             return (
               <GridItem xs={12} sm={12} md={3}>
                 <Card product className={classes.cardHover} >
                   <CardHeader image className={classes.cardHeaderHover}>
-                    <a href="#pablo" onClick={e => e.preventDefault()}>
-                      <img src={priceImage1} alt="..." />
+                    <a>
+                      <img 
+                        src={service.image.fileUrl} 
+                        onError={e => { 
+                          if(self.state.imageLoadError) { 
+                            self.setState({
+                                imageLoadError: false
+                            });
+                            e.target.src = priceImage1;
+                          }   
+                        }
+                      }
+                      />
                     </a>
                   </CardHeader>
                   <CardBody>
@@ -137,4 +171,23 @@ class ServicesList extends React.Component{
   }
 }
 
-export default withStyles(listPageStyle)(ServicesList);
+const mapStateToProps = (state) => {
+  return {
+    services: state.service.getService,
+    serviceLoading: state.service.getServiceLoading,
+    serviceError: state.service.getServiceError
+
+  }
+
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getServicesByOrganization: () => dispatch(getServicesByOrganization()),
+  }
+}
+
+export default compose(
+  withStyles(listPageStyle),
+  connect(mapStateToProps, mapDispatchToProps),
+)(ServicesList);

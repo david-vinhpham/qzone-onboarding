@@ -2372,7 +2372,7 @@ img {
   direction: ltr; }
 
 .fileinput {
-  display: inline-block;
+  /* display: inline-block; */
   margin-bottom: 9px; }
   .fileinput.text-center {
     text-align: center; }

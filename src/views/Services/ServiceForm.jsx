@@ -26,12 +26,58 @@ class ServiceForm extends React.Component {
             'Virginia Andrews',
             'Kelly Snyder',
         ];
+        const serviceCategory = [
+            "Appointment",
+            "Queue"
+        ]
         return (
             <form>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            Standard Name
+                            Name
+                        </FormLabel>
+                    </GridItem>
+                    <GridItem xs={12} sm={4}>
+                        <CustomInput
+                            labelText="Name"
+                            success={serviceInfo.nameState === "success"}
+                            error={serviceInfo.nameState === "error"}
+                            id="name"
+                            formControlProps={{
+                                fullWidth: true
+                            }}
+                            inputProps={{
+                                onChange: event =>
+                                    this.props.change(event, "name"),
+                                type: "text"
+                            }}
+                        />
+                    </GridItem>
+                </GridContainer>
+                <GridContainer>
+                    <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>
+                            Description
+                        </FormLabel>
+                    </GridItem>
+                    <GridItem xs={12} sm={3}>
+                        <CustomInput
+                            id="about-me"
+                            formControlProps={{
+                            fullWidth: true
+                            }}
+                            inputProps={{
+                            multiline: true,
+                            rows: 5
+                            }}
+                        />
+                    </GridItem>
+                </GridContainer>
+                <GridContainer>
+                    <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>
+                            Service Category
                         </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={4}>
@@ -65,45 +111,21 @@ class ServiceForm extends React.Component {
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            *Name
+                            Duration of Service
                         </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={4}>
                         <CustomInput
-                            labelText="Name"
-                            success={serviceInfo.nameState === "success"}
-                            error={serviceInfo.nameState === "error"}
-                            id="name"
+                            labelText="Duration of Service"
+                            success={serviceInfo.duration === "success"}
+                            error={serviceInfo.duration === "error"}
+                            id="duration"
                             formControlProps={{
                                 fullWidth: true
                             }}
                             inputProps={{
                                 onChange: event =>
-                                    this.props.change(event, "name"),
-                                type: "text"
-                            }}
-                        />
-                    </GridItem>
-
-                </GridContainer>
-                <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel className={classes.labelHorizontal}>
-                            *Avg Service Time
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                        <CustomInput
-                            labelText="Avg Service Time"
-                            success={serviceInfo.avgServiceTimeState === "success"}
-                            error={serviceInfo.avgServiceTimeState === "error"}
-                            id="avgServiceTime"
-                            formControlProps={{
-                                fullWidth: true
-                            }}
-                            inputProps={{
-                                onChange: event =>
-                                    this.props.change(event, "avgServiceTime"),
+                                    this.props.change(event, "duration"),
                                 type: "number",
                                 min: "5"
                             }}
@@ -113,19 +135,43 @@ class ServiceForm extends React.Component {
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            Tkt Prefix
+                            Booking Horizon
                         </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={4}>
                         <CustomInput
-                            labelText="Tkt Prefix"
-                            id="tktPrefix"
+                            labelText="Booking Horizon"
+                            success={serviceInfo.bookingHorizon === "success"}
+                            error={serviceInfo.bookingHorizon === "error"}
+                            id="bookingHorizon"
                             formControlProps={{
                                 fullWidth: true
                             }}
                             inputProps={{
                                 onChange: event =>
-                                    this.props.change(event, "tktPrefix"),
+                                    this.props.change(event, "bookingHorizon"),
+                                type: "number",
+                                min: "0"
+                            }}
+                        />
+                    </GridItem>
+                </GridContainer>
+                <GridContainer>
+                    <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>
+                            Tags
+                        </FormLabel>
+                    </GridItem>
+                    <GridItem xs={12} sm={4}>
+                        <CustomInput
+                            labelText="Tags"
+                            id="tags"
+                            formControlProps={{
+                                fullWidth: true
+                            }}
+                            inputProps={{
+                                onChange: event =>
+                                    this.props.change(event, "tags"),
                                 type: "text"
                             }}
                         />
@@ -165,20 +211,52 @@ class ServiceForm extends React.Component {
                 </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
+                    <FormLabel
+                        className={
+                        classes.labelHorizontal +
+                        " " +
+                        classes.labelHorizontalRadioCheckbox
+                        }
+                    >
+                        Allow Provider Selection
+                    </FormLabel>
+                    </GridItem>
+                    <GridItem xs={12} sm={2}>
+                    <CustomRadio
+                        checkedValue={serviceInfo.allowProviderSelection}
+                        label="Yes"
+                        value={true}
+                        classes={classes}
+                        onClick={event =>
+                        this.props.change(event, "allowListingOnQuezone", true)}
+                    />
+                    </GridItem>
+                    <GridItem xs={12} sm={2}>
+                    <CustomRadio
+                        checkedValue={serviceInfo.allowProviderSelection}
+                        label="No"
+                        value={false}
+                        classes={classes}
+                        onClick={event =>
+                        this.props.change(event, "allowProviderSelection", false)} />
+                    </GridItem>
+                </GridContainer>
+                <GridContainer>
+                    <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            Avg Customers Per Hour
+                            No. of Parallel Customer
                         </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={4}>
                         <CustomInput
-                            labelText="Avg Customers Per Hour"
-                            id="avgCustomersPerHour"
+                            labelText="No. of Parallel Customer"
+                            id="numberOfParallelCustomer"
                             formControlProps={{
                                 fullWidth: true
                             }}
                             inputProps={{
                                 onChange: event =>
-                                    this.props.change(event, "avgCustomersPerHour"),
+                                    this.props.change(event, "numberOfParallelCustomer"),
                                 type: "number",
                                 min: "0"
                             }}
@@ -188,19 +266,19 @@ class ServiceForm extends React.Component {
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            Avg Provider Count
+                            Gap between Bookings
                         </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={4}>
                         <CustomInput
-                            labelText="Avg Provider Count"
-                            id="avgProviderCount"
+                            labelText="Gap between Bookings"
+                            id="gapBetweenBookings"
                             formControlProps={{
                                 fullWidth: true
                             }}
                             inputProps={{
                                 onChange: event =>
-                                    this.props.change(event, "avgProviderCount"),
+                                    this.props.change(event, "gapBetweenBookings"),
                                 type: "number",
                                 min: "0"
                             }}

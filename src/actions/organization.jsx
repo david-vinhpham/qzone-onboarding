@@ -53,6 +53,7 @@ export const getOrganizationByAdmin = (adminId) => {
         .then(res => res.json())
         .then(data => {
             dispatch(getOrganizationByAdminSuccess(data))
+            localStorage.setItem('organizationId', data.object.id);
         })
         .catch(err => {
             dispatch(getOrganizationByAdminFailure(err))

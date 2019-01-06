@@ -23,11 +23,11 @@ import { fetchBusinessCategory, editOrganization, getOrganizationByAdmin } from 
 import _ from 'lodash';
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 
-const userDetail = JSON.parse(localStorage.getItem('user'));
-
 class OrganizationEdit extends React.Component {
   constructor(props) {
     super(props);
+    const userDetail = JSON.parse(localStorage.getItem('user'));
+
     this.state = {
 
       name: this.props.userDetails ? this.props.userDetails.registerOrganizationName : '',
@@ -65,6 +65,7 @@ class OrganizationEdit extends React.Component {
     };
 
     this.change = this.change.bind(this);
+
   }
 
   change(event, stateName, type, value) {
@@ -93,6 +94,8 @@ class OrganizationEdit extends React.Component {
   }
 
   componentDidMount() {
+    const userDetail = JSON.parse(localStorage.getItem('user'));
+
     console.log("user details------", userDetail)
     if(userDetail) {
       this.props.getOrganizationByAdmin(userDetail.object.id);
@@ -121,7 +124,10 @@ class OrganizationEdit extends React.Component {
     if (businessCategory && businessCategory.objects) {
       categoryOptions = businessCategory.objects;
     }
+    const userDetail = JSON.parse(localStorage.getItem('user'));
+
     return (
+
       (<GridContainer>
         {userDetail === null ? 
           <SweetAlert
@@ -160,7 +166,7 @@ class OrganizationEdit extends React.Component {
                                   <GridItem>
                                     <FormLabel className={classes.labelHorizontal}>
                                       Name
-                        </FormLabel>
+                                    </FormLabel>
                                   </GridItem>
                                   <GridItem >
                                     <CustomInput
@@ -265,7 +271,7 @@ class OrganizationEdit extends React.Component {
                                       }
                                     >
                                       Allow listing on Quezone?
-                        </FormLabel>
+                                    </FormLabel>
                                   </GridItem>
                                   <GridItem xs={12} sm={2}>
                                     <CustomRadio
