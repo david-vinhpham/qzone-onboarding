@@ -6,7 +6,8 @@ export const URL = {
     ORGANIZATION_BY_ADMIN_ID: 'organizations-by-admin-id/',
     
     GET_SERVICES: 'services-by-org-id/',
-
+    CREATE_SERVICE: 'services',
+    GET_SERVICE_CATEGORY: 'service-categories',
 
     LOGIN: 'business-admins-by-usersub'
 }

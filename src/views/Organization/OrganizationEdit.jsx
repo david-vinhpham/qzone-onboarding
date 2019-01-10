@@ -184,7 +184,7 @@ class OrganizationEdit extends React.Component {
                                   <GridItem xs={12} sm={3}>
                                     <FormLabel className={classes.labelHorizontal}>
                                       Mode of Organization
-                        </FormLabel>
+                                    </FormLabel>
                                   </GridItem>
                                   <GridItem xs={12} sm={3}>
                                     <Select

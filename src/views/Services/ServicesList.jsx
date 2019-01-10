@@ -40,9 +40,6 @@ class ServicesList extends React.Component{
   render() {
     const { 
       classes,
-      services,
-      serviceError,
-      serviceLoading 
     } = this.props;
 
     if(!this.state.data ) {
@@ -101,6 +98,7 @@ class ServicesList extends React.Component{
                   <CardHeader image className={classes.cardHeaderHover}>
                     <a>
                       <img 
+                        alt=''
                         src={service.image.fileUrl} 
                         onError={e => { 
                           if(self.state.imageLoadError) { 
@@ -176,7 +174,6 @@ const mapStateToProps = (state) => {
     services: state.service.getService,
     serviceLoading: state.service.getServiceLoading,
     serviceError: state.service.getServiceError
-
   }
 
 }

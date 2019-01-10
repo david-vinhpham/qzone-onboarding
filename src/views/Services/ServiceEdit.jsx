@@ -24,17 +24,18 @@ class ServiceEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            standardName: "",
-            name: "",
-            nameState: "",
-            avgServiceTime: "",
-            tktPrefix: "",
-            serviceMode: null,
-            avgCustomersPerHour: "",
-            avgProviderCount: "",
-            avgServiceTimeState: "",
-            file: null,
-            imagePreviewUrl: defaultImage
+            allowProviderSelection: true,
+			name: "",
+			nameState: "",
+			bookingHorizon: 0,
+			description: "",
+			duration: 1,
+			gapBetweenBookings: 1,
+			mode: "APPOINTMENT",
+			numberOfParallelCustomer: 0,
+			serviceCategoryId: "",
+			tags: "",
+			imagePreviewUrl: defaultImage
         }
     }
 

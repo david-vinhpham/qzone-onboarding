@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {authGetToken} from './auth'
+import { authGetToken } from './auth'
 export const FETCH_PROVIDERS = 'FETCH_PROVIDERS';
 export const FETCH_PROVIDERS_SUCCESS = 'FETCH_PROVIDERS_SUCCESS';
 export const FETCH_PROVIDERS_FAILURE = 'FETCH_PROVIDERS_FAILURE';
@@ -12,27 +12,17 @@ export const FETCH_PROVIDER = 'FETCH_PROVIDER';
 export const FETCH_PROVIDER_SUCCESS = 'FETCH_PROVIDER_SUCCESS';
 export const FETCH_PROVIDER_FAILURE = 'FETCH_PROVIDER_FAILURE';
 
-const ROOT_URL = `http://35.189.61.189:8080/api/`;
+const ROOT_URL = `http://13.238.116.171:8080/api/providers-by-org-id/5c020fc6ab6aee3dc499e2e6`;
 
 export function fetchProviders() {
   return (dispatch) => {
     dispatch(getProviders());
-    dispatch(authGetToken())
-      .then(token => {
-        console.log("token inside provider--------", token)
-        return (
-          fetch(ROOT_URL + `providers`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer '+token
-            }
-          })
-        )
-      })
-      .catch(() => {
-        alert("No token found");
-      })
+    fetch(ROOT_URL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
     .then(res => res.json())
     .then(json => {
       console.log("json-----------", json)

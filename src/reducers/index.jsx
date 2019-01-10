@@ -6,6 +6,7 @@ import UserReducer from './reducer_auth';
 import TemplateReducer from './email_templates';
 import OrganizationReducer from './organization.reducer';
 import ServiceReducer from './service.reducer';
+import ImageUploadReducer from './imageUpload.reducer';
 
 const rootReducer = combineReducers({
   providers: ProvidersReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   user: UserReducer,
   email: TemplateReducer,
   organization: OrganizationReducer,
-  service: ServiceReducer
+  service: ServiceReducer,
+  image: ImageUploadReducer
 });
 
 export default rootReducer;
