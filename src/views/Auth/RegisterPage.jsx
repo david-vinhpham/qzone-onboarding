@@ -203,14 +203,15 @@ class RegisterPage extends React.Component {
                           fullWidth: true
                         }}
                         inputProps={{
-                          onChange: event =>
-                            this.change(event, "registerOrganizationName"),
+                          
                           endAdornment: (
                             <InputAdornment position="end">
                               <Email className={classes.inputAdornmentIcon} />
                             </InputAdornment>
                           )
                         }}
+                        onChange= {event =>
+                            this.change(event, "registerOrganizationName")}
                       />)}
 
                   <CustomInput
@@ -222,8 +223,7 @@ class RegisterPage extends React.Component {
                       fullWidth: true
                     }}
                     inputProps={{
-                      onChange: event =>
-                        this.change(event, "registerEmail", "email"),
+                      
                       type: "email",
                       endAdornment: (
                         <InputAdornment position="end">
@@ -231,6 +231,8 @@ class RegisterPage extends React.Component {
                         </InputAdornment>
                       )
                     }}
+                    onChange={ event =>
+                        this.change(event, "registerEmail", "email")}
                   />
                   <CustomInput
                     labelText="Password"
@@ -241,8 +243,7 @@ class RegisterPage extends React.Component {
                       fullWidth: true
                     }}
                     inputProps={{
-                      onChange: event =>
-                        this.change(event, "registerPassword", "password", "registerConfirmPassword"),
+                      
                       type: "password",
                       endAdornment: (
                         <InputAdornment position="end">
@@ -252,6 +253,8 @@ class RegisterPage extends React.Component {
                         </InputAdornment>
                       )
                     }}
+                    onChange= {event =>
+                        this.change(event, "registerPassword", "password", "registerConfirmPassword")}
                   />
                   <CustomInput
                     labelText="Confirm Password"
@@ -262,8 +265,7 @@ class RegisterPage extends React.Component {
                       fullWidth: true
                     }}
                     inputProps={{
-                      onChange: event =>
-                        this.change(event,"registerConfirmPassword", "equalTo","registerPassword"),
+                      
                       type: "password",
                       endAdornment: (
                         <InputAdornment position="end">
@@ -273,6 +275,8 @@ class RegisterPage extends React.Component {
                         </InputAdornment>
                       )
                     }}
+                    onChange= {event =>
+                        this.change(event,"registerConfirmPassword", "equalTo","registerPassword")}
                   />
                   <FormControlLabel
                     control={

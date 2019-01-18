@@ -18,7 +18,8 @@ function CustomInput({ ...props }) {
     white,
     inputRootCustomClasses,
     success,
-    value
+    value,
+    onChange
   } = props;
 
   const labelClasses = classNames({
@@ -85,6 +86,7 @@ function CustomInput({ ...props }) {
           min: min_attr
         }}
         {...inputProps}
+        onChange={onChange}
       />
       {error ? (
         <Clear className={feedbackClasses + " " + classes.labelRootError} />
@@ -110,6 +112,7 @@ CustomInput.propTypes = {
             PropTypes.string,
             PropTypes.number
           ]),
+  onChange: PropTypes.func
 };
 
 export default withStyles(customInputStyle)(CustomInput);

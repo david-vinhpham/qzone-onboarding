@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { css } from 'react-emotion';
+import { Auth } from 'aws-amplify';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -45,7 +46,62 @@ class LoginPage extends React.Component {
       }.bind(this),
       700
     );
+    const ga = window.gapi && window.gapi.auth2 ? 
+            window.gapi.auth2.getAuthInstance() : 
+            null;
+        if (!ga) this.createScript();
   }
+
+  signIn = () => {
+    const ga = window.gapi.auth2.getAuthInstance();
+    ga.signIn().then(
+        googleUser => {
+          console.log("google user---", googleUser);
+            this.getAWSCredentials(googleUser);
+        },
+        error => {
+            console.log(error);
+        }
+    );
+  }
+
+  async getAWSCredentials(googleUser) {
+    const { id_token, expires_at } = googleUser.getAuthResponse();
+    const profile = googleUser.getBasicProfile();
+    let user = {
+        email: profile.getEmail(),
+        name: profile.getName()
+    };
+    
+    const credentials = await Auth.federatedSignIn(
+        'google',
+        { token: id_token, expires_at },
+        user
+    );
+    console.log('credentials', credentials);
+  }
+
+  createScript() {
+    // load the Google SDK
+    const script = document.createElement('script');
+    script.src = 'https://apis.google.com/js/platform.js';
+    script.async = true;
+    script.onload = this.initGapi;
+    document.body.appendChild(script);
+  }
+
+  initGapi() {
+    // init the Google SDK client
+    const g = window.gapi;
+    g.load('auth2', function() {
+        g.auth2.init({
+            client_id: '578331627963-l8a7ru9q3289k2tvtkq9jjotobrc1pib.apps.googleusercontent.com',
+            // authorized scopes
+            scope: 'profile email openid'
+        });
+    });
+  }
+
 
   verifyEmail(value) {
     var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -141,9 +197,10 @@ class LoginPage extends React.Component {
                           </Button>
                           <Button
                             justIcon
-                            href="https://www.plus.google.com"
+                            //href="https://www.plus.google.com"
                             target="_blank"
                             color="transparent"
+                            onClick={this.signIn}
                           >
                             <i className={"fab fa-google-plus-g"} />
                           </Button>
@@ -159,8 +216,7 @@ class LoginPage extends React.Component {
                             fullWidth: true
                           }}
                           inputProps={{
-                            onChange: event =>
-                              this.change(event, "loginEmail", "email"),
+                            
                             type: "email",
                             endAdornment: (
                               <InputAdornment position="end">
@@ -168,6 +224,8 @@ class LoginPage extends React.Component {
                               </InputAdornment>
                             )
                           }}
+                          onChange = {event =>
+                              this.change(event, "loginEmail", "email")}
                         />
                         <CustomInput
                           labelText="Password"
@@ -178,8 +236,7 @@ class LoginPage extends React.Component {
                             fullWidth: true
                           }}
                           inputProps={{
-                            onChange: event =>
-                              this.change(event, "loginPassword", "password"),
+                            
                             type: "password",
                             endAdornment: (
                               <InputAdornment position="end">
@@ -189,6 +246,8 @@ class LoginPage extends React.Component {
                               </InputAdornment>
                             )
                           }}
+                          onChange = {event =>
+                              this.change(event, "loginPassword", "password")}
                         />
                         <div>
                           <Button color="rose" simple size="lg" block onClick={this.loginClick}>
