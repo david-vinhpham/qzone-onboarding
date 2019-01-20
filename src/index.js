@@ -13,16 +13,8 @@ import logger from 'redux-logger';
 import indexRoutes from "./routes/index.jsx";
 import reducers from './reducers';
 import "./assets/scss/material-dashboard-pro-react.css?v=1.2.0";
-import App from './App';
-import { withAuthenticator } from 'aws-amplify-react';
-//const AppWithAuth = withAuthenticator(App);
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const federated = {
-    google_client_id: '1075505092107-j8821j05r48pco773m0mqb16g1po5gtj.apps.googleusercontent.com',
-    facebook_app_id: '243175483037775',
-    amazon_client_id: ''
-};
 
 Amplify.configure({
     Auth: {

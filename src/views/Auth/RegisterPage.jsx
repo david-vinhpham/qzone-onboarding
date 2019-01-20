@@ -17,7 +17,7 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import registerPageStyle from "../../assets/jss/material-dashboard-pro-react/views/registerPageStyle";
 import VerificationPage from "./VerificationPage";
 import validatePassword from "../../validation/validation";
-import { registerUser, googleSignIn, facebookSignIn } from '../../actions/auth';
+import { registerUser, facebookSignIn } from '../../actions/auth';
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -167,29 +167,7 @@ class RegisterPage extends React.Component {
                   className={`${classes.cardHeader} ${classes.textCenter}`}
                   color="rose">
                   <h4 className={classes.cardTitle}>Register</h4>
-                  <div className={classes.socialLine}>
-                    <Button
-                      justIcon
-                      href="https://www.twitter.com"
-                      target="_blank"
-                      color="transparent">
-                      <i className={"fab fa-twitter"} />
-                    </Button>
-                    <Button
-                      justIcon
-                      onClick={this.props.facebookSignIn}
-                      target="_blank"
-                      color="transparent">
-                      <i className={"fab fa-facebook"} />
-                    </Button>
-                    <Button
-                      justIcon
-                      onClick={this.props.googleSignIn}
-                      target="_blank"
-                      color="transparent">
-                      <i className={"fab fa-google-plus-g"} />
-                    </Button>
-                  </div>
+                  
                 </CardHeader>
 
                 <CardBody>
@@ -357,7 +335,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
   return {
     registerUser: (value) => dispatch(registerUser(value)),
-    googleSignIn: () => dispatch(googleSignIn()),
     facebookSignIn: () => dispatch(facebookSignIn())
   }
 }
