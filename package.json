@@ -12,6 +12,7 @@
     "e": "0.0.4",
     "express": "^4.16.4",
     "express-favicon": "^2.0.1",
+    "formik": "^1.4.2",
     "fullcalendar-reactwrapper": "^1.0.7",
     "history": "^4.7.2",
     "lodash": "^4.17.10",
@@ -36,7 +37,8 @@
     "redux-logger": "^3.0.6",
     "redux-promise": "^0.6.0",
     "redux-react-session": "^2.5.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "yup": "^0.26.7"
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
