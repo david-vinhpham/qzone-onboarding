@@ -1,6 +1,73 @@
 import { API_ROOT, URL} from '../config/config';
 import { service } from '../constants/Service.constants';
 
+export const editService = (values) => {
+    return (dispatch) => {
+        dispatch({
+            type: service.EDIT_SERVICE
+        })
+        fetch(API_ROOT + URL.CREATE_SERVICE, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        })
+        .then(res => res.json())
+        .then(data => {
+            dispatch({
+                type: service.EDIT_SERVICE_SUCCESS,
+                payload: {data}
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type: service.EDIT_SERVICE_FAILURE,
+                payload: {err}
+            })
+        })
+    }
+}
+
+export const getServiceById = (id) => {
+    return (dispatch) => {
+        dispatch(getServiceByIdLoading())
+        fetch(API_ROOT + URL.GET_SERVICE_BY_ID + id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            dispatch(getServiceByIdSuccess(data.object))
+        })
+        .catch(err => {
+            dispatch(getServiceByIdFailure(err))
+        })
+    }
+}
+
+export const getServiceByIdLoading = () => {
+    return {
+        type: service.FETCH_SERVICE_BY_ID
+    }
+}
+
+export const getServiceByIdSuccess = (data) => {
+    return {
+        type: service.FETCH_SERVICE_BY_ID_SUCCESS,
+        payload: { data }
+    }
+}
+
+export const getServiceByIdFailure = (error) => {
+    return {
+        type: service.FETCH_SERVICE_BY_ID_FAILURE,
+        payload: { error }
+    }
+}
+
 export const getServiceCategory = () => {
     return (dispatch) => {
         dispatch(getServiceCategoryLoading())
@@ -45,7 +112,6 @@ export const getServicesByOrganization = () => {
     return (dispatch) => {
         dispatch(getServicesByOrganizationLoading())
         fetch(API_ROOT + URL.GET_SERVICES + orgId, {
-        //fetch('http://13.238.116.171:8080/api/services-by-org-id/%7BorgId%7D?orgId=5c109dc921d2880f2c9b0b8b', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

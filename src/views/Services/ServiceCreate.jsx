@@ -92,6 +92,7 @@ class ServiceCreate extends React.Component {
 		if (serviceCategory.length > 0) {
 			categoryOptions = serviceCategory;
 		}
+		
 		return (
 			<GridItem xs={12} sm={12} md={12}>
 				<Card>

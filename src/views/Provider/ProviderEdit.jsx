@@ -32,18 +32,7 @@ class ProviderEdit extends React.Component{
         tags: [],
         qualifications: [],
         description: ""
-        /* credentials:"",
-       emailPreference: "",
-       enableWaitListAppointment: "",
-       isOpen: "",
-       createdBy: "",
-       createdOn: "",
-       isDeleted: false,
-       updatedBy: "",
-       updatedOn: "", */
-        //avgserviceTime: "",
-        //externalProviderId: "",
-        //avgCustomersPerHour: "",
+
       },
       firstNameState: "",
       lastNameState: "",

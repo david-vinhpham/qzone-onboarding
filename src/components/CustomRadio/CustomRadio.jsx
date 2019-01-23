@@ -10,7 +10,8 @@ export default function CustomRadio({...props}) {
     label,
     value,
     classes,
-    onClick
+    onClick,
+    name
   } = props;
   return (
     <div
@@ -26,7 +27,7 @@ export default function CustomRadio({...props}) {
         	checked={checkedValue === value}
           value={value}
           onClick={onClick}
-          name="service_type_counter"
+          name={name}
           aria-label="C"
           icon={
             <FiberManualRecord

@@ -6,13 +6,17 @@ const initialState = {
     getService: [],
     getServiceError: null,
 
-    createService: [],
-    createServiceLoading: false,
-    createServiceError: null,
+    service: [],
+    serviceLoading: false,
+    serviceError: null,
 
     serviceCategory: [],
     serviceCategoryLoading: false,
-    serviceCategoryError: null
+    serviceCategoryError: null,
+
+    getServiceById: [],
+    getServiceByIdLoading: false,
+    getServiceByIdError: null
 
 }
 
@@ -26,11 +30,18 @@ const reducer = (state = initialState, action) => {
             return { ...state, getService: [], getServiceError: action.payload.error, getServiceLodiang: false } 
 
         case service.CREATE_SERVICE: 
-            return { ...state, createServiceLoading: true }
+            return { ...state, serviceLoading: true }
         case service.CREATE_SERVICE_SUCCESS:
-            return { ...state, createService: action.payload.data, createServiceLoading: false }
+            return { ...state, service: action.payload.data, serviceLoading: false }
         case service.CREATE_SERVICE_FAILURE:
-            return { ...state, createService:[], createServiceError: action.payload.error, createServiceLoading: false }
+            return { ...state, service:[], serviceError: action.payload.error, serviceLoading: false }
+
+        case service.EDIT_SERVICE: 
+            return { ...state, serviceLoading: true }
+        case service.EDIT_SERVICE_SUCCESS:
+            return { ...state, service: action.payload.data, serviceLoading: false }
+        case service.EDIT_SERVICE_FAILURE:
+            return { ...state, service:[], serviceError: action.payload.error, serviceLoading: false }
 
         case service.FETCH_CATEGORY: 
             return { ...state, serviceCategoryLoading: true } 
@@ -39,9 +50,14 @@ const reducer = (state = initialState, action) => {
         case service.FETCH_CATEGORY_FAILURE:
             return { ...state, serviceCategory: [], serviceCategoryError: action.payload.error, serviceCategoryLoading: false } 
 
-        
+        case service.FETCH_SERVICE_BY_ID: 
+            return { ...state, getServiceByIdLoading: true } 
+        case service.FETCH_SERVICE_BY_ID_SUCCESS:
+            return { ...state, getServiceById: action.payload.data, getServiceByIdLoading: false }
+        case service.FETCH_SERVICE_BY_ID_FAILURE:
+            return { ...state, getServiceById: [], getServiceByIdError: action.payload.error, getServiceByIdLoading: false } 
 
-            default:
+        default:
             return state;
     }
 }

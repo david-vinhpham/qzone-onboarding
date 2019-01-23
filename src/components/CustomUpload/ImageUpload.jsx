@@ -14,7 +14,7 @@ class ImageUpload extends React.Component {
     super(props);
     this.state = {
       file: null,
-      imagePreviewUrl: defaultImage
+      imagePreviewUrl: this.props.imagePreviewUrl || defaultImage
     };
     this.handleImageChange = this.handleImageChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -61,7 +61,8 @@ class ImageUpload extends React.Component {
       avatar,
       addButtonProps,
       changeButtonProps,
-      removeButtonProps
+      removeButtonProps,
+      imagePreviewUrl,
     } = this.props;
     return (
       <div className="fileinput text-center">
