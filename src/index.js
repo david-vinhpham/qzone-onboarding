@@ -21,13 +21,13 @@ Amplify.configure({
 
         // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
         identityPoolId: 'ap-southeast-2:adab2657-684c-4222-a17a-9a82b6a5ee84',
-        
-        // REQUIRED - Amazon Cognito Region
-        region: 'AP-SOUTHEAST-2',
 
-        // OPTIONAL - Amazon Cognito Federated Identity Pool Region 
+        // REQUIRED - Amazon Cognito Region
+        region: 'ap-southeast-2',
+
+        // OPTIONAL - Amazon Cognito Federated Identity Pool Region
         // Required only if it's different from Amazon Cognito Region
-        identityPoolRegion: 'AP-SOUTHEAST-2',
+        identityPoolRegion: 'ap-southeast-2',
 
         // OPTIONAL - Amazon Cognito User Pool ID
         userPoolId: 'ap-southeast-2_0sAegznUX',
@@ -38,10 +38,10 @@ Amplify.configure({
         // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
         mandatorySignIn: true,
 
-        
+
         // OPTIONAL - customized storage object
         //storage: new MyStorage(),
-        
+
         // OPTIONAL - Manually set the authentication flow type. Default is 'USER_SRP_AUTH'
         //authenticationFlowType: 'USER_PASSWORD_AUTH'
 	}
