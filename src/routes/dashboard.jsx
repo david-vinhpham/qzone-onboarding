@@ -15,7 +15,7 @@ import BusinessEdit from "../views/Organization/OrganizationEdit.jsx";
 import Calendar from "../views/Calendar/Calendar.jsx";
 import CustomerFlow from "../views/CustomerFlow/CustomerFlow.jsx";
 
-import ProviderDetails from "../views/Provider/ProviderDetails.jsx";
+import ProviderList from "../views/Provider/ProviderList.jsx";
 import ProviderCreate from "../views/Provider/ProviderCreateWizard.jsx";
 import ProviderEdit from "../views/Provider/ProviderEdit.jsx";
 
@@ -128,13 +128,13 @@ export const otherRoutes=[
     path: "/provider/list",
     name: "Provider Details",
     icon: Person,
-    component: ProviderDetails
+    component: ProviderList
   },
   {
     path: "/provider/card",
     name: "Provider Card",
     icon: Person,
-    component: ProviderDetails
+    component: ProviderList
   },
   {
     path: "/business/edit",

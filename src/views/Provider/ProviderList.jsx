@@ -22,7 +22,7 @@ import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/l
 import priceImage1 from "../../assets/img/faces/profile.jpg";
 import providers from "../../assets/provider.json";
 
-class ProviderDetails extends React.Component {
+class ProviderList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -156,4 +156,4 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
   withStyles(listPageStyle),
   connect(mapStateToProps, mapDispatchToProps),
-)(ProviderDetails);
+)(ProviderList);
