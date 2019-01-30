@@ -7,7 +7,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import ArtTrack from "@material-ui/icons/ArtTrack";
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";

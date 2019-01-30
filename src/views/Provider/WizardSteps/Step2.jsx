@@ -3,18 +3,20 @@ import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Email from "@material-ui/icons/Email";
-
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Phone from "@material-ui/icons/Phone";
+import { FormLabel, FormControlLabel, Switch } from "@material-ui/core";
+import Select from 'react-select';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import CustomInput from "../../../components/CustomInput/CustomInput.jsx";
-
-// core components
 import GridContainer from "../../../components/Grid/GridContainer.jsx";
 import GridItem from "../../../components/Grid/GridItem.jsx";
-
 import customSelectStyle from "../../../assets/jss/material-dashboard-pro-react/customSelectStyle.jsx";
 import customCheckboxRadioSwitch from "../../../assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.jsx";
+
+import { fetchAllLocations } from '../../../actions/location';
 
 const style = {
   infoText: {
@@ -34,18 +36,34 @@ const style = {
   ...customCheckboxRadioSwitch
 };
 
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' }
+];
+
+
 class Step2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: "",
-      phoneNumberState: "",
-      mobileNumber: "",
-      mobileNumberState: "",
+      telephone: "",
+      isAdmin: false,
       email: "",
-      emailState: ""
+      emailState: "",
+      selectedOption: null,
+
     };
   }
+
+  componentDidMount() {
+    this.props.fetchAllLocations();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({geoLocation: nextProps.getAllLocations})
+  }
+
   sendState() {
     return this.state;
   }
@@ -58,24 +76,10 @@ class Step2 extends React.Component {
     return false;
   }
 
-  verifyLength(value, length) {
-    if (value.length >= length) {
-      return true;
-    }
-    return false;
-  }
-
-  change(event, stateName, type, stateNameEqualTo) {
+  change(event, stateName, type) {
     switch (type) {
       case "email":
         if (this.verifyEmail(event.target.value)) {
-          this.setState({ [stateName + "State"]: "success" });
-        } else {
-          this.setState({ [stateName + "State"]: "error" });
-        }
-        break;
-      case "length":
-        if (this.verifyLength(event.target.value, stateNameEqualTo)) {
           this.setState({ [stateName + "State"]: "success" });
         } else {
           this.setState({ [stateName + "State"]: "error" });
@@ -87,48 +91,29 @@ class Step2 extends React.Component {
     this.setState({ [stateName]: event.target.value });
   }
 
-  handleSimple = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked });
   };
+
   isValidated() {
     return true;
   }
+
+  handleChangeSelect = (selectedOption) => {
+    this.setState({ selectedOption });
+    console.log(`Option selected:`, selectedOption);
+  }
+
+
+
   render() {
     const { classes } = this.props;
+    const { selectedOption } = this.state;
+
     return (
       <div>
-        <h4 className={classes.infoText}>How to connect with you?</h4>
-        <GridContainer justify="center">          
-          <GridItem xs={12} sm={5}>
-            <CustomInput
-              success={this.state.mobileNumberState === "success"}
-              error={this.state.mobileNumberState === "error"}
-              labelText={
-                <span>
-                  Mobile No <small>(required)</small>
-                </span>
-              }
-              id="mobileNumber"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                type:"number",
-                onChange: event => this.change(event, "mobileNumber", "length", 10),
-                endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    className={classes.inputAdornment}
-                  >
-                    <Phone className={classes.inputAdornmentIcon} />
-                  </InputAdornment>
-                )
-              }}
-            />
-          </GridItem>
+        <h4 className={classes.infoText}> Further Details </h4>
+        <GridContainer justify="center">
           <GridItem xs={12} sm={5}>
             <CustomInput
               labelText={
@@ -136,13 +121,12 @@ class Step2 extends React.Component {
                   Phone Number
               </span>
               }
-              id="phoneNumber"
+              id="telephone"
               formControlProps={{
                 fullWidth: true
               }}
               inputProps={{
-                type:"number",
-                onChange: event => this.change(event, "phoneNumber"),
+                type: "number",
                 endAdornment: (
                   <InputAdornment
                     position="end"
@@ -152,9 +136,10 @@ class Step2 extends React.Component {
                   </InputAdornment>
                 )
               }}
+              onChange={event => this.change(event, "telephone")}
             />
           </GridItem>
-          <GridItem xs={12} sm={10}>
+          <GridItem xs={12} sm={5}>
             <CustomInput
               success={this.state.emailState === "success"}
               error={this.state.emailState === "error"}
@@ -168,7 +153,7 @@ class Step2 extends React.Component {
                 fullWidth: true
               }}
               inputProps={{
-                onChange: event => this.change(event, "email", "email"),
+
                 endAdornment: (
                   <InputAdornment
                     position="end"
@@ -178,13 +163,60 @@ class Step2 extends React.Component {
                   </InputAdornment>
                 )
               }}
+              onChange={event => this.change(event, "email", "email")}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={3}>
+            <FormLabel
+              className={
+                classes.labelHorizontal +
+                " " +
+                classes.labelHorizontalRadioCheckbox
+              }
+            >
+              Is Provider Admin?
+            </FormLabel>
+          </GridItem>
+          <GridItem xs={12} sm={2}>
+            <FormControlLabel
+              control={
+                <Switch
+                  name="isAdmin"
+                  checked={this.state.isAdmin}
+                  value="isAdmin"
+                  onChange={this.handleChange("isAdmin")}
+                />
+              }
+            />
+          </GridItem>
+          <GridItem xs={12} sm={5}>
+            <Select
+              value={selectedOption}
+              onChange={this.handleChangeSelect}
+              options={options}
             />
           </GridItem>
         </GridContainer>
 
-        </div>
+      </div>
     );
   }
 }
 
-export default withStyles(style)(Step2);
+const mapStateToProps = (state) => {
+  return {
+    getAllLocations: state.location.getAllLocations,
+    getAllLocationsLoading: state.location.getAllLocationsLoading
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchAllLocations: () => dispatch(fetchAllLocations())
+  }
+}
+
+export default compose(
+	withStyles(style),
+	connect(mapStateToProps, mapDispatchToProps),
+)(Step2);

@@ -96,7 +96,7 @@ class ServicesList extends React.Component{
               <GridItem xs={12} sm={12} md={3}>
                 <Card product className={classes.cardHover} >
                   <CardHeader image className={classes.cardHeaderHover}>
-                    <a>
+                   
                       <img 
                         alt=''
                         src={service.image.fileUrl} 
@@ -110,7 +110,7 @@ class ServicesList extends React.Component{
                         }
                       }
                       />
-                    </a>
+                   
                   </CardHeader>
                   <CardBody>
                     <div className={classes.cardHoverUnder}>

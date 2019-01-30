@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import withStyles from "@material-ui/core/styles/withStyles";
-import _ from 'lodash';
-import { FormLabel, InputLabel, MenuItem, FormControl, Select } from "@material-ui/core";
+import { FormLabel, MenuItem, FormControl, Select } from "@material-ui/core";
 
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";

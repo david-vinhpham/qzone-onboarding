@@ -7,14 +7,12 @@ import RecordVoiceOver from "@material-ui/icons/RecordVoiceOver";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { FormLabel, InputLabel } from "@material-ui/core";      
+import { InputLabel } from "@material-ui/core";      
 
 // core components
 import GridContainer from "../../../components/Grid/GridContainer.jsx";
 import GridItem from "../../../components/Grid/GridItem.jsx";
-import PictureUpload from "../../../components/CustomUpload/PictureUpload.jsx";
 import CustomInput from "../../../components/CustomInput/CustomInput.jsx";
-import defaultImage from "../../../assets/img/default-avatar.png";
 
 const style = {
   infoText: {
@@ -37,9 +35,7 @@ class Step1 extends React.Component {
       firstname: "",
       firstnameState: "",
       lastname: "",
-      lastnameState: "",
-      middleName: "",
-      isEditMode: null
+      description: ""
     };
   }
   sendState() {
@@ -55,13 +51,6 @@ class Step1 extends React.Component {
   }
   change(event, stateName, type, stateNameEqualTo) {
     switch (type) {
-      case "email":
-        if (this.verifyEmail(event.target.value)) {
-          this.setState({ [stateName + "State"]: "success" });
-        } else {
-          this.setState({ [stateName + "State"]: "error" });
-        }
-        break;
       case "length":
         if (this.verifyLength(event.target.value, stateNameEqualTo)) {
           this.setState({ [stateName + "State"]: "success" });
@@ -89,7 +78,7 @@ class Step1 extends React.Component {
       }
      
     }
-    return false;
+    return true;
   }
   onDoubleClick = (fieldname) => {
     this.setState({isEditMode: fieldname})
@@ -103,10 +92,7 @@ class Step1 extends React.Component {
             Let's start with the basic information
           </h4>
         </GridItem>
-        <GridItem xs={12} sm={4}>
-          <PictureUpload imagePreviewUrl= {defaultImage}/>
-        </GridItem>
-        <GridItem xs={12} sm={6}>
+        <GridItem xs={12} sm={5}>
           <CustomInput
             success={this.state.firstnameState === "success"}
             error={this.state.firstnameState === "error"}
@@ -120,7 +106,6 @@ class Step1 extends React.Component {
               fullWidth: true
             }}
             inputProps={{
-              onChange: event => this.change(event, "firstname", "length", 3),
               endAdornment: (
                 <InputAdornment
                   position="end"
@@ -130,45 +115,14 @@ class Step1 extends React.Component {
                 </InputAdornment>
               )
             }}
+            onChange = { event => this.change(event, "firstname", "length", 3)}
           />
-          :
-              <InputLabel
-            className={classes.labelLeftHorizontal}
-            sm={4}
-            onClick={() => this.props.onDoubleClick('firstName')}
-          >
-            {'provider.firstName' || 'firstName'}
-          </InputLabel> 
-            }
-          
+        </GridItem>
+        <GridItem xs={12} sm={5}>
           <CustomInput
             labelText={
               <span>
-                Middle Name
-              </span>
-            }
-            id="middleName"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              onChange: event => this.change(event, "middleName"),
-              endAdornment: (
-                <InputAdornment
-                  position="end"
-                  className={classes.inputAdornment}
-                >
-                  <Face className={classes.inputAdornmentIcon} />
-                </InputAdornment>
-              )
-            }}
-          />
-          <CustomInput
-            success={this.state.lastnameState === "success"}
-            error={this.state.lastnameState === "error"}
-            labelText={
-              <span>
-                Last Name <small>(required)</small>
+                Last Name
               </span>
             }
             id="lastname"
@@ -176,7 +130,6 @@ class Step1 extends React.Component {
               fullWidth: true
             }}
             inputProps={{
-              onChange: event => this.change(event, "lastname", "length", 3),
               endAdornment: (
                 <InputAdornment
                   position="end"
@@ -186,8 +139,23 @@ class Step1 extends React.Component {
                 </InputAdornment>
               )
             }}
+            onChange = { event => this.change(event, "lastname")}
           />
         </GridItem>
+        <GridItem xs={12} sm={12} md={10}>
+            <InputLabel style={{ color: "#AAAAAA" }}>Description</InputLabel>
+            <CustomInput
+              id="about-me"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                multiline: true,
+                rows: 5
+              }}
+              onChange = { event => this.change(event, "description")}
+            />
+          </GridItem>
       </GridContainer>
     );
   }

@@ -36,12 +36,12 @@ const reducer = (state = initialState, action) => {
         case organization.ORGANIZATION_BY_ADMIN_FAILURE:
             return { ...state, createOrganizationError: action.payload.error, createOrganizationLoading: false};
 
-        case organization.ORGANIZATION_BY_ADMIN_LOADING: 
-            return { ...state, organizationByAdminLoading:true};
-        case organization.ORGANIZATION_BY_ADMIN_SUCCESS:
-            return { ...state, organizationByAdmin: action.payload.data, organizationByAdminLoading: false};
-        case organization.ORGANIZATION_BY_ADMIN_FAILURE:
-            return { ...state, organizationByAdminError: action.payload.error, organizationByAdminLoading: false};
+        // case organization.ORGANIZATION_BY_ADMIN_LOADING: 
+        //     return { ...state, organizationByAdminLoading:true};
+        // case organization.ORGANIZATION_BY_ADMIN_SUCCESS:
+        //     return { ...state, organizationByAdmin: action.payload.data, organizationByAdminLoading: false};
+        // case organization.ORGANIZATION_BY_ADMIN_FAILURE:
+        //     return { ...state, organizationByAdminError: action.payload.error, organizationByAdminLoading: false};
 
         case organization.EDIT_ORGANIZATION_LOADING: 
             return { ...state, editOrganizationLoading: true};

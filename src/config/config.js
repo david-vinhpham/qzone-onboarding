@@ -9,7 +9,11 @@ export const URL = {
     CREATE_SERVICE: 'services',
     GET_SERVICE_CATEGORY: 'service-categories',
     GET_SERVICE_BY_ID: 'services/',
+
+    GET_ALL_LOCATIONS: 'geo-locations',
     
-    LOGIN: 'business-admins-by-usersub'
+    LOGIN: 'business-admins-by-usersub',
+
+    GET_TIMEZONES: 'timezones'
 }
 export const GOOGLE_ID = '1075505092107-j8821j05r48pco773m0mqb16g1po5gtj.apps.googleusercontent.com'

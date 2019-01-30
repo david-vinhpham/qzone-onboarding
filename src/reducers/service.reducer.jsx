@@ -1,5 +1,4 @@
 import { service } from '../constants/Service.constants'
-import { stat } from 'fs';
 
 const initialState = {
     getServiceLodiang : false,

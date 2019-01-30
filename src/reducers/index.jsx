@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
 
-import ProvidersReducer from './reducer_provider';
+import ProvidersReducer from './provider.reducer';
 import EventsReducer from './reducer_events';
 import UserReducer from './reducer_auth';
 import TemplateReducer from './email_templates';
 import OrganizationReducer from './organization.reducer';
 import ServiceReducer from './service.reducer';
 import ImageUploadReducer from './imageUpload.reducer';
+import LocationReducer from './location.reducer';
 
 const rootReducer = combineReducers({
   providers: ProvidersReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   email: TemplateReducer,
   organization: OrganizationReducer,
   service: ServiceReducer,
-  image: ImageUploadReducer
+  image: ImageUploadReducer,
+  location: LocationReducer
 });
 
 export default rootReducer;

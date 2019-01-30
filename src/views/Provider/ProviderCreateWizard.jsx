@@ -8,7 +8,6 @@ import GridItem from "../../components/Grid/GridItem.jsx";
 import Step1 from "./WizardSteps/Step1.jsx";
 import Step2 from "./WizardSteps/Step2.jsx";
 import Step3 from "./WizardSteps/Step3.jsx";
-import Step4 from "./WizardSteps/Step4.jsx";
 
 class WizardView extends React.Component {
     constructor(props) {
@@ -28,7 +27,6 @@ class WizardView extends React.Component {
                             { stepName: "About", stepComponent: Step1, stepId: "about" },
                             { stepName: "Contact Information", stepComponent: Step2, stepId: "contact" },
                             { stepName: "Description", stepComponent: Step3, stepId: "description" },
-                            { stepName: "Location & Service", stepComponent: Step4, stepId: "locationNservice"}
                         ]}
                         title="Build Your Profile"
                         subtitle="This information will let us know more about you."

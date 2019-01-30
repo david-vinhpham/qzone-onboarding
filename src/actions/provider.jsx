@@ -1,18 +1,33 @@
 import axios from 'axios';
 import { authGetToken } from './auth'
-export const FETCH_PROVIDERS = 'FETCH_PROVIDERS';
-export const FETCH_PROVIDERS_SUCCESS = 'FETCH_PROVIDERS_SUCCESS';
-export const FETCH_PROVIDERS_FAILURE = 'FETCH_PROVIDERS_FAILURE';
-
-export const CREATE_PROVIDER = 'CREATE_PROVIDER';
-export const CREATE_PROVIDER_SUCCESS = 'CREATE_PROVIDER_SUCCESS';
-export const CREATE_PROVIDER_FAILURE = 'CREATE_PROVIDER_FAILURE';
-
-export const FETCH_PROVIDER = 'FETCH_PROVIDER';
-export const FETCH_PROVIDER_SUCCESS = 'FETCH_PROVIDER_SUCCESS';
-export const FETCH_PROVIDER_FAILURE = 'FETCH_PROVIDER_FAILURE';
-
+import { provider } from '../constants/Provider.constants';
+import {API_ROOT, URL } from '../config/config';
 const ROOT_URL = `http://13.238.116.171:8080/api/providers-by-org-id/5c020fc6ab6aee3dc499e2e6`;
+
+export const fetchTimezones = () => {
+  return (dispatch) => {
+    dispatch({ type: provider.FETCH_TIMEZONES_LOADING })
+    fetch(API_ROOT + URL.GET_TIMEZONES, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        dispatch({
+            type: provider.FETCH_TIMEZONES_SUCCESS,
+            payload: data.objects
+        })
+    })
+    .catch(err => {
+        dispatch({
+            type: provider.FETCH_TIMEZONES_FAILURE,
+            payload: err
+        })
+    })
+}
+}
 
 export function fetchProviders() {
   return (dispatch) => {
@@ -39,20 +54,20 @@ export function fetchProviders() {
 
 export function getProviders() {
   return {
-    type: FETCH_PROVIDERS
+    type: provider.FETCH_PROVIDERS
   }
 }
 
 export function fetchProvidersSuccess(providers) {
   return {
-    type: FETCH_PROVIDERS_SUCCESS,
+    type: provider.FETCH_PROVIDERS_SUCCESS,
     payload: { providers }
   }
 }
 
 export function fetchProvidersFailure(error) {
   return {
-    type: FETCH_PROVIDERS_FAILURE,
+    type: provider.FETCH_PROVIDERS_FAILURE,
     payload: { error }
   }
 }
@@ -95,20 +110,20 @@ export function createProvider(values) {
 
 export function postProvider() {
   return {
-    type: CREATE_PROVIDER
+    type: provider.CREATE_PROVIDER
   }
 }
 
 export function createProviderSuccess(providers) {
   return {
-    type: CREATE_PROVIDER_SUCCESS,
+    type: provider.CREATE_PROVIDER_SUCCESS,
     payload: { providers }
   }
 }
 
 export function createProviderFailure(error) {
   return {
-    type: CREATE_PROVIDER_FAILURE,
+    type: provider.CREATE_PROVIDER_FAILURE,
     payload: { error }
   }
 }
@@ -147,20 +162,20 @@ export function fetchProvider(id) {
 
 export function getProvider() {
   return {
-    type: FETCH_PROVIDER
+    type: provider.FETCH_PROVIDER
   }
 }
 
 export function fetchProviderSuccess(provider) {
   return {
-    type: FETCH_PROVIDER_SUCCESS,
+    type: provider.FETCH_PROVIDER_SUCCESS,
     payload: { provider }
   }
 }
 
 export function fetchProviderFailure(error) {
   return {
-    type: FETCH_PROVIDER_FAILURE,
+    type: provider.FETCH_PROVIDER_FAILURE,
     payload: { error }
   }
 }
