@@ -85,21 +85,38 @@ export const getOrganizationByAdminFailure = (error) => {
 export const createOrganization = (values, history) => {
     return (dispatch) => {
         dispatch(createOrganizationLoading())
-        fetch(API_ROOT + URL.ORGANIZATIONS, {
-            method: 'POST',
+        fetch(API_ROOT + URL.ORGANIZATION_NAME_VALIDATE + values.registerOrganizationName, {
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-        .then(res => res.json())
-        .then(data => {
-            dispatch(createOrganizationSuccess(data))
-            history.push('/dashboard');
-        })
-        .catch(err => {
-            dispatch(createOrganizationFailure(err))
-        })
+              'Accept': '*/*',
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(res => res.json())
+          .then(json => {
+            console.log("json-------", json)
+            if (json.object === 'VALID') {
+                fetch(API_ROOT + URL.ORGANIZATIONS, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(values)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    dispatch(createOrganizationSuccess(data))
+                    history.push('/dashboard');
+                })
+                .catch(err => {
+                    dispatch(createOrganizationFailure(err))
+                })
+            } else {
+              alert("Already registered organization. Please enter a unique name");
+            }
+          })
+          .catch(err => console.log("error", err))
+        
     }
 }
 

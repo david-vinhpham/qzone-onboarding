@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom';
 import Search from "@material-ui/icons/Search";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { ClipLoader } from 'react-spinners';
+import { css } from 'react-emotion';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -20,6 +23,13 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
 import priceImage1 from "../../assets/img/faces/profile.jpg";
 import { getServicesByOrganization } from '../../actions/service';
+import { FormLabel } from "@material-ui/core";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 class ServicesList extends React.Component{
   constructor(props) {
@@ -43,53 +53,25 @@ class ServicesList extends React.Component{
     } = this.props;
 
     if(!this.state.data ) {
-      return null;
+      return < ClipLoader
+      className={override}
+      sizeUnit={"px"}
+      size={150}
+      color={'#123abc'}
+      loading={true}
+    />;
     }
-    let self = this;
-    return (
-      <div>
+    let data = null
+    if(this.state.data.length === 0) {
+      data =  (
         <GridContainer>
-          <GridItem xs={12}>
-            <Card>
-              <CardHeader color="primary" icon>
-                <CardText color="rose">
-                  <h4 className={classes.cardTitle}>Service List</h4>
-                </CardText>
-                <div className="centerDiv">
-                  <div className="search" md={3}>
-                    <CustomInput
-                      formControlProps={{
-                        className: classes.top + " " + classes.search
-                      }}
-                      inputProps={{
-                        placeholder: "Search",
-                        inputProps: {
-                          "aria-label": "Search",
-                          className: classes.searchInput
-                        }
-                      }}
-                    />
-                    <Button
-                      color="white"
-                      aria-label="edit"
-                      justIcon
-                      round
-                      className={classes.top + " " + classes.searchButton} >
-                      <Search
-                        className={classes.headerLinksSvg + " " + classes.searchIcon}
-                      />
-                    </Button>
-                  </div>
-                </div>
-                <Link to={`/services/create`}>
-                  <Button size="sm" className={classes.buttonDisplay} >
-                    New Service
-                  </Button>
-                </Link>
-              </CardHeader>
-            </Card>
-          </GridItem>
+         <FormLabel>
+           No Services.
+         </FormLabel>
         </GridContainer>
+      )
+    } else {
+      data = (
         <GridContainer>
           {this.state.data.map((service, index) => {
             return (
@@ -165,6 +147,54 @@ class ServicesList extends React.Component{
             )
           })}
         </GridContainer>
+      )
+    }
+    let self = this;
+    return (
+      <div>
+        <GridContainer>
+          <GridItem xs={12}>
+            <Card>
+              <CardHeader color="primary" icon>
+                <CardText color="rose">
+                  <h4 className={classes.cardTitle}>Service List</h4>
+                </CardText>
+                <div className="centerDiv">
+                  <div className="search" md={3}>
+                    <CustomInput
+                      formControlProps={{
+                        className: classes.top + " " + classes.search
+                      }}
+                      inputProps={{
+                        placeholder: "Search",
+                        inputProps: {
+                          "aria-label": "Search",
+                          className: classes.searchInput
+                        }
+                      }}
+                    />
+                    <Button
+                      color="white"
+                      aria-label="edit"
+                      justIcon
+                      round
+                      className={classes.top + " " + classes.searchButton} >
+                      <Search
+                        className={classes.headerLinksSvg + " " + classes.searchIcon}
+                      />
+                    </Button>
+                  </div>
+                </div>
+                <Link to={`/services/create`}>
+                  <Button size="sm" className={classes.buttonDisplay} >
+                    New Service
+                  </Button>
+                </Link>
+              </CardHeader>
+            </Card>
+          </GridItem>
+        </GridContainer>
+        {data}
       </div>
     );
   }
