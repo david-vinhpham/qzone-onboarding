@@ -74,7 +74,8 @@ class Step3 extends React.Component {
     let categoryOptions = [];
 		if (timezones.length > 0) {
 			categoryOptions = timezones;
-		}
+    }
+    console.log("this.state 3---", this.state)
     return (
       <div>
         <GridContainer justify="center">

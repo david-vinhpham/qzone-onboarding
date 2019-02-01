@@ -94,24 +94,25 @@ class ServicesList extends React.Component{
           {this.state.data.map((service, index) => {
             return (
               <GridItem xs={12} sm={12} md={3}>
-                <Card product className={classes.cardHover} >
-                  <CardHeader image className={classes.cardHeaderHover}>
+                <Card product >
+                  {/* <CardHeader image className={classes.cardHeaderHover}>
                    
                       <img 
                         alt=''
-                        src={service.image.fileUrl} 
+                        src={service.image ? service.image.fileUrl : null} 
                         onError={e => { 
                           if(self.state.imageLoadError) { 
                             self.setState({
                                 imageLoadError: false
                             });
                             e.target.src = priceImage1;
+                          
                           }   
-                        }
-                      }
+                          this.setState({imageLoadError: true})
+                        }}
                       />
                    
-                  </CardHeader>
+                  </CardHeader> */}
                   <CardBody>
                     <div className={classes.cardHoverUnder}>
                       <Tooltip

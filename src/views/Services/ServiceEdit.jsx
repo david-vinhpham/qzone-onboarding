@@ -109,7 +109,7 @@ class ServiceEdit extends React.Component {
         let orgId = localStorage.getItem('organizationId');
         console.log(values);
         values.organizationId = orgId;
-        this.props.editService(values)
+        this.props.editService(values, this.props.history)
     }
 
 
@@ -242,7 +242,7 @@ class ServiceEdit extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={4}>
                                                     <CustomInput
-                                                        labelText="in mins"
+                                                        placeholder="in mins"
                                                         id="duration"
                                                         formControlProps={{
                                                             fullWidth: true
@@ -250,9 +250,12 @@ class ServiceEdit extends React.Component {
                                                         inputProps={{
                                                             type: "number",
                                                         }}
-                                                        value={this.state.data.duration}
+                                                        value={values.duration}
                                                         onChange={handleChange}
                                                     />
+                                                     {errors.duration && touched.duration ? (
+                                                        <div style={{ color: "red" }}>{errors.duration}</div>
+                                                    ) : null}
                                                 </GridItem>
                                             </GridContainer>
                                             <GridContainer>
@@ -263,7 +266,7 @@ class ServiceEdit extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={4}>
                                                     <CustomInput
-                                                        labelText="in mins"
+                                                        placeholder="in mins"
                                                         id="bookingHorizon"
                                                         formControlProps={{
                                                             fullWidth: true
@@ -271,9 +274,12 @@ class ServiceEdit extends React.Component {
                                                         inputProps={{
                                                             type: "number",
                                                         }}
-                                                        value={this.state.data.bookingHorizon}
+                                                        value={values.bookingHorizon}
                                                         onChange={handleChange}
                                                     />
+                                                     {errors.bookingHorizon && touched.bookingHorizon ? (
+                                                        <div style={{ color: "red" }}>{errors.bookingHorizon}</div>
+                                                    ) : null}
                                                 </GridItem>
                                             </GridContainer>
                                             <GridContainer>
@@ -284,7 +290,7 @@ class ServiceEdit extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={4}>
                                                     <CustomInput
-                                                        labelText="Tags"
+                                                        placeholder="Tags"
                                                         id="tags"
                                                         formControlProps={{
                                                             fullWidth: true
@@ -292,7 +298,7 @@ class ServiceEdit extends React.Component {
                                                         inputProps={{
                                                             type: "text"
                                                         }}
-                                                        value={this.state.data.tags}
+                                                        value={values.tags}
                                                         onChange={handleChange}
                                                     />
                                                 </GridItem>
@@ -388,19 +394,19 @@ class ServiceEdit extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={4}>
                                                     <CustomInput
-                                                        labelText="No. of Parallel Customer"
                                                         id="numberOfParallelCustomer"
                                                         formControlProps={{
                                                             fullWidth: true
                                                         }}
                                                         inputProps={{
-                                                            onChange: event =>
-                                                                this.change(event, "numberOfParallelCustomer"),
                                                             type: "number",
-                                                            min: "0"
                                                         }}
-                                                        value={this.state.data.numberOfParallelCustomer}
+                                                        onChange={handleChange}
+                                                        value={values.numberOfParallelCustomer}
                                                     />
+                                                     {errors.numberOfParallelCustomer && touched.numberOfParallelCustomer ? (
+                                                        <div style={{ color: "red" }}>{errors.numberOfParallelCustomer}</div>
+                                                    ) : null}
                                                 </GridItem>
                                             </GridContainer>
                                             <GridContainer>
@@ -411,7 +417,7 @@ class ServiceEdit extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={4}>
                                                     <CustomInput
-                                                        labelText="in mins"
+                                                        placeholder="in mins"
                                                         id="gapBetweenBookings"
                                                         name="gapBetweenBookings"
                                                         formControlProps={{
@@ -419,11 +425,13 @@ class ServiceEdit extends React.Component {
                                                         }}
                                                         inputProps={{
                                                             type: "number",
-                                                            min: "0"
                                                         }}
                                                         onChange={handleChange}
                                                         value={values.gapBetweenBookings}
                                                     />
+                                                     {errors.gapBetweenBookings && touched.gapBetweenBookings ? (
+                                                        <div style={{ color: "red" }}>{errors.gapBetweenBookings}</div>
+                                                    ) : null}
                                                 </GridItem>
                                             </GridContainer>
                                             <GridContainer>
@@ -437,7 +445,7 @@ class ServiceEdit extends React.Component {
                                         <Button color="rose" onClick={handleSubmit}>
                                             Save
                                         </Button>
-                                        <Button color="rose" onClick={this.handleService.bind(this, "save")}>
+                                        <Button color="rose" onClick={this.props.history.goBack}>
                                             Exit
                                         </Button>
                                     </CardFooter>
@@ -470,7 +478,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getServiceCategory: () => dispatch(getServiceCategory()),
         getServiceById: (id) => dispatch(getServiceById(id)),
-        editService: (values) => dispatch(editService(values))
+        editService: (values, history) => dispatch(editService(values, history))
     }
 }
 

@@ -1,7 +1,7 @@
 import { API_ROOT, URL} from '../config/config';
 import { service } from '../constants/Service.constants';
 
-export const editService = (values) => {
+export const editService = (values, history) => {
     return (dispatch) => {
         dispatch({
             type: service.EDIT_SERVICE
@@ -19,6 +19,7 @@ export const editService = (values) => {
                 type: service.EDIT_SERVICE_SUCCESS,
                 payload: {data}
             })
+            history.push('/services/list');
         })
         .catch(err => {
             dispatch({
@@ -147,7 +148,7 @@ export const getServicesByOrganizationFailure = (error) => {
     }
 }
 
-export const createService = (data) => {
+export const createService = (data, history) => {
     console.log("data---", data)
     return (dispatch) => {
         dispatch(createServiceLoading())
@@ -161,6 +162,7 @@ export const createService = (data) => {
         .then(res => res.json())
         .then(data => {
             dispatch(createServiceSuccess(data.objects))
+            history.push('/services/list')
         })
         .catch(err => {
             dispatch(createServiceFailure(err))

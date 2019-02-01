@@ -117,9 +117,9 @@ export function loginUser(values, history) {
               console.log("User exists. Fetch the user details and store in local storage");
               dispatch(registerUserSuccess(json));
               localStorage.setItem('user', JSON.stringify(json));
-              history.push('dashboard');
+              history.push('/organization/edit');
             } else {
-              console.log("User logins for the 1st time. Navigate to business edit to add the organization.")
+              console.log("User logins for the 1st time. Navigate to Organization edit to add the organization.")
               history.push('/organization/create')
             }
           })

@@ -19,7 +19,8 @@ function CustomInput({ ...props }) {
     inputRootCustomClasses,
     success,
     value,
-    onChange
+    onChange,
+    placeholder
   } = props;
 
   const labelClasses = classNames({
@@ -80,6 +81,7 @@ function CustomInput({ ...props }) {
           disabled: classes.disabled,
           underline: underlineClasses
         }}
+        placeholder={placeholder}
         id={id}
         value={value}
         inputProps={{

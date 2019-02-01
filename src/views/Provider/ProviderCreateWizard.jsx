@@ -10,9 +10,6 @@ import Step2 from "./WizardSteps/Step2.jsx";
 import Step3 from "./WizardSteps/Step3.jsx";
 
 class WizardView extends React.Component {
-    constructor(props) {
-        super(props);
-    }
     finishButtonClick = (props) => {
         console.log("all data-----", props);
         console.log("finish clicked------")

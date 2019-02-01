@@ -119,11 +119,11 @@ class ProviderList extends React.Component {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Link to={`/provider/edit/${provider.id}`}>
+                        {/* <Link to={``}> */}
                           <Button color="success" simple justIcon >
                             <Edit className={classes.underChartIcons} />
                           </Button>
-                        </Link>
+                        {/* </Link> */}
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>

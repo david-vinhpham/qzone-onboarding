@@ -11,7 +11,7 @@ import {  Person,
 import Dashboard from "../views/Dashboard/Dashboard.jsx";
 import Administration from "../views/Administration/Administration.jsx";
 import OrganizationCreate from "../views/Organization/OrganizationCreate";
-import BusinessEdit from "../views/Organization/OrganizationEdit.jsx";
+import OrganizationEdit from "../views/Organization/OrganizationEdit.jsx";
 import Calendar from "../views/Calendar/Calendar.jsx";
 import CustomerFlow from "../views/CustomerFlow/CustomerFlow.jsx";
 
@@ -137,10 +137,10 @@ export const otherRoutes=[
     component: ProviderList
   },
   {
-    path: "/business/edit",
+    path: "/organization/edit",
     name: "Business Edit",
     icon: BusinessCenter,
-    component: BusinessEdit
+    component: OrganizationEdit
   },
   {
     path: "/register",

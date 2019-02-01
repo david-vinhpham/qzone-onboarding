@@ -85,6 +85,7 @@ class Step1 extends React.Component {
   }
   render() {
     const { classes } = this.props;
+    console.log("this.state----", this.state)
     return (
       <GridContainer justify="center">
         <GridItem xs={12} sm={12}>

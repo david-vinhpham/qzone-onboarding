@@ -57,7 +57,7 @@ class Step2 extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchAllLocations();
+    //this.props.fetchAllLocations();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -104,12 +104,10 @@ class Step2 extends React.Component {
     console.log(`Option selected:`, selectedOption);
   }
 
-
-
   render() {
     const { classes } = this.props;
     const { selectedOption } = this.state;
-
+    console.log("this.state 2-----", this.state)
     return (
       <div>
         <h4 className={classes.infoText}> Further Details </h4>
@@ -216,7 +214,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default compose(
-	withStyles(style),
-	connect(mapStateToProps, mapDispatchToProps),
-)(Step2);
+// export default compose(
+// 	withStyles(style),
+// 	connect(mapStateToProps, mapDispatchToProps),
+// )(Step2);
+
+export default withStyles(style)(Step2)

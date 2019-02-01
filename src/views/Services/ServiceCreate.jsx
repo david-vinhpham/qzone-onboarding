@@ -3,7 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel, MenuItem, FormControl, Select } from "@material-ui/core";
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { FormLabel, MenuItem, FormControl, Select, Radio, FormControlLabel, Switch } from "@material-ui/core";
+import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
@@ -20,6 +23,24 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import CustomRadio from "../../components/CustomRadio/CustomRadio.jsx";
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 
+const ServiceCreateSchema = Yup.object().shape({
+    name: Yup.string()
+        .min(3, "Name too short")
+        .max(50, "Name too long")
+        .required("This field is required"),
+    description: Yup.string()
+        .min(50, "Description too short")
+        .max(1500, "Description too long")
+        .required("this field is required"),
+    duration: Yup.number()
+        .min(60),
+    numberOfParallelCustomer: Yup.number()
+        .min(1),
+    bookingHorizon: Yup.number()
+        .min(3)
+        .max(1095)
+
+})
 
 class ServiceCreate extends React.Component {
 
@@ -29,12 +50,12 @@ class ServiceCreate extends React.Component {
 			allowProviderSelection: true,
 			name: "",
 			nameState: "",
-			bookingHorizon: 0,
+			bookingHorizon: 3,
 			description: "",
 			duration: 1,
 			gapBetweenBookings: 1,
 			mode: "APPOINTMENT",
-			numberOfParallelCustomer: 0,
+			numberOfParallelCustomer: 1,
 			serviceCategoryId: "",
 			tags: "",
 			imagePreviewUrl: defaultImage
@@ -45,15 +66,19 @@ class ServiceCreate extends React.Component {
 		this.props.getServiceCategory();
 	}
 
-	handleService() {
+	handleService(values) {
 		let orgId = localStorage.getItem('organizationId');
-		this.setState({
-			organizationId: orgId,
-			image: this.props.imageObject
-		},
-			() => {
-				this.props.createService(this.state);
-			});
+		values.organizationId = orgId;
+		values.image = this.props.imageObject;
+		console.log("values-----", values)
+		this.props.createService(values, this.props.history);
+		// this.setState({
+		// 	organizationId: orgId,
+		// 	image: this.props.imageObject
+		// },
+		// 	() => {
+		// 		this.props.createService(this.state);
+		// 	});
 	}
 
 	changeProfileImage(e) {
@@ -95,280 +120,332 @@ class ServiceCreate extends React.Component {
 		return (
 			<GridItem xs={12} sm={12} md={12}>
 				<Card>
-					<CardHeader color="rose" text>
-						<CardText color="rose">
-							<h4 className={classes.cardTitle}>Add a Service</h4>
-						</CardText>
-					</CardHeader>
-					<CardBody>
-						<form>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel className={classes.labelHorizontal}>
-										Name
-                  </FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={4}>
-									<CustomInput
-										labelText="Name"
-										success={this.state.nameState === "success"}
-										error={this.state.nameState === "error"}
-										id="name"
-										formControlProps={{
-											fullWidth: true
-										}}
-										inputProps={{
-											onChange: event =>
-												this.change(event, "name"),
-											type: "text"
-										}}
-									/>
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel className={classes.labelHorizontal}>
-										Description
-                  					</FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={3}>
-									<CustomInput
-										id="description"
-										formControlProps={{
-											fullWidth: true
-										}}
-										inputProps={{
-											onChange: event => this.change(event, "description"),
-											multiline: true,
-											rows: 5
-										}}
-										
-									/>
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel className={classes.labelHorizontal}>
-										Service Category
-                  					</FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={4}>
-									<FormControl
-										fullWidth
-										className={classes.selectFormControl}>
-										
-										<Select
-											value={this.state.serviceCategoryId}
-											onChange={event =>
-												this.change(event, "serviceCategoryId")}
-										>
+				<Formik
+                        initialValues={{
+                            allowProviderSelection: this.state.allowProviderSelection,
+                            name: this.state.name,
+                            bookingHorizon: this.state.bookingHorizon,
+                            description: this.state.description,
+                            duration: this.state.duration,
+                            gapBetweenBookings: this.state.gapBetweenBookings,
+                            mode: this.state.mode,
+                            numberOfParallelCustomer: this.state.numberOfParallelCustomer,
+                            serviceCategoryId: this.state.serviceCategoryId,
+                            tags: this.state.tags,
+                            imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
+                        }}
+                        enableReinitialize={true}
+                        validationSchema={ServiceCreateSchema}
+                        onSubmit={(values) => this.handleService(values)}
+                        render={({
+                            values,
+                            errors,
+                            status,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                            isSubmitting,
+                            setFieldValue
+                        }) => (
+                                <div>
+                                    <CardHeader color="rose" text>
+                                        <CardText color="rose">
+                                            <h4 className={classes.cardTitle}>Create a new Service</h4>
+                                        </CardText>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <form>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel className={classes.labelHorizontal}>
+                                                        Name
+                                                    </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={4}>
+                                                    <CustomInput
+                                                        id="name"
+                                                        name="name"
+                                                        onChange={handleChange}
+                                                        value={values.name}
+                                                    />
+                                                    {errors.name && touched.name ? (
+                                                        <div style={{ color: "red" }}>{errors.name}</div>
+                                                    ) : null}
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel className={classes.labelHorizontal}>
+                                                        Description
+                                                    </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={3}>
+                                                    <CustomInput
+                                                        id="description"
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            multiline: true,
+                                                            rows: 5
+                                                        }}
+                                                        value={values.description}
+                                                        onChange={handleChange}
+                                                    />
+                                                    {errors.description && touched.description ? (
+                                                        <div style={{ color: "red" }}>{errors.description}</div>
+                                                    ) : null}
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel className={classes.labelHorizontal}>
+                                                        Service Category
+                                                    </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={4}>
+                                                    <FormControl
+                                                        fullWidth
+                                                        className={classes.selectFormControl}>
 
-											{categoryOptions.map(categoryOption => (
-												<MenuItem
-													key={ categoryOption.id }
-													value={ categoryOption.id }
-
-												>
-													{categoryOption.name}
-												</MenuItem>
-											))}
-										</Select>
-									</FormControl>
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel className={classes.labelHorizontal}>
-										Duration of Service
-                        			</FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={4}>
-									<CustomInput
-										labelText="in mins"
-										success={this.state.duration === "success"}
-										error={this.state.duration === "error"}
-										id="duration"
-										formControlProps={{
-											fullWidth: true
-										}}
-										inputProps={{
-											onChange: event =>
-												this.change(event, "duration"),
-											type: "number",
-											min: "5"
-										}}
-									/>
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel className={classes.labelHorizontal}>
-										Booking Horizon
-                        			</FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={4}>
-									<CustomInput
-										labelText="in mins"
-										success={this.state.bookingHorizon === "success"}
-										error={this.state.bookingHorizon === "error"}
-										id="bookingHorizon"
-										formControlProps={{
-											fullWidth: true
-										}}
-										inputProps={{
-											onChange: event =>
-												this.change(event, "bookingHorizon"),
-											type: "number",
-											min: "0"
-										}}
-									/>
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel className={classes.labelHorizontal}>
-										Tags
-                        </FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={4}>
-									<CustomInput
-										labelText="Tags"
-										id="tags"
-										formControlProps={{
-											fullWidth: true
-										}}
-										inputProps={{
-											onChange: event =>
-												this.change(event, "tags"),
-											type: "text"
-										}}
-									/>
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel
-										className={
-											classes.labelHorizontal +
-											" " +
-											classes.labelHorizontalRadioCheckbox
-										}
-									>
-										Service Mode
-                        </FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={2}>
-									<CustomRadio
-										checkedValue={this.state.mode}
-										label="Queue"
-										value="QUEUE"
-										classes={classes}
-										onClick={event =>
-											this.change(event, "mode")}
-									/>
-								</GridItem>
-								<GridItem xs={12} sm={2}>
-									<CustomRadio
-										checkedValue={this.state.mode}
-										label="Appointment"
-										value="APPOINTMENT"
-										classes={classes}
-										onClick={event =>
-											this.change(event, "mode")} />
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel
-										className={
-											classes.labelHorizontal +
-											" " +
-											classes.labelHorizontalRadioCheckbox
-										}
-									>
-										Allow Provider Selection
-                    </FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={2}>
-									<CustomRadio
-										checkedValue={this.state.allowProviderSelection}
-										label="Yes"
-										value={true}
-										classes={classes}
-										onClick={event =>
-											this.change(event, "allowProviderSelection", true)}
-									/>
-								</GridItem>
-								<GridItem xs={12} sm={2}>
-									<CustomRadio
-										checkedValue={this.state.allowProviderSelection}
-										label="No"
-										value={false}
-										classes={classes}
-										onClick={event =>
-											this.change(event, "allowProviderSelection", false)} />
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel className={classes.labelHorizontal}>
-										No. of Parallel Customer
-                        			</FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={4}>
-									<CustomInput
-										labelText="No. of Parallel Customer"
-										id="numberOfParallelCustomer"
-										formControlProps={{
-											fullWidth: true
-										}}
-										inputProps={{
-											onChange: event =>
-												this.change(event, "numberOfParallelCustomer"),
-											type: "number",
-											min: "0"
-										}}
-									/>
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} sm={3}>
-									<FormLabel className={classes.labelHorizontal}>
-										Gap between Bookings
-                        			</FormLabel>
-								</GridItem>
-								<GridItem xs={12} sm={4}>
-									<CustomInput
-										labelText="in mins"
-										id="gapBetweenBookings"
-										formControlProps={{
-											fullWidth: true
-										}}
-										inputProps={{
-											onChange: event =>
-												this.change(event, "gapBetweenBookings"),
-											type: "number",
-											min: "0"
-										}}
-									/>
-								</GridItem>
-							</GridContainer>
-							<GridContainer>
-								<GridItem xs={12} md={12}>
-									<ImageUpload changeProfileImage={this.changeProfileImage} imagePreviewUrl={this.state.imagePreviewUrl} />
-								</GridItem>
-							</GridContainer>
-						</form>
-
-					</CardBody>
-					<CardFooter className={classes.justifyContentCenter}>
-						<Button color="rose" onClick={() => this.handleService()}>
-							Add Service
-            			</Button>
-						<Button color="rose">
-							Cancel
-            			</Button>
-					</CardFooter>
+                                                        <Select
+                                                            value={values.serviceCategoryId}
+                                                            onChange={handleChange('serviceCategoryId')}
+                                                            name="serviceCategoryId"
+                                                        >
+                                                            {categoryOptions.map(categoryOption => (
+                                                                <MenuItem
+                                                                    key={categoryOption.id}
+                                                                    value={categoryOption.id}
+                                                                    id="serviceCategoryId"
+                                                                >
+                                                                    {categoryOption.name}
+                                                                </MenuItem>
+                                                            ))}
+                                                        </Select>
+                                                    </FormControl>
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel className={classes.labelHorizontal}>
+                                                        Duration of Service
+                                            </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={4}>
+                                                    <CustomInput
+                                                        placeholder="in mins"
+                                                        id="duration"
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            type: "number",
+                                                        }}
+                                                        value={values.duration}
+                                                        onChange={handleChange}
+                                                    />
+													 {errors.duration && touched.duration ? (
+                                                        <div style={{ color: "red" }}>{errors.duration}</div>
+                                                    ) : null}
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel className={classes.labelHorizontal}>
+                                                        Booking Horizon
+                                            </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={4}>
+                                                    <CustomInput
+                                                        placeholder="in mins"
+                                                        id="bookingHorizon"
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            type: "number",
+                                                        }}
+                                                        value={values.bookingHorizon}
+                                                        onChange={handleChange}
+                                                    />
+													 {errors.bookingHorizon && touched.bookingHorizon ? (
+                                                        <div style={{ color: "red" }}>{errors.bookingHorizon}</div>
+                                                    ) : null}
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel className={classes.labelHorizontal}>
+                                                        Tags
+                                            </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={4}>
+                                                    <CustomInput
+                                                        placeholder="Tags"
+                                                        id="tags"
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            type: "text"
+                                                        }}
+                                                        value={values.tags}
+                                                        onChange={handleChange}
+                                                    />
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel
+                                                        className={
+                                                            classes.labelHorizontal +
+                                                            " " +
+                                                            classes.labelHorizontalRadioCheckbox
+                                                        }
+                                                    >
+                                                        Service Mode
+                                                    </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={2}>
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Radio
+                                                                checked={values.mode === "QUEUE"}
+                                                                onChange={handleChange}
+                                                                value="QUEUE"
+                                                                name="mode"
+                                                                aria-label="Queue"
+                                                                icon={<FiberManualRecord className={classes.radioUnchecked} />}
+                                                                checkedIcon={<FiberManualRecord className={classes.radioChecked} />}
+                                                                classes={{
+                                                                    checked: classes.radio
+                                                                }}
+                                                            />
+                                                        }
+                                                        classes={{
+                                                            label: classes.label
+                                                        }}
+                                                        label="Queue"
+                                                    />
+                                                </GridItem>
+                                                <GridItem xs={12} sm={2}>
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Radio
+                                                                checked={values.mode === "APPOINTMENT"}
+                                                                onChange={handleChange}
+                                                                value="APPOINTMENT"
+                                                                name="mode"
+                                                                aria-label="Appointment"
+                                                                icon={<FiberManualRecord className={classes.radioUnchecked} />}
+                                                                checkedIcon={<FiberManualRecord className={classes.radioChecked} />}
+                                                                classes={{
+                                                                    checked: classes.radio
+                                                                }}
+                                                            />
+                                                        }
+                                                        classes={{
+                                                            label: classes.label
+                                                        }}
+                                                        label="Appointment"
+                                                    />
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel
+                                                        className={
+                                                            classes.labelHorizontal +
+                                                            " " +
+                                                            classes.labelHorizontalRadioCheckbox
+                                                        }
+                                                    >
+                                                        Allow Provider Selection
+                                                    </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={2}>
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Switch
+                                                                name="allowProviderSelection"
+                                                                checked={values.allowProviderSelection}
+                                                                value="allowProviderSelection"
+                                                                onChange={handleChange}
+                                                            />
+                                                        }
+                                                    />
+                                                </GridItem>
+                                                
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel className={classes.labelHorizontal}>
+                                                        No. of Parallel Customer
+                                            </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={4}>
+                                                    <CustomInput
+                                                        id="numberOfParallelCustomer"
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            type: "number",
+														}}
+														onChange={handleChange}
+                                                        value={values.numberOfParallelCustomer}
+                                                    />
+													 {errors.numberOfParallelCustomer && touched.numberOfParallelCustomer ? (
+                                                        <div style={{ color: "red" }}>{errors.numberOfParallelCustomer}</div>
+                                                    ) : null}
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} sm={3}>
+                                                    <FormLabel className={classes.labelHorizontal}>
+                                                        Gap between Bookings
+                                            </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={4}>
+                                                    <CustomInput
+                                                        placeholder="in mins"
+                                                        id="gapBetweenBookings"
+                                                        name="gapBetweenBookings"
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            type: "number",
+                                                        }}
+                                                        onChange={handleChange}
+                                                        value={values.gapBetweenBookings}
+                                                    />
+													 {errors.gapBetweenBookings && touched.gapBetweenBookings ? (
+                                                        <div style={{ color: "red" }}>{errors.gapBetweenBookings}</div>
+                                                    ) : null}
+                                                </GridItem>
+                                            </GridContainer>
+                                            <GridContainer>
+                                                <GridItem xs={12} md={12}>
+                                                    <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
+                                                </GridItem>
+                                            </GridContainer>
+                                        </form>
+                                    </CardBody>
+                                    <CardFooter className={classes.justifyContentCenter}>
+                                        <Button color="rose" onClick={handleSubmit}>
+                                            Create
+                                        </Button>
+                                        <Button color="rose" onClick={this.props.history.goBack}>
+                                            Exit
+                                        </Button>
+                                    </CardFooter>
+                                </div>
+                            )
+                        }
+                    />
 				</Card>
 			</GridItem>
 		);
@@ -390,7 +467,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		createService: (data) => dispatch(createService(data)),
+		createService: (data, history) => dispatch(createService(data, history)),
 		getServiceCategory: () => dispatch(getServiceCategory())
 	}
 }

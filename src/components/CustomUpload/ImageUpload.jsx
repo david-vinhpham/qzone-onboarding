@@ -51,7 +51,7 @@ class ImageUpload extends React.Component {
   }
   uploadImage = () => {
     console.log("file---", this.state.file);
-    var data = new FormData
+    var data = new FormData();
     data.append("file", this.state.file);
     this.props.uploadImage(data);
   }
@@ -60,9 +60,7 @@ class ImageUpload extends React.Component {
     var {
       avatar,
       addButtonProps,
-      changeButtonProps,
       removeButtonProps,
-      imagePreviewUrl,
     } = this.props;
     return (
       <div className="fileinput text-center">
