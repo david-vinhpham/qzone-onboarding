@@ -2,7 +2,6 @@ import axios from 'axios';
 import { authGetToken } from './auth'
 import { provider } from '../constants/Provider.constants';
 import {API_ROOT, URL } from '../config/config';
-const ROOT_URL = `http://13.238.116.171:8080/api/providers-by-org-id/5c020fc6ab6aee3dc499e2e6`;
 
 export const fetchTimezones = () => {
   return (dispatch) => {
@@ -30,9 +29,11 @@ export const fetchTimezones = () => {
 }
 
 export function fetchProviders() {
+  let orgId = localStorage.getItem('organizationId');
+
   return (dispatch) => {
     dispatch(getProviders());
-    fetch(ROOT_URL, {
+    fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_ORG_ID + orgId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ export function createProvider(values) {
       .then(token => {
         console.log("token inside provider--------", token)
         return (
-          fetch(ROOT_URL + `providers`, {
+          fetch('ROOT_URL' + `providers`, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -134,7 +135,7 @@ export function fetchProvider(id) {
       .then(token => {
         console.log("token inside provider--------", token)
         return (
-          fetch(ROOT_URL + `providers/` + `${id}`, {
+          fetch('ROOT_URL' + `providers/` + `${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

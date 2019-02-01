@@ -170,6 +170,7 @@ class LocationForm extends React.Component {
                                    placeholder:"Zip Code",
                                     type: "text"
                                 }}
+                                onChange={handleChange}
                             />
                             :
                             <InputLabel
@@ -204,6 +205,7 @@ class LocationForm extends React.Component {
                                    placeholder: "State",
                                     type: "text"
                                 }}
+                                onChange={handleChange}
                             />
                             :
                             <InputLabel

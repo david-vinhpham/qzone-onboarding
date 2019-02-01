@@ -27,6 +27,7 @@ import ServiceEdit from "../views/Services/ServiceEdit.jsx";
 
 import LocationList from "../views/Location/LocationList.jsx";
 import LocationCreate from "../views/Location/LocationCreate.jsx";
+import LocationEdit from "../views/Location/LocationEdit.jsx";
 
 import RegisterPage from "../views/Auth/RegisterPage.jsx";
 
@@ -70,6 +71,12 @@ export const dashboardRoutes = [
 ];
 
 export const otherRoutes=[
+  {
+    path: "/location/edit/:id",
+    name: "Location Edit",
+    icon: Person,
+    component: LocationEdit
+  },
   {
     path: "/location/create",
     name: "Location Create",

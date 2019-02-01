@@ -7,6 +7,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
+import { ClipLoader } from 'react-spinners';
+import { css } from 'react-emotion';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -20,8 +22,13 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
 import priceImage1 from "../../assets/img/faces/profile.jpg";
-import providers from "../../assets/provider.json";
+import { FormLabel } from "@material-ui/core";
 
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 class ProviderList extends React.Component {
   constructor(props) {
     super(props)
@@ -41,53 +48,24 @@ class ProviderList extends React.Component {
   render() {
     const { classes } = this.props;
     if (!this.state.data)
-      return null;
-    return (
-
-      <div>
+      return < ClipLoader
+      className={override}
+      sizeUnit={"px"}
+      size={150}
+      color={'#123abc'}
+      loading={true}
+    />;
+    let data = null
+    if(this.state.data.length === 0) {
+      data =  (
         <GridContainer>
-          <GridItem xs={12}>
-            <Card>
-              <CardHeader color="primary" icon>
-                <CardText color="rose">
-                  <h4 className={classes.cardTitle}>Provider List</h4>
-                </CardText>
-                <div className="centerDiv">
-                  <div className="search" md={3}>
-                    <CustomInput
-                      formControlProps={{
-                        className: classes.top + " " + classes.search
-                      }}
-                      inputProps={{
-                        placeholder: "Search",
-                        inputProps: {
-                          "aria-label": "Search",
-                          className: classes.searchInput
-                        }
-                      }}
-                    />
-                    <Button
-                      color="white"
-                      aria-label="edit"
-                      justIcon
-                      round
-                      className={classes.top + " " + classes.searchButton} >
-                      <Search
-                        className={classes.headerLinksSvg + " " + classes.searchIcon}
-                      />
-                    </Button>
-                  </div>
-                </div>
-                <Link to={`/provider/create`}>
-                  <Button size="sm" className={classes.buttonDisplay}>
-                    New Provider
-                  </Button>
-                </Link>
-                
-              </CardHeader>
-            </Card>
-          </GridItem>
+         <FormLabel>
+           No Providers.
+         </FormLabel>
         </GridContainer>
+      )
+    } else {
+      data = (
         <GridContainer>
           {this.state.data.map((provider, index) => {
             return (
@@ -138,7 +116,57 @@ class ProviderList extends React.Component {
             )
           })}
         </GridContainer>
-      </div>
+     
+      )
+    }
+    return (
+
+      <div>
+        <GridContainer>
+          <GridItem xs={12}>
+            <Card>
+              <CardHeader color="primary" icon>
+                <CardText color="rose">
+                  <h4 className={classes.cardTitle}>Provider List</h4>
+                </CardText>
+                <div className="centerDiv">
+                  <div className="search" md={3}>
+                    <CustomInput
+                      formControlProps={{
+                        className: classes.top + " " + classes.search
+                      }}
+                      inputProps={{
+                        placeholder: "Search",
+                        inputProps: {
+                          "aria-label": "Search",
+                          className: classes.searchInput
+                        }
+                      }}
+                    />
+                    <Button
+                      color="white"
+                      aria-label="edit"
+                      justIcon
+                      round
+                      className={classes.top + " " + classes.searchButton} >
+                      <Search
+                        className={classes.headerLinksSvg + " " + classes.searchIcon}
+                      />
+                    </Button>
+                  </div>
+                </div>
+                <Link to={`/provider/create`}>
+                  <Button size="sm" className={classes.buttonDisplay}>
+                    New Provider
+                  </Button>
+                </Link>
+                
+              </CardHeader>
+            </Card>
+          </GridItem>
+        </GridContainer>
+        {data}
+         </div>
     );
   }
 }
