@@ -1,120 +1,48 @@
 import React from 'react';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel, InputLabel, MenuItem, FormControl, Select } from "@material-ui/core";
+import { FormLabel, InputLabel} from "@material-ui/core";
+import {Link} from 'react-router-dom';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
-import CustomRadio from "../../components/CustomRadio/CustomRadio.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
 
 class LocationForm extends React.Component {
 
     render() {
-        const { classes, locationInfo } = this.props;
-        const { location } = locationInfo;
+        const { classes, locationInfo, values, handleChange, handleSubmit, errors, touched } = this.props;
         return (
             <form>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            Address Line 1
+                            Street Address
                         </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={3}>
-                        {locationInfo.isEditMode === 'address1'
+                        {locationInfo.isEditMode === 'streetAddress'
                             ?
                             <CustomInput
-                                labelText="Address Line 1"
-                                success={locationInfo.address1State === "success"}
-                                value={location.address1 || ''}
-                                error={locationInfo.address1State === "error"}
-                                id="address1"
+                                value={values.streetAddress}
+                                id="streetAddress"
                                 formControlProps={{
                                     fullWidth: true
                                 }}
                                 inputProps={{
-                                    onChange: event =>
-                                        this.props.change(event, "address1", "not-null"),
-                                    type: "text"
+                                    type: "text",
+                                    placeholder: "Street Address"
                                 }}
+                                onChange={handleChange}
                             />
                             :
                             <InputLabel
                                 className={classes.labelLeftHorizontal}
                                 sm={4}
-                                onClick={() => this.props.onDoubleClick('address1')}
+                                onClick={() => this.props.onDoubleClick('streetAddress')}
                             >
-                                {location.address1 || 'address 1'}
-                            </InputLabel>
-                        }
-                    </GridItem>
-                </GridContainer>
-                <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel className={classes.labelHorizontal}>
-                            Address Line 2
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={3}>
-                        {locationInfo.isEditMode === 'address2'
-                            ?
-                            <CustomInput
-                                labelText="Address Line 2"
-                                success={locationInfo.address2State === "success"}
-                                error={locationInfo.address2State === "error"}
-                                value={location.address2 || ''}
-                                id="address2"
-                                formControlProps={{
-                                    fullWidth: true
-                                }}
-                                inputProps={{
-                                    onChange: event =>
-                                        this.props.change(event, "address2", "not-null"),
-                                    type: "text"
-                                }}
-                            />
-                            :
-                            <InputLabel
-                                className={classes.labelLeftHorizontal}
-                                sm={4}
-                                onClick={() => this.props.onDoubleClick('address2')}
-                            >
-                                {location.address2 || 'address 2'}
-                            </InputLabel>
-                        }
-                    </GridItem>
-
-                </GridContainer>
-                <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel className={classes.labelHorizontal}>
-                            Address Line 3
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                        {locationInfo.isEditMode === 'address3'
-                            ?
-                            <CustomInput
-                                labelText="Address Line 3"
-                                id="address3"
-                                value={location.address3 || ''}
-                                formControlProps={{
-                                    fullWidth: true
-                                }}
-                                inputProps={{
-                                    onChange: event =>
-                                        this.props.change(event, "address3"),
-                                    type: "text"
-                                }}
-                            />
-                            :
-                            <InputLabel
-                                className={classes.labelLeftHorizontal}
-                                sm={4}
-                                onClick={() => this.props.onDoubleClick('address3')}
-                            >
-                                {location.address3 || 'address3'}
+                                {values.streetAddress || 'Street address'}
                             </InputLabel>
                         }
                     </GridItem>
@@ -129,24 +57,23 @@ class LocationForm extends React.Component {
                         {locationInfo.isEditMode === 'district'
                             ?
                             <CustomInput
-                                labelText="District"
                                 id="district"
-                                value={location.district || ''}
+                                value={values.district }
                                 formControlProps={{
                                     fullWidth: true
                                 }}
                                 inputProps={{
-                                    onChange: event =>
-                                        this.props.change(event, "district"),
+                                    placeholder: "District",
                                     type: "text"
                                 }}
+                                onChange={handleChange}
                             />
                             :
                             <InputLabel
                                 className={classes.labelLeftHorizontal}
                                 onClick={() => this.props.onDoubleClick('district')}
                             >
-                                {location.district || 'district'}
+                                {values.district || 'District'}
                             </InputLabel>
                         }
                     </GridItem>
@@ -162,27 +89,30 @@ class LocationForm extends React.Component {
                         {locationInfo.isEditMode === 'city'
                             ?
                             <CustomInput
-                                labelText="City"
                                 id="city"
-                                value={location.city || ''}
+                                value={values.city || ''}
                                 formControlProps={{
                                     fullWidth: true
                                 }}
                                 inputProps={{
-                                    onChange: event =>
-                                        this.props.change(event, "city"),
+                                    placeholder: "City",
                                     type: "text"
                                 }}
+                                onChange={handleChange}
                             />
                             :
                             <InputLabel
                                 className={classes.labelLeftHorizontal}
                                 onClick={() => this.props.onDoubleClick('city')}
                             >
-                                {location.city || 'city'}
+                                {values.city || 'City'}
                             </InputLabel>
                         }
+                        {errors.city && touched.city ? (
+                        <div style={{ color: "red" }}>{errors.city}</div>
+                    ) : null}
                     </GridItem>
+                    
                 </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
@@ -194,29 +124,31 @@ class LocationForm extends React.Component {
                         {locationInfo.isEditMode === 'country'
                             ?
                             <CustomInput
-                                labelText="Country"
                                 id="country"
-                                success={locationInfo.countryState === "success"}
-                                error={locationInfo.countryState === "error"}
-                                value={location.country || ''}
+                                
+                                value={values.country}
                                 formControlProps={{
                                     fullWidth: true
                                 }}
                                 inputProps={{
-                                    onChange: event =>
-                                        this.props.change(event, "country", "not-null"),
+                                    placeholder: "Country",
                                     type: "text"
                                 }}
+                                onChange={handleChange}
                             />
                             :
                             <InputLabel
                                 className={classes.labelLeftHorizontal}
                                 onClick={() => this.props.onDoubleClick('country')}
                             >
-                                {location.country || 'country'}
+                                {values.country || 'Country'}
                             </InputLabel>
                         }
+                        {errors.country && touched.country ? (
+                        <div style={{ color: "red" }}>{errors.country}</div>
+                    ) : null}
                     </GridItem>
+                    
                 </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
@@ -228,17 +160,14 @@ class LocationForm extends React.Component {
                         {locationInfo.isEditMode === 'zipcode'
                             ?
                             <CustomInput
-                                labelText="Zipcode"
-                                id="zipcode"
-                                success={locationInfo.zipcodeState === "success"}
-                                error={locationInfo.zipcodeState === "error"}
-                                value={location.zipcode || ''}
+                                id="postCode"
+                                
+                                value={values.postCode}
                                 formControlProps={{
                                     fullWidth: true
                                 }}
                                 inputProps={{
-                                    onChange: event =>
-                                        this.props.change(event, "zipcode", "not-null"),
+                                   placeholder:"Zip Code",
                                     type: "text"
                                 }}
                             />
@@ -247,10 +176,14 @@ class LocationForm extends React.Component {
                                 className={classes.labelLeftHorizontal}
                                 onClick={() => this.props.onDoubleClick('zipcode')}
                             >
-                                {location.zipcode || 'zipcode'}
+                                {values.postCode || 'Zipcode'}
                             </InputLabel>
                         }
+                        {errors.postCode && touched.postCode ? (
+                        <div style={{ color: "red" }}>{errors.postCode}</div>
+                    ) : null}
                     </GridItem>
+                    
                 </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
@@ -262,15 +195,13 @@ class LocationForm extends React.Component {
                         {locationInfo.isEditMode === 'state'
                             ?
                             <CustomInput
-                                labelText="State"
                                 id="state"
-                                value={location.state || ''}
+                                value={values.state }
                                 formControlProps={{
                                     fullWidth: true
                                 }}
                                 inputProps={{
-                                    onChange: event =>
-                                        this.props.change(event, "state"),
+                                   placeholder: "State",
                                     type: "text"
                                 }}
                             />
@@ -279,76 +210,27 @@ class LocationForm extends React.Component {
                                 className={classes.labelLeftHorizontal}
                                 onClick={() => this.props.onDoubleClick('state')}
                             >
-                                {location.state || 'state'}
+                                {values.state || 'State'}
                             </InputLabel>
                         }
+                        {errors.state && touched.state ? (
+                        <div style={{ color: "red" }}>{errors.state}</div>
+                    ) : null}
                     </GridItem>
+                    
                 </GridContainer>
-                <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel
-                            className={
-                                classes.labelHorizontal +
-                                " " +
-                                classes.labelHorizontalRadioCheckbox
-                            }
-                        >
-                            Does it have billing address?
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={2}>
-                        <CustomRadio
-                            checkedValue={location.isBillingAddress}
-                            label="Yes"
-                            value= "Yes"
-                            classes={classes}
-                            onClick={event =>
-                                this.props.change(event, "isBillingAddress")}
-                        />
-                    </GridItem>
-                    <GridItem xs={12} sm={2}>
-                        <CustomRadio
-                            checkedValue={location.isBillingAddress}
-                            label="No"
-                            value="No"
-                            classes={classes}
-                            onClick={event =>
-                                this.props.change(event, "isBillingAddress")} />
-                    </GridItem>
+                
+                <GridContainer style={{justifyContent: 'center'}}>
+                <Button color="rose" onClick={handleSubmit}>
+                        {this.props.buttonName}
+                    </Button>
+                    <Link to={`/location/list`}>
+                    <Button color="rose" >
+                        Exit
+                    </Button>
+                    </Link>
+                   
                 </GridContainer>
-                <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel
-                            className={
-                                classes.labelHorizontal +
-                                " " +
-                                classes.labelHorizontalRadioCheckbox
-                            }
-                        >
-                            Is it the Head Office?
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={2}>
-                        <CustomRadio
-                            checkedValue={location.isHeadOffice}
-                            label="Yes"
-                            value= "Yes"
-                            classes={classes}
-                            onClick={event =>
-                                this.props.change(event, "isHeadOffice")}
-                        />
-                    </GridItem>
-                    <GridItem xs={12} sm={2}>
-                        <CustomRadio
-                            checkedValue={location.isHeadOffice}
-                            label="No"
-                            value= "No"
-                            classes={classes}
-                            onClick={event =>
-                                this.props.change(event, "isHeadOffice")} />
-                    </GridItem>
-                </GridContainer>
-
             </form>
         )
 

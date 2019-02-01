@@ -3,49 +3,47 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { Formik} from 'formik';
+import * as Yup from 'yup';
 
-import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
-import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import { createProvider } from '../../actions/provider';
-import { verifyLength, verifyEmail } from "../../validation/validation.jsx";
+import { fetchLocation, editLocation } from '../../actions/location';
 import LocationForm from "./LocationForm";
 
+const LocationSchema = Yup.object().shape({
+    city: Yup.string()
+            .required("Please enter a city"),
+    country: Yup.string()
+                .required("Please enter a valid Country"),
+    postCode: Yup.string()
+                .required("Please enter a valid Postal code"),
+    state: Yup.string()
+            .required("Please enter a valid State")
+    
+})
 
 class LocationEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            location: {
-                address1: "",
-                address2: "",
-                address3: "",
-                district: "",
-                city: "",
-                country: "",
-                postCode: "",
-                state: "",
-                isBillingAddress: false,
-                isHeadOffice: false
-            },
-            address1State: "",
-            address2State: "",
-            countryState: "",
-            postCodeState: "",
-        };
-
-        this.change = this.change.bind(this);
-
+            data:[]
+        }
         this.doubleClick = this.doubleClick.bind(this);
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log("location", nextProps.location)
+        this.setState({ data: nextProps.location })
+    }
+
     componentDidMount() {
-        //Api call for that location
+        const { id } = this.props.match.params
+        this.props.fetchLocation(id);
     }
 
     doubleClick(fieldName) {
@@ -53,89 +51,74 @@ class LocationEdit extends React.Component {
         this.setState({ isEditMode: fieldName });
     }
 
-    change(event, stateName, type) {
-        const { location } = this.state
-        location[stateName] = (event.target.value || event.target.checked)
-        this.setState({ location: location })
-        switch (type) {
-            case "not-null":
-                if (verifyLength(event.target.value, 3)) {
-                    this.setState({ [stateName + "State"]: "success" });
-                } else {
-                    this.setState({ [stateName + "State"]: "error" });
-                }
-                break;
-            default:
-                this.setState({ [stateName]: event.target.value })
-                break;;
-        }
+    handleLocation(values) {
+        this.props.editLocation(values, this.props.history)
     }
 
-    handleLocation(option) {
-        if (this.state.address1State === "")
-            this.setState({ address1State: "error" })
-        if (this.state.address2State === "")
-            this.setState({ address2State: "error" })
-        if (this.state.countryState === "") {
-            this.setState({ countryState: "error" });
-        }
-        if (this.state.postCodeState === "") {
-            this.setState({ postCodeState: "error" });
-        }
-        if (this.state.address1State === "success" && this.state.address2State === "success" && this.state.countryState === "success" && this.state.postCodeState === "success") {
-            if (option === "Save") {
-                this.props.createProvider(this.state.provider, (response) => {
-                    window.location = "/provider/list";
-                });
-            }
-            else {
-                this.props.createProvider(this.state.provider, () => {
-                    window.location = "/provider/create"
-                });
-            }
-        }
-    }
     render() {
         const { classes } = this.props;
         return (
             <Card>
                 <CardHeader color="rose" text>
                     <CardText color="rose">
-                        <h4 className={classes.cardTitle}>Create Provider</h4>
+                        <h4 className={classes.cardTitle}>Create new Address</h4>
                     </CardText>
                 </CardHeader>
                 <CardBody>
-                    <LocationForm
-                        locationInfo={this.state}
-                        change={this.change}
-                        onDoubleClick={this.doubleClick}
-                        classes={this.props.classes}
+                    <Formik 
+                    initialValues={{
+                        id: this.state.data.id,
+                        streetAddress: this.state.data.streetAddress,
+                        district: this.state.data.postCode,
+                        city: this.state.data.district,
+                        country: this.state.data.country,
+                        postCode: this.state.data.postCode,
+                        state: this.state.data.state,
+                        coordinates: {
+                            latitude: this.state.data.coordinates ? this.state.data.coordinates.latitude : 0,
+                            longitude: this.state.data.coordinates ? this.state.data.coordinates.longitude : 0
+                        }
+                    }}
+                    enableReinitialize={true}
+                    validationSchema={LocationSchema}
+                    onSubmit={values => this.handleLocation(values)}
+                    children={props =>
+                        <LocationForm
+                            {...props}
+                            locationInfo={this.state}
+                            change={this.change}
+                            onDoubleClick={this.doubleClick}
+                            classes={this.props.classes}
+                            buttonName="Edit Address"
+                        />
+                    }
                     />
                 </CardBody>
-                <CardFooter className={classes.justifyContentCenter}>
-                    <Button color="rose" onClick={this.handleLocation.bind(this)}>
-                        Add Another Provider
-                    </Button>
-                    <Button color="rose" onClick={this.handleLocation.bind(this, "Save")}>
-                        Save & Exit
-          </Button>
-                </CardFooter>
+                
             </Card>
-        )
+        
+            )
     }
 }
 
-LocationCreate.propTypes = {
+LocationEdit.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
+const mapStateToProps = (state) => {
+    return {
+        location: state.location.getLocation
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        createProvider: (provider) => dispatch(createProvider(provider))
+        fetchLocation: (id) => dispatch(fetchLocation(id)),
+        editLocation: (values, history) => dispatch(editLocation(values, history))
     }
 }
 
 export default compose(
     withStyles(validationFormStyle),
-    connect(null, mapDispatchToProps),
+    connect(mapStateToProps, mapDispatchToProps),
 )(LocationEdit);

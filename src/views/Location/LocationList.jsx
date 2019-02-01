@@ -15,7 +15,7 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import { fetchProviders } from '../../actions/provider';
+import { fetchAllLocations } from '../../actions/location';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
@@ -31,11 +31,11 @@ class LocationList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ data: nextProps.providerLists })
+        this.setState({ data: nextProps.locations })
     }
 
     componentDidMount() {
-        this.props.fetchProviders()
+        this.props.fetchAllLocations()
     }
 
     render() {
@@ -88,7 +88,7 @@ class LocationList extends React.Component {
                     </GridItem>
                 </GridContainer>
                 <GridContainer>
-                    {locations.map((location, index) => {
+                    {this.state.data.map((location, index) => {
                         return (
                             <GridItem xs={12} sm={12} md={3}>
                                 <Card product className={classes.cardHover} >
@@ -118,7 +118,7 @@ class LocationList extends React.Component {
                                                 placement="bottom"
                                                 classes={{ tooltip: classes.tooltip }}
                                             >
-                                                <Link to={`/provider/edit/${location.id}`}>
+                                                <Link to={`/location/edit/${location.id}`}>
                                                     <Button color="success" simple justIcon >
                                                         <Edit className={classes.underChartIcons} />
                                                     </Button>
@@ -127,10 +127,10 @@ class LocationList extends React.Component {
                                         </div>
 
                                         <h4 className={classes.cardProductTitle}>
-                                            {location.address1}
+                                            {location.streetAddress}
                                         </h4>
                                         <p className={classes.cardProductDesciprion}>
-                                            {location.address2}
+                                            {location.city}
                                         </p>
                                     </CardBody>
                                 </Card>
@@ -144,12 +144,12 @@ class LocationList extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return { providerLists: state.providers.data }
+    return { locations: state.location.getAllLocations }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchProviders: () => dispatch(fetchProviders()),
+        fetchAllLocations: () => dispatch(fetchAllLocations()),
     }
 }
 
