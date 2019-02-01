@@ -1,7 +1,7 @@
 import {organization} from '../constants/Organization.constants';
 import {API_ROOT, URL} from '../config/config';
 
-export const editOrganization = (values) => {
+export const editOrganization = (values, history) => {
     return (dispatch) => {
         dispatch(editOrganizationLoading())
         fetch(API_ROOT + URL.ORGANIZATIONS, {
@@ -14,6 +14,7 @@ export const editOrganization = (values) => {
             .then(res => res.json())
             .then(data => {
                 dispatch(editOrganizationSuccess(data))
+                history.push('/organization/edit')
             })
             .catch(err => {
                 dispatch(editOrganizationFailure(err))
@@ -70,7 +71,7 @@ export const getOrganizationByAdminLoading = () => {
 export const getOrganizationByAdminSuccess = (data) => {
     return {
         type: organization.ORGANIZATION_BY_ADMIN_SUCCESS,
-        payload: { data }
+        payload: {data}
     }
 }
 
@@ -81,7 +82,7 @@ export const getOrganizationByAdminFailure = (error) => {
     }
 }
 
-export const createOrganization = (values) => {
+export const createOrganization = (values, history) => {
     return (dispatch) => {
         dispatch(createOrganizationLoading())
         fetch(API_ROOT + URL.ORGANIZATIONS, {
@@ -94,6 +95,7 @@ export const createOrganization = (values) => {
         .then(res => res.json())
         .then(data => {
             dispatch(createOrganizationSuccess(data))
+            history.push('/dashboard');
         })
         .catch(err => {
             dispatch(createOrganizationFailure(err))

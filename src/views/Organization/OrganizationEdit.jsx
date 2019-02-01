@@ -1,10 +1,14 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import SweetAlert from "react-bootstrap-sweetalert";  
-import { FormLabel, MenuItem, Select, ListItemText, Grid } from "@material-ui/core";
+import SweetAlert from "react-bootstrap-sweetalert";
+import { FormLabel, MenuItem, Select, Grid, FormControl, FormControlLabel, Switch } from "@material-ui/core";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { ClipLoader } from 'react-spinners';
+import { css } from 'react-emotion';
 
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -16,96 +20,52 @@ import CardText from "components/Card/CardText.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
-import CustomRadio from "components/CustomRadio/CustomRadio.jsx";
 import { fetchBusinessCategory, editOrganization, getOrganizationByAdmin } from "../../actions/organization.jsx"
-//import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
 
-import _ from 'lodash';
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
+
+const OrganizationEditSchema = Yup.object().shape({
+  name: Yup.string()
+          .required("This is required Field"),
+  businessCategoryId: Yup.string().required("Please select category"),
+  telephone: Yup.string().required("Please enter a valid phone Number")
+})
 
 class OrganizationEdit extends React.Component {
   constructor(props) {
     super(props);
     const userDetail = JSON.parse(localStorage.getItem('user'));
-
     this.state = {
-
       name: this.props.userDetails ? this.props.userDetails.registerOrganizationName : '',
-      organizationNameState: null,
-      orgMode: "PROVIDER_BASED",
-      businessCategoryId: '',
-      preferences: {
-        allowListingOnQuezone: false,
-        allowReschedule: true,
-        allowSmsCommunication: true,
-        displayPhoneNumber: true,
-        enableWaitlist: true,
-        isCustomerRegistrationRequired: true,
-        preferGuestcheckout: true,
-        trackManualTime: true,
-        bookingHorizon: 0,
-        dataRetention: 0,
-        serviceHours: [
-          {
-            "day": "Monday",
-            "endTime": "string",
-            "startTime": "string"
-          }
-        ],
-      },
-      phone: {
-        areaCode: '',
-        countryCode: '',
-        number: ''
-      },
-      logo: '',
-      website: '',
-      queueModel: '',
-      businessAdminId: userDetail ? (userDetail.object ? userDetail.object.id : null) : null
+      businessAdminId: userDetail ? (userDetail.object ? userDetail.object.id : null) : null,
+      data: []
     };
-
-    this.change = this.change.bind(this);
-
   }
 
-  change(event, stateName, type, value) {
-    if (type !== undefined && value !== undefined) {
-      this.setState({
-        ...this.state,
-        [stateName]: {
-          ...this.state[stateName],
-          [type]: value
-        }
-      })
-    } else if (type !== undefined) {
-      this.setState({
-        ...this.state,
-        [stateName]: {
-          ...this.state[stateName],
-          [type]: event.target.value
-        }
-      })
-    }
-
-    else {
-      this.setState({ [stateName]: (event.target.value || event.target.checked) })
-    }
-    console.log("state value----", this.state)
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.organizationByAdmin && nextProps.organizationByAdmin.object)
+      this.setState({ data: nextProps.organizationByAdmin.object })
   }
 
   componentDidMount() {
     const userDetail = JSON.parse(localStorage.getItem('user'));
-
     console.log("user details------", userDetail)
-    if(userDetail) {
+    if (userDetail) {
       this.props.getOrganizationByAdmin(userDetail.object.id);
     }
     this.props.getBusinessCategory()
   }
 
-  submit = () => {
+  submit = (values) => {
+    values.businessAdminId = this.state.businessAdminId;
     // this is the case of 1st time registering the organization along with admin
-    this.props.editOrganization(this.state);
+    this.props.editOrganization(values, this.props.history);
   }
 
   moveToCreate = () => {
@@ -120,16 +80,19 @@ class OrganizationEdit extends React.Component {
       organizationByAdmin,
       organizationByAdminLoading
     } = this.props;
+    const { data } = this.state;
     let categoryOptions = [];
     if (businessCategory && businessCategory.objects) {
       categoryOptions = businessCategory.objects;
     }
     const userDetail = JSON.parse(localStorage.getItem('user'));
 
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
     return (
 
       (<GridContainer>
-        {userDetail === null ? 
+        {userDetail === null ?
           <SweetAlert
             info
             title={<span> <small>Please create an organization before editing.</small></span>}
@@ -138,7 +101,13 @@ class OrganizationEdit extends React.Component {
           :
           (<GridContainer>
             {organizationByAdminLoading ?
-              <FormLabel> Loading </FormLabel>
+              < ClipLoader
+                className={override}
+                sizeUnit={"px"}
+                size={150}
+                color={'#123abc'}
+                loading={organizationByAdminLoading}
+              />
               :
               (<GridContainer>
                 {organizationByAdmin.success === false ?
@@ -149,497 +118,535 @@ class OrganizationEdit extends React.Component {
                   />
                   :
                   <GridItem xs={12} sm={12} md={12}>
-                    <Card>
-                      <CardHeader color="rose" text>
-                        <CardText color="rose">
-                          <h4 className={classes.cardTitle}>Edit Organization Details</h4>
-                        </CardText>
-                      </CardHeader>
-                      <CardBody>
-                        <Accordion
-                          active={0}
-                          collapses={[
-                            {
-                              title: "About",
-                              content:
-                                <GridContainer>
-                                  <GridItem>
-                                    <FormLabel className={classes.labelHorizontal}>
-                                      Name
-                                    </FormLabel>
-                                  </GridItem>
-                                  <GridItem >
-                                    <CustomInput
-                                      labelText="Name"
-                                      success={this.state.organizationNameState === "success"}
-                                      error={this.state.organizationNameState === "error"}
-                                      id="name"
-                                      inputProps={{
-                                        onChange: event =>
-                                          this.change(event, "name"),
-                                        type: "text"
-                                      }}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={3}>
-                                    <FormLabel className={classes.labelHorizontal}>
-                                      Mode of Organization
-                                    </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={3}>
-                                    <Select
-                                      style={{ paddingTop: '9%', }}
-                                      fullWidth
-                                      MenuProps={{
-                                        className: classes.selectMenu
-                                      }}
-                                      classes={{
-                                        select: classes.select
-                                      }}
-                                      value={this.state.orgMode}
-                                      onChange={(event) => { this.change(event, "orgMode") }}
-                                      inputProps={{
-                                        name: "simpleSelect",
-                                        id: "simple-select"
-                                      }}>
-                                      <MenuItem
-                                        classes={{
-                                          root: classes.selectMenuItem,
-                                          selected: classes.selectMenuItemSelected
-                                        }}
-                                        value="PROVIDER_BASED">
-                                        PROVIDER_BASED
-                            </MenuItem>
-                                      <MenuItem
-                                        classes={{
-                                          root: classes.selectMenuItem,
-                                          selected: classes.selectMenuItemSelected
-                                        }}
-                                        value="COUNTER_BASED">
-                                        COUNTER_BASED
-                            </MenuItem>
-                                      <MenuItem
-                                        classes={{
-                                          root: classes.selectMenuItem,
-                                          selected: classes.selectMenuItemSelected
-                                        }}
-                                        value="ANY">
-                                        ANY
-                            </MenuItem>
-                                    </Select>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={3}>
-                                    <FormLabel className={classes.labelHorizontal}>
-                                      Business Category
-                        </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={3}>
-                                    <Select
-                                      style={{ paddingTop: '9%', }}
-                                      fullWidth
-                                      MenuProps={{
-                                        className: classes.selectMenu
-                                      }}
-                                      classes={{
-                                        select: classes.select
-                                      }}
-                                      value={this.state.businessCategoryId}
-                                      onChange={(event) => { this.change(event, "businessCategoryId") }}
-                                      inputProps={{
-                                        name: "simpleSelect",
-                                        id: "simple-select"
-                                      }}>
-                                      {categoryOptions.map(business => (
-                                        <MenuItem key={business.id} value={business.id}>
-                                          <ListItemText primary={business.name} />
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                  </GridItem>
-                                </GridContainer>
-                            },
-                            {
-                              title: "Preferences",
-                              content:
-                                <GridContainer>
-                                  <GridItem xs={12} sm={2}>
-                                    <FormLabel
-                                      className={
-                                        classes.labelHorizontal +
-                                        " " +
-                                        classes.labelHorizontalRadioCheckbox
-                                      }
-                                    >
-                                      Allow listing on Quezone?
-                                    </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.allowListingOnQuezone}
-                                      label="Yes"
-                                      value={true}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "allowListingOnQuezone", true)}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.allowListingOnQuezone}
-                                      label="No"
-                                      value={false}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "allowListingOnQuezone", false)} />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <FormLabel
-                                      className={
-                                        classes.labelHorizontal +
-                                        " " +
-                                        classes.labelHorizontalRadioCheckbox
-                                      }
-                                    >
-                                      Allow Rescheduling?
-                        </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.allowReschedule}
-                                      label="Yes"
-                                      value={true}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "allowReschedule", true)}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.allowReschedule}
-                                      label="No"
-                                      value={false}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "allowReschedule", false)} />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <FormLabel
-                                      className={
-                                        classes.labelHorizontal +
-                                        " " +
-                                        classes.labelHorizontalRadioCheckbox
-                                      }
-                                    >
-                                      Allow Communication by SMS?
-                            </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.allowSmsCommunication}
-                                      label="Yes"
-                                      value={true}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "allowSmsCommunication", true)}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.allowSmsCommunication}
-                                      label="No"
-                                      value={false}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "allowSmsCommunication", false)} />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <FormLabel
-                                      className={
-                                        classes.labelHorizontal +
-                                        " " +
-                                        classes.labelHorizontalRadioCheckbox
-                                      }
-                                    >
-                                      Display Contact Information?
-                            </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.displayPhoneNumber}
-                                      label="Yes"
-                                      value={true}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "displayPhoneNumber", true)}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.displayPhoneNumber}
-                                      label="No"
-                                      value={false}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "displayPhoneNumber", false)} />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <FormLabel
-                                      className={
-                                        classes.labelHorizontal +
-                                        " " +
-                                        classes.labelHorizontalRadioCheckbox
-                                      }
-                                    >
-                                      Enable Wait List?
-                            </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.enableWaitlist}
-                                      label="Yes"
-                                      value={true}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "enableWaitlist", true)}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.enableWaitlist}
-                                      label="No"
-                                      value={false}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "enableWaitlist", false)} />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <FormLabel
-                                      className={
-                                        classes.labelHorizontal +
-                                        " " +
-                                        classes.labelHorizontalRadioCheckbox
-                                      }
-                                    >
-                                      Is Customer Registration Required?
-                            </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.isCustomerRegistrationRequired}
-                                      label="Yes"
-                                      value={true}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "isCustomerRegistrationRequired", true)}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.isCustomerRegistrationRequired}
-                                      label="No"
-                                      value={false}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "isCustomerRegistrationRequired", false)} />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <FormLabel
-                                      className={
-                                        classes.labelHorizontal +
-                                        " " +
-                                        classes.labelHorizontalRadioCheckbox
-                                      }
-                                    >
-                                      Prefer Guest Checkout?
-                            </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.preferGuestcheckout}
-                                      label="Yes"
-                                      value={true}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "preferGuestcheckout", true)}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.preferGuestcheckout}
-                                      label="No"
-                                      value={false}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "preferGuestcheckout", false)} />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <FormLabel
-                                      className={
-                                        classes.labelHorizontal +
-                                        " " +
-                                        classes.labelHorizontalRadioCheckbox
-                                      }
-                                    >
-                                      Track Manual Time?
-                            </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.trackManualTime}
-                                      label="Yes"
-                                      value={true}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "trackManualTime", true)}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={2}>
-                                    <CustomRadio
-                                      checkedValue={this.state.preferences.trackManualTime}
-                                      label="No"
-                                      value={false}
-                                      classes={classes}
-                                      onClick={event =>
-                                        this.change(event, "preferences", "trackManualTime", false)} />
-                                  </GridItem>
-                                  <GridItem >
-                                    <FormLabel className={classes.labelHorizontal}>
-                                      Booking Horizon
-                          </FormLabel>
-                                  </GridItem>
-                                  <GridItem >
-                                    <CustomInput
-                                      labelText="Booking Horizon"
-                                      id="bookingHorizon"
-                                      formControlProps={{
-                                        fullWidth: true
-                                      }}
-                                      inputProps={{
-                                        onChange: event =>
-                                          this.change(event, "preferences", "bookingHorizon"),
-                                        type: "number"
-                                      }}
-                                    />
-                                  </GridItem>
-                                  <GridItem xs={12} sm={3}>
-                                    <FormLabel className={classes.labelHorizontal}>
-                                      Data Retention
-                          </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={3}>
-                                    <CustomInput
-                                      labelText="Data Retention"
-                                      id="dataRetention"
-                                      formControlProps={{
-                                        fullWidth: true
-                                      }}
-                                      inputProps={{
-                                        onChange: event =>
-                                          this.change(event, "preferences", "dataRetention"),
-                                        type: "number"
-                                      }}
-                                    />
-                                  </GridItem>
-                                </GridContainer>
-                            },
-                            {
-                              title: "Personal Information",
-                              content:
-                                <Grid>
-                                  <GridContainer>
-                                    <GridItem>
-                                      <FormLabel className={classes.labelHorizontal}>
-                                        Phone Number
-                        </FormLabel>
-                                    </GridItem>
-                                    <GridItem >
-                                      <CustomInput
-                                        labelText="Country Code"
-                                        id="countryCode"
-                                        inputProps={{
-                                          onChange: event =>
-                                            this.change(event, "phone", "countryCode"),
-                                          type: "text"
-                                        }}
-                                      />
-                                      <CustomInput
-                                        labelText="Area Code"
-                                        id="areaCode"
-                                        inputProps={{
-                                          onChange: event =>
-                                            this.change(event, "phone", "areaCode"),
-                                          type: "text"
-                                        }}
-                                      />
-                                      <CustomInput
-                                        labelText="Phone Number"
-                                        id="number"
-                                        inputProps={{
-                                          onChange: event =>
-                                            this.change(event, "phone", "number"),
-                                          type: "text"
-                                        }}
-                                      />
-                                    </GridItem>
-                                  </GridContainer>
-                                  <GridContainer>
-                                    <GridItem>
-                                      <FormLabel className={classes.labelHorizontal}>
-                                        Website
-                        </FormLabel>
-                                    </GridItem>
-                                    <GridItem >
-                                      <CustomInput
-                                        labelText="Website"
-                                        id="website"
-                                        inputProps={{
-                                          onChange: event =>
-                                            this.change(event, "website"),
-                                          type: "text"
-                                        }}
-                                      />
-                                    </GridItem>
-                                  </GridContainer>
-                                  <GridContainer>
-                                    <GridItem>
-                                      <FormLabel className={classes.labelHorizontal}>
-                                        Queue Model
-                        </FormLabel>
-                                    </GridItem>
-                                    <GridItem >
-                                      <CustomInput
-                                        labelText="Queue Model"
-                                        id="queueModel"
-                                        inputProps={{
-                                          onChange: event =>
-                                            this.change(event, "queueModel"),
-                                          type: "text"
-                                        }}
-                                      />
-                                    </GridItem>
-                                  </GridContainer>
-                                </Grid>
-                            }
-                          ]}
-                        />
-                      </CardBody>
-                      <CardFooter className={classes.justifyContentCenter}>
-                        <Button color="rose" onClick={() => this.submit(userDetails)}>
-                          Update
-            </Button>
-                        <Button color="rose" >
-                          Delete
-            </Button>
-                      </CardFooter>
-                    </Card>
+                    {data && data.preferences ?
+                      <Formik
+                        initialValues={{
+                          id: data.id,
+                          name: data.name,
+                          orgMode: data.orgMode,
+                          businessCategoryId: data.businessCategoryId,
+                          preferences: {
+                            allowListingOnQuezone: data.preferences.allowListingOnQuezone,
+                            allowReschedule: data.preferences.allowReschedule,
+                            allowSmsCommunication: data.preferences.allowSmsCommunication,
+                            displayPhoneNumber: data.preferences.displayPhoneNumber,
+                            enableWaitlist: data.preferences.enableWaitlist,
+                            isCustomerRegistrationRequired: data.preferences.isCustomerRegistrationRequired,
+                            preferGuestcheckout: data.preferences.preferGuestcheckout,
+                            trackManualTime: data.preferences.trackManualTime,
+                            bookingHorizon: data.preferences.bookingHorizon,
+                            dataRetention: data.preferences.dataRetention,
+                            serviceHours: [
+                              {
+                                "day": "Monday",
+                                "endTime": data.preferences.serviceHours[0].endTime,
+                                "startTime": data.preferences.serviceHours[0].startTime
+                              },
+                              {
+                                "day": "Tuesday",
+                                "endTime": data.preferences.serviceHours[1].endTime,
+                                "startTime": data.preferences.serviceHours[1].startTime
+                              },
+                              {
+                                "day": "Wednesday",
+                                "endTime": data.preferences.serviceHours[2].endTime,
+                                "startTime": data.preferences.serviceHours[2].startTime
+                              },
+                              {
+                                "day": "Thursday",
+                                "endTime": data.preferences.serviceHours[3].endTime,
+                                "startTime": data.preferences.serviceHours[3].startTime
+                              },
+                              {
+                                "day": "Friday",
+                                "endTime": data.preferences.serviceHours[4].endTime,
+                                "startTime": data.preferences.serviceHours[4].startTime
+                              },
+                              {
+                                "day": "Saturday",
+                                "endTime": data.preferences.serviceHours[5].endTime,
+                                "startTime": data.preferences.serviceHours[5].startTime
+                              },
+                              {
+                                "day": "Sunday",
+                                "endTime": data.preferences.serviceHours[6].endTime,
+                                "startTime": data.preferences.serviceHours[6].startTime
+                              }
+                            ],
+                          },
+                          telephone: data.telephone,
+                          logo: data.logo,
+                          website: data.website,
+                          queueModel: data.queueModel,
+                        }}
+                        validationSchema={OrganizationEditSchema}
+                        enableReinitialize={true}
+                        onSubmit={(values) => this.submit(values)}
+                        render={({
+                          values,
+                          errors,
+                          status,
+                          touched,
+                          handleChange,
+                          handleSubmit,
+                        }) => (
+                            <Card>
+                              <CardHeader color="rose" text>
+                                <CardText color="rose">
+                                  <h4 className={classes.cardTitle}>Edit Organization Details</h4>
+                                </CardText>
+                              </CardHeader>
+                              <CardBody>
+                                <Accordion
+                                  active={0}
+                                  collapses={[
+                                    {
+                                      title: "About",
+                                      content:
+                                        <GridContainer>
+                                          <GridItem >
+                                            <FormLabel className={classes.labelHorizontal}>
+                                              Name
+                                            </FormLabel>
+                                          </GridItem >
+                                          <GridItem xs={12} sm={4} style={{'flex-basis': '17.333%'}}>
+                                            <CustomInput
+                                              id="name"
+                                              inputProps={{
+                                                disabled: true,
+                                                placeholder: "Name",
+                                                type: "text"
+                                              }}
+                                              onChange={handleChange}
+                                              value={values.name}
+                                            />
+                                             {errors.name && touched.name ? (
+                                                        <div style={{ color: "red" }}>{errors.name}</div>
+                                                    ) : null}
+                                          </GridItem>
+                                          <GridItem xs={12} sm={3} style={{'flex-basis': '18%'}}>
+                                            <FormLabel className={classes.labelHorizontal}>
+                                              Mode of Organization
+                                            </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={3} style={{'flex-basis': '15%'}}>
+                                           
+                                              <Select
+                                                value={values.orgMode}
+                                                onChange={handleChange("orgMode")}
+                                                name='orgMode'
+                                                style={{ paddingTop: '16%', }}
+                                              fullWidth
+                                              MenuProps={{
+                                                className: classes.selectMenu
+                                              }}
+                                              classes={{
+                                                select: classes.select
+                                              }}
+                                              >
+                                                <MenuItem value="PROVIDER_BASED">
+                                                  PROVIDER_BASED
+                                                </MenuItem>
+                                                <MenuItem value="COUNTER_BASED">
+                                                  COUNTER_BASED
+                                                </MenuItem>
+                                                <MenuItem value="ANY">
+                                                  ANY
+                                                </MenuItem>
+                                              </Select>
+                                            
+                                          </GridItem>
+                                          <GridItem >
+                                            <FormLabel className={classes.labelHorizontal}>
+                                              Business Category
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={3}>
+                                            <Select
+                                              style={{ paddingTop: '9%', }}
+                                              fullWidth
+                                              MenuProps={{
+                                                className: classes.selectMenu
+                                              }}
+                                              classes={{
+                                                select: classes.select
+                                              }}
+                                              value={values.businessCategoryId}
+                                              onChange={handleChange("businessCategoryId")}
+                                              name="businessCategoryId"
+                                            >
+                                              {categoryOptions.map(business => (
+                                                <MenuItem key={business.id} value={business.id}>
+                                                  {business.name} 
+                                                </MenuItem>
+                                              ))}
+                                            </Select>
+                                            {errors.businessCategoryId && touched.businessCategoryId ? (
+                                                        <div style={{ color: "red" }}>{errors.businessCategoryId}</div>
+                                                    ) : null}
+                                          </GridItem>
+                                        </GridContainer>
+                                    },
+                                    {
+                                      title: "Preferences",
+                                      content:
+                                      <div>
+                                        <GridContainer style={{paddingBottom: '15px'}}>
+                                          <GridItem >
+                                            <FormLabel className={classes.labelHorizontal}>
+                                              Service Hours
+                                            </FormLabel>
+                                          </GridItem>
+                                          {days.map((day, index) => (
+                                            <div>
+                                               <GridItem xs={12} sm={3} style={{'max-width': '100%'}}>
+                                            <FormLabel >
+                                              {day}
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={3} style={{'max-width': '87%'}}>
+                                            <FormControl fullWidth style={{margin:'-3px'}}>
+                                              <CustomInput
+                                              id={`preferences.serviceHours[${index}].startTime`}
+                                              inputProps={{
+                                                placeholder: "Start Time",
+                                                type: "time"
+                                              }}
+                                              onChange={handleChange}
+                                              value={values.preferences.serviceHours[index].startTime}
+                                            />
+                                            </FormControl>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={3} style={{'max-width': '87%'}}>
+                                            <FormControl fullWidth style={{margin:'-3px'}}>
+                                              <CustomInput
+                                                id={`preferences.serviceHours[${index}].endTime`}
+                                                value={values.preferences.serviceHours[index].endTime}
+                                                inputProps={{ placeholder: "End Time", type: "time" }}
+                                                onChange={handleChange}
+                                              />
+                                            </FormControl>
+                                          </GridItem>
+                                            </div>
+                                          ))}
+                                         </GridContainer>
+                                          <GridContainer>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormLabel
+                                              className={
+                                                classes.labelHorizontal +
+                                                " " +
+                                                classes.labelHorizontalRadioCheckbox
+                                              }
+                                            >
+                                              Allow listing on Quezone?
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormControlLabel
+                                              control={
+                                                <Switch
+                                                  name="preferences.allowListingOnQuezone"
+                                                  checked={values.preferences.allowListingOnQuezone}
+                                                  value="preferences.allowListingOnQuezone"
+                                                  onChange={handleChange}
+                                                />
+                                              }
+                                            />
+                                          </GridItem>
 
+                                          <GridItem xs={12} sm={2}>
+                                            <FormLabel
+                                              className={
+                                                classes.labelHorizontal +
+                                                " " +
+                                                classes.labelHorizontalRadioCheckbox
+                                              }
+                                            >
+                                              Allow Rescheduling?
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormControlLabel
+                                              control={
+                                                <Switch
+                                                  name="preferences.allowReschedule"
+                                                  checked={values.preferences.allowReschedule}
+                                                  value="preferences.allowReschedule"
+                                                  onChange={handleChange}
+                                                />
+                                              }
+                                            />
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormLabel
+                                              className={
+                                                classes.labelHorizontal +
+                                                " " +
+                                                classes.labelHorizontalRadioCheckbox
+                                              }
+                                            >
+                                              Allow Communication by SMS?
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormControlLabel
+                                              control={
+                                                <Switch
+                                                  name="preferences.allowSmsCommunication"
+                                                  checked={values.preferences.allowSmsCommunication}
+                                                  value="preferences.allowSmsCommunication"
+                                                  onChange={handleChange}
+                                                />
+                                              }
+                                            />
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormLabel
+                                              className={
+                                                classes.labelHorizontal +
+                                                " " +
+                                                classes.labelHorizontalRadioCheckbox
+                                              }
+                                            >
+                                              Display Contact Information?
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormControlLabel
+                                              control={
+                                                <Switch
+                                                  name="preferences.displayPhoneNumber"
+                                                  checked={values.preferences.displayPhoneNumber}
+                                                  value="preferences.displayPhoneNumber"
+                                                  onChange={handleChange}
+                                                />
+                                              }
+                                            />
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormLabel
+                                              className={
+                                                classes.labelHorizontal +
+                                                " " +
+                                                classes.labelHorizontalRadioCheckbox
+                                              }
+                                            >
+                                              Enable Wait List?
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormControlLabel
+                                              control={
+                                                <Switch
+                                                  name="preferences.enableWaitlist"
+                                                  checked={values.preferences.enableWaitlist}
+                                                  value="preferences.enableWaitlist"
+                                                  onChange={handleChange}
+                                                />
+                                              }
+                                            />
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormLabel
+                                              className={
+                                                classes.labelHorizontal +
+                                                " " +
+                                                classes.labelHorizontalRadioCheckbox
+                                              }
+                                            >
+                                              Is Customer Registration Required?
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormControlLabel
+                                              control={
+                                                <Switch
+                                                  name="preferences.isCustomerRegistrationRequired"
+                                                  checked={values.preferences.isCustomerRegistrationRequired}
+                                                  value="preferences.isCustomerRegistrationRequired"
+                                                  onChange={handleChange}
+                                                />
+                                              }
+                                            />
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormLabel
+                                              className={
+                                                classes.labelHorizontal +
+                                                " " +
+                                                classes.labelHorizontalRadioCheckbox
+                                              }
+                                            >
+                                              Prefer Guest Checkout?
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormControlLabel
+                                              control={
+                                                <Switch
+                                                  name="preferences.preferGuestcheckout"
+                                                  checked={values.preferences.preferGuestcheckout}
+                                                  value="preferences.preferGuestcheckout"
+                                                  onChange={handleChange}
+                                                />
+                                              }
+                                            />
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormLabel
+                                              className={
+                                                classes.labelHorizontal +
+                                                " " +
+                                                classes.labelHorizontalRadioCheckbox
+                                              }
+                                            >
+                                              Track Manual Time?
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem xs={12} sm={2}>
+                                            <FormControlLabel
+                                              control={
+                                                <Switch
+                                                  name="preferences.trackManualTime"
+                                                  checked={values.preferences.trackManualTime}
+                                                  value="preferences.trackManualTime"
+                                                  onChange={handleChange}
+                                                />
+                                              }
+                                            />
+                                          </GridItem>
+                                          <GridItem >
+                                            <FormLabel className={classes.labelHorizontal}>
+                                              Booking Horizon
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem >
+                                            <CustomInput
+
+                                              id="preferences.bookingHorizon"
+                                              formControlProps={{
+                                                fullWidth: true
+                                              }}
+                                              inputProps={{
+                                                placeholder: "Booking Horizon",
+                                                type: "number"
+                                              }}
+                                              onChange={handleChange}
+                                              value={values.preferences.bookingHorizon}
+                                            />
+                                          </GridItem>
+                                          <GridItem >
+                                            <FormLabel className={classes.labelHorizontal}>
+                                              Data Retention
+                                          </FormLabel>
+                                          </GridItem>
+                                          <GridItem >
+                                            <CustomInput
+
+                                              id="preferences.dataRetention"
+                                              formControlProps={{
+                                                fullWidth: true
+                                              }}
+                                              inputProps={{
+                                                type: "number",
+                                                placeholder: "Data Retention"
+                                              }}
+                                              onChange={handleChange}
+                                              value={values.preferences.dataRetention}
+                                            />
+                                          </GridItem>
+
+                                        </GridContainer>
+                                        </div>
+                                    },
+                                    {
+                                      title: "Personal Information",
+                                      content:
+                                        <Grid>
+                                          <GridContainer>
+                                            <GridItem>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Phone Number
+                                            </FormLabel>
+                                            </GridItem>
+                                            <GridItem >
+                                              <CustomInput
+                                                id="telephone"
+                                                inputProps={{
+                                                  placeholder: "Phone Number",
+                                                  type: "text"
+                                                }}
+                                                onChange={handleChange}
+                                                value={values.telephone}
+                                              />
+                                              {errors.telephone && touched.telephone ? (
+                                                        <div style={{ color: "red" }}>{errors.telephone}</div>
+                                                    ) : null}
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer>
+                                            <GridItem>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Website
+                                            </FormLabel>
+                                            </GridItem>
+                                            <GridItem >
+                                              <CustomInput
+                                                id="website"
+                                                inputProps={{
+                                                  placeholder: "Website",
+                                                  type: "text"
+                                                }}
+                                                onChange={handleChange}
+                                                value={values.website}
+                                              />
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer>
+                                            <GridItem>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Queue Model
+                                            </FormLabel>
+                                            </GridItem>
+                                            <GridItem >
+                                              <CustomInput
+                                                id="queueModel"
+                                                inputProps={{
+                                                  placeholder: "Queue Model",
+                                                  type: "text"
+                                                }}
+                                                onChange={handleChange}
+                                                value={values.queueModel}
+                                              />
+                                            </GridItem>
+                                          </GridContainer>
+                                        </Grid>
+                                    }
+                                  ]}
+                                />
+                              </CardBody>
+                              <CardFooter className={classes.justifyContentCenter}>
+                                <Button color="rose" onClick={handleSubmit}>
+                                  Update
+                              </Button>
+                                <Button color="rose" >
+                                  Delete
+                              </Button>
+                              </CardFooter>
+                            </Card>
+                          )}
+                      />
+                      :
+                      null
+                    }
                   </GridItem>
                 }
               </GridContainer>)
             }</GridContainer>)
         }
       </GridContainer>)
-      )
+    )
   }
 }
 
@@ -650,7 +657,6 @@ OrganizationEdit.propTypes = {
 
 const mapsStateToProp = (state) => ({
   userDetails: state.user.userDetails,
-  email: state.user.email,
   businessCategory: state.organization.businessCategory,
   businessCategoryLoading: state.organization.businessCategoryLoading,
   businessCategoryError: state.organization.businessCategoryError,
@@ -662,7 +668,7 @@ const mapsStateToProp = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     getBusinessCategory: () => dispatch(fetchBusinessCategory()),
-    editOrganization: (data) => dispatch(editOrganization(data)),
+    editOrganization: (data, history) => dispatch(editOrganization(data, history)),
     getOrganizationByAdmin: (id) => dispatch(getOrganizationByAdmin(id))
   }
 }

@@ -139,7 +139,7 @@ class Sidebar extends React.Component {
                 </ListItem>
                 <ListItem className={classes.collapseItem}>
                   <NavLink
-                    to="/business/edit"
+                    to="/organization/edit"
                     className={
                       classes.itemLink + " " + classes.userCollapseLinks
                     }
