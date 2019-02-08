@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { FormLabel, Switch, FormControlLabel, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
+import TagsInput from "react-tagsinput";
 
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
@@ -12,41 +16,35 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import { fetchProvider, createProvider } from '../../actions/provider';
-import { verifyLength, verifyEmail } from "../../validation/validation.jsx"
-import ProviderForm from "./ProviderForm"
-import defaultImage from "../../assets/img/default-avatar.png";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import { fetchTimezones } from '../../actions/provider';
+import { fetchAllLocations } from '../../actions/location';
 
+const ProviderSchema = Yup.object().shape({
+  email: Yup.string()
+            .required("This field is required")
+            .email("Please write correct format"),
+  givenName: Yup.string()
+                .required("This field is required")
+                .min(3, "Name should be atleast 3 letters")
+                .max(40, "Too Long")
+})
 class ProviderEdit extends React.Component{
 	constructor(props) {
     super(props);
     this.state = {
-      provider: {
-        firstName: "",
-        lastName: "",
-        middleName: "",
-        email: "",
-        mobileNumber: "",
-        phoneNumber: "",
-        file: null,
-        imagePreviewUrl: defaultImage,
-        tags: [],
-        qualifications: [],
-        description: ""
-
-      },
-      firstNameState: "",
-      lastNameState: "",
-      emailState: "",
-      isEditMode: null
+      provider: null
     };
 
-    this.change = this.change.bind(this);
-    this.changeCheckbox = this.changeCheckbox.bind(this);
-    this.changeProfileImage = this.changeProfileImage.bind(this);
+    
     this.doubleClick = this.doubleClick.bind(this);
   }
 
-  componentWillMount(){
+  componentDidMount(){
+    this.props.fetchTimezones();
+    this.props.fetchAllLocations();
     const { id } = this.props.match.params
     console.log("id------", id)
     this.props.fetchProvider(id);
@@ -54,11 +52,7 @@ class ProviderEdit extends React.Component{
 
   componentWillReceiveProps(nextProps) {
     console.log("next props---------", nextProps)
-    const { provider } = this.state;
-    for(var key in nextProps.provider) {
-      provider[key]= nextProps.provider[key]
-      this.setState({provider: provider})
-    };
+    this.setState({ provider: nextProps.provider})    
   }
 
   doubleClick(fieldName) {
@@ -66,123 +60,279 @@ class ProviderEdit extends React.Component{
    this.setState({isEditMode: fieldName});
   }
 
-  change(event, stateName,type){
-    console.log("state--", this.state);
-    const { provider } = this.state
-    provider[stateName]= (event.target.value || event.target.checked)
-    this.setState({provider: provider})
-  	switch (type) {
-      case "first-name":
-        if (verifyLength(event.target.value, 3)) {
-          this.setState({ [stateName + "State"]: "success" });
-        } else {
-          this.setState({ [stateName + "State"]: "error" });
-        }
-        break;
-      case "email":
-        if (verifyEmail(event.target.value)) {
-          this.setState({ [stateName + "State"]: "success" });
-        } else {
-          this.setState({ [stateName + "State"]: "error" });
-        }
-        break;
-      case "last-name":
-        if (verifyLength(event.target.value, 3)) {
-          this.setState({ [stateName + "State"]: "success" });
-        } else {
-          this.setState({ [stateName + "State"]: "error" });
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
+  
   handleUpdate(option) {
     
-  	if (this.state.provider.firstName === "")
-  		this.setState({firstNameState: "error"})
-    else
-      this.setState({firstNameState: "success"})
+  }
 
-  	if (this.state.provider.lastName === "")
-  		this.setState({lastNameState: "error"})
-    else 
-      this.setState({lastNameState: "success"})
-    if (this.state.provider.email === "") 
-      this.setState({ emailState: "error" });
-    else
-      this.setState({emailState: "success"})
-    
-  	if (this.state.firstNameState === "success" && this.state.lastNameState === "success" && this.state.emailState === "success"){
-      this.props.createProvider(this.state.provider, this.state.file);
+  render() {
+    const { classes, timezones, getAllLocations } = this.props;
+    let categoryOptions = [];
+    let geoLocations = [];
+		if ((timezones.length && getAllLocations.length) > 0) {
+      categoryOptions = timezones;
+      geoLocations = getAllLocations;
     }
-  }
-
-  changeCheckbox(event, stateName, type){
-    const { emailPreference } = this.state.provider;
-    const currentIndex = emailPreference.indexOf(event.target.value || '') ;
-    const newChecked = [...emailPreference];
-    if (event.target.checked) {
-      newChecked.push(event.target.value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    const {provider} = this.state
-    provider['emailPreference']= newChecked
-    this.setState({
-      provider: provider
-    });
-  }
-
-  changeProfileImage(e) {
-    //const {file, imagePreviewUrl} = this.state.provider;
-    console.log("inside change image function", e);
-    console.log("event---", e)
-    e.preventDefault();
-    let reader = new FileReader();
-    let files = e.target.files[0];
-    const {provider} = this.state
-    console.log("file-------", files)
-    reader.onloadend = () => {
-      provider['file'] = files
-      provider['imagePreviewUrl'] = reader.result
-      this.setState({
-        // file: file,
-        // imagePreviewUrl: reader.result
-        provider: provider
-      });
-    };
-    reader.readAsDataURL(files);
-  }
-
-	render() {
-    const { classes } = this.props;
-    if(!this.state.provider)
+    if (!this.state.provider) {
       return null;
+  }
+  console.log("data-----", this.state.provider)
 		return(
-      <Card>
-        <CardHeader color="rose" text>
-          <CardText color="rose">
-            <h4 className={classes.cardTitle}>Edit Provider</h4>
-          </CardText>
-        </CardHeader>
-        <CardBody>
-          <ProviderForm 
-            providerInfo={this.state} 
-            change={this.change} 
-            onDoubleClick={this.doubleClick}
-            changeCheckbox={this.changeCheckbox} 
-            changeProfileImage={this.changeProfileImage}
-            classes={this.props.classes}
-          />
-        </CardBody>
-        <CardFooter className={classes.justifyContentCenter}>
-        	<Button color="rose" onClick={this.handleUpdate.bind(this)}>
-            Update
-          </Button>
-        </CardFooter>
-      </Card>
+      <Formik 
+        initialValues={{
+          cognitoToken: this.state.provider.cognitoToken,
+          description: this.state.provider.description,
+          email: this.state.provider.email,
+          familyName: this.state.provider.familyName,
+          geoLocationId: this.state.provider.geoLocationId,
+          givenName: this.state.provider.givenName,
+          isAdmin: this.state.provider.isAdmin,
+          organizationId: this.state.provider.organizationId,
+          qualifications: this.state.provider.qualifications && this.state.provider.qualifications.length > 0 ? this.state.provider.qualifications : [],
+          tags: this.state.provider.tags && this.state.provider.tags.length > 0 ? this.state.provider.tags : [],
+          telephone: this.state.provider.telephone,
+          timeZoneId: this.state.provider.timeZoneId,
+          userStatus: this.state.provider.userStatus,
+          userSub: this.state.provider.userSub
+        }}
+        validationSchema={ProviderSchema}
+        onSubmit={(values) => {this.handleProvider(values)}}
+        render={({values, handleChange, errors, touched, setFieldValue, handleSubmit}) => (
+          <Card>
+            <CardHeader color="rose" text>
+              <CardText color="rose">
+                <h4 className={classes.cardTitle}>Create Provider</h4>
+              </CardText>
+            </CardHeader>
+            <CardBody>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                        First Name
+                    </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                    <CustomInput
+                        id="givenName"
+                        name="givenName"
+                        onChange={handleChange}
+                        value={values.givenName}
+                    />
+                    {errors.givenName && touched.givenName ? (
+                        <div style={{ color: "red" }}>{errors.givenName}</div>
+                    ) : null}
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                        Last Name
+                    </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                    <CustomInput
+                        id="familyName"
+                        name="familyName"
+                        onChange={handleChange}
+                        value={values.familyName}
+                    />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+              <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>
+                      Email
+                  </FormLabel>
+              </GridItem>
+              <GridItem xs={12} sm={4}>
+                  <CustomInput
+                      id="email"
+                      name="email"
+                      onChange={handleChange}
+                      value={values.email}
+                  />
+                  {errors.email && touched.email ? (
+                        <div style={{ color: "red" }}>{errors.email}</div>
+                    ) : null}
+              </GridItem>
+            </GridContainer>
+              <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                      <FormLabel className={classes.labelHorizontal}>
+                          Description
+                      </FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={3}>
+                      <CustomInput
+                          id="description"
+                          formControlProps={{
+                              fullWidth: true
+                          }}
+                          inputProps={{
+                              multiline: true,
+                              rows: 5
+                          }}
+                          value={values.description}
+                          onChange={handleChange}
+                      />
+                      {errors.description && touched.description ? (
+                          <div style={{ color: "red" }}>{errors.description}</div>
+                      ) : null}
+                  </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                    <FormLabel
+                        className={
+                            classes.labelHorizontal +
+                            " " +
+                            classes.labelHorizontalRadioCheckbox
+                        }
+                    >
+                        Is Provider Admin?
+                    </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={2}>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                name="isAdmin"
+                                checked={values.isAdmin}
+                                value="isAdmin"
+                                onChange={handleChange}
+                            />
+                        }
+                    />
+                </GridItem>
+            </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel
+                      className={
+                          classes.labelHorizontal +
+                          " " +
+                          classes.labelHorizontalRadioCheckbox
+                      }
+                  >
+                      Time Zone
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <FormControl
+                      fullWidth
+                      className={classes.selectFormControl}>
+
+                      <Select
+                          value={values.timeZoneId}
+                          onChange={handleChange('timeZoneId')}
+                          name="timeZoneId"
+                      >
+                          {categoryOptions.map(option => (
+                                <MenuItem
+                                key={ option }
+                                value={ option }
+                                id="timeZoneId"
+                              >
+                                {option}
+                              </MenuItem>
+                          ))}
+                      </Select>
+                  </FormControl>                      
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                        Telephone
+                    </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                    <CustomInput
+                        id="telephone"
+                        name="telephone"
+                        onChange={handleChange}
+                        value={values.telephone}
+                    />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>
+                      Tags
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <TagsInput
+                    id="tags"
+                    value={values.tags}
+                    onChange={(value) => setFieldValue('tags', value)}
+                    addKeys={[9, 13, 32, 188]}
+                    tagProps={{ className: "react-tagsinput-tag info" }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>
+                      Qualifications
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <TagsInput
+                    id="qualifications"
+                    value={values.qualifications}
+                    onChange={(value) => setFieldValue('qualifications', value)}
+                    addKeys={[9, 13, 32, 188]}
+                    tagProps={{ className: "react-tagsinput-tag info" }}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel
+                      className={
+                          classes.labelHorizontal +
+                          " " +
+                          classes.labelHorizontalRadioCheckbox
+                      }
+                  >
+                      Location
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <FormControl
+                      fullWidth
+                      className={classes.selectFormControl}>
+                      <Select
+                        value={values.geoLocationId}
+                        onChange={handleChange('geoLocationId')}
+                        name="geoLocationId"
+                      >
+                        {geoLocations.map(option => (
+                            <MenuItem
+                              key={ option.id }
+                              value={ option.id }
+                            >
+                              {option.streetAddress}, {option.city}, {option.country}
+                            </MenuItem>
+                        ))}
+                      </Select>
+                  </FormControl>                      
+                </GridItem>
+              </GridContainer>
+            </CardBody>
+            <CardFooter className={classes.justifyContentCenter}>
+              <Button color="rose" onClick={handleSubmit}>
+                Add Provider
+              </Button>
+              <Button color="rose" onClick={this.props.history.goBack}>
+                Save & Exit
+              </Button>
+            </CardFooter>
+          </Card>
+  )}
+      />
+    
 		)
 	}
 }
@@ -193,14 +343,19 @@ ProviderEdit.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    provider: state.providers.provider
+    provider: state.providers.provider,
+    timezones: state.providers.timezones,
+    getAllLocations: state.location.getAllLocations,
+    getAllLocationsLoading: state.location.getAllLocationsLoading
   }
 } 
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProvider: (id) => dispatch(fetchProvider(id)),
-    createProvider: (provider) => dispatch(createProvider(provider))
+    createProvider: (provider) => dispatch(createProvider(provider)),
+    fetchTimezones: () => dispatch(fetchTimezones()),
+    fetchAllLocations: () => dispatch(fetchAllLocations())
   }
 }
 

@@ -16,7 +16,7 @@ import Calendar from "../views/Calendar/Calendar.jsx";
 import CustomerFlow from "../views/CustomerFlow/CustomerFlow.jsx";
 
 import ProviderList from "../views/Provider/ProviderList.jsx";
-import ProviderCreate from "../views/Provider/ProviderCreateWizard.jsx";
+import ProviderCreate from "../views/Provider/ProviderCreate";
 import ProviderEdit from "../views/Provider/ProviderEdit.jsx";
 
 import Reports from "../views/Reports/Reports.jsx";

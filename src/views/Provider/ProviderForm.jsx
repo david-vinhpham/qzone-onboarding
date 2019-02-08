@@ -1,6 +1,8 @@
 import React from 'react';
 import withStyles from "@material-ui/core/styles/withStyles";
 import { FormLabel, InputLabel }  from "@material-ui/core";      
+import TagsInput from "react-tagsinput";
+
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
@@ -11,113 +13,99 @@ import PictureUpload from "../../components/CustomUpload/PictureUpload";
 class ProviderForm extends React.Component{
   
 	render() {
-    const { classes, providerInfo} = this.props;
+    const { classes, providerInfo, values, handleChange, handleSubmit, errors, touched} = this.props;
     const {provider, firstNameState, lastNameState, emailState} = providerInfo
 		return(
       <form>
-        <GridContainer>
-          <GridItem md={12}>
-            <PictureUpload changeProfileImage={this.props.changeProfileImage} imagePreviewUrl={provider.imagePreviewUrl}/>
-          </GridItem>
-        </GridContainer>
-
+        
         <GridContainer>
           <GridItem xs={12} sm={2}>
             <FormLabel className={classes.labelHorizontal}>
-              *First Name
+              First Name
             </FormLabel>
           </GridItem>
           <GridItem xs={12} sm={4}>
-            { providerInfo.isEditMode === 'firstName' 
+            { providerInfo.isEditMode === 'givenName' 
               ?
               <CustomInput
                 labelText="First Name"
-                success={firstNameState === "success"}
-                value={provider.firstName || ''}
-                error={firstNameState === "error"}
-                id="firstName"
+                value={values.givenName || ''}
+                id="givenName"
                 formControlProps={{
                   fullWidth: true
                 }}
                 inputProps={{
-                  onChange: event =>
-                    this.props.change(event, "firstName", "first-name"),
                   type: "text"
                 }}
+                onChange= {handleChange}
               /> 
               :
               <InputLabel 
                 className={classes.labelLeftHorizontal} 
                 sm={4}
-                onClick={() => this.props.onDoubleClick('firstName')}
+                onClick={() => this.props.onDoubleClick('givenName')}
               >
-                {provider.firstName || 'firstName'}
+                {values.givenName || 'Given Name'}
               </InputLabel> 
             }
           </GridItem>
-
           <GridItem xs={12} sm={2}>
             <FormLabel className={classes.labelHorizontal}>
-              External Provider Id
+             Last Name
             </FormLabel>
           </GridItem>
           <GridItem xs={12} sm={4}>
-            { providerInfo.isEditMode === 'externalProviderId'
+            { providerInfo.isEditMode === 'familyName'
               ?
               <CustomInput
-                labelText="External Provider Id"
-                id="externalProviderId"
-                value={provider.externalProviderId || ''}
+                id="familyName"
+                value={values.familyName || ''}
                 formControlProps={{
                   fullWidth: true
                 }}
                 inputProps={{
-                  onChange: event =>
-                    this.props.change(event, "externalProviderId"),
-                  type: "number"
+                  
+                  type: "text"
                 }}
+                onChange= {handleChange}
               /> 
               :
               <InputLabel 
                 className={classes.labelLeftHorizontal} 
-                onClick={() => this.props.onDoubleClick('externalProviderId')}
+                onClick={() => this.props.onDoubleClick('familyName')}
               >
-                {provider.externalProviderId || 'externalProviderId'}
+                {values.familyName || 'Family Name'}
               </InputLabel>
             }
           </GridItem>
         </GridContainer>
 
         <GridContainer>
-          <GridItem xs={12} sm={2}>
+        <GridItem xs={12} sm={2}>
             <FormLabel className={classes.labelHorizontal}>
-              *Last Name
+              Email
             </FormLabel>
           </GridItem>
           <GridItem xs={12} sm={4}>
-            { providerInfo.isEditMode === 'lastName' 
+            { providerInfo.isEditMode === 'email' 
               ?
               <CustomInput
-                labelText="Last Name"
-                success={lastNameState === "success"}
-                error={lastNameState === "error"}
-                value={provider.lastName || ''}
-                id="lastName"
+                value={values.email || ''}
+                id="email"
                 formControlProps={{
                   fullWidth: true
                 }}
                 inputProps={{
-                  onChange: event =>
-                    this.props.change(event, "lastName", "last-name"),
                   type: "text"
                 }}
+                onChange= {handleChange}
               />
               :
               <FormLabel
                 className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('lastName')}
+                onClick={() => this.props.onDoubleClick('email')}
               >
-                {provider.lastName || 'lastName'}
+                {values.email || 'Email'}
               </FormLabel>
             }
           </GridItem>
@@ -131,90 +119,46 @@ class ProviderForm extends React.Component{
               ?
               <CustomInput
                 labelText="Avg Service Time"
-                value={provider.avgServiceTime || ''}
+                value={values.avgServiceTime || ''}
                 id="avgServiceTime"
                 formControlProps={{
                   fullWidth: true
                 }}
                 inputProps={{
-                  onChange: event =>
-                    this.props.change(event, "avgServiceTime"),
+                  
                   type: "number"
                 }}
+                
               />
               :
               <FormLabel
                 className={classes.labelLeftHorizontal}
                 onClick={() => this.props.onDoubleClick('avgServiceTime')}
               >
-                {provider.avgServiceTime || 'avgServiceTime'}
+                {values.avgServiceTime || 'avgServiceTime'}
               </FormLabel>
             }
           </GridItem>
         </GridContainer>
         
-        <GridContainer>
-          <GridItem xs={12} sm={2}>
-            <FormLabel className={classes.labelHorizontal}>
-              *Email
-            </FormLabel>
+        <GridContainer justify="center">
+          <GridItem xs={12} sm={12} md={5}>
+            <InputLabel >Tags</InputLabel>
+            <TagsInput
+              value={this.state.tags}
+              onChange={this.handleTags}
+              addKeys={[9, 13, 32, 188]}
+              tagProps={{ className: "react-tagsinput-tag info" }}
+            />
           </GridItem>
-          <GridItem xs={12} sm={4}>
-            {providerInfo.isEditMode === 'email'
-              ?
-              <CustomInput
-                labelText="Email"
-                success={emailState === "success"}
-                error={emailState === "error"}
-                value={provider.email || ''}
-                id="email"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                inputProps={{
-                  onChange: event =>
-                    this.props.change(event, "email", "email"),
-                  type: "email"
-                }}
-              />
-              :
-              <FormLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('email')}
-              >
-                {provider.email || 'email'}
-              </FormLabel>
-            }
-          </GridItem>
-          <GridItem xs={12} sm={2}>
-            <FormLabel className={classes.labelHorizontal}>
-              Avg Customer Per Hour
-            </FormLabel>
-          </GridItem>
-          <GridItem xs={12} sm={4}>
-            { providerInfo.isEditMode === 'avgCustomersPerHour'
-              ?
-              <CustomInput
-                labelText="Avg Customer Per Hour"
-                value={provider.avgCustomersPerHour || ''}
-                id="avgCustomersPerHour"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                inputProps={{
-                  onChange: event =>
-                    this.props.change(event, "avgCustomersPerHour"),
-                  type: "number"
-                }}
-              />
-              :
-              <FormLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('avgCustomersPerHour')}
-              >
-                {provider.avgCustomersPerHour || 'avgCustomersPerHour'}
-              </FormLabel>
-            }
+          <GridItem xs={12} sm={12} md={5}>
+            <InputLabel >Qualifications</InputLabel>
+            <TagsInput
+              value={this.state.qualifications}
+              onChange={this.handleQualifications}
+              addKeys={[9, 13, 32, 188]}
+              tagProps={{ className: "react-tagsinput-tag info" }}
+            />
           </GridItem>
         </GridContainer>
         <GridContainer>
@@ -232,7 +176,7 @@ class ProviderForm extends React.Component{
               ?
               <CustomInput
                 labelText="Email Preference"
-                value={provider.emailPreference || ''}
+                value={values.emailPreference || ''}
                 id="emailPreference"
                 formControlProps={{
                   fullWidth: true
@@ -247,7 +191,7 @@ class ProviderForm extends React.Component{
                 className={classes.labelLeftHorizontal}
                 onClick={() => this.props.onDoubleClick('emailPreference')}
               >
-                {provider.emailPreference || 'emailPreference'}
+                {values.emailPreference || 'emailPreference'}
               </FormLabel>
             }
           </GridItem>
@@ -289,7 +233,7 @@ class ProviderForm extends React.Component{
           <GridItem xs={12} sm={4}>
             <CustomCheckbox 
               value=""
-              checked={provider.enableWaitListAppointment || false}
+              checked={values.enableWaitListAppointment || false}
               label="" 
               onClick={event =>this.props.change(event, "enableWaitListAppointment", "waitlist")}
               classes={classes}
@@ -307,7 +251,7 @@ class ProviderForm extends React.Component{
               ?
               <CustomInput
                 labelText="Mobile No"
-                value={provider.mobileNumber || ''}
+                value={values.mobileNumber || ''}
                 id="mobileNumber"
                 formControlProps={{
                   fullWidth: true
@@ -323,7 +267,7 @@ class ProviderForm extends React.Component{
                 className={classes.labelLeftHorizontal}
                 onClick={() => this.props.onDoubleClick('mobileNumber')}
               >
-                {provider.mobileNumber || 'mobileNumber'}
+                {values.mobileNumber || 'mobileNumber'}
               </FormLabel>
             }
           </GridItem>
@@ -338,7 +282,7 @@ class ProviderForm extends React.Component{
               ?
               <CustomInput
                 labelText="Credentials"
-                value={provider.credentials || ''}
+                value={values.credentials || ''}
                 id="credentials"
                 formControlProps={{
                   fullWidth: true
@@ -354,7 +298,7 @@ class ProviderForm extends React.Component{
                 className={classes.labelLeftHorizontal}
                 onClick={() => this.props.onDoubleClick('credentials')}
               >
-                {provider.credentials || 'credentials'}
+                {values.credentials || 'credentials'}
               </FormLabel>
             }
           </GridItem>
@@ -376,7 +320,7 @@ class ProviderForm extends React.Component{
           <GridItem xs={12} sm={2}>
             <CustomCheckbox 
               value=""
-              checked={provider.isOpen || false}
+              checked={values.isOpen || false}
               onClick={event =>this.props.change(event, "isOpen", "isOpen")}
               classes={classes}
             />

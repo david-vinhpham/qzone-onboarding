@@ -20,7 +20,6 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
 import priceImage1 from "../../assets/img/location.png";
-import locations from "../../assets/location.json";
 
 class LocationList extends React.Component {
     constructor(props) {

@@ -26,18 +26,20 @@ export default function(state = initialState, action) {
       return { ...state, providers: action.payload.providers, providersLoading: false }
     case provider.FETCH_PROVIDERS_FAILURE:
       return { ...state, providers: [], providersError: action.payload.error, providersLoading: false}
+    
     case provider.FETCH_PROVIDER:
       return { ...state, provider: null, providerLoading: true };
     case provider.FETCH_PROVIDER_SUCCESS:
-      return { ...state, provider: action.payload.provider, providerLoading: false }
+      return { ...state, provider: action.payload.data, providerLoading: false }
     case provider.FETCH_PROVIDER_FAILURE:
       return { ...state, provider: [], providerError: action.payload.error, providerLoading: false }
-    case provider.CREATE_PROVIDER:
-      return state;
+    
+    case provider.CREATE_PROVIDER_LOADING:
+      return { ...state, providerLoading: true };
     case provider.CREATE_PROVIDER_SUCCESS:
-      return {}
+      return { ...state, provider: action.payload, providerLoading: false }
     case provider.CREATE_PROVIDER_FAILURE:
-      return {}
+      return { ...state, provider: null, providerError: action.payload, providerLoading: false }
 
     case provider.FETCH_TIMEZONES_LOADING:
       return { ...state, timezonesLoading:true}

@@ -16,6 +16,7 @@ export const URL = {
     LOGIN: 'business-admins-by-usersub',
 
     GET_TIMEZONES: 'timezones',
-    FETCH_PROVIDERS_BY_ORG_ID: 'providers-by-org-id/'
+    FETCH_PROVIDERS_BY_ORG_ID: 'providers-by-org-id/',
+    PROVIDER: 'providers'
 }
 export const GOOGLE_ID = '1075505092107-j8821j05r48pco773m0mqb16g1po5gtj.apps.googleusercontent.com'

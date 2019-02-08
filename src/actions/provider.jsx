@@ -73,39 +73,24 @@ export function fetchProvidersFailure(error) {
   }
 }
 
-export function createProvider(values) {
+export function createProvider(values, history) {
   console.log("values-", values);
-  
   return (dispatch) => {
-    dispatch(authGetToken())
-      .then(token => {
-        console.log("token inside provider--------", token)
-        return (
-          fetch('ROOT_URL' + `providers`, {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
-            },
-            body: JSON.stringify({provider: values})
-          })
-        )
-      })
-      .catch(() => {
-        alert("No token found");
-      })
-      .then(res => res.json())
-      .then(json => {
-        console.log("json-------", json)
-        if (json) {
-          dispatch(createProviderSuccess(json));
-        } else {
-          dispatch(createProviderFailure("Topology Error"))
-        }
-        return json;
-      })
-      .catch(err => dispatch(createProviderFailure(err)))
+      dispatch({ type: provider.CREATE_PROVIDER_LOADING })
+        fetch(API_ROOT + URL.PROVIDER, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values)
+        })
+        .then(res => res.json())
+        .then(json => {
+          console.log("json-------", json)
+          dispatch({ type: provider.CREATE_PROVIDER_SUCCESS, payload: json.object });
+          history.push('/provider/list');
+        })
+        .catch(err => dispatch({ type: provider.CREATE_PROVIDER_FAILURE, payload: err}))
   };
 }
 
@@ -131,22 +116,12 @@ export function createProviderFailure(error) {
 
 export function fetchProvider(id) {
   return (dispatch) => {
-    dispatch(authGetToken())
-      .then(token => {
-        console.log("token inside provider--------", token)
-        return (
-          fetch('ROOT_URL' + `providers/` + `${id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
-            }
-          })
-        )
-      })
-      .catch(() => {
-        alert("No token found");
-      })
+      fetch(API_ROOT + URL.PROVIDER + '/' + id, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })     
       .then(res => res.json())
       .then(json => {
         console.log("jaon-----", json)
@@ -167,10 +142,10 @@ export function getProvider() {
   }
 }
 
-export function fetchProviderSuccess(provider) {
+export function fetchProviderSuccess(data) {
   return {
     type: provider.FETCH_PROVIDER_SUCCESS,
-    payload: { provider }
+    payload: { data }
   }
 }
 

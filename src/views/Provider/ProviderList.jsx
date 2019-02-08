@@ -71,11 +71,11 @@ class ProviderList extends React.Component {
             return (
               <GridItem xs={12} sm={12} md={3}>
                 <Card product className={classes.cardHover} >
-                  <CardHeader image className={classes.cardHeaderHover}>
+                  {/* <CardHeader image className={classes.cardHeaderHover}>
                     <a href="#pablo" onClick={e => e.preventDefault()}>
                       <img src={priceImage1} alt="..." />
                     </a>
-                  </CardHeader>
+                  </CardHeader> */}
                   <CardBody>
                     <div className={classes.cardHoverUnder}>
                       <Tooltip
@@ -97,15 +97,15 @@ class ProviderList extends React.Component {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        {/* <Link to={``}> */}
+                        <Link to={`/provider/edit/${provider.id}`}>
                           <Button color="success" simple justIcon >
                             <Edit className={classes.underChartIcons} />
                           </Button>
-                        {/* </Link> */}
+                        </Link>
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>
-                      {provider.firstName} {provider.lastName}
+                      {provider.givenName} {provider.familyName}
                     </h4>
                     <p className={classes.cardProductDesciprion}>
                       {provider.id}
