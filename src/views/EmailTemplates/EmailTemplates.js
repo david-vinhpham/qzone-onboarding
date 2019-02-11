@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, ExpansionPanelActions } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
+import {ExpansionPanel, ExpansionPanelActions, ExpansionPanelDetails, ExpansionPanelSummary} from '@material-ui/core';
+import {Link} from 'react-router-dom';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -15,12 +15,15 @@ import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridS
 import Loading from 'components/Loading/Loading';
 import CustomModal from 'components/CustomModal/CustomModal';
 import {
-  fetchTemplates, updateEmailTemplate, deleteTemplate, resetDeleteStatus,
+  deleteTemplate,
+  fetchTemplates,
+  resetDeleteStatus,
   saveTemplateNameList,
+  updateEmailTemplate,
 } from "actions/email_templates";
 
-import { connect } from 'react-redux';
-import { restApiResponseCodes, eTemplateUrl } from "../../constants";
+import {connect} from 'react-redux';
+import {eTemplateUrl, restApiResponseCodes} from "../../constants";
 
 const styles = () => ({
   inputBox: {
@@ -108,10 +111,7 @@ class EmailTemplates extends Component {
             multiline
             fullWidth
             inputProps={{
-              className: classes.contentBox,
-            }}
-            InputProps={{
-              className: classes.inputBox,
+              className: [classes.inputBox, classes.contentBox]
             }}
           />
         </ExpansionPanelDetails>

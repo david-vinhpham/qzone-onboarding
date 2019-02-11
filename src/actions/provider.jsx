@@ -1,7 +1,5 @@
-import axios from 'axios';
-import { authGetToken } from './auth'
-import { provider } from '../constants/Provider.constants';
-import {API_ROOT, URL } from '../config/config';
+import {provider} from '../constants/Provider.constants';
+import {API_ROOT, URL} from '../config/config';
 
 export const fetchTimezones = () => {
   return (dispatch) => {
@@ -121,7 +119,7 @@ export function fetchProvider(id) {
         headers: {
           'Content-Type': 'application/json',
         }
-      })     
+      })
       .then(res => res.json())
       .then(json => {
         console.log("jaon-----", json)

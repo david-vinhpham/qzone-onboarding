@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import withStyles from "@material-ui/core/styles/withStyles";
 import TextField from '@material-ui/core/TextField';
 import Card from "components/Card/Card.jsx";
@@ -9,11 +9,11 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import CardText from "components/Card/CardText.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx";
-import { dangerColor } from '../../assets/jss/material-dashboard-pro-react'
-import { fetchTemplate, cleanTemplateStatus, editTemplate, cleanEditTemplateStatus } from 'actions/email_templates';
+import {dangerColor} from '../../assets/jss/material-dashboard-pro-react'
+import {cleanEditTemplateStatus, cleanTemplateStatus, editTemplate, fetchTemplate} from 'actions/email_templates';
 import Loading from 'components/Loading/Loading';
-import { isDirty } from "../../validation/validation";
-import { eTemplateContentMax, eTemplateNameMax, eTemplateUrl } from "../../constants";
+import {isDirty} from "../../validation/validation";
+import {eTemplateContentMax, eTemplateNameMax, eTemplateUrl} from "../../constants";
 
 const styles = () => ({
   borderLess: {
@@ -118,9 +118,7 @@ class EditEmailTemplate extends Component {
                 className={classes.templateBox}
                 inputProps={{
                   maxLength: eTemplateNameMax ,
-                }}
-                InputProps={{
-                  className: classes.borderLess,
+                  className: classes.borderLess
                 }}
               />
             </div>
@@ -135,12 +133,9 @@ class EditEmailTemplate extends Component {
                 fullWidth
                 className={classes.templateBox}
                 inputProps={{
-                  className: classes.inputBox,
+                  className: [classes.inputBox, classes.borderLess, classes.contentBox].join(' '),
                   maxLength: eTemplateContentMax,
                   placeholder: 'Click here to start!'
-                }}
-                InputProps={{
-                  className: [classes.borderLess, classes.contentBox].join(' '),
                 }}
               />
             </div>

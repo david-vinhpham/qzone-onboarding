@@ -1,14 +1,14 @@
 import React from "react";
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
 import Search from "@material-ui/icons/Search";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import { ClipLoader } from 'react-spinners';
-import { css } from 'react-emotion';
+import {ClipLoader} from 'react-spinners';
+import {css} from 'react-emotion';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -17,12 +17,10 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import { fetchProviders } from '../../actions/provider';
+import {fetchProviders} from '../../actions/provider';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
-
-import priceImage1 from "../../assets/img/faces/profile.jpg";
-import { FormLabel } from "@material-ui/core";
+import {FormLabel} from "@material-ui/core";
 
 const override = css`
     display: block;
@@ -116,7 +114,7 @@ class ProviderList extends React.Component {
             )
           })}
         </GridContainer>
-     
+
       )
     }
     return (
@@ -160,7 +158,7 @@ class ProviderList extends React.Component {
                     New Provider
                   </Button>
                 </Link>
-                
+
               </CardHeader>
             </Card>
           </GridItem>

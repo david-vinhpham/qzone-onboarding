@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import SweetAlert from "react-bootstrap-sweetalert";
-import { FormLabel, MenuItem, Select, Grid, FormControl, FormControlLabel, Switch } from "@material-ui/core";
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { Formik } from 'formik';
+import {FormControl, FormControlLabel, FormLabel, Grid, MenuItem, Select, Switch} from "@material-ui/core";
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
-import { ClipLoader } from 'react-spinners';
-import { css } from 'react-emotion';
+import {ClipLoader} from 'react-spinners';
+import {css} from 'react-emotion';
 
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -20,7 +20,7 @@ import CardText from "components/Card/CardText.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
-import { fetchBusinessCategory, editOrganization, getOrganizationByAdmin } from "../../actions/organization.jsx"
+import {editOrganization, fetchBusinessCategory, getOrganizationByAdmin} from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 
@@ -76,7 +76,6 @@ class OrganizationEdit extends React.Component {
     const {
       classes,
       businessCategory,
-      userDetails,
       organizationByAdmin,
       organizationByAdminLoading
     } = this.props;
@@ -230,7 +229,7 @@ class OrganizationEdit extends React.Component {
                                             </FormLabel>
                                           </GridItem>
                                           <GridItem xs={12} sm={3} style={{'flex-basis': '15%'}}>
-                                           
+
                                               <Select
                                                 value={values.orgMode}
                                                 onChange={handleChange("orgMode")}
@@ -254,7 +253,7 @@ class OrganizationEdit extends React.Component {
                                                   ANY
                                                 </MenuItem>
                                               </Select>
-                                            
+
                                           </GridItem>
                                           <GridItem >
                                             <FormLabel className={classes.labelHorizontal}>
@@ -277,7 +276,7 @@ class OrganizationEdit extends React.Component {
                                             >
                                               {categoryOptions.map(business => (
                                                 <MenuItem key={business.id} value={business.id}>
-                                                  {business.name} 
+                                                  {business.name}
                                                 </MenuItem>
                                               ))}
                                             </Select>

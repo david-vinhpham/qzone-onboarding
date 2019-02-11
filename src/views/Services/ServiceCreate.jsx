@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Formik } from 'formik';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
-import { FormLabel, MenuItem, FormControl, Select, Radio, FormControlLabel, Switch } from "@material-ui/core";
+import {FormControl, FormControlLabel, FormLabel, MenuItem, Radio, Select, Switch} from "@material-ui/core";
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -16,11 +16,10 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import { createService, getServiceCategory } from '../../actions/service';
+import {createService, getServiceCategory} from '../../actions/service';
 import defaultImage from "../../assets/img/default-avatar.png";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
-import CustomRadio from "../../components/CustomRadio/CustomRadio.jsx";
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 
 const ServiceCreateSchema = Yup.object().shape({
@@ -116,7 +115,7 @@ class ServiceCreate extends React.Component {
 		if (serviceCategory.length > 0) {
 			categoryOptions = serviceCategory;
 		}
-		
+
 		return (
 			<GridItem xs={12} sm={12} md={12}>
 				<Card>
@@ -377,7 +376,7 @@ class ServiceCreate extends React.Component {
                                                         }
                                                     />
                                                 </GridItem>
-                                                
+
                                             </GridContainer>
                                             <GridContainer>
                                                 <GridItem xs={12} sm={3}>
