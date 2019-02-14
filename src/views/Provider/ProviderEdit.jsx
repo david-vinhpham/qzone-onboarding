@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { Formik } from 'formik';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
-import { FormLabel, Switch, FormControlLabel, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
+import {FormControl, FormControlLabel, FormLabel, MenuItem, Select, Switch} from '@material-ui/core'
 import TagsInput from "react-tagsinput";
 
 import Button from "../../components/CustomButtons/Button.jsx";
@@ -15,12 +15,11 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import { fetchProvider, createProvider } from '../../actions/provider';
+import {createProvider, fetchProvider, fetchTimezones} from '../../actions/provider';
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
-import { fetchTimezones } from '../../actions/provider';
-import { fetchAllLocations } from '../../actions/location';
+import {fetchAllLocations} from '../../actions/location';
 
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -38,7 +37,7 @@ class ProviderEdit extends React.Component{
       provider: null
     };
 
-    
+
     this.doubleClick = this.doubleClick.bind(this);
   }
 
@@ -52,7 +51,7 @@ class ProviderEdit extends React.Component{
 
   componentWillReceiveProps(nextProps) {
     console.log("next props---------", nextProps)
-    this.setState({ provider: nextProps.provider})    
+    this.setState({ provider: nextProps.provider})
   }
 
   doubleClick(fieldName) {
@@ -60,9 +59,9 @@ class ProviderEdit extends React.Component{
    this.setState({isEditMode: fieldName});
   }
 
-  
+
   handleUpdate(option) {
-    
+
   }
 
   render() {
@@ -78,7 +77,7 @@ class ProviderEdit extends React.Component{
   }
   console.log("data-----", this.state.provider)
 		return(
-      <Formik 
+      <Formik
         initialValues={{
           cognitoToken: this.state.provider.cognitoToken,
           description: this.state.provider.description,
@@ -237,7 +236,7 @@ class ProviderEdit extends React.Component{
                               </MenuItem>
                           ))}
                       </Select>
-                  </FormControl>                      
+                  </FormControl>
                 </GridItem>
               </GridContainer>
               <GridContainer>
@@ -317,7 +316,7 @@ class ProviderEdit extends React.Component{
                             </MenuItem>
                         ))}
                       </Select>
-                  </FormControl>                      
+                  </FormControl>
                 </GridItem>
               </GridContainer>
             </CardBody>
@@ -332,7 +331,7 @@ class ProviderEdit extends React.Component{
           </Card>
         )}
       />
-    
+
 		)
 	}
 }
@@ -348,7 +347,7 @@ function mapStateToProps(state) {
     getAllLocations: state.location.getAllLocations,
     getAllLocationsLoading: state.location.getAllLocationsLoading
   }
-} 
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {

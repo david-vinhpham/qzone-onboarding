@@ -104,9 +104,6 @@ class CreateEmailTemplate extends Component {
                 inputProps={{
                   maxLength: eTemplateNameMax ,
                 }}
-                InputProps={{
-                  className: classes.borderLess,
-                }}
               />
             </div>
             <div className={classes.templateContent}>
@@ -120,12 +117,9 @@ class CreateEmailTemplate extends Component {
                 fullWidth
                 className={classes.templateBox}
                 inputProps={{
-                  className: classes.inputBox,
                   maxLength: eTemplateContentMax,
-                  placeholder: 'Click here to start!'
-                }}
-                InputProps={{
-                  className: [classes.borderLess, classes.contentBox].join(' '),
+                  placeholder: 'Click here to start!',
+                  className: [classes.inputBox, classes.borderLess, classes.contentBox].join(' ')
                 }}
               />
             </div>

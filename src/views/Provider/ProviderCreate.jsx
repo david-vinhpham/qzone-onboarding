@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { Formik } from 'formik';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
-import { FormLabel, Switch, FormControlLabel, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core'
+import {FormControl, FormControlLabel, FormLabel, MenuItem, Select, Switch} from '@material-ui/core'
 import TagsInput from "react-tagsinput";
 
 import Button from "../../components/CustomButtons/Button.jsx";
@@ -15,13 +15,12 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import { createProvider } from '../../actions/provider';
-import {verifyLength, verifyEmail} from "../../validation/validation.jsx";
+import {createProvider, fetchTimezones} from '../../actions/provider';
+import {verifyEmail, verifyLength} from "../../validation/validation.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
-import { fetchTimezones } from '../../actions/provider';
-import { fetchAllLocations } from '../../actions/location';
+import {fetchAllLocations} from '../../actions/location';
 
 
 const ProviderSchema = Yup.object().shape({
@@ -137,8 +136,8 @@ class ProviderCreate extends React.Component{
       geoLocations = getAllLocations;
     }
 		return(
-      
-          <Formik 
+
+          <Formik
             initialValues={{
               cognitoToken: "",
               description: "",
@@ -296,7 +295,7 @@ class ProviderCreate extends React.Component{
                                   </MenuItem>
                               ))}
                           </Select>
-                      </FormControl>                      
+                      </FormControl>
                     </GridItem>
                   </GridContainer>
                   <GridContainer>
@@ -376,7 +375,7 @@ class ProviderCreate extends React.Component{
                                 </MenuItem>
                             ))}
                           </Select>
-                      </FormControl>                      
+                      </FormControl>
                     </GridItem>
                   </GridContainer>
                 </CardBody>
@@ -391,7 +390,7 @@ class ProviderCreate extends React.Component{
               </Card>
       )}
           />
-        
+
 		)
 	}
 }

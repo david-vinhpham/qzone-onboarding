@@ -4,13 +4,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import ArtTrack from "@material-ui/icons/ArtTrack";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Search from "@material-ui/icons/Search";
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { ClipLoader } from 'react-spinners';
-import { css } from 'react-emotion';
-import SweetAlert from 'react-bootstrap-sweetalert';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import {ClipLoader} from 'react-spinners';
+import {css} from 'react-emotion';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -21,9 +20,8 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
-import priceImage1 from "../../assets/img/faces/profile.jpg";
-import { getServicesByOrganization } from '../../actions/service';
-import { FormLabel } from "@material-ui/core";
+import {getServicesByOrganization} from '../../actions/service';
+import {FormLabel} from "@material-ui/core";
 
 const override = css`
     display: block;
@@ -34,7 +32,7 @@ const override = css`
 class ServicesList extends React.Component{
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       data: [],
       imageLoadError: true
     }
@@ -48,7 +46,7 @@ class ServicesList extends React.Component{
     this.props.getServicesByOrganization()
   }
   render() {
-    const { 
+    const {
       classes,
     } = this.props;
 
@@ -78,22 +76,22 @@ class ServicesList extends React.Component{
               <GridItem xs={12} sm={12} md={3}>
                 <Card product >
                   {/* <CardHeader image className={classes.cardHeaderHover}>
-                   
-                      <img 
+
+                      <img
                         alt=''
-                        src={service.image ? service.image.fileUrl : null} 
-                        onError={e => { 
-                          if(self.state.imageLoadError) { 
+                        src={service.image ? service.image.fileUrl : null}
+                        onError={e => {
+                          if(self.state.imageLoadError) {
                             self.setState({
                                 imageLoadError: false
                             });
                             e.target.src = priceImage1;
-                          
-                          }   
+
+                          }
                           this.setState({imageLoadError: true})
                         }}
                       />
-                   
+
                   </CardHeader> */}
                   <CardBody>
                     <div className={classes.cardHoverUnder}>
@@ -149,7 +147,6 @@ class ServicesList extends React.Component{
         </GridContainer>
       )
     }
-    let self = this;
     return (
       <div>
         <GridContainer>

@@ -7,7 +7,7 @@ export const restApiResponseCodes = {
 };
 
 // API
-const email_template = 'http://54.252.134.87:8999/api';
+const email_template = 'http://13.238.116.171:8080/api';
 
 // Email Templates
 export const eTemplateUrl = '/email-templates';
