@@ -6,7 +6,6 @@
     "@material-ui/core": "^1.4.0",
     "@material-ui/icons": "^1.1.0",
     "aws-amplify": "^1.1.6",
-    "aws-amplify-react": "^2.0.7",
     "axios": "^0.18.0",
     "contentful": "^6.1.1",
     "e": "0.0.4",
