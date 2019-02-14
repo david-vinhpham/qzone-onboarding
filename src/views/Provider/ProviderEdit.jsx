@@ -330,7 +330,7 @@ class ProviderEdit extends React.Component{
               </Button>
             </CardFooter>
           </Card>
-  )}
+        )}
       />
     
 		)

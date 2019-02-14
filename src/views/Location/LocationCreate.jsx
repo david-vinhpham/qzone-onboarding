@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Geocode from 'react-geocode';
 
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
@@ -13,6 +14,7 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import { createLocation } from '../../actions/location';
 import LocationForm from "./LocationForm";
+import { GEO_CODING_KEY } from '../../config/config'
 
 const LocationSchema = Yup.object().shape({
     city: Yup.string()
@@ -33,6 +35,9 @@ class LocationCreate extends React.Component {
         };
         this.doubleClick = this.doubleClick.bind(this);
 
+        Geocode.setApiKey(GEO_CODING_KEY);
+        Geocode.enableDebug();
+ 
     }
 
 
@@ -43,19 +48,23 @@ class LocationCreate extends React.Component {
 
    
     handleLocation(values) {
-        this.props.createLocation(values, this.props.history)
+        Geocode.fromAddress(values.streetAddress + values.city + values.country + values.postCode).then(
+            response => {
+              const { lat, lng } = response.results[0].geometry.location;
+              console.log("Geo location------",lat, lng);
+              values.coordinates = {};
+              values.coordinates.latitude = lat;
+              values.coordinates.longitude = lng;
+              console.log("values---", values)
+              this.props.createLocation(values, this.props.history)
+            },
+            error => {
+              console.error(error);
+            }
+          );
+        
     }
-    // componentDidMount() {
-    //     Geocode.fromAddress("Eiffel Tower").then(
-    //         response => {
-    //           const { lat, lng } = response.results[0].geometry.location;
-    //           console.log(lat, lng);
-    //         },
-    //         error => {
-    //           console.error(error);
-    //         }
-    //       );
-    // }
+    
     render() {
         const { classes } = this.props;
         return (
@@ -85,7 +94,6 @@ class LocationCreate extends React.Component {
                         <LocationForm
                             {...props}
                             locationInfo={this.state}
-                            change={this.change}
                             onDoubleClick={this.doubleClick}
                             classes={this.props.classes}
                             buttonName="Create Address"

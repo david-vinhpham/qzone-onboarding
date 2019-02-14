@@ -20,3 +20,5 @@ export const URL = {
     PROVIDER: 'providers'
 }
 export const GOOGLE_ID = '1075505092107-j8821j05r48pco773m0mqb16g1po5gtj.apps.googleusercontent.com'
+
+export const GEO_CODING_KEY = 'AIzaSyCM4fZfA-m2F6ekcl4IyN77YZJlAdydxlc'
