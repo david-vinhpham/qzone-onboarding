@@ -51,7 +51,7 @@ class LoginPage extends React.Component {
     if (!ga) createScript();
   }
 
-   
+
 
   verifyEmail(value) {
     var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -100,16 +100,16 @@ class LoginPage extends React.Component {
         break;
     }
   }
-  
+
   render() {
     const { classes, userLoading } = this.props;
     return (
-      
+
        <div className={classes.content}>
           <div className={classes.container}>
             <GridContainer justify="center">
               <GridItem xs={12} sm={6} md={4}>
-                {userLoading === true ? 
+                {userLoading === true ?
                 (
                   < ClipLoader
                     className={override}
@@ -118,7 +118,7 @@ class LoginPage extends React.Component {
                     color={'#123abc'}
                     loading={userLoading}
                   />
-                )  
+                )
                 :
                   (
                   <form>
@@ -131,7 +131,7 @@ class LoginPage extends React.Component {
                         <div className={classes.socialLine}>
                           <Button
                             justIcon
-                            href="https://www.twitter.com"
+                            href=""
                             target="_blank"
                             color="transparent"
                           >
@@ -139,7 +139,7 @@ class LoginPage extends React.Component {
                           </Button>
                           <Button
                             justIcon
-                            href="https://www.facebook.com"
+                            href=""
                             target="_blank"
                             color="transparent"
                           >
@@ -166,7 +166,7 @@ class LoginPage extends React.Component {
                             fullWidth: true
                           }}
                           inputProps={{
-                            
+
                             type: "email",
                             endAdornment: (
                               <InputAdornment position="end">
@@ -186,7 +186,7 @@ class LoginPage extends React.Component {
                             fullWidth: true
                           }}
                           inputProps={{
-                            
+
                             type: "password",
                             endAdornment: (
                               <InputAdornment position="end">
@@ -216,13 +216,13 @@ class LoginPage extends React.Component {
                   </form>
                   )
               }
-                
+
               </GridItem>
             </GridContainer>
           </div>
         </div>
       );
-  } 
+  }
 }
 
 LoginPage.propTypes = {
