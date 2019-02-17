@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Auth } from 'aws-amplify';
-import { API_ROOT, URL } from '../config/config'; 
+import { API_ROOT, URL } from '../config/config';
 import { auth } from '../constants/Auth.constants';
 
 const client_id = '3ov1blo2eji4acnqfcv88tcidn'
@@ -8,8 +8,8 @@ const client_id = '3ov1blo2eji4acnqfcv88tcidn'
 export const authGetToken = () => {
   return (dispatch, getState) => {
     const promise = new Promise((resolve, reject) => {
-      var username = localStorage.getItem('username');
-      var token = localStorage.getItem('CognitoIdentityServiceProvider.'+ client_id +'.'+ username +'.idToken');
+      var userSub = localStorage.getItem('userSub');
+      var token = localStorage.getItem('CognitoIdentityServiceProvider.'+ client_id +'.'+ userSub +'.idToken');
         console.log("token---------", token);
         if(token) {
           resolve(token)
@@ -48,8 +48,19 @@ export function register(values) {
       username: values.registerEmail,
       password: values.registerPassword,
       attributes: {
-        email: values.registerEmail
+        'email': values.registerEmail,
+        'custom:user_type': 'BUSINESS_ADMIN',
       },
+      /*UserAttributes: [
+        {
+          Name: 'email',
+          Value: values.registerEmail
+        },
+        {
+          Name: 'custom:user_type',
+          Value: 'BUSINESS_ADMIN'
+        }
+      ],*/
       validationData: []
     })
       .then(json => {
@@ -57,7 +68,7 @@ export function register(values) {
         if (json) {
           localStorage.setItem('username', json.username);
           dispatch(registerUserSuccess(json));
-          
+
         } else {
           dispatch(registerUserFailure("Topology Error"))
         }
@@ -68,6 +79,7 @@ export function register(values) {
 }
 
 export function registerUser(values) {
+  console.log('registerUser');
   return (dispatch) => {
     if (values.registrationType === 'Organization') {
       //Call organization api
@@ -103,7 +115,8 @@ export function loginUser(values, history) {
       .then(json => {
         console.log("json-------", json);
         if (json) {
-          localStorage.setItem('username', json.username);
+          localStorage.setItem('userSub', json.username);
+          localStorage.setItem('loginEmail', values.loginEmail);
           fetch(API_ROOT + URL.LOGIN + '/' + json.username, {
             method: 'GET',
             headers: {
@@ -144,14 +157,14 @@ export function getUser() {
 export function registerUserSuccess(user) {
   return {
       type: auth.REGISTER_USER_SUCCESS,
-      payload: {user} 
+      payload: {user}
   };
 }
 
 export function registerUserFailure(error) {
   return {
       type: auth.REGISTER_USER_FAILURE,
-      payload: {error} 
+      payload: {error}
   };
 }
 
@@ -160,18 +173,18 @@ export function verifyUserCode(user, email, code, history) {
     dispatch(verifyUser())
     Auth.confirmSignUp(email, code, {
       // Optional. Force user confirmation irrespective of existing alias. By default set to True.
-      forceAliasCreation: true    
+      forceAliasCreation: true
   })
       .then(json => {
         console.log("json-------")
         if(json) {
-            dispatch(verifyUserSuccess(json)); 
+            dispatch(verifyUserSuccess(json));
             history.push('/registerorganization');
         } else {
             dispatch(verifyUserFailure("Topology Error"))
         }
         //return json;
-      })  
+      })
       .catch(err => dispatch(verifyUserFailure(err)))
   };
 }
@@ -185,18 +198,19 @@ export function verifyUser() {
 export function verifyUserSuccess(user) {
   return {
       type: auth.VERIFY_USER_SUCCESS,
-      payload: {user} 
+      payload: {user}
   };
 }
 
 export function verifyUserFailure(error) {
   return {
       type: auth.VERIFY_USER_FAILURE,
-      payload: {error} 
+      payload: {error}
   };
 }
 
 export function verifyResendUser(values, callback) {
+  console.log('verifyResendUser');
   axios.post(`${API_ROOT}/resendEmailConfirm`,values)
     .then(
       response => {

@@ -2,7 +2,7 @@ import {organization} from '../constants/Organization.constants';
 import {API_ROOT, URL} from '../config/config';
 
 export const editOrganization = (values, history) => {
-    console('editOrganization');
+    console.log('editOrganization');
     return (dispatch) => {
         dispatch(editOrganizationLoading())
         fetch(API_ROOT + URL.ORGANIZATIONS, {
