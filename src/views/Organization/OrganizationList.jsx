@@ -96,7 +96,7 @@ class OrganizationList extends React.Component {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Link to={`/oganizations/edit/${organization.id}`}>
+                        <Link to={`/oganization/edit/${organization.id}`}>
                           <Button color="success" simple justIcon >
                             <Edit className={classes.underChartIcons} />
                           </Button>
@@ -154,7 +154,7 @@ class OrganizationList extends React.Component {
                     </Button>
                   </div>
                 </div>
-                <Link to={`/oganizations/create`}>
+                <Link to={`/oganization/create`}>
                   <Button size="sm" className={classes.buttonDisplay}>
                     New Organization
                   </Button>
