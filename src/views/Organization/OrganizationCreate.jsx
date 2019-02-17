@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel, MenuItem, Select, Grid, FormControlLabel, Switch, FormControl } from "@material-ui/core";
+import { FormLabel, MenuItem, Select, FormControlLabel, Switch, FormControl } from "@material-ui/core";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { Formik, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -17,23 +17,18 @@ import CardText from "components/Card/CardText.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 
 import { fetchBusinessCategory, createOrganization, getOrganizationByAdmin } from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-
-const userDetail = JSON.parse(localStorage.getItem('user'));
 
 const OrganizationCreateSchema = Yup.object().shape({
   name: Yup.string()
           .required("This is required Field"),
   businessCategoryId: Yup.string().required("Please select category"),
   telephone: Yup.string().required("Please enter a valid phone Number"),
-  businessAdmin: Yup.object()
-                  .default(null)
-                  .shape({
-                      givenName: Yup.string().required("Please enter a valid name")
-                  })
 })
 
 
@@ -44,8 +39,9 @@ class OrganizationCreate extends React.Component {
       businessAdmin: {
         cognitoToken: localStorage.getItem('CognitoIdentityServiceProvider.3ov1blo2eji4acnqfcv88tcidn.' + (localStorage.getItem('username')) + '.idToken'),
         email: this.props.email ? this.props.email : '',
-        userSub: localStorage.getItem('username'),
-      }
+        userSub: localStorage.getItem('userSub'),
+      },
+      businessAdminEmail: localStorage.getItem('loginEmail'),
     };
   }
 
@@ -54,16 +50,10 @@ class OrganizationCreate extends React.Component {
   }
 
   submit = (values) => {
-    // this is the case of 1st time registering the organization along with admin
-    if (userDetail.success === false) {
-      this.props.createOrganization(values, this.props.history);
-    } else {
-      this.setState({
-        businessAdminId: userDetail.object.id
-      })
-    }
+    values.businessAdminEmail = localStorage.getItem('loginEmail');
+    values.userSub = localStorage.getItem('userSub');
+    this.props.createOrganization(values, this.props.history);
   }
-
   render() {
     const { classes, businessCategory, userDetails } = this.props;
     let categoryOptions = [];
@@ -93,38 +83,38 @@ class OrganizationCreate extends React.Component {
               serviceHours: [
                 {
                   "day": "Monday",
-                  "endTime": "",
-                  "startTime": ""
+                  "endTime": "18:00",
+                  "startTime": "09:00"
                 },
                 {
                   "day": "Tuesday",
-                  "endTime": "",
-                  "startTime": ""
+                  "endTime": "18:00",
+                  "startTime": "09:00"
                 },
                 {
                   "day": "Wednesday",
-                  "endTime": "",
-                  "startTime": ""
+                  "endTime": "18:00",
+                  "startTime": "09:00"
                 },
                 {
                   "day": "Thursday",
-                  "endTime": "",
-                  "startTime": ""
+                  "endTime": "18:00",
+                  "startTime": "09:00"
                 },
                 {
                   "day": "Friday",
-                  "endTime": "",
-                  "startTime": ""
+                  "endTime": "18:00",
+                  "startTime": "09:00"
                 },
                 {
                   "day": "Saturday",
-                  "endTime": "",
-                  "startTime": ""
+                  "endTime": "00:00",
+                  "startTime": "00:00"
                 },
                 {
                   "day": "Sunday",
-                  "endTime": "",
-                  "startTime": ""
+                  "endTime": "00:00",
+                  "startTime": "00:00"
                 }
               ],
             },
@@ -137,23 +127,8 @@ class OrganizationCreate extends React.Component {
             },
             website: '',
             queueModel: '',
-            businessAdmin: {
-              address: {
-                city: "",
-                country: "",
-                district: "",
-                postCode: "",
-                state: "",
-                streetAddress: ""
-              },
-              cognitoToken: this.state.businessAdmin.cognitoToken,
-              email: "",
-              familyName: "",
-              givenName: "",
-              telephone: "",
-              userStatus: "CONFIRMED",
-              userSub: this.state.businessAdmin.userSub
-            },
+            businessAdminEmail: '',
+            userSub: ''
           }}
           validationSchema={OrganizationCreateSchema}
           enableReinitialize={true}
@@ -165,6 +140,7 @@ class OrganizationCreate extends React.Component {
             touched,
             handleChange,
             handleSubmit,
+            setFieldValue
           }) => (
               <Card>
                 <CardHeader color="rose" text>
@@ -545,20 +521,19 @@ class OrganizationCreate extends React.Component {
                                             </FormLabel>
                               </GridItem>
                               <GridItem >
-                                <CustomInput
+                                <PhoneInput
                                   id="telephone"
-                                  inputProps={{
-                                    placeholder: "Phone Number",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.telephone}
+                                  placeholder="Enter phone number"
+                                  country="AU"
+                                  name={'telephone'}
+                                  value={values['telephone']}
+                                  onChange={e => setFieldValue('telephone', e)}
                                 />
                                 {errors.telephone && touched.telephone ? (
                                   <div style={{ color: "red" }}>{errors.telephone}</div>
                                 ) : null}
                               </GridItem>
-                            
+
                               <GridItem>
                                 <FormLabel className={classes.labelHorizontal}>
                                   Website
@@ -575,7 +550,7 @@ class OrganizationCreate extends React.Component {
                                   value={values.website}
                                 />
                               </GridItem>
-                            
+
                               <GridItem>
                                 <FormLabel className={classes.labelHorizontal}>
                                   Queue Model
@@ -594,185 +569,6 @@ class OrganizationCreate extends React.Component {
                               </GridItem>
                             </GridContainer>
                       },
-                      {
-                        title: "Admin Details",
-                        content:
-                        <Grid>
-                            <GridContainer>
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                  Name
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem >
-                                <CustomInput
-                                  id="businessAdmin.givenName"
-                                  inputProps={{
-                                    placeholder: "Name",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.givenName}
-                                />
-                                <ErrorMessage
-                                  component="div"
-                                  name="businessAdmin.givenName"
-                                  className="input-feedback"
-                                >
-                                {msg => <div style={{ color: "red" }}>{msg}</div>}
-                                </ErrorMessage>
-                              </GridItem>
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                  Last Name
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem >
-                                <CustomInput
-                                  id="businessAdmin.familyName"
-                                  inputProps={{
-                                    placeholder: "Last Name",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.familyName}
-                                />
-                              </GridItem>
-                            
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                 Email
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem >
-                                <CustomInput
-                                  id="businessAdmin.email"
-                                  inputProps={{
-                                    placeholder: "Email",
-                                    type: "email"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.email}
-                                />
-                              </GridItem>
-                            
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                 Phone
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem >
-                                <CustomInput
-                                  id="businessAdmin.telephone"
-                                  inputProps={{
-                                    placeholder: "Phone",
-                                    type: "number"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.telephone}
-                                />
-                              </GridItem>
-                            </GridContainer>
-                            <GridContainer>
-                              <GridItem >
-                                <FormLabel className={classes.labelHorizontal}>
-                                 City
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem xs={12} sm={2}>
-                              <CustomInput
-                                  id="businessAdmin.address.city"
-                                  inputProps={{
-                                    placeholder: "City",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.address.city}
-                                />
-                              </GridItem>
-                              <GridItem >
-                                <FormLabel className={classes.labelHorizontal}>
-                                 Country
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem xs={12} sm={2}>
-                              <CustomInput
-                                  id="businessAdmin.address.country"
-                                  inputProps={{
-                                    placeholder: "Country",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.address.country}
-                                />
-                              </GridItem>
-                              <GridItem >
-                                <FormLabel className={classes.labelHorizontal}>
-                                 District
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem xs={12} sm={2}>
-                              <CustomInput
-                                  id="businessAdmin.address.district"
-                                  inputProps={{
-                                    placeholder: "District",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.address.district}
-                                />
-                              </GridItem>
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                 Postal Code
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem>
-                              <CustomInput
-                                  id="businessAdmin.address.postCode"
-                                  inputProps={{
-                                    placeholder: "Postal Code",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.address.postCode}
-                                />
-                              </GridItem>
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                  State
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem>
-                              <CustomInput
-                                  id="businessAdmin.address.state"
-                                  inputProps={{
-                                    placeholder: "State",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.address.state}
-                                />
-                              </GridItem>
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                  Street Address
-                                </FormLabel>
-                              </GridItem>
-                              <GridItem>
-                              <CustomInput
-                                  id="businessAdmin.address.streetAddress"
-                                  inputProps={{
-                                    placeholder: "Street Address",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.businessAdmin.address.streetAddress}
-                                />
-                              </GridItem>
-                            </GridContainer>
-                          </Grid>
-                      }
                     ]}
                   />
                 </CardBody>
@@ -787,10 +583,10 @@ class OrganizationCreate extends React.Component {
               </Card>
             )}
         />
-        
+
                     </GridItem>
-                
-             
+
+
     )
   }
 }

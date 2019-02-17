@@ -18,7 +18,7 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import loginPageStyle from "../../assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import { loginUser } from '../../actions/auth';
-import { createScript, signIn } from '../../actions/googleAuth';
+//import { createScript, signIn } from '../../actions/googleAuth';
 
 const override = css`
     display: block;
@@ -47,8 +47,8 @@ class LoginPage extends React.Component {
       }.bind(this),
       700
     );
-    const ga = window.gapi && window.gapi.auth2 ? window.gapi.auth2.getAuthInstance() : null;
-    if (!ga) createScript();
+    //const ga = window.gapi && window.gapi.auth2 ? window.gapi.auth2.getAuthInstance() : null;
+    //if (!ga) createScript();
   }
 
 
@@ -147,10 +147,9 @@ class LoginPage extends React.Component {
                           </Button>
                           <Button
                             justIcon
-                            //href="https://www.plus.google.com"
+                            href=""
                             target="_blank"
                             color="transparent"
-                            onClick={() => signIn(this.props.history)}
                           >
                             <i className={"fab fa-google-plus-g"} />
                           </Button>

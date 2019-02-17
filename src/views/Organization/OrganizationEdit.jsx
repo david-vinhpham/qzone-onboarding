@@ -40,10 +40,8 @@ const OrganizationEditSchema = Yup.object().shape({
 class OrganizationEdit extends React.Component {
   constructor(props) {
     super(props);
-    const userDetail = JSON.parse(localStorage.getItem('user'));
     this.state = {
       name: this.props.userDetails ? this.props.userDetails.registerOrganizationName : '',
-      businessAdminId: userDetail ? (userDetail.object ? userDetail.object.id : null) : null,
       data: []
     };
   }
@@ -54,17 +52,18 @@ class OrganizationEdit extends React.Component {
   }
 
   componentDidMount() {
-    const userDetail = JSON.parse(localStorage.getItem('user'));
-    console.log("user details------", userDetail)
-    if (userDetail) {
-      this.props.getOrganizationByAdmin(userDetail.object.id);
+    const adminId = localStorage.getItem('userSub');
+    console.log("userSub------", adminId)
+    if (adminId) {
+      this.props.getOrganizationByAdmin(adminId);
     }
     this.props.getBusinessCategory()
   }
 
   submit = (values) => {
-    values.businessAdminId = this.state.businessAdminId;
     // this is the case of 1st time registering the organization along with admin
+    values.businessAdminEmail = localStorage.getItem('loginEmail');
+    values.userSub = localStorage.getItem('userSub');
     this.props.editOrganization(values, this.props.history);
   }
 
@@ -84,14 +83,14 @@ class OrganizationEdit extends React.Component {
     if (businessCategory && businessCategory.objects) {
       categoryOptions = businessCategory.objects;
     }
-    const userDetail = JSON.parse(localStorage.getItem('user'));
+    const userSub = localStorage.getItem('userSub');
 
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     return (
 
       (<GridContainer>
-        {userDetail === null ?
+        {userSub === null ?
           <SweetAlert
             info
             title={<span> <small>Please create an organization before editing.</small></span>}
@@ -177,6 +176,8 @@ class OrganizationEdit extends React.Component {
                           logo: data.logo,
                           website: data.website,
                           queueModel: data.queueModel,
+                          businessAdminEmail:'',
+                          userSub: ''
                         }}
                         validationSchema={OrganizationEditSchema}
                         enableReinitialize={true}

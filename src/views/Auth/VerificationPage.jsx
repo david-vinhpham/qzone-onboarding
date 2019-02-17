@@ -24,7 +24,7 @@ import ResendCodeButton from './ResendCodeButton';
 class VerificationPage extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { code: '', errorCode: false, countDownResendCode: 30 };
+    this.state = { code: '', errorCode: false, countDownResendCode: 120 };
   }
 
   countDownResendCodeId = null;
@@ -39,7 +39,7 @@ class VerificationPage extends React.PureComponent {
         this.startCountDown();
       } else {
         this.stopCountDown();
-        this.setState({ countDownResendCode: 30 });
+        this.setState({ countDownResendCode: 120 });
       }
     }
   }
@@ -70,7 +70,7 @@ class VerificationPage extends React.PureComponent {
   }
 
   cbAfterResend = () => {
-    this.setState({ errorCode: false, countDownResendCode: 30 }, this.startCountDown);
+    this.setState({ errorCode: false, countDownResendCode: 120 }, this.startCountDown);
   }
 
   render() {
@@ -144,7 +144,7 @@ const mapStateToProps = state => {
       user: state.user.userDetails.userSub
     }
   }
-  
+
 
 const mapDispatchToProps = (dispatch) => {
     return {
