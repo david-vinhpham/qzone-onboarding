@@ -107,7 +107,7 @@ export function registerUser(values) {
 }
 
 export function loginUser(values, history) {
-  console.log("values-------", values);
+  console.log("loginUser: ", values);
   return (dispatch) => {
     dispatch(storeEmail(values.loginEmail))
     dispatch(getUser())
@@ -128,13 +128,8 @@ export function loginUser(values, history) {
           .then(json => {
             dispatch(registerUserSuccess(json));
             localStorage.setItem('user', JSON.stringify(json));
-            if(json.success === true) {
-              console.log("User exists. Fetch the user details and store in local storage");
-              history.push('/organization/edit');
-            } else {
-              console.log("User logins for the 1st time. Navigate to Organization create to add the organization.")
-              history.push('/organization/create')
-            }
+            console.log("loginUser succeeded -> dashboard");
+            history.push('/dashboard');
           })
           .catch(err => {
             dispatch(registerUserFailure(err))

@@ -54,9 +54,8 @@ export const getOrganizationByAdmin = (adminId) => {
             }
         })
         .then(res => res.json())
-        .then(data => {
-            dispatch(getOrganizationByAdminSuccess(data))
-            localStorage.setItem('organizationId', data.object.id);
+        .then(json => {
+            dispatch(getOrganizationByAdminSuccess(json.objects))
         })
         .catch(err => {
             dispatch(getOrganizationByAdminFailure(err))
@@ -70,10 +69,10 @@ export const getOrganizationByAdminLoading = () => {
     }
 }
 
-export const getOrganizationByAdminSuccess = (data) => {
+export const getOrganizationByAdminSuccess = (organizations) => {
     return {
         type: organization.ORGANIZATION_BY_ADMIN_SUCCESS,
-        payload: {data}
+        payload: {organizations}
     }
 }
 

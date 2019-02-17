@@ -12,6 +12,7 @@ import Dashboard from "../views/Dashboard/Dashboard.jsx";
 import Administration from "../views/Administration/Administration.jsx";
 import OrganizationCreate from "../views/Organization/OrganizationCreate";
 import OrganizationEdit from "../views/Organization/OrganizationEdit.jsx";
+import OrganizationList from "../views/Organization/OrganizationList.jsx";
 import Calendar from "../views/Calendar/Calendar.jsx";
 import CustomerFlow from "../views/CustomerFlow/CustomerFlow.jsx";
 
@@ -106,6 +107,18 @@ export const otherRoutes=[
     name: "Create Organization",
     icon: BusinessCenter,
     component: OrganizationCreate
+  },
+  {
+    path: "/organization/edit/:id",
+    name: "Organization Edit",
+    icon: BusinessCenter,
+    component: OrganizationCreate
+  },
+  {
+    path: "/organization/list",
+    name: "Organization List",
+    icon: BusinessCenter,
+    component: OrganizationList
   },
   {
     path: "/services/list",

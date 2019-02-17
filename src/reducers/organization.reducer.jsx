@@ -11,7 +11,7 @@ const initialState = {
     createOrganizationError: null,
     createOrganizationLoading: false,
 
-    organizationByAdmin: [],
+    organizations: [],
     organizationByAdminError: null,
     organizationByAdminLoading: false,
 
@@ -28,7 +28,7 @@ const reducer = (state = initialState, action) => {
             return { ...state, businessCategory: action.payload.data, businessCategoryLoading: false };
         case organization.FETCH_BUSINESS_FAILURE:
             return { ...state, businessCategoryError: action.payload.err, businessCategoryLoading: false}
-        
+
         case organization.CREATE_ORGANIZATION_LOADING:
             return { ...state,  createOrganizationLoading: true};
         case organization.CREATE_ORGANIZATION_SUCCESS:
@@ -36,18 +36,18 @@ const reducer = (state = initialState, action) => {
         case organization.CREATE_ORGANIZATION_FAILURE:
             return { ...state, createOrganizationError: action.payload.error, createOrganizationLoading: false};
 
-        case organization.ORGANIZATION_BY_ADMIN_LOADING: 
+        case organization.ORGANIZATION_BY_ADMIN_LOADING:
             return { ...state, organizationByAdminLoading:true};
         case organization.ORGANIZATION_BY_ADMIN_SUCCESS:
-            return { ...state, organizationByAdmin: action.payload.data, organizationByAdminLoading: false};
+            return { ...state, organizations: action.payload.organizations, organizationByAdminLoading: false};
         case organization.ORGANIZATION_BY_ADMIN_FAILURE:
             return { ...state, organizationByAdminError: action.payload.error, organizationByAdminLoading: false};
 
-        case organization.EDIT_ORGANIZATION_LOADING: 
+        case organization.EDIT_ORGANIZATION_LOADING:
             return { ...state, editOrganizationLoading: true};
-        case organization.EDIT_ORGANIZATION_SUCCESS: 
+        case organization.EDIT_ORGANIZATION_SUCCESS:
             return {...state, editOrganization: action.payload, editOrganizationLoading: false};
-        case organization.EDIT_ORGANIZATION_FAILURE: 
+        case organization.EDIT_ORGANIZATION_FAILURE:
             return { ...state, editOrganizationError: action.payload, editOrganizationLoading: false};
 
         default:
