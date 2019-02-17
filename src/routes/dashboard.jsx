@@ -112,7 +112,7 @@ export const otherRoutes=[
     path: "/organization/edit/:id",
     name: "Organization Edit",
     icon: BusinessCenter,
-    component: OrganizationCreate
+    component: OrganizationEdit
   },
   {
     path: "/organization/list",
