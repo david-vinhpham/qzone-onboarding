@@ -575,10 +575,12 @@ class OrganizationCreate extends React.Component {
                 <CardFooter className={classes.justifyContentCenter}>
                   <Button color="rose" onClick={handleSubmit}>
                     Create
-                              </Button>
-                  <Button color="rose" >
-                    Cancel
-                              </Button>
+                  </Button>
+                  <Link to={`/organization/list`}>
+                    <Button color="rose" >
+                      Close
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             )}

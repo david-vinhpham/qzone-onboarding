@@ -50,38 +50,6 @@ class LocationForm extends React.Component {
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            District
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                        {locationInfo.isEditMode === 'district'
-                            ?
-                            <CustomInput
-                                id="district"
-                                value={values.district }
-                                formControlProps={{
-                                    fullWidth: true
-                                }}
-                                inputProps={{
-                                    placeholder: "District",
-                                    type: "text"
-                                }}
-                                onChange={handleChange}
-                            />
-                            :
-                            <InputLabel
-                                className={classes.labelLeftHorizontal}
-                                onClick={() => this.props.onDoubleClick('district')}
-                            >
-                                {values.district || 'District'}
-                            </InputLabel>
-                        }
-                    </GridItem>
-                </GridContainer>
-                
-                <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel className={classes.labelHorizontal}>
                             City
                         </FormLabel>
                     </GridItem>
@@ -112,7 +80,7 @@ class LocationForm extends React.Component {
                         <div style={{ color: "red" }}>{errors.city}</div>
                     ) : null}
                     </GridItem>
-                    
+
                 </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
@@ -125,7 +93,7 @@ class LocationForm extends React.Component {
                             ?
                             <CustomInput
                                 id="country"
-                                
+
                                 value={values.country}
                                 formControlProps={{
                                     fullWidth: true
@@ -148,7 +116,7 @@ class LocationForm extends React.Component {
                         <div style={{ color: "red" }}>{errors.country}</div>
                     ) : null}
                     </GridItem>
-                    
+
                 </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
@@ -161,7 +129,7 @@ class LocationForm extends React.Component {
                             ?
                             <CustomInput
                                 id="postCode"
-                                
+
                                 value={values.postCode}
                                 formControlProps={{
                                     fullWidth: true
@@ -184,7 +152,7 @@ class LocationForm extends React.Component {
                         <div style={{ color: "red" }}>{errors.postCode}</div>
                     ) : null}
                     </GridItem>
-                    
+
                 </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
@@ -219,19 +187,19 @@ class LocationForm extends React.Component {
                         <div style={{ color: "red" }}>{errors.state}</div>
                     ) : null}
                     </GridItem>
-                    
+
                 </GridContainer>
-                
+
                 <GridContainer style={{justifyContent: 'center'}}>
                 <Button color="rose" onClick={handleSubmit}>
                         {this.props.buttonName}
                     </Button>
                     <Link to={`/location/list`}>
                     <Button color="rose" >
-                        Exit
+                        Close
                     </Button>
                     </Link>
-                   
+
                 </GridContainer>
             </form>
         )

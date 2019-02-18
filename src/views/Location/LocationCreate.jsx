@@ -25,19 +25,19 @@ const LocationSchema = Yup.object().shape({
                 .required("Please enter a valid Postal code"),
     state: Yup.string()
             .required("Please enter a valid State")
-    
+
 })
 class LocationCreate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+
         };
         this.doubleClick = this.doubleClick.bind(this);
 
         Geocode.setApiKey(GEO_CODING_KEY);
         Geocode.enableDebug();
- 
+
     }
 
 
@@ -46,7 +46,7 @@ class LocationCreate extends React.Component {
         this.setState({ isEditMode: fieldName });
     }
 
-   
+
     handleLocation(values) {
         Geocode.fromAddress(values.streetAddress + values.city + values.country + values.postCode).then(
             response => {
@@ -62,20 +62,20 @@ class LocationCreate extends React.Component {
               console.error(error);
             }
           );
-        
+
     }
-    
+
     render() {
         const { classes } = this.props;
         return (
             <Card>
                 <CardHeader color="rose" text>
                     <CardText color="rose">
-                        <h4 className={classes.cardTitle}>Create new Address</h4>
+                        <h4 className={classes.cardTitle}>Create a new Address</h4>
                     </CardText>
                 </CardHeader>
                 <CardBody>
-                    <Formik 
+                    <Formik
                     initialValues={{
                         streetAddress: "",
                         district: "",
@@ -101,7 +101,7 @@ class LocationCreate extends React.Component {
                     }
                     />
                 </CardBody>
-                
+
             </Card>
         )
     }

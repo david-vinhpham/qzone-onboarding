@@ -588,9 +588,11 @@ class OrganizationEdit extends React.Component {
                                 <Button color="rose" onClick={handleSubmit}>
                                   Update
                               </Button>
-                                <Button color="rose" >
-                                  Cancel
-                              </Button>
+                                <Link to={`/organization/list`}>
+                                  <Button color="rose" >
+                                    Close
+                                  </Button>
+                                </Link>
                               </CardFooter>
                             </Card>
                           )}

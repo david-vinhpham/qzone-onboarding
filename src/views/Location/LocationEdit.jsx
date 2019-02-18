@@ -25,7 +25,7 @@ const LocationSchema = Yup.object().shape({
                 .required("Please enter a valid Postal code"),
     state: Yup.string()
             .required("Please enter a valid State")
-    
+
 })
 
 class LocationEdit extends React.Component {
@@ -37,7 +37,7 @@ class LocationEdit extends React.Component {
         this.doubleClick = this.doubleClick.bind(this);
         Geocode.setApiKey(GEO_CODING_KEY);
         Geocode.enableDebug();
- 
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -70,7 +70,7 @@ class LocationEdit extends React.Component {
               console.error(error);
             }
           );
-        
+
     }
 
     render() {
@@ -79,16 +79,16 @@ class LocationEdit extends React.Component {
             <Card>
                 <CardHeader color="rose" text>
                     <CardText color="rose">
-                        <h4 className={classes.cardTitle}>Create new Address</h4>
+                        <h4 className={classes.cardTitle}>Update a Address</h4>
                     </CardText>
                 </CardHeader>
                 <CardBody>
-                    <Formik 
+                    <Formik
                     initialValues={{
                         id: this.state.data.id,
                         streetAddress: this.state.data.streetAddress,
-                        district: this.state.data.postCode,
-                        city: this.state.data.district,
+                        district: this.state.data.district,
+                        city: this.state.data.city,
                         country: this.state.data.country,
                         postCode: this.state.data.postCode,
                         state: this.state.data.state,
@@ -107,14 +107,14 @@ class LocationEdit extends React.Component {
                             change={this.change}
                             onDoubleClick={this.doubleClick}
                             classes={this.props.classes}
-                            buttonName="Edit Address"
+                            buttonName="Save"
                         />
                     }
                     />
                 </CardBody>
-                
+
             </Card>
-        
+
             )
     }
 }
