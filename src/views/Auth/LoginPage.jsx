@@ -206,7 +206,7 @@ class LoginPage extends React.Component {
                         <div>
                           <Link to={`/register`}>
                             <Button color="rose" simple size="lg" block>
-                              Register as new User
+                              Register as Business User
                         </Button>
                           </Link>
                         </div>

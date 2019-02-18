@@ -26,6 +26,8 @@ class RegisterPage extends React.Component {
       cardAnimaton: "cardHidden",
       registerOrganizationName: "",
       registerOrganizationNameState: "",
+      registerGivenName: "",
+      registerGivenNameState: "",
       registerEmail: "",
       registerEmailState: "",
       registerPassword: "",
@@ -41,7 +43,7 @@ class RegisterPage extends React.Component {
     };
     this.change = this.change.bind(this);
   }
-  
+
   componentDidMount() {
     setTimeout(() => {
       this.setState({ cardAnimaton: '' });
@@ -74,25 +76,33 @@ class RegisterPage extends React.Component {
     if (this.state.registerEmailState === "") {
       this.setState({ registerEmailState: "error" });
     }
+    if (this.state.registerGivenName === "") {
+      this.setState({ registerGivenName: "error" });
+    }
     if (this.state.registerPasswordState === "") {
       this.setState({ registerPasswordState: "error" });
     }
-    if (this.state.registerOrganizationName === "") {
+    /*if (this.state.registerOrganizationName === "") {
       this.setState({ registerOrganizationNameState: "error" })
-    }
+    }*/
     if (this.state.registerConfirmPasswordState === "" || this.state.registerPassword !== this.state.registerConfirmPassword) {
       this.setState({ registerConfirmPasswordState: "error" });
     }
     if (this.state.registerCheckboxState === "" ) {
       this.setState({ registerCheckboxState: "error" });
     }
-    if (this.state.registrationType === "Organization" && this.state.registerEmailState === "success" && this.state.registerPasswordState === "success" && this.state.registerConfirmPasswordState === "success" && this.state.registerCheckboxState === "success" && this.state.registerOrganizationName === "success") {
+    /*if (this.state.registrationType === "Organization" && this.state.registerEmailState === "success"
+      && this.state.registerGivenNameState === "success"
+      && this.state.registerPasswordState === "success" && this.state.registerConfirmPasswordState === "success"
+      && this.state.registerCheckboxState === "success" && this.state.registerOrganizationName === "success") {
       //window.location = '/dashboard'
       this.setState({ loading: true }, () => {
         this.props.registerUser(this.state);
       });
-    }
-    if (this.state.registerEmailState === "success" && this.state.registerPasswordState === "success" && this.state.registerConfirmPasswordState === "success" && this.state.registerCheckboxState === "success") {
+    }*/
+    if (this.state.registerEmailState === "success" && this.state.registerPasswordState === "success"
+      && this.state.registerConfirmPasswordState === "success"
+      && this.state.registerConfirmPasswordState === "success" && this.state.registerCheckboxState === "success") {
       //window.location = '/dashboard'
       this.setState({ loading: true }, () => {
         this.props.registerUser(this.state);
@@ -105,7 +115,7 @@ class RegisterPage extends React.Component {
   }
 
   change(event, stateName, type, stateNameEqualTo, maxValue) {
-    
+
     switch (type) {
       case "email":
         if (this.verifyEmail(event.target.value)) {
@@ -167,31 +177,30 @@ class RegisterPage extends React.Component {
                   className={`${classes.cardHeader} ${classes.textCenter}`}
                   color="rose">
                   <h4 className={classes.cardTitle}>Register</h4>
-                  
+
                 </CardHeader>
 
                 <CardBody>
-                    {this.state.registrationType === 'Organization' &&
-                      (<CustomInput
-                        labelText="Organization Name"
-                        success={this.state.registerOrganizationNameState === "success"}
-                        error={this.state.registerOrganizationNameState === "error"}
-                        id="registerorganizationname"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <Email className={classes.inputAdornmentIcon} />
-                            </InputAdornment>
-                          )
-                        }}
-                        onChange= {event =>
-                            this.change(event, "registerOrganizationName")}
-                      />)}
-
+                  <CustomInput
+                    labelText="Given Name"
+                    success={this.state.registerEmailState === "success"}
+                    error={this.state.registerEmailState === "error"}
+                    id="givenName"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      placeholder: "Given Name",
+                      type: "text",
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Email className={classes.inputAdornmentIcon} />
+                        </InputAdornment>
+                      )
+                    }}
+                    onChange={ event =>
+                      this.change(event, "registerGivenName", "text")}
+                  />
                   <CustomInput
                     labelText="Email"
                     success={this.state.registerEmailState === "success"}
@@ -201,7 +210,7 @@ class RegisterPage extends React.Component {
                       fullWidth: true
                     }}
                     inputProps={{
-                      
+
                       type: "email",
                       endAdornment: (
                         <InputAdornment position="end">
@@ -221,7 +230,7 @@ class RegisterPage extends React.Component {
                       fullWidth: true
                     }}
                     inputProps={{
-                      
+
                       type: "password",
                       endAdornment: (
                         <InputAdornment position="end">
@@ -243,7 +252,7 @@ class RegisterPage extends React.Component {
                       fullWidth: true
                     }}
                     inputProps={{
-                      
+
                       type: "password",
                       endAdornment: (
                         <InputAdornment position="end">
@@ -295,19 +304,19 @@ class RegisterPage extends React.Component {
                     </Button>
                   </div>
 
-                    {this.state.registrationType === 'Customer' &&
+                    {/*this.state.registrationType === 'Customer' &&
                       (<div className={classes.center}>
                         <Button color="rose" simple size="lg" block onClick={this.registerAsClick.bind(this, 'Organization')}>
                            Or Register As Organization
                   </Button>
-                      </div>)}
+                      </div>)*/}
 
-                    {this.state.registrationType === 'Organization' &&
+                    {/*this.state.registrationType === 'Organization' &&
                       (<div className={classes.center}>
                         <Button color="rose" simple size="lg" block onClick={this.registerAsClick.bind(this, 'Customer')}>
                           Or Register As Customer
                     </Button>
-                      </div>)}
+                      </div>)*/}
                 </CardBody>
               </Card>
             </form>

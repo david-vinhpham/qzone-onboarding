@@ -50,6 +50,7 @@ export function register(values) {
       attributes: {
         'email': values.registerEmail,
         'custom:user_type': 'BUSINESS_ADMIN',
+        'given_name':values.registerGivenName,
       },
       /*UserAttributes: [
         {
@@ -81,28 +82,29 @@ export function register(values) {
 export function registerUser(values) {
   console.log('registerUser');
   return (dispatch) => {
-    if (values.registrationType === 'Organization') {
+    dispatch(register(values));
+    //if (values.registrationType === 'Organization') {
       //Call organization api
-      fetch(API_ROOT + URL.ORGANIZATION_NAME_VALIDATE + values.registerOrganizationName, {
-        method: 'GET',
-        headers: {
-          'Accept': '*/*',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => res.json())
-      .then(json => {
-        console.log("json-------", json)
-        if (json.object === 'VALID') {
-          dispatch(register(values));
-        } else {
-          alert("Already registered organization please login");
-        }
-      })
-      .catch(err => console.log("error", err))
-    }
-    else // for customer
-      dispatch(register(values));
+    //  fetch(API_ROOT + URL.ORGANIZATION_NAME_VALIDATE + values.registerOrganizationName, {
+    //    method: 'GET',
+     //   headers: {
+     //     'Accept': '*/*',
+    //      'Content-Type': 'application/json'
+    //    }
+    //  })
+     // .then(res => res.json())
+     // .then(json => {
+     //   console.log("json-------", json)
+    //    if (json.object === 'VALID') {
+    //      dispatch(register(values));
+     //   } else {
+     //     alert("Already registered organization please login");
+     //   }
+    //  })
+    //  .catch(err => console.log("error", err))
+   // }
+   // else // for customer
+   //   dispatch(register(values));
   }
 }
 
