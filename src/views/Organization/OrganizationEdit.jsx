@@ -20,6 +20,8 @@ import Accordion from "components/Accordion/Accordion.jsx";
 import {editOrganization, fetchBusinessCategory, fetchOrganization} from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 
 const OrganizationEditSchema = Yup.object().shape({
   name: Yup.string()
@@ -145,6 +147,7 @@ class OrganizationEdit extends React.Component {
                           touched,
                           handleChange,
                           handleSubmit,
+                          setFieldValue
                         }) => (
                             <Card>
                               <CardHeader color="rose" text>
@@ -527,14 +530,13 @@ class OrganizationEdit extends React.Component {
                                             </FormLabel>
                                             </GridItem>
                                             <GridItem >
-                                              <CustomInput
+                                              <PhoneInput
                                                 id="telephone"
-                                                inputProps={{
-                                                  placeholder: "Phone Number",
-                                                  type: "text"
-                                                }}
-                                                onChange={handleChange}
+                                                placeholder="Enter phone number"
+                                                country="AU"
+                                                name={'telephone'}
                                                 value={values.telephone}
+                                                onChange={e => setFieldValue('telephone', e)}
                                               />
                                               {errors.telephone && touched.telephone ? (
                                                         <div style={{ color: "red" }}>{errors.telephone}</div>
@@ -587,7 +589,7 @@ class OrganizationEdit extends React.Component {
                                   Update
                               </Button>
                                 <Button color="rose" >
-                                  Delete
+                                  Cancel
                               </Button>
                               </CardFooter>
                             </Card>

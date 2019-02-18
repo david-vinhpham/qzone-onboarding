@@ -577,7 +577,7 @@ class OrganizationCreate extends React.Component {
                     Create
                               </Button>
                   <Button color="rose" >
-                    Delete
+                    Cancel
                               </Button>
                 </CardFooter>
               </Card>
