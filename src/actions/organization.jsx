@@ -1,6 +1,31 @@
 import {organization} from '../constants/Organization.constants';
 import {API_ROOT, URL} from '../config/config';
 
+export const fetchOrganization = (id) => {
+  return (dispatch) => {
+    dispatch({ type: organization.FETCH_ORGANIZATION_FAILURE })
+    fetch(API_ROOT + URL.GET_ORGANIZATION + id ,{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch({
+          type: organization.FETCH_ORGANIZATION_SUCCESS,
+          payload: data.object
+        })
+      })
+      .catch(err => {
+        dispatch({
+          type: organization.FETCH_ORGANIZATION_FAILURE,
+          payload: err
+        })
+      })
+  }
+}
+
 export const editOrganization = (values, history) => {
     console.log('editOrganization');
     return (dispatch) => {
@@ -15,7 +40,7 @@ export const editOrganization = (values, history) => {
             .then(res => res.json())
             .then(data => {
                 dispatch(editOrganizationSuccess(data))
-                history.push('/organization/edit')
+                history.push('/organization/list')
             })
             .catch(err => {
                 dispatch(editOrganizationFailure(err))

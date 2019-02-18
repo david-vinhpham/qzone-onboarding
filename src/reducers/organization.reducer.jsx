@@ -11,13 +11,13 @@ const initialState = {
     createOrganizationError: null,
     createOrganizationLoading: false,
 
-    organizations: [],
+    getAllLocations: [],
     organizationByAdminError: null,
     organizationByAdminLoading: false,
 
-    editOrganization: [],
-    editOrganizationLoading: false,
-    editOrganizationError: null
+    getOrganization: [],
+    organizationLoading: false,
+    organizationError: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -39,16 +39,16 @@ const reducer = (state = initialState, action) => {
         case organization.ORGANIZATION_BY_ADMIN_LOADING:
             return { ...state, organizationByAdminLoading:true};
         case organization.ORGANIZATION_BY_ADMIN_SUCCESS:
-            return { ...state, organizations: action.payload.organizations, organizationByAdminLoading: false};
+            return { ...state, getAllLocations: action.payload.organizations, organizationByAdminLoading: false};
         case organization.ORGANIZATION_BY_ADMIN_FAILURE:
             return { ...state, organizationByAdminError: action.payload.error, organizationByAdminLoading: false};
 
-        case organization.EDIT_ORGANIZATION_LOADING:
-            return { ...state, editOrganizationLoading: true};
-        case organization.EDIT_ORGANIZATION_SUCCESS:
-            return {...state, editOrganization: action.payload, editOrganizationLoading: false};
-        case organization.EDIT_ORGANIZATION_FAILURE:
-            return { ...state, editOrganizationError: action.payload, editOrganizationLoading: false};
+        case organization.FETCH_ORGANIZATION_LOADING:
+            return { ...state, organizationLoading: true};
+        case organization.FETCH_ORGANIZATION_SUCCESS:
+            return {...state, getOrganization: action.payload, organizationLoading: false};
+        case organization.FETCH_ORGANIZATION_FAILURE:
+            return { ...state, organizationError: action.payload, organizationLoading: false};
 
         default:
             return state;

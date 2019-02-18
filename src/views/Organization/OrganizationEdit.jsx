@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import SweetAlert from "react-bootstrap-sweetalert";
 import {FormControl, FormControlLabel, FormLabel, Grid, MenuItem, Select, Switch} from "@material-ui/core";
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {ClipLoader} from 'react-spinners';
-import {css} from 'react-emotion';
 
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -20,15 +17,9 @@ import CardText from "components/Card/CardText.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
-import {editOrganization, fetchBusinessCategory, getOrganizationByAdmin} from "../../actions/organization.jsx"
+import {editOrganization, fetchBusinessCategory, fetchOrganization} from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-
-const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: red;
-`;
 
 const OrganizationEditSchema = Yup.object().shape({
   name: Yup.string()
@@ -41,80 +32,45 @@ class OrganizationEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.userDetails ? this.props.userDetails.registerOrganizationName : '',
       data: []
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.organizationByAdmin && nextProps.organizationByAdmin.object)
-      this.setState({ data: nextProps.organizationByAdmin.object })
+    console.log("organization", nextProps.organization)
+    this.setState({ data: nextProps.organization })
   }
 
   componentDidMount() {
-    const adminId = localStorage.getItem('userSub');
-    console.log("userSub------", adminId)
-    if (adminId) {
-      this.props.getOrganizationByAdmin(adminId);
-    }
+    const { id } = this.props.match.params
+    this.props.fetchOrganization(id);
     this.props.getBusinessCategory()
   }
 
   submit = (values) => {
     // this is the case of 1st time registering the organization along with admin
-    values.businessAdminEmail = localStorage.getItem('loginEmail');
-    values.userSub = localStorage.getItem('userSub');
     this.props.editOrganization(values, this.props.history);
   }
 
   moveToCreate = () => {
-    this.props.history.push('/organization/create');
+    this.props.history.push('/organization/list');
   }
 
   render() {
     const {
       classes,
       businessCategory,
-      organizationByAdmin,
-      organizationByAdminLoading
     } = this.props;
     const { data } = this.state;
     let categoryOptions = [];
     if (businessCategory && businessCategory.objects) {
       categoryOptions = businessCategory.objects;
     }
-    const userSub = localStorage.getItem('userSub');
-
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     return (
 
-      (<GridContainer>
-        {userSub === null ?
-          <SweetAlert
-            info
-            title={<span> <small>Please create an organization before editing.</small></span>}
-            onConfirm={this.moveToCreate}
-          />
-          :
-          (<GridContainer>
-            {organizationByAdminLoading ?
-              < ClipLoader
-                className={override}
-                sizeUnit={"px"}
-                size={150}
-                color={'#123abc'}
-                loading={organizationByAdminLoading}
-              />
-              :
-              (<GridContainer>
-                {organizationByAdmin.success === false ?
-                  <SweetAlert
-                    info
-                    title={<span> <small>Please create an organization before editing.</small></span>}
-                    onConfirm={this.moveToCreate}
-                  />
-                  :
+                <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     {data && data.preferences ?
                       <Formik
@@ -176,8 +132,8 @@ class OrganizationEdit extends React.Component {
                           logo: data.logo,
                           website: data.website,
                           queueModel: data.queueModel,
-                          businessAdminEmail:'',
-                          userSub: ''
+                          businessAdminEmail:data.businessAdminEmail,
+                          userSub: data.userSub,
                         }}
                         validationSchema={OrganizationEditSchema}
                         enableReinitialize={true}
@@ -641,11 +597,7 @@ class OrganizationEdit extends React.Component {
                       null
                     }
                   </GridItem>
-                }
-              </GridContainer>)
-            }</GridContainer>)
-        }
-      </GridContainer>)
+              </GridContainer>
     )
   }
 }
@@ -656,20 +608,20 @@ OrganizationEdit.propTypes = {
 
 
 const mapsStateToProp = (state) => ({
-  userDetails: state.user.userDetails,
   businessCategory: state.organization.businessCategory,
   businessCategoryLoading: state.organization.businessCategoryLoading,
   businessCategoryError: state.organization.businessCategoryError,
-  organizationByAdmin: state.organization.organizationByAdmin,
-  organizationByAdminLoading: state.organization.organizationByAdminLoading,
-  organizationByAdminError: state.organization.organizationByAdminError
+  organization: state.organization.getOrganization,
+  organizationLoading: state.organization.organizationLoading,
+  organizationError: state.organization.organizationError,
+
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getBusinessCategory: () => dispatch(fetchBusinessCategory()),
     editOrganization: (data, history) => dispatch(editOrganization(data, history)),
-    getOrganizationByAdmin: (id) => dispatch(getOrganizationByAdmin(id))
+    fetchOrganization: (id) => dispatch(fetchOrganization(id))
   }
 }
 
