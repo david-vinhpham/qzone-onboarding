@@ -72,7 +72,7 @@ export const getOrganizationByBusinessAdminId = (adminId) => {
   console.log('getOrganizationByAdmin: ' + adminId);
     return (dispatch) => {
         dispatch(getOrganizationByAdminLoading())
-        fetch(API_ROOT + URL.ORGANIZATION_BY_BUSINESS_ADMIN_ID + adminId, {
+        fetch(API_ROOT + URL.GET_SERVICES_BY_BUSINESS_ADMIN_ID + adminId, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
