@@ -132,7 +132,7 @@ export const getServicesByOrganization = () => {
 export const getServicesByBusinessAdminId = (businessAdminId) => {
   return (dispatch) => {
     dispatch(getServicesByOrganizationLoading())
-    fetch(API_ROOT + URL.GET_SERVICES + businessAdminId, {
+    fetch(API_ROOT + URL.GET_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

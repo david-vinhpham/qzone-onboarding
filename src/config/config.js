@@ -6,6 +6,7 @@ export const URL = {
     ORGANIZATION_BY_ADMIN_ID: 'organizations-by-admin-id/',
     GET_ORGANIZATION:'organizations/',
 
+    GET_SERVICES_BY_BUSINESS_ADMIN_ID: 'services-by-business-admin-id/',
     GET_SERVICES: 'services-by-org-id/',
     CREATE_SERVICE: 'services',
     GET_SERVICE_CATEGORY: 'service-categories',
