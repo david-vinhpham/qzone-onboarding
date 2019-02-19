@@ -20,7 +20,7 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
-import {getServicesByOrganization} from '../../actions/service';
+import {getServicesByBusinessAdminId} from '../../actions/service';
 import {FormLabel} from "@material-ui/core";
 
 const override = css`
@@ -133,6 +133,11 @@ class ServicesList extends React.Component{
                         </Link>
                       </Tooltip>
                     </div>
+                    <h4 className={classes.cardProductTitle}>
+                      <a href="#pablo" onClick={e => e.preventDefault()}>
+                        {service.organizationName}
+                      </a>
+                    </h4>
                     <h4 className={classes.cardProductTitle}>
                       <a href="#pablo" onClick={e => e.preventDefault()}>
                         {service.name}

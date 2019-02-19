@@ -1,6 +1,5 @@
-import { API_ROOT, URL} from '../config/config';
-import { service } from '../constants/Service.constants';
-import {location} from "../constants/Location.constants";
+import {API_ROOT, URL} from '../config/config';
+import {service} from '../constants/Service.constants';
 
 export const editService = (values, history) => {
     return (dispatch) => {
