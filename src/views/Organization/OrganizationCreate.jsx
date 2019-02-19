@@ -20,7 +20,7 @@ import Accordion from "components/Accordion/Accordion.jsx";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 
-import { fetchBusinessCategory, createOrganization, getOrganizationByAdmin } from "../../actions/organization.jsx"
+import { fetchBusinessCategory, createOrganization } from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 
@@ -55,7 +55,7 @@ class OrganizationCreate extends React.Component {
     this.props.createOrganization(values, this.props.history);
   }
   render() {
-    const { classes, businessCategory, userDetails } = this.props;
+    const { classes, businessCategory } = this.props;
     let categoryOptions = [];
     if (businessCategory && businessCategory.objects) {
       categoryOptions = businessCategory.objects;
@@ -66,7 +66,6 @@ class OrganizationCreate extends React.Component {
       <GridItem xs={12} sm={12} md={12}>
         <Formik
           initialValues={{
-            name: userDetails ? userDetails.registerOrganizationName : '',
             orgMode: "PROVIDER_BASED",
             businessCategoryId: '',
             preferences: {
@@ -604,16 +603,12 @@ const mapsStateToProp = (state) => ({
   businessCategory: state.organization.businessCategory,
   businessCategoryLoading: state.organization.businessCategoryLoading,
   businessCategoryError: state.organization.businessCategoryError,
-  organizationByAdmin: state.organization.organizationByAdmin,
-  organizationByAdminLoading: state.organization.organizationByAdminLoading,
-  organizationByAdminError: state.organization.organizationByAdminError
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getBusinessCategory: () => dispatch(fetchBusinessCategory()),
     createOrganization: (data, history) => dispatch(createOrganization(data, history)),
-    getOrganizationByAdmin: (id) => dispatch(getOrganizationByAdmin(id))
   }
 }
 

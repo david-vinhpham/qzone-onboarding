@@ -20,7 +20,7 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 import {FormLabel} from "@material-ui/core";
-import {getOrganizationByAdmin} from "../../actions/organization";
+import {getOrganizationByBusinessAdminId} from "../../actions/organization";
 
 const override = css`
     display: block;
@@ -41,7 +41,7 @@ class OrganizationList extends React.Component {
 
   componentDidMount() {
     var userSub = localStorage.getItem('userSub');
-    this.props.getOrganizationByAdmin(userSub);
+    this.props.getOrganizationByBusinessAdminId(userSub);
   }
 
   render() {
@@ -176,7 +176,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrganizationByAdmin: (id) => dispatch(getOrganizationByAdmin(id)),
+    getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
   }
 }
 
