@@ -48,20 +48,10 @@ export function register(values) {
       username: values.registerEmail,
       password: values.registerPassword,
       attributes: {
-        'email': values.registerEmail,
+        email: values.registerEmail,
         'custom:user_type': 'BUSINESS_ADMIN',
-        'given_name':values.registerGivenName,
+        given_name:values.registerGivenName,
       },
-      /*UserAttributes: [
-        {
-          Name: 'email',
-          Value: values.registerEmail
-        },
-        {
-          Name: 'custom:user_type',
-          Value: 'BUSINESS_ADMIN'
-        }
-      ],*/
       validationData: []
     })
       .then(json => {
