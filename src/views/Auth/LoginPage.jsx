@@ -7,8 +7,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { css } from 'react-emotion';
-
+import { css } from '@emotion/core';
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";

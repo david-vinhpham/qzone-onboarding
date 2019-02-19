@@ -9,7 +9,7 @@ import Search from "@material-ui/icons/Search";
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {ClipLoader} from 'react-spinners';
-import {css} from 'react-emotion';
+import { css } from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
