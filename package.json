@@ -10,8 +10,6 @@
     "axios": "^0.18.0",
     "contentful": "^6.1.1",
     "e": "0.0.4",
-    "express": "^4.16.4",
-    "express-favicon": "^2.0.1",
     "formik": "^1.4.2",
     "fullcalendar-reactwrapper": "^1.0.7",
     "history": "^4.7.2",
@@ -53,7 +51,6 @@
     "test": "cross-env NODE_PATH=src react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "/build",
   "browserslist": [
     ">0.2%",
     "not dead",
