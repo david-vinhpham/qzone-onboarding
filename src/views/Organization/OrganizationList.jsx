@@ -171,7 +171,7 @@ class OrganizationList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { organizationLists: state.organization.getAllLocations }
+  return { organizationLists: state.organization.getOrganizations }
 }
 
 const mapDispatchToProps = (dispatch) => {

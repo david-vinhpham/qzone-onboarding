@@ -43,7 +43,9 @@ class ServicesList extends React.Component{
   }
 
   componentDidMount() {
-    this.props.getServicesByOrganization()
+    var businessAdminId = localStorage.getItem('userSub');
+    console.log('businessAdminId: ' + businessAdminId);
+    this.props.getServicesByBusinessAdminId(businessAdminId)
   }
   render() {
     const {
@@ -208,7 +210,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getServicesByOrganization: () => dispatch(getServicesByOrganization()),
+    getServicesByBusinessAdminId: (businessAdminId) => dispatch(getServicesByBusinessAdminId(businessAdminId)),
   }
 }
 

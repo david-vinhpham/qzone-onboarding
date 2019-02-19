@@ -11,7 +11,7 @@ const initialState = {
     createOrganizationError: null,
     createOrganizationLoading: false,
 
-    getAllLocations: [],
+    getOrganizations: [],
     organizationByAdminError: null,
     organizationByAdminLoading: false,
 
@@ -39,7 +39,7 @@ const reducer = (state = initialState, action) => {
         case organization.ORGANIZATION_BY_ADMIN_LOADING:
             return { ...state, organizationByAdminLoading:true};
         case organization.ORGANIZATION_BY_ADMIN_SUCCESS:
-            return { ...state, getAllLocations: action.payload.organizations, organizationByAdminLoading: false};
+            return { ...state, getOrganizations: action.payload.organizations, organizationByAdminLoading: false};
         case organization.ORGANIZATION_BY_ADMIN_FAILURE:
             return { ...state, organizationByAdminError: action.payload.error, organizationByAdminLoading: false};
 

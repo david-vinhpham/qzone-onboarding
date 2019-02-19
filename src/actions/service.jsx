@@ -1,5 +1,6 @@
 import { API_ROOT, URL} from '../config/config';
 import { service } from '../constants/Service.constants';
+import {location} from "../constants/Location.constants";
 
 export const editService = (values, history) => {
     return (dispatch) => {
@@ -128,6 +129,25 @@ export const getServicesByOrganization = () => {
     }
 }
 
+export const getServicesByBusinessAdminId = (businessAdminId) => {
+  return (dispatch) => {
+    dispatch(getServicesByOrganizationLoading())
+    fetch(API_ROOT + URL.GET_SERVICES + businessAdminId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      dispatch(getServicesByBusinessAdminSuccess(data.objects))
+    })
+    .catch(err => {
+      dispatch(getServicesByBusinessAdminFailure(err))
+    })
+  }
+}
+
 export const getServicesByOrganizationLoading = () => {
     return {
         type: service.FETCH_SERVICES
@@ -142,6 +162,26 @@ export const getServicesByOrganizationSuccess = (data) => {
 }
 
 export const getServicesByOrganizationFailure = (error) => {
+  return {
+    type: service.FETCH_SERVICES_FAILURE,
+    payload: { error }
+  }
+}
+
+export const getServicesByBusinessAdminLoading = () => {
+  return {
+    type: service.FETCH_SERVICES
+  }
+}
+
+export const getServicesByBusinessAdminSuccess = (data) => {
+  return {
+    type: service.FETCH_SERVICES_SUCCESS,
+    payload: { data }
+  }
+}
+
+export const getServicesByBusinessAdminFailure = (error) => {
     return {
         type: service.FETCH_SERVICES_FAILURE,
         payload: { error }
