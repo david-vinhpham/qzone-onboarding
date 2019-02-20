@@ -95,38 +95,38 @@ class OrganizationEdit extends React.Component {
                             serviceHours: [
                               {
                                 "day": "Monday",
-                                "endTime": data.preferences.serviceHours[0].endTime,
-                                "startTime": data.preferences.serviceHours[0].startTime
+                                "endTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[0].endTime: '',
+                                "startTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[0].startTime: ''
                               },
                               {
                                 "day": "Tuesday",
-                                "endTime": data.preferences.serviceHours[1].endTime,
-                                "startTime": data.preferences.serviceHours[1].startTime
+                                "endTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[1].endTime: '',
+                                "startTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[1].startTime: '',
                               },
                               {
                                 "day": "Wednesday",
-                                "endTime": data.preferences.serviceHours[2].endTime,
-                                "startTime": data.preferences.serviceHours[2].startTime
+                                "endTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[2].endTime: '',
+                                "startTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[2].startTime: '',
                               },
                               {
                                 "day": "Thursday",
-                                "endTime": data.preferences.serviceHours[3].endTime,
-                                "startTime": data.preferences.serviceHours[3].startTime
+                                "endTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[3].endTime: '',
+                                "startTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[3].startTime: '',
                               },
                               {
                                 "day": "Friday",
-                                "endTime": data.preferences.serviceHours[4].endTime,
-                                "startTime": data.preferences.serviceHours[4].startTime
+                                "endTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[4].endTime: '',
+                                "startTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[4].startTime: '',
                               },
                               {
                                 "day": "Saturday",
-                                "endTime": data.preferences.serviceHours[5].endTime,
-                                "startTime": data.preferences.serviceHours[5].startTime
+                                "endTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[5].endTime: '',
+                                "startTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[5].startTime: '',
                               },
                               {
                                 "day": "Sunday",
-                                "endTime": data.preferences.serviceHours[6].endTime,
-                                "startTime": data.preferences.serviceHours[6].startTime
+                                "endTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[6].endTime: '',
+                                "startTime": data.preferences.serviceHours.length > 0 ? data.preferences.serviceHours[6].startTime: '',
                               }
                             ],
                           },

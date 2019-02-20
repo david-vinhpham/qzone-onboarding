@@ -104,11 +104,8 @@ class ServiceEdit extends React.Component {
 		};
 		reader.readAsDataURL(files);
     }
-    
+
     saveClicked = (values) => {
-        let orgId = localStorage.getItem('organizationId');
-        console.log(values);
-        values.organizationId = orgId;
         this.props.editService(values, this.props.history)
     }
 
@@ -138,6 +135,10 @@ class ServiceEdit extends React.Component {
                             mode: this.state.data.mode,
                             numberOfParallelCustomer: this.state.data.numberOfParallelCustomer,
                             serviceCategoryId: this.state.data.serviceCategoryId,
+                            organizationId: this.state.data.organizationId,
+                            organizationName: this.state.data.organizationName,
+                            userSub: this.state.data.userSub,
+                            image: this.state.data.image,
                             tags: this.state.data.tags,
                             imagePreviewUrl: this.props.imageObject || (this.state.data.image ? this.state.data.image.fileUrl : this.state.imagePreviewUrl)
                         }}
@@ -384,7 +385,7 @@ class ServiceEdit extends React.Component {
                                                         }
                                                     />
                                                 </GridItem>
-                                                
+
                                             </GridContainer>
                                             <GridContainer>
                                                 <GridItem xs={12} sm={3}>
