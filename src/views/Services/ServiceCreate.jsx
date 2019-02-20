@@ -21,6 +21,7 @@ import defaultImage from "../../assets/img/default-avatar.png";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
+import {getOrganizationByBusinessAdminId} from "../../actions/organization";
 
 const ServiceCreateSchema = Yup.object().shape({
     name: Yup.string()
@@ -63,7 +64,11 @@ class ServiceCreate extends React.Component {
 
 	componentDidMount() {
 		this.props.getServiceCategory();
-	}
+    let userSub = localStorage.getItem('userSub');
+    console.log('userSub: ' + userSub);
+    this.props.getOrganizationByBusinessAdminId(userSub);
+
+  }
 
 	handleService(values) {
 		values.image = this.props.imageObject;
@@ -109,12 +114,15 @@ class ServiceCreate extends React.Component {
 	}
 
 	render() {
-		const { classes, serviceCategory} = this.props;
+		const { classes, serviceCategory, organizationLists} = this.props;
 		let categoryOptions = [];
+    let organizationOptions = [];
 		if (serviceCategory.length > 0) {
 			categoryOptions = serviceCategory;
 		}
-
+    if (organizationLists.length > 0) {
+      organizationOptions = organizationLists;
+    }
 		return (
 			<GridItem xs={12} sm={12} md={12}>
 				<Card>
@@ -130,8 +138,9 @@ class ServiceCreate extends React.Component {
                             numberOfParallelCustomer: this.state.numberOfParallelCustomer,
                             serviceCategoryId: this.state.serviceCategoryId,
                             tags: this.state.tags,
-                            organizationId: this.state.data.organizationId,
-                            organizationName: this.state.data.organizationName,
+                            organizationId: this.state.organizationId,
+                            organizationName: this.state.organizationName,
+                            userSub: this.state.userSub,
                             imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
                         }}
                         enableReinitialize={true}
@@ -157,46 +166,32 @@ class ServiceCreate extends React.Component {
                                     <CardBody>
                                         <form>
                                             <GridContainer>
-                                                <GridItem xs={12} sm={3}>
-                                                    <FormLabel className={classes.labelHorizontal}>
-                                                        Name
-                                                    </FormLabel>
-                                                </GridItem>
-                                                <GridItem xs={12} sm={4}>
-                                                    <CustomInput
-                                                        id="name"
-                                                        name="name"
-                                                        onChange={handleChange}
-                                                        value={values.name}
-                                                    />
-                                                    {errors.name && touched.name ? (
-                                                        <div style={{ color: "red" }}>{errors.name}</div>
-                                                    ) : null}
-                                                </GridItem>
-                                            </GridContainer>
-                                            <GridContainer>
-                                                <GridItem xs={12} sm={3}>
-                                                    <FormLabel className={classes.labelHorizontal}>
-                                                        Description
-                                                    </FormLabel>
-                                                </GridItem>
-                                                <GridItem xs={12} sm={3}>
-                                                    <CustomInput
-                                                        id="description"
-                                                        formControlProps={{
-                                                            fullWidth: true
-                                                        }}
-                                                        inputProps={{
-                                                            multiline: true,
-                                                            rows: 5
-                                                        }}
-                                                        value={values.description}
-                                                        onChange={handleChange}
-                                                    />
-                                                    {errors.description && touched.description ? (
-                                                        <div style={{ color: "red" }}>{errors.description}</div>
-                                                    ) : null}
-                                                </GridItem>
+                                              <GridItem xs={12} sm={3}>
+                                                <FormLabel className={classes.labelHorizontal}>
+                                                  Service Organization
+                                                </FormLabel>
+                                              </GridItem>
+                                              <GridItem xs={12} sm={4}>
+                                                <FormControl
+                                                  fullWidth
+                                                  className={classes.selectFormControl}>
+                                                  <Select
+                                                    value={values.organizationId}
+                                                    onChange={handleChange('organizationId')}
+                                                    name="organizationId"
+                                                  >
+                                                    {organizationOptions.map(organizationOption => (
+                                                      <MenuItem
+                                                        key={organizationOption.id}
+                                                        value={organizationOption.id}
+                                                        id="organizationId"
+                                                      >
+                                                        {organizationOption.name}
+                                                      </MenuItem>
+                                                    ))}
+                                                  </Select>
+                                                </FormControl>
+                                              </GridItem>
                                             </GridContainer>
                                             <GridContainer>
                                                 <GridItem xs={12} sm={3}>
@@ -227,6 +222,48 @@ class ServiceCreate extends React.Component {
                                                     </FormControl>
                                                 </GridItem>
                                             </GridContainer>
+                                          <GridContainer>
+                                            <GridItem xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Name
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={4}>
+                                              <CustomInput
+                                                id="name"
+                                                name="name"
+                                                onChange={handleChange}
+                                                value={values.name}
+                                              />
+                                              {errors.name && touched.name ? (
+                                                <div style={{ color: "red" }}>{errors.name}</div>
+                                              ) : null}
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer>
+                                            <GridItem xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Description
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={3}>
+                                              <CustomInput
+                                                id="description"
+                                                formControlProps={{
+                                                  fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                  multiline: true,
+                                                  rows: 5
+                                                }}
+                                                value={values.description}
+                                                onChange={handleChange}
+                                              />
+                                              {errors.description && touched.description ? (
+                                                <div style={{ color: "red" }}>{errors.description}</div>
+                                              ) : null}
+                                            </GridItem>
+                                          </GridContainer>
                                             <GridContainer>
                                                 <GridItem xs={12} sm={3}>
                                                     <FormLabel className={classes.labelHorizontal}>
@@ -461,12 +498,14 @@ const mapStateToProps = (state) => {
 		imageObject: state.image.image,
 		imageError: state.image.imageError,
 		imageLoading: state.image.imageLoading,
-		serviceCategory: state.service.serviceCategory
+		serviceCategory: state.service.serviceCategory,
+    organizationLists: state.organization.getOrganizations
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+    getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
 		createService: (data, history) => dispatch(createService(data, history)),
 		getServiceCategory: () => dispatch(getServiceCategory())
 	}

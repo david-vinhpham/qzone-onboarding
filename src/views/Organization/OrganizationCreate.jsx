@@ -522,7 +522,7 @@ class OrganizationCreate extends React.Component {
                               <GridItem >
                                 <PhoneInput
                                   id="telephone"
-                                  placeholder="Enter phone number"
+                                  placeholder="e.g.+61 3 xxxx xxxx"
                                   country="AU"
                                   name={'telephone'}
                                   value={values['telephone']}
