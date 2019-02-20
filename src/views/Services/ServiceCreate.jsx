@@ -51,7 +51,7 @@ class ServiceCreate extends React.Component {
 			nameState: "",
 			bookingHorizon: 3,
 			description: "",
-			duration: 1,
+			duration: 60,
 			gapBetweenBookings: 1,
 			mode: "APPOINTMENT",
 			numberOfParallelCustomer: 1,
@@ -66,11 +66,10 @@ class ServiceCreate extends React.Component {
 	}
 
 	handleService(values) {
-		let orgId = localStorage.getItem('organizationId');
-		values.organizationId = orgId;
 		values.image = this.props.imageObject;
 		console.log("values-----", values)
-		this.props.createService(values, this.props.history);
+        values.userSub = localStorage.getItem('userSub');
+        this.props.createService(values, this.props.history);
 		// this.setState({
 		// 	organizationId: orgId,
 		// 	image: this.props.imageObject
@@ -131,6 +130,8 @@ class ServiceCreate extends React.Component {
                             numberOfParallelCustomer: this.state.numberOfParallelCustomer,
                             serviceCategoryId: this.state.serviceCategoryId,
                             tags: this.state.tags,
+                            organizationId: this.state.data.organizationId,
+                            organizationName: this.state.data.organizationName,
                             imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
                         }}
                         enableReinitialize={true}
