@@ -55,12 +55,21 @@ class ServiceEdit extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({ data: nextProps.serviceById })
+        if(nextProps.serviceById != null && nextProps.serviceById.image != null) {
+          this.setState({ imagePreviewUrl: nextProps.serviceById.image.fileUrl })
+          console.log('imagePreviewUrl1: ', nextProps.serviceById.image.fileUrl);
+        }
+        else {
+          this.setState({ imagePreviewUrl: defaultImage })
+          console.log('imagePreviewUrl2: ', defaultImage);
+        }
     }
 
     componentDidMount() {
       this.props.getServiceCategory();
       const { id } = this.props.match.params
       this.props.getServiceById(id);
+
 
       let userSub = localStorage.getItem('userSub');
       console.log('userSub: ' + userSub);
@@ -95,18 +104,18 @@ class ServiceEdit extends React.Component {
 
     handleImageChange(e) {
         let self = this;
-		//const {file, imagePreviewUrl} = this.state.provider;
-		console.log("inside change image function", e);
-		console.log("event---", e)
-		e.preventDefault();
-		let reader = new FileReader();
-		let files = e.target.files[0];
-		console.log("file-------", files)
-		reader.onloadend = () => {
-			self.setState({
-				imagePreviewUrl: reader.result
-				//provider: provider
-			});
+        //const {file, imagePreviewUrl} = this.state.provider;
+        console.log("inside change image function", e);
+        console.log("event---", e)
+        e.preventDefault();
+        let reader = new FileReader();
+        let files = e.target.files[0];
+        console.log("file-------", files)
+        reader.onloadend = () => {
+          self.setState({
+            imagePreviewUrl: reader.result
+            //provider: provider
+          });
 		};
 		reader.readAsDataURL(files);
     }
@@ -150,6 +159,7 @@ class ServiceEdit extends React.Component {
                             organizationName: this.state.data.organizationName,
                             userSub: this.state.data.userSub,
                             image: this.state.data.image,
+                            imageShow: this.state.data.image ? this.state.data.image.fileUrl : defaultImage,
                             tags: this.state.data.tags,
                             imagePreviewUrl: this.props.imageObject || (this.state.data.image ? this.state.data.image.fileUrl : this.state.imagePreviewUrl)
                         }}
@@ -474,9 +484,18 @@ class ServiceEdit extends React.Component {
                                                     ) : null}
                                                 </GridItem>
                                             </GridContainer>
+                                          {/*<GridContainer>
+                                              <GridItem xs={12} md={12}>
+                                                <div className="fileinput text-center">
+                                                  <div className={"thumbnail"}>
+                                                   <img src={values.imageShow} alt="..." />
+                                                  </div>
+                                                </div>
+                                              </GridItem>
+                                          </GridContainer>*/}
                                             <GridContainer>
                                                 <GridItem xs={12} md={12}>
-                                                    <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
+                                                    <ImageUpload imagePreviewUrl={values.imageShow} />
                                                 </GridItem>
                                             </GridContainer>
                                         </form>

@@ -1,9 +1,10 @@
 import { imageUpload } from '../constants/ImageUpload.constants';
+import {API_MEDIA_URL} from '../config/config';
 
 export const uploadImage = (formData) => {
-    return (dispatch) => { 
+    return (dispatch) => {
         dispatch(uploadImageLoading())
-        fetch('http://13.238.116.171:8093/api/media/medias', {
+        fetch(API_MEDIA_URL, {
             method: 'POST',
             body: formData,
         })
@@ -26,7 +27,7 @@ export const uploadImageLoading = () => {
 export const uploadImageSuccess = (data) => {
     return {
         type: imageUpload.IMAGE_UPLOAD_SUCCESS,
-        payload: data 
+        payload: data
     }
 }
 

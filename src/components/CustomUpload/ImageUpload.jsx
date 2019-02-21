@@ -1,25 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-
-// core components
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { css } from '@emotion/core';
+import { ClipLoader } from 'react-spinners';
 import Button from "../../components/CustomButtons/Button.jsx";
-
-import defaultImage from "../../assets/img/image_placeholder.jpg";
+//import defaultImage from "../../assets/img/image_placeholder.jpg";
 import { uploadImage } from '../../actions/imageUpload';
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 class ImageUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       file: null,
-      imagePreviewUrl: this.props.imagePreviewUrl || defaultImage
+      imagePreviewUrlOrg: this.props.imagePreviewUrl,
+      imagePreviewUrl: this.props.imagePreviewUrl,
     };
+    console.log('imagePreviewUrl: ' + this.props.imagePreviewUrl);
     this.handleImageChange = this.handleImageChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({ imagePreviewUrlOrg: nextProps.imagePreviewUrl });
+    this.setState({ imagePreviewUrl: nextProps.imagePreviewUrl });
+    console.log('Re-render imagePreviewUrl -> ' + this.state.imagePreviewUrl);
   }
   handleImageChange(e) {
     e.preventDefault();
@@ -45,7 +57,7 @@ class ImageUpload extends React.Component {
   handleRemove() {
     this.setState({
       file: null,
-      imagePreviewUrl: defaultImage
+      imagePreviewUrl:  this.state.imagePreviewUrlOrg,
     });
     this.refs.fileInput.value = null;
   }
@@ -58,27 +70,35 @@ class ImageUpload extends React.Component {
 
   render() {
     var {
-      avatar,
       addButtonProps,
       removeButtonProps,
+      imageLoading,
     } = this.props;
     return (
       <div className="fileinput text-center">
         <input type="file" onChange={this.handleImageChange} ref="fileInput" />
-        <div className={"thumbnail" + (avatar ? " img-circle" : "")}>
+        <div className={"thumbnail"}>
           <img src={this.state.imagePreviewUrl} alt="..." />
+        </div>
+        <div className='sweet-loading'>
+          <ClipLoader
+            css={override}
+            sizeUnit={"px"}
+            size={50}
+            color={'#123abc'}
+            loading={imageLoading}
+          />
         </div>
         <div>
           {this.state.file === null ? (
             <Button {...addButtonProps} onClick={() => this.handleClick()}>
-              {avatar ? "Add Photo" : "Select image"}
+              {imageLoading ? "Add Photo" : "Select image"}
             </Button>
           ) : (
             <span>
               <Button onClick={() => this.uploadImage()}>
                 Upload
               </Button>
-              {avatar ? <br /> : null}
               <Button
                 {...removeButtonProps}
                 onClick={() => this.handleRemove()}
@@ -94,7 +114,8 @@ class ImageUpload extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  
+  imageLoading: state.image.imageLoading,
+  imageError: state.image.imageError,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -104,7 +125,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 ImageUpload.propTypes = {
-  avatar: PropTypes.bool,
   addButtonProps: PropTypes.object,
   changeButtonProps: PropTypes.object,
   removeButtonProps: PropTypes.object
