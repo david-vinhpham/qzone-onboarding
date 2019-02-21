@@ -69,7 +69,6 @@ export const editOrganizationFailure = (error) => {
 }
 
 export const getOrganizationByBusinessAdminId = (adminId) => {
-  console.log('getOrganizationByAdmin: ' + adminId);
     return (dispatch) => {
         dispatch(getOrganizationByAdminLoading())
         fetch(API_ROOT + URL.GET_ORGANIZATION_BY_BUSINESS_ADMIN_ID + adminId, {

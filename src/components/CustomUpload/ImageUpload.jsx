@@ -21,8 +21,8 @@ class ImageUpload extends React.Component {
       file: null,
       imagePreviewUrlOrg: this.props.imagePreviewUrl,
       imagePreviewUrl: this.props.imagePreviewUrl,
+      isUploadImage: 0
     };
-    console.log('imagePreviewUrl: ' + this.props.imagePreviewUrl);
     this.handleImageChange = this.handleImageChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -30,16 +30,18 @@ class ImageUpload extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
         if(!nextProps.imageLoading) {
-        this.setState({imagePreviewUrlOrg: nextProps.imagePreviewUrl});
-        if (nextProps.imageObject != null) {
-          this.setState({imagePreviewUrl: nextProps.imageObject.fileUrl});
-        } else {
-          this.setState({imagePreviewUrl: this.state.imagePreviewUrl});
-        }
+          this.setState({imagePreviewUrlOrg: nextProps.imagePreviewUrl});
+          this.setState({imagePreviewUrl: nextProps.imagePreviewUrl});
+          if (nextProps.imageObject != null && this.state.isUploadImage === 1) {
+            this.setState({imagePreviewUrl: nextProps.imageObject.fileUrl});
+          }
       }
     else {
       console.log('Uploading...');
     }
+  }
+  componentDidMount() {
+    this.setState({imageObject: ''});
   }
   handleImageChange(e) {
     e.preventDefault();
@@ -70,7 +72,9 @@ class ImageUpload extends React.Component {
     this.refs.fileInput.value = null;
   }
   uploadImage = () => {
-    console.log("file---", this.state.file);
+    this.setState({
+      isUploadImage:1,
+    });
     var data = new FormData();
     data.append("file", this.state.file);
     this.props.uploadImage(data);

@@ -58,8 +58,10 @@ class ServiceEdit extends React.Component {
         this.setState({data: nextProps.serviceById})
         if (nextProps.serviceById != null && nextProps.serviceById.image != null) {
           this.setState({imagePreviewUrl: nextProps.serviceById.image.fileUrl})
+          //console.log('imagePreviewUrl 1: ' +  nextProps.serviceById.image.fileUrl);
         } else {
           this.setState({imagePreviewUrl: defaultImage})
+          //console.log('imagePreviewUrl 2: ' +  defaultImage);
         }
       }
       else {
@@ -72,12 +74,8 @@ class ServiceEdit extends React.Component {
       this.props.getServiceCategory();
       const { id } = this.props.match.params
       this.props.getServiceById(id);
-
-
       let userSub = localStorage.getItem('userSub');
-      console.log('userSub: ' + userSub);
       this.props.getOrganizationByBusinessAdminId(userSub);
-
     }
 
     handleService(option) {
@@ -108,12 +106,12 @@ class ServiceEdit extends React.Component {
     handleImageChange(e) {
         let self = this;
         //const {file, imagePreviewUrl} = this.state.provider;
-        console.log("inside change image function", e);
-        console.log("event---", e)
+        //console.log("inside change image function", e);
+        //console.log("event---", e)
         e.preventDefault();
         let reader = new FileReader();
         let files = e.target.files[0];
-        console.log("file-------", files)
+       // console.log("file-------", files)
         reader.onloadend = () => {
           self.setState({
             imagePreviewUrl: reader.result
@@ -142,7 +140,7 @@ class ServiceEdit extends React.Component {
         if (!this.state.data) {
             return null;
         }
-        console.log("data-----", this.state.data)
+        //console.log("data-----", this.state.data)
         return (
             <GridItem xs={12} sm={12} md={12}>
                 <Card>

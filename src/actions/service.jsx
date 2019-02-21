@@ -31,8 +31,7 @@ export const editService = (values, history) => {
 }
 
 export const getServiceById = (id) => {
-    console.log('getServiceById');
-    return (dispatch) => {
+        return (dispatch) => {
         dispatch(getServiceByIdLoading())
         fetch(API_ROOT + URL.GET_SERVICE_BY_ID + id, {
             method: 'GET',
