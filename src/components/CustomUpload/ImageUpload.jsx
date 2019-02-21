@@ -29,9 +29,17 @@ class ImageUpload extends React.Component {
     this.handleRemove = this.handleRemove.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ imagePreviewUrlOrg: nextProps.imagePreviewUrl });
-    this.setState({ imagePreviewUrl: nextProps.imagePreviewUrl });
-    console.log('Re-render imagePreviewUrl -> ' + this.state.imagePreviewUrl);
+        if(!nextProps.imageLoading) {
+        this.setState({imagePreviewUrlOrg: nextProps.imagePreviewUrl});
+        if (nextProps.imageObject != null) {
+          this.setState({imagePreviewUrl: nextProps.imageObject.fileUrl});
+        } else {
+          this.setState({imagePreviewUrl: this.state.imagePreviewUrl});
+        }
+      }
+    else {
+      console.log('Uploading...');
+    }
   }
   handleImageChange(e) {
     e.preventDefault();
@@ -116,6 +124,7 @@ class ImageUpload extends React.Component {
 const mapStateToProps = (state) => ({
   imageLoading: state.image.imageLoading,
   imageError: state.image.imageError,
+  imageObject: state.image.image,
 })
 
 const mapDispatchToProps = (dispatch) => {

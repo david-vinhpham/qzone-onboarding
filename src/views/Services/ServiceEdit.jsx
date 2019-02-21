@@ -54,15 +54,18 @@ class ServiceEdit extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ data: nextProps.serviceById })
-        if(nextProps.serviceById != null && nextProps.serviceById.image != null) {
-          this.setState({ imagePreviewUrl: nextProps.serviceById.image.fileUrl })
-          console.log('imagePreviewUrl1: ', nextProps.serviceById.image.fileUrl);
+      if(!nextProps.imageLoading) {
+        this.setState({data: nextProps.serviceById})
+        if (nextProps.serviceById != null && nextProps.serviceById.image != null) {
+          this.setState({imagePreviewUrl: nextProps.serviceById.image.fileUrl})
+        } else {
+          this.setState({imagePreviewUrl: defaultImage})
         }
-        else {
-          this.setState({ imagePreviewUrl: defaultImage })
-          console.log('imagePreviewUrl2: ', defaultImage);
-        }
+      }
+      else {
+        console.log('imageLoading...');
+      }
+
     }
 
     componentDidMount() {

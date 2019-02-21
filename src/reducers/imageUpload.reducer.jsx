@@ -13,7 +13,7 @@ const reducer = (state = initialState, action) => {
             return {...state, imageLoading: true}
         case imageUpload.IMAGE_UPLOAD_SUCCESS:
             console.log('IMAGE_UPLOAD_SUCCESS');
-            return { ...state, image: action.payload.fileUrl, imageLoading: false}
+            return { ...state, image: action.payload, imageLoading: false}
         case imageUpload.IMAGE_UPLOAD_FAILURE:
             return { ...state, image: null, imageError: action.payload.error, imageLoading: false}
 
