@@ -43,7 +43,7 @@ class ServicesList extends React.Component{
   }
 
   componentDidMount() {
-    var businessAdminId = localStorage.getItem('userSub');
+    let businessAdminId = localStorage.getItem('userSub');
     //console.log('businessAdminId: ' + businessAdminId);
     this.props.getServicesByBusinessAdminId(businessAdminId)
   }

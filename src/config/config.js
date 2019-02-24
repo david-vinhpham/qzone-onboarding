@@ -17,11 +17,11 @@ export const URL = {
     LOCATION: 'geo-locations',
     GET_LOCATION:'geo-locations/',
 
-    LOGIN: 'business-admins-by-usersub',
-
+    USERS: 'users',
     GET_TIMEZONES: 'timezones',
     FETCH_PROVIDERS_BY_ORG_ID: 'providers-by-org-id/',
-    PROVIDER: 'providers'
+    FETCH_PROVIDERS_BY_USER_SUB: 'providers-by-user-sub/',
+    ADMIN_CREATE_AWS_USER: 'users/admin-create-new-users'
 }
 export const GOOGLE_ID = '1075505092107-j8821j05r48pco773m0mqb16g1po5gtj.apps.googleusercontent.com'
 

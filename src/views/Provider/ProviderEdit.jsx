@@ -5,8 +5,7 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {FormControl, FormControlLabel, FormLabel, MenuItem, Select, Switch} from '@material-ui/core'
-import TagsInput from "react-tagsinput";
+import {FormControl, FormLabel, MenuItem, Select} from '@material-ui/core'
 
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
@@ -15,11 +14,13 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import {createProvider, fetchProvider, fetchTimezones} from '../../actions/provider';
+import {editProvider, fetchProvider, fetchTimezones} from '../../actions/provider';
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
-import {fetchAllLocations} from '../../actions/location';
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+import {getOrganizationByBusinessAdminId} from "../../actions/organization";
 
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -43,10 +44,12 @@ class ProviderEdit extends React.Component{
 
   componentDidMount(){
     this.props.fetchTimezones();
-    this.props.fetchAllLocations();
     const { id } = this.props.match.params
     console.log("id------", id)
     this.props.fetchProvider(id);
+    let userSub = localStorage.getItem('userSub');
+    console.log('userSub: ' + userSub);
+    this.props.getOrganizationByBusinessAdminId(userSub);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -59,40 +62,42 @@ class ProviderEdit extends React.Component{
    this.setState({isEditMode: fieldName});
   }
 
-
-  handleUpdate(option) {
-
+  handleProvider(values) {
+    console.log("values", values);
+    this.props.editProvider(values, this.props.history);
   }
 
   render() {
-    const { classes, timezones, getAllLocations } = this.props;
-    let categoryOptions = [];
-    let geoLocations = [];
-		if ((timezones.length && getAllLocations.length) > 0) {
-      categoryOptions = timezones;
-      geoLocations = getAllLocations;
+    const { classes, timezones, organizationLists } = this.props;
+    let timeZoneOptions = [];
+    let organizationOptions = [];
+    if ((timezones.length) > 0) {
+      timeZoneOptions = timezones;
+    }
+    if(organizationLists.length > 0) {
+      organizationOptions = organizationLists;
     }
     if (!this.state.provider) {
       return null;
-  }
-  console.log("data-----", this.state.provider)
-		return(
+   }
+    return(
       <Formik
         initialValues={{
-          cognitoToken: this.state.provider.cognitoToken,
-          description: this.state.provider.description,
-          email: this.state.provider.email,
-          familyName: this.state.provider.familyName,
-          geoLocationId: this.state.provider.geoLocationId,
-          givenName: this.state.provider.givenName,
-          isAdmin: this.state.provider.isAdmin,
-          organizationId: this.state.provider.organizationId,
-          qualifications: this.state.provider.qualifications && this.state.provider.qualifications.length > 0 ? this.state.provider.qualifications : [],
-          tags: this.state.provider.tags && this.state.provider.tags.length > 0 ? this.state.provider.tags : [],
-          telephone: this.state.provider.telephone,
-          timeZoneId: this.state.provider.timeZoneId,
-          userStatus: this.state.provider.userStatus,
-          userSub: this.state.provider.userSub
+          email: this.state.provider.data.email,
+          familyName: this.state.provider.data.familyName == null ? '' : this.state.provider.data.familyName,
+          givenName: this.state.provider.data.givenName,
+          telephone: this.state.provider.data.telephone,
+          userStatus: this.state.provider.data.userStatus,
+          userSub: this.state.provider.data.userSub,
+          userType: this.state.provider.data.userType,
+          providerInformation: {
+            description: this.state.provider.data.providerInformation.description,
+            qualifications:this.state.provider.data.providerInformation.qualifications,
+            tags:this.state.provider.data.providerInformation.tags,
+            organizationId: this.state.provider.data.providerInformation.organizationId,
+            timeZoneId: this.state.provider.data.providerInformation.timeZoneId,
+            businessId:this.state.provider.data.providerInformation.businessId,
+          },
         }}
         validationSchema={ProviderSchema}
         onSubmit={(values) => {this.handleProvider(values)}}
@@ -106,255 +111,243 @@ class ProviderEdit extends React.Component{
             <CardBody>
               <GridContainer>
                 <GridItem xs={12} sm={3}>
-                    <FormLabel className={classes.labelHorizontal}>
-                        First Name
-                    </FormLabel>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Given Name
+                  </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={4}>
-                    <CustomInput
-                        id="givenName"
-                        name="givenName"
-                        onChange={handleChange}
-                        value={values.givenName}
-                    />
-                    {errors.givenName && touched.givenName ? (
-                        <div style={{ color: "red" }}>{errors.givenName}</div>
-                    ) : null}
+                  <CustomInput
+                    id="givenName"
+                    name="givenName"
+                    onChange={handleChange}
+                    value={values.givenName}
+                  />
+                  {errors.givenName && touched.givenName ? (
+                    <div style={{ color: "red" }}>{errors.givenName}</div>
+                  ) : null}
                 </GridItem>
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={3}>
-                    <FormLabel className={classes.labelHorizontal}>
-                        Last Name
-                    </FormLabel>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Family Name
+                  </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={4}>
-                    <CustomInput
-                        id="familyName"
-                        name="familyName"
-                        onChange={handleChange}
-                        value={values.familyName}
-                    />
+                  <CustomInput
+                    id="familyName"
+                    name="familyName"
+                    onChange={handleChange}
+                    value={values.familyName}
+                  />
                 </GridItem>
               </GridContainer>
               <GridContainer>
-              <GridItem xs={12} sm={3}>
+                <GridItem xs={12} sm={3}>
                   <FormLabel className={classes.labelHorizontal}>
-                      Email
+                    Email
                   </FormLabel>
-              </GridItem>
-              <GridItem xs={12} sm={4}>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
                   <CustomInput
-                      id="email"
-                      name="email"
-                      onChange={handleChange}
-                      value={values.email}
+                    id="email"
+                    name="email"
+                    onChange={handleChange}
+                    value={values.email}
                   />
                   {errors.email && touched.email ? (
-                        <div style={{ color: "red" }}>{errors.email}</div>
-                    ) : null}
-              </GridItem>
-            </GridContainer>
-              <GridContainer>
-                  <GridItem xs={12} sm={3}>
-                      <FormLabel className={classes.labelHorizontal}>
-                          Description
-                      </FormLabel>
-                  </GridItem>
-                  <GridItem xs={12} sm={3}>
-                      <CustomInput
-                          id="description"
-                          formControlProps={{
-                              fullWidth: true
-                          }}
-                          inputProps={{
-                              multiline: true,
-                              rows: 5
-                          }}
-                          value={values.description}
-                          onChange={handleChange}
-                      />
-                      {errors.description && touched.description ? (
-                          <div style={{ color: "red" }}>{errors.description}</div>
-                      ) : null}
-                  </GridItem>
+                    <div style={{ color: "red" }}>{errors.email}</div>
+                  ) : null}
+                </GridItem>
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={3}>
-                    <FormLabel
-                        className={
-                            classes.labelHorizontal +
-                            " " +
-                            classes.labelHorizontalRadioCheckbox
-                        }
-                    >
-                        Is Provider Admin?
-                    </FormLabel>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Telephone
+                  </FormLabel>
                 </GridItem>
-                <GridItem xs={12} sm={2}>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                name="isAdmin"
-                                checked={values.isAdmin}
-                                value="isAdmin"
-                                onChange={handleChange}
-                            />
-                        }
-                    />
+                <GridItem xs={12} sm={4}>
+                  <PhoneInput
+                    id="telephone"
+                    placeholder="e.g.+61 3 xxxx xxxx"
+                    country="AU"
+                    name={'telephone'}
+                    value={values['telephone']}
+                    onChange={e => setFieldValue('telephone', e)}
+                  />
+                  {errors.telephone && touched.telephone ? (
+                    <div style={{ color: "red" }}>{errors.telephone}</div>
+                  ) : null}
                 </GridItem>
-            </GridContainer>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Description
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={3}>
+                  <CustomInput
+                    id="providerInformation.description"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 5
+                    }}
+                    value={values.providerInformation.description}
+                    onChange={handleChange}
+                  />
+                  {errors.description && touched.description ? (
+                    <div style={{ color: "red" }}>{errors.description}</div>
+                  ) : null}
+                </GridItem>
+              </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={3}>
                   <FormLabel
-                      className={
-                          classes.labelHorizontal +
-                          " " +
-                          classes.labelHorizontalRadioCheckbox
-                      }
+                    className={
+                      classes.labelHorizontal +
+                      " " +
+                      classes.labelHorizontalRadioCheckbox
+                    }
                   >
-                      Time Zone
+                    Time Zone
                   </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={4}>
                   <FormControl
-                      fullWidth
-                      className={classes.selectFormControl}>
+                    fullWidth
+                    className={classes.selectFormControl}>
 
-                      <Select
-                          value={values.timeZoneId}
-                          onChange={handleChange('timeZoneId')}
-                          name="timeZoneId"
-                      >
-                          {categoryOptions.map(option => (
-                                <MenuItem
-                                key={ option }
-                                value={ option }
-                                id="timeZoneId"
-                              >
-                                {option}
-                              </MenuItem>
-                          ))}
-                      </Select>
+                    <Select
+                      value={values.providerInformation.timeZoneId}
+                      onChange={handleChange('providerInformation.timeZoneId')}
+                      name="timeZoneId"
+                    >
+                      {timeZoneOptions.map(option => (
+                        <MenuItem
+                          key={ option }
+                          value={ option }
+                          id="providerInformation.timeZoneId"
+                        >
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
                 </GridItem>
               </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                    <FormLabel className={classes.labelHorizontal}>
-                        Telephone
-                    </FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                    <CustomInput
-                        id="telephone"
-                        name="telephone"
-                        onChange={handleChange}
-                        value={values.telephone}
-                    />
-                </GridItem>
-              </GridContainer>
+
               <GridContainer>
                 <GridItem xs={12} sm={3}>
                   <FormLabel className={classes.labelHorizontal}>
-                      Tags
-                  </FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                  <TagsInput
-                    id="tags"
-                    value={values.tags}
-                    onChange={(value) => setFieldValue('tags', value)}
-                    addKeys={[9, 13, 32, 188]}
-                    tagProps={{ className: "react-tagsinput-tag info" }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>
-                      Qualifications
-                  </FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                  <TagsInput
-                    id="qualifications"
-                    value={values.qualifications}
-                    onChange={(value) => setFieldValue('qualifications', value)}
-                    addKeys={[9, 13, 32, 188]}
-                    tagProps={{ className: "react-tagsinput-tag info" }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel
-                      className={
-                          classes.labelHorizontal +
-                          " " +
-                          classes.labelHorizontalRadioCheckbox
-                      }
-                  >
-                      Location
+                    Service Organization
                   </FormLabel>
                 </GridItem>
                 <GridItem xs={12} sm={4}>
                   <FormControl
-                      fullWidth
-                      className={classes.selectFormControl}>
-                      <Select
-                        value={values.geoLocationId}
-                        onChange={handleChange('geoLocationId')}
-                        name="geoLocationId"
-                      >
-                        {geoLocations.map(option => (
-                            <MenuItem
-                              key={ option.id }
-                              value={ option.id }
-                            >
-                              {option.streetAddress}, {option.city}, {option.country}
-                            </MenuItem>
-                        ))}
-                      </Select>
+                    fullWidth
+                    className={classes.selectFormControl}>
+                    <Select
+                      value={values.providerInformation.organizationId}
+                      onChange={handleChange('providerInformation.organizationId')}
+                      name="organizationId"
+                    >
+                      {organizationOptions.map(organizationOption => (
+                        <MenuItem
+                          key={organizationOption.id}
+                          value={organizationOption.id}
+                          id="providerInformation.organizationId"
+                        >
+                          {organizationOption.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Tags
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={3}>
+                  <CustomInput
+                    id="providerInformation.tags"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 3
+                    }}
+                    placeholder="tag1,tag2,tag3,..."
+                    value={values.providerInformation.tags}
+                    onChange={handleChange}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Qualifications
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={3}>
+                  <CustomInput
+                    id="providerInformation.qualifications"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 3
+                    }}
+                    placeholder="Empathy,Thick Skin,Flexibility,..."
+                    value={values.providerInformation.qualifications}
+                    onChange={handleChange}
+                  />
                 </GridItem>
               </GridContainer>
             </CardBody>
             <CardFooter className={classes.justifyContentCenter}>
               <Button color="rose" onClick={handleSubmit}>
-                Add Provider
+                Save
               </Button>
-              <Button color="rose" onClick={this.props.history.goBack}>
-                Save & Exit
+               <Button color="rose" onClick={this.props.history.goBack}>
+                Back
               </Button>
             </CardFooter>
           </Card>
         )}
       />
 
-		)
-	}
+    )
+  }
 }
 
 ProviderEdit.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return {
     provider: state.providers.provider,
     timezones: state.providers.timezones,
     getAllLocations: state.location.getAllLocations,
-    getAllLocationsLoading: state.location.getAllLocationsLoading
+    getAllLocationsLoading: state.location.getAllLocationsLoading,
+    organizationLists: state.organization.getOrganizations
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProvider: (id) => dispatch(fetchProvider(id)),
-    createProvider: (provider) => dispatch(createProvider(provider)),
+    editProvider: (provider, history) => dispatch(editProvider(provider, history)),
     fetchTimezones: () => dispatch(fetchTimezones()),
-    fetchAllLocations: () => dispatch(fetchAllLocations())
+    getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
   }
 }
 

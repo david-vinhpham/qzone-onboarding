@@ -26,9 +26,7 @@ export const fetchTimezones = () => {
 }
 }
 
-export function fetchProviders() {
-  let orgId = localStorage.getItem('organizationId');
-
+export function fetchProviders(orgId) {
   return (dispatch) => {
     dispatch(getProviders());
     fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_ORG_ID + orgId, {
@@ -51,6 +49,30 @@ export function fetchProviders() {
   };
 };
 
+export function fetchProvidersBySub(sub) {
+  return (dispatch) => {
+    dispatch(getProviders());
+    fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_USER_SUB + sub, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log("json-----------", json)
+        if (json.objects) {
+          dispatch(fetchProvidersSuccess(json.objects));
+        } else {
+          dispatch(fetchProvidersFailure("Topology Error"))
+        }
+        return json;
+      })
+      .catch(err => dispatch(fetchProvidersFailure(err)))
+  };
+};
+
+
 export function getProviders() {
   return {
     type: provider.FETCH_PROVIDERS
@@ -70,12 +92,45 @@ export function fetchProvidersFailure(error) {
     payload: { error }
   }
 }
-
+export function editProvider(values, history) {
+  return (dispatch) => {
+    dispatch({
+      type: provider.EDIT_PROVIDER_LOADING
+    })
+    fetch(API_ROOT + URL.USERS, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch({
+          type: provider.EDIT_PROVIDER_SUCCESS,
+          payload: data.object
+        })
+        history.push('/provider/list');
+      })
+      .catch(err => {
+        dispatch({
+          type: provider.EDIT_PROVIDER_FAILURE,
+          payload: {err}
+        })
+      })
+  }
+}
 export function createProvider(values, history) {
   console.log("values-", values);
+  if(values.userType === null || values.userType === '' || values.userType !== "PROVIDER") {
+    values.userType = "PROVIDER";
+  }
+  let userSub = localStorage.getItem('userSub');
+  values.providerInformation.businessId = userSub;
+
   return (dispatch) => {
       dispatch({ type: provider.CREATE_PROVIDER_LOADING })
-        fetch(API_ROOT + URL.PROVIDER, {
+        fetch(API_ROOT + URL.ADMIN_CREATE_AWS_USER, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -114,7 +169,8 @@ export function createProviderFailure(error) {
 
 export function fetchProvider(id) {
   return (dispatch) => {
-      fetch(API_ROOT + URL.PROVIDER + '/' + id, {
+      dispatch(getProvider())
+      fetch(API_ROOT + URL.USERS + '/' + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

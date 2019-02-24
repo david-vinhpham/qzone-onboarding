@@ -5,8 +5,7 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {FormControl, FormControlLabel, FormLabel, MenuItem, Select, Switch} from '@material-ui/core'
-import TagsInput from "react-tagsinput";
+import {FormControl, FormLabel, MenuItem, Select} from '@material-ui/core'
 
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
@@ -21,7 +20,9 @@ import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import {fetchAllLocations} from '../../actions/location';
-
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+import {getOrganizationByBusinessAdminId} from "../../actions/organization";
 
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -30,7 +31,8 @@ const ProviderSchema = Yup.object().shape({
   givenName: Yup.string()
                 .required("This field is required")
                 .min(3, "Name should be atleast 3 letters")
-                .max(40, "Too Long")
+                .max(40, "Too Long"),
+  telephone: Yup.string().required("Please enter a valid phone Number")
 })
 class ProviderCreate extends React.Component{
 	constructor(props) {
@@ -47,6 +49,9 @@ class ProviderCreate extends React.Component{
   componentDidMount() {
     this.props.fetchTimezones();
     this.props.fetchAllLocations();
+    let userSub = localStorage.getItem('userSub');
+    console.log('userSub: ' + userSub);
+    this.props.getOrganizationByBusinessAdminId(userSub);
   }
 
   doubleClick(fieldName) {
@@ -128,31 +133,35 @@ class ProviderCreate extends React.Component{
   }
 
 	render() {
-    const { classes, timezones, getAllLocations } = this.props;
-    let categoryOptions = [];
-    let geoLocations = [];
-		if ((timezones.length && getAllLocations.length) > 0) {
-      categoryOptions = timezones;
-      geoLocations = getAllLocations;
+    const { classes, timezones, organizationLists } = this.props;
+    let timeZoneOptions = [];
+    let organizationOptions = [];
+		if ((timezones.length) > 0) {
+      timeZoneOptions = timezones;
+    }
+		if(organizationLists.length > 0) {
+      organizationOptions = organizationLists;
     }
 		return(
 
           <Formik
             initialValues={{
-              cognitoToken: "",
-              description: "",
-              email: "",
-              familyName: "",
-              geoLocationId: "",
-              givenName: "",
-              isAdmin: true,
-              organizationId: localStorage.getItem('organizationId'),
-              qualifications: [],
-              tags: [],
-              telephone: "",
-              timeZoneId: "",
+              email: '',
+              familyName: '',
+              givenName: '',
+              telephone: '',
               userStatus: "FORCE_CHANGE_PASSWORD",
-              userSub: null
+              userSub: '',
+              userType: "PROVIDER",
+              providerInformation:{
+                description: '',
+                qualifications:'',
+                tags:'',
+                organizationId: null,
+                timeZoneId: null,
+                isAdmin: false,
+                businessId:null,
+              }
             }}
             validationSchema={ProviderSchema}
             onSubmit={(values) => {this.handleProvider(values)}}
@@ -167,7 +176,7 @@ class ProviderCreate extends React.Component{
                   <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            First Name
+                            Given Name
                         </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={4}>
@@ -185,7 +194,7 @@ class ProviderCreate extends React.Component{
                   <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
-                            Last Name
+                            Family Name
                         </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={4}>
@@ -216,6 +225,26 @@ class ProviderCreate extends React.Component{
                   </GridItem>
                 </GridContainer>
                   <GridContainer>
+                    <GridItem xs={12} sm={3}>
+                      <FormLabel className={classes.labelHorizontal}>
+                        Telephone
+                      </FormLabel>
+                    </GridItem>
+                    <GridItem xs={12} sm={4}>
+                      <PhoneInput
+                        id="telephone"
+                        placeholder="e.g.+61 3 xxxx xxxx"
+                        country="AU"
+                        name={'telephone'}
+                        value={values['telephone']}
+                        onChange={e => setFieldValue('telephone', e)}
+                      />
+                      {errors.telephone && touched.telephone ? (
+                        <div style={{ color: "red" }}>{errors.telephone}</div>
+                      ) : null}
+                    </GridItem>
+                  </GridContainer>
+                  <GridContainer>
                       <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                               Description
@@ -223,7 +252,7 @@ class ProviderCreate extends React.Component{
                       </GridItem>
                       <GridItem xs={12} sm={3}>
                           <CustomInput
-                              id="description"
+                              id="providerInformation.description"
                               formControlProps={{
                                   fullWidth: true
                               }}
@@ -231,7 +260,7 @@ class ProviderCreate extends React.Component{
                                   multiline: true,
                                   rows: 5
                               }}
-                              value={values.description}
+                              value={values.providerInformation.description}
                               onChange={handleChange}
                           />
                           {errors.description && touched.description ? (
@@ -239,31 +268,6 @@ class ProviderCreate extends React.Component{
                           ) : null}
                       </GridItem>
                   </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel
-                            className={
-                                classes.labelHorizontal +
-                                " " +
-                                classes.labelHorizontalRadioCheckbox
-                            }
-                        >
-                            Is Provider Admin?
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={2}>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    name="isAdmin"
-                                    checked={values.isAdmin}
-                                    value="isAdmin"
-                                    onChange={handleChange}
-                                />
-                            }
-                        />
-                    </GridItem>
-                </GridContainer>
                   <GridContainer>
                     <GridItem xs={12} sm={3}>
                       <FormLabel
@@ -282,14 +286,15 @@ class ProviderCreate extends React.Component{
                           className={classes.selectFormControl}>
 
                           <Select
-                              value={values.timeZoneId}
-                              onChange={handleChange('timeZoneId')}
+                              value={values.providerInformation.timeZoneId}
+                              onChange={handleChange('providerInformation.timeZoneId')}
                               name="timeZoneId"
                           >
-                              {categoryOptions.map(option => (
+                              {timeZoneOptions.map(option => (
                                     <MenuItem
                                     key={ option }
                                     value={ option }
+                                    id="providerInformation.timeZoneId"
                                   >
                                     {option}
                                   </MenuItem>
@@ -298,22 +303,36 @@ class ProviderCreate extends React.Component{
                       </FormControl>
                     </GridItem>
                   </GridContainer>
+
                   <GridContainer>
                     <GridItem xs={12} sm={3}>
-                        <FormLabel className={classes.labelHorizontal}>
-                            Telephone
-                        </FormLabel>
+                      <FormLabel className={classes.labelHorizontal}>
+                        Service Organization
+                      </FormLabel>
                     </GridItem>
                     <GridItem xs={12} sm={4}>
-                        <CustomInput
-                            id="telephone"
-                            name="telephone"
-                            onChange={handleChange}
-                            value={values.telephone}
-                        />
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}>
+                        <Select
+                          value={values.providerInformation.organizationId}
+                          onChange={handleChange('providerInformation.organizationId')}
+                          name="organizationId"
+                        >
+                          {organizationOptions.map(organizationOption => (
+                            <MenuItem
+                              key={organizationOption.id}
+                              value={organizationOption.id}
+                              id="providerInformation.organizationId"
+                            >
+                              {organizationOption.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </GridItem>
                   </GridContainer>
-                  <GridContainer>
+                  {/*<GridContainer>
                     <GridItem xs={12} sm={3}>
                       <FormLabel className={classes.labelHorizontal}>
                           Tags
@@ -328,8 +347,30 @@ class ProviderCreate extends React.Component{
                         tagProps={{ className: "react-tagsinput-tag info" }}
                       />
                     </GridItem>
-                  </GridContainer>
+                  </GridContainer>*/}
                   <GridContainer>
+                    <GridItem xs={12} sm={3}>
+                      <FormLabel className={classes.labelHorizontal}>
+                        Tags
+                      </FormLabel>
+                    </GridItem>
+                    <GridItem xs={12} sm={3}>
+                      <CustomInput
+                        id="providerInformation.tags"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          multiline: true,
+                          rows: 3
+                        }}
+                        placeholder="tag1,tag2,tag3,..."
+                        value={values.providerInformation.tags}
+                        onChange={handleChange}
+                      />
+                    </GridItem>
+                  </GridContainer>
+                  {/*<GridContainer>
                     <GridItem xs={12} sm={3}>
                       <FormLabel className={classes.labelHorizontal}>
                           Qualifications
@@ -344,38 +385,27 @@ class ProviderCreate extends React.Component{
                         tagProps={{ className: "react-tagsinput-tag info" }}
                       />
                     </GridItem>
-                  </GridContainer>
+                  </GridContainer>*/}
                   <GridContainer>
                     <GridItem xs={12} sm={3}>
-                      <FormLabel
-                          className={
-                              classes.labelHorizontal +
-                              " " +
-                              classes.labelHorizontalRadioCheckbox
-                          }
-                      >
-                          Location
+                      <FormLabel className={classes.labelHorizontal}>
+                        Qualifications
                       </FormLabel>
                     </GridItem>
-                    <GridItem xs={12} sm={4}>
-                      <FormControl
-                          fullWidth
-                          className={classes.selectFormControl}>
-                          <Select
-                            value={values.geoLocationId}
-                            onChange={handleChange('geoLocationId')}
-                            name="geoLocationId"
-                          >
-                            {geoLocations.map(option => (
-                                <MenuItem
-                                  key={ option.id }
-                                  value={ option.id }
-                                >
-                                  {option.streetAddress}, {option.city}, {option.country}
-                                </MenuItem>
-                            ))}
-                          </Select>
-                      </FormControl>
+                    <GridItem xs={12} sm={3}>
+                      <CustomInput
+                        id="providerInformation.qualifications"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          multiline: true,
+                          rows: 3
+                        }}
+                        placeholder="Empathy,Thick Skin,Flexibility,..."
+                        value={values.providerInformation.qualifications}
+                        onChange={handleChange}
+                      />
                     </GridItem>
                   </GridContainer>
                 </CardBody>
@@ -384,7 +414,7 @@ class ProviderCreate extends React.Component{
                     Add Provider
                   </Button>
                   <Button color="rose" onClick={this.props.history.goBack}>
-                    Save & Exit
+                    Back
                   </Button>
                 </CardFooter>
               </Card>
@@ -402,7 +432,8 @@ const mapStateToProps = (state) => {
   return {
     timezones: state.providers.timezones,
     getAllLocations: state.location.getAllLocations,
-    getAllLocationsLoading: state.location.getAllLocationsLoading
+    getAllLocationsLoading: state.location.getAllLocationsLoading,
+    organizationLists: state.organization.getOrganizations
   }
 }
 
@@ -410,7 +441,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     createProvider: (provider, history) => dispatch(createProvider(provider, history)),
     fetchTimezones: () => dispatch(fetchTimezones()),
-    fetchAllLocations: () => dispatch(fetchAllLocations())
+    fetchAllLocations: () => dispatch(fetchAllLocations()),
+    getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
   }
 }
 

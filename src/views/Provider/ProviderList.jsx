@@ -17,7 +17,7 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import {fetchProviders} from '../../actions/provider';
+import {fetchProvidersBySub} from '../../actions/provider';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 import {FormLabel} from "@material-ui/core";
@@ -40,7 +40,8 @@ class ProviderList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchProviders()
+    let sub = localStorage.getItem('userSub');
+    this.props.fetchProvidersBySub(sub);
   }
 
   render() {
@@ -103,7 +104,7 @@ class ProviderList extends React.Component {
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>
-                      {provider.givenName} {provider.familyName}
+                      {provider.givenName} {/*provider.familyName*/}
                     </h4>
                     <p className={classes.cardProductDesciprion}>
                       {provider.id}
@@ -175,7 +176,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchProviders: () => dispatch(fetchProviders()),
+    fetchProvidersBySub: (sub) => dispatch(fetchProvidersBySub(sub)),
   }
 }
 
