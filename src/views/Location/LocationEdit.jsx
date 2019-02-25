@@ -79,7 +79,7 @@ class LocationEdit extends React.Component {
             <Card>
                 <CardHeader color="rose" text>
                     <CardText color="rose">
-                        <h4 className={classes.cardTitle}>Update a Address</h4>
+                        <h4 className={classes.cardTitle}>Update a Service Location</h4>
                     </CardText>
                 </CardHeader>
                 <CardBody>

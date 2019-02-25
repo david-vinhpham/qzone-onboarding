@@ -105,7 +105,7 @@ class ProviderEdit extends React.Component{
           <Card>
             <CardHeader color="rose" text>
               <CardText color="rose">
-                <h4 className={classes.cardTitle}>Create Provider</h4>
+                <h4 className={classes.cardTitle}>Edit Provider</h4>
               </CardText>
             </CardHeader>
             <CardBody>

@@ -181,7 +181,7 @@ class ServiceEdit extends React.Component {
                                 <div>
                                     <CardHeader color="rose" text>
                                         <CardText color="rose">
-                                            <h4 className={classes.cardTitle}>Edit a Service</h4>
+                                            <h4 className={classes.cardTitle}>Edit Service</h4>
                                         </CardText>
                                     </CardHeader>
                                     <CardBody>
