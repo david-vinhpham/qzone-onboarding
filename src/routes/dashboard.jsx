@@ -139,6 +139,12 @@ export const otherRoutes=[
     component: ServiceEdit
   },
   {
+    path: "/service-providers/list",
+    name: "Service Provider Assignment",
+    icon: ContentPaste,
+    component: ServiceProviderList
+  },
+  {
     path: "/administration",
     name: "Administration",
     icon: LocationOn,
