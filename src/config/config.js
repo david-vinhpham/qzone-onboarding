@@ -9,6 +9,10 @@ export const URL = {
     GET_ORGANIZATION:'organizations/',
 
     GET_SERVICES_BY_BUSINESS_ADMIN_ID: 'services-by-business-admin-id/',
+    FETCH_SERVICES_BY_ORG_ID: 'services-by-org-id/',
+    CREATE_SERVICE_PROVIDER: 'service-providers',
+    GET_SERVICE_PROVIDER_BY_ID: 'service-providers/',
+
     GET_SERVICES: 'services-by-org-id/',
     CREATE_SERVICE: 'services',
     GET_SERVICE_CATEGORY: 'service-categories',
