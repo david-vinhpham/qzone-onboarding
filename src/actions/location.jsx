@@ -27,9 +27,10 @@ export const fetchLocations = () => {
 }
 
 export const fetchLocation = (id) => {
+    console.log('fetchLocation: ' +  id);
     return (dispatch) => {
         dispatch({ type: location.FETCH_LOCATION_FAILURE })
-        fetch(API_ROOT + URL.GET_LOCATION + id ,{
+        fetch(API_ROOT + URL.LOCATION + '/' + id ,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -90,10 +91,10 @@ export const editLocation = (values, history) => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch({
-                type: location.EDIT_LOCATION_SUCCESS,
-                payload: data.object
-            })
+            //dispatch({
+            //    type: location.EDIT_LOCATION_SUCCESS,
+            //    payload: data.object
+            //})
             history.push('/location/list');
         })
         .catch(err => {

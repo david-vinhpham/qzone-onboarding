@@ -79,7 +79,8 @@ class ProviderEdit extends React.Component{
     }
     if (!this.state.provider) {
       return null;
-   }
+    }
+    console.log('this.state.provider: ' + this.state.provider);
     return(
       <Formik
         initialValues={{
@@ -334,8 +335,8 @@ ProviderEdit.propTypes = {
 };
 const mapStateToProps = (state) => {
   return {
-    provider: state.providers.provider,
-    timezones: state.providers.timezones,
+    provider: state.provider.provider,
+    timezones: state.provider.timezones,
     organizations: state.organization.organizations
   }
 }

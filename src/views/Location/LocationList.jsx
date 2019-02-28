@@ -81,7 +81,7 @@ class LocationList extends React.Component {
                                         New Location
                                     </Button>
                                 </Link>
-                                
+
                             </CardHeader>
                         </Card>
                     </GridItem>
@@ -143,7 +143,7 @@ class LocationList extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return { locations: state.location.fetchLocations }
+    return { locations: state.location.locations }
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -1,7 +1,6 @@
-import { service } from '../constants/Service.constants'
-import { provider } from '../constants/Provider.constants'
-import { organization } from '../constants/Organization.constants'
-import { location } from '../constants/Location.constants'
+import {provider} from '../constants/Provider.constants'
+import {organization} from '../constants/Organization.constants'
+import {location} from '../constants/Location.constants'
 
 const initialState = {
 

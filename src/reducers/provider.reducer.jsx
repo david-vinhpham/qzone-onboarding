@@ -42,13 +42,14 @@ export default function(state = initialState, action) {
     case provider.CREATE_PROVIDER_LOADING:
       return { ...state, createProviderLoading: true };
     case provider.CREATE_PROVIDER_SUCCESS:
-      return { ...state, provider: action.payload, editProviderLoading: false }
+      return { ...state, provider: action.payload, createProviderLoading: false }
     case provider.CREATE_PROVIDER_FAILURE:
-      return { ...state, provider: null, createProviderError: action.payload, editProviderLoading: false }
+      return { ...state, provider: null, createProviderError: action.payload, createProviderLoading: false }
 
     case provider.EDIT_PROVIDER_LOADING:
       return { ...state, editProviderLoading: true };
     case provider.EDIT_PROVIDER_SUCCESS:
+      console.log('reducer: EDIT_PROVIDER_SUCCESS');
       return { ...state, provider: action.payload, editProviderLoading: false }
     case provider.EDIT_PROVIDER_FAILURE:
       return { ...state, provider: null, editProviderError: action.payload, editProviderLoading: false }

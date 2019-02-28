@@ -1,13 +1,12 @@
 import React from "react";
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import Search from "@material-ui/icons/Search";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import ArtTrack from "@material-ui/icons/ArtTrack";
-import {Link} from 'react-router-dom';
-import Search from "@material-ui/icons/Search";
-import {connect} from 'react-redux';
-import {compose} from 'redux';
 import {ClipLoader} from 'react-spinners';
 import { css } from '@emotion/core';
 
@@ -19,97 +18,65 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
-import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
-import {fetchLocations} from '../../actions/location';
-import {fetchOrganizationsByBusinessAdminId} from '../../actions/organization';
-import {fetchProviders} from '../../actions/provider';
-import {fetchProvidersByOrgId, fetchServiceProvidersByServiceId} from '../../actions/serviceProvider';
+import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 import {FormLabel} from "@material-ui/core";
+import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 
 const override = css`
     display: block;
     margin: 0 auto;
     border-color: red;
 `;
-
-class ServiceProviderAssignmentList extends React.Component{
+class ServiceProviderList extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       data: [],
-      imageLoadError: true
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.services })
+    this.setState({ data: nextProps.organizations })
   }
 
   componentDidMount() {
-    let businessAdminId = localStorage.getItem('userSub');
-    //console.log('businessAdminId: ' + businessAdminId);
-    this.props.getServicesByBusinessAdminId(businessAdminId)
+    var userSub = localStorage.getItem('userSub');
+    this.props.fetchOrganizationsByBusinessAdminId(userSub);
   }
-  render() {
-    const {
-      classes,
-    } = this.props;
 
-    if(!this.state.data ) {
+  render() {
+    const { classes } = this.props;
+    if (!this.state.data)
       return < ClipLoader
-      className={override}
-      sizeUnit={"px"}
-      size={150}
-      color={'#123abc'}
-      loading={true}
-    />;
-    }
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={true}
+      />;
     let data = null
     if(this.state.data.length === 0) {
       data =  (
         <GridContainer>
-         <FormLabel>
-           No Services.
-         </FormLabel>
+          <FormLabel>
+            No Organizations.
+          </FormLabel>
         </GridContainer>
       )
     } else {
       data = (
         <GridContainer>
-          {this.state.data.map((service, index) => {
+          {this.state.data.map((organization, index) => {
             return (
               <GridItem xs={12} sm={12} md={3}>
-                <Card product >
+                <Card product className={classes.cardHover} >
                   {/* <CardHeader image className={classes.cardHeaderHover}>
-
-                      <img
-                        alt=''
-                        src={service.image ? service.image.fileUrl : null}
-                        onError={e => {
-                          if(self.state.imageLoadError) {
-                            self.setState({
-                                imageLoadError: false
-                            });
-                            e.target.src = priceImage1;
-
-                          }
-                          this.setState({imageLoadError: true})
-                        }}
-                      />
-
+                    <a href="#pablo" onClick={e => e.preventDefault()}>
+                      <img src={priceImage1} alt="..." />
+                    </a>
                   </CardHeader> */}
                   <CardBody>
                     <div className={classes.cardHoverUnder}>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="View"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button color="transparent" simple justIcon>
-                          <ArtTrack className={classes.underChartIcons} />
-                        </Button>
-                      </Tooltip>
                       <Tooltip
                         id="tooltip-top"
                         title="Remove"
@@ -129,7 +96,7 @@ class ServiceProviderAssignmentList extends React.Component{
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Link to={`/service/edit/${service.id}`}>
+                        <Link to={`/organization/edit/${organization.id}`}>
                           <Button color="success" simple justIcon >
                             <Edit className={classes.underChartIcons} />
                           </Button>
@@ -137,17 +104,10 @@ class ServiceProviderAssignmentList extends React.Component{
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>
-                      <a href="#pablo" onClick={e => e.preventDefault()}>
-                        {service.organizationName}
-                      </a>
-                    </h4>
-                    <h4 className={classes.cardProductTitle}>
-                      <a href="#pablo" onClick={e => e.preventDefault()}>
-                        {service.name}
-                      </a>
+                      {organization.name}
                     </h4>
                     <p className={classes.cardProductDesciprion}>
-                      {service.description}
+                      {organization.id}
                     </p>
                   </CardBody>
                 </Card>
@@ -155,16 +115,18 @@ class ServiceProviderAssignmentList extends React.Component{
             )
           })}
         </GridContainer>
+
       )
     }
     return (
+
       <div>
         <GridContainer>
           <GridItem xs={12}>
             <Card>
               <CardHeader color="primary" icon>
                 <CardText color="rose">
-                  <h4 className={classes.cardTitle}>Service List</h4>
+                  <h4 className={classes.cardTitle}>Organization List</h4>
                 </CardText>
                 <div className="centerDiv">
                   <div className="search" md={3}>
@@ -192,11 +154,12 @@ class ServiceProviderAssignmentList extends React.Component{
                     </Button>
                   </div>
                 </div>
-                <Link to={`/services/create`}>
-                  <Button size="sm" className={classes.buttonDisplay} >
-                    New Service
+                <Link to={`/organization/create`}>
+                  <Button size="sm" className={classes.buttonDisplay}>
+                    New Organization
                   </Button>
                 </Link>
+
               </CardHeader>
             </Card>
           </GridItem>
@@ -207,22 +170,17 @@ class ServiceProviderAssignmentList extends React.Component{
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    services: state.service.getService,
-    serviceLoading: state.service.getServiceLoading,
-    serviceError: state.service.getServiceError
-  }
-
+function mapStateToProps(state) {
+  return { organizations: state.organization.organizations }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getServicesByBusinessAdminId: (businessAdminId) => dispatch(getServicesByBusinessAdminId(businessAdminId)),
+    fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
   }
 }
 
 export default compose(
   withStyles(listPageStyle),
   connect(mapStateToProps, mapDispatchToProps),
-)(ServiceProviderAssignmentList);
+)(ServiceProviderList);

@@ -35,6 +35,7 @@ import RegisterPage from "../views/Auth/RegisterPage.jsx";
 import EmailTemplates from '../views/EmailTemplates/EmailTemplates';
 import EditEmailTemplate from "../views/EmailTemplates/EditEmailTemplate";
 import CreateEmailTemplate from "../views/EmailTemplates/CreateEmailTemplate";
+import ServiceProviderList from "../views/ServiceProviderAssignment/ServiceProviderList.jsx";
 
 export const dashboardRoutes = [
   {

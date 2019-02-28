@@ -19,7 +19,6 @@ import {verifyEmail, verifyLength} from "../../validation/validation.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
-import {fetchAllLocations} from '../../actions/location';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
@@ -50,7 +49,7 @@ class ProviderCreate extends React.Component{
     this.props.fetchTimezones();
     let userSub = localStorage.getItem('userSub');
     console.log('userSub: ' + userSub);
-    this.props.getOrganizationByBusinessAdminId(userSub);
+    this.props.fetchOrganizationsByBusinessAdminId(userSub);
   }
 
   doubleClick(fieldName) {
@@ -427,7 +426,7 @@ ProviderCreate.propTypes = {
 };
 const mapStateToProps = (state) => {
   return {
-    timezones: state.providers.timezones,
+    timezones: state.provider.timezones,
     organizations: state.organization.organizations
   }
 }

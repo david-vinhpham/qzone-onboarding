@@ -10,7 +10,7 @@ import ImageUploadReducer from './imageUpload.reducer';
 import LocationReducer from './location.reducer';
 
 const rootReducer = combineReducers({
-  providers: ProvidersReducer,
+  provider: ProvidersReducer,
   events: EventsReducer,
   user: UserReducer,
   email: TemplateReducer,

@@ -23,7 +23,7 @@ export const URL = {
     FETCH_LOCATION:'geo-locations/',
 
     USER: 'users',
-    FETCH_TIMEZONE: 'timezones',
+    TIMEZONE: 'timezones',
     FETCH_PROVIDERS_BY_ORG_ID: 'providers-by-org-id/',
     FETCH_PROVIDERS_BY_USER_SUB: 'providers-by-user-sub/',
     ADMIN_CREATE_AWS_USER: 'users/admin-create-new-users'

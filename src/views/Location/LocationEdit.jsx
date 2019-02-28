@@ -46,7 +46,8 @@ class LocationEdit extends React.Component {
     }
 
     componentDidMount() {
-        const { id } = this.props.match.params
+        const { id } = this.props.match.params;
+        console.log('id: ' + id);
         this.props.fetchLocation(id);
     }
 

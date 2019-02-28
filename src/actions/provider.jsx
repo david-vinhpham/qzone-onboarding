@@ -4,7 +4,7 @@ import {API_ROOT, URL} from '../config/config';
 export const fetchTimezones = () => {
   return (dispatch) => {
     dispatch({ type: provider.FETCH_TIMEZONES_LOADING })
-    fetch(API_ROOT + URL.GET_TIMEZONE, {
+    fetch(API_ROOT + URL.TIMEZONE, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -92,12 +92,29 @@ export function fetchProvidersFailure(error) {
     payload: { error }
   }
 }
+export const editProviderLoading = () => {
+  return {
+    type: provider.CREATE_PROVIDER_LOADING
+  }
+}
+
+export const editProviderSuccess = (data) => {
+  return {
+    type: provider.EDIT_PROVIDER_SUCCESS,
+    payload: data.object
+  }
+}
+
+export const editProviderFailure = (error) => {
+  return {
+    type: provider.EDIT_PROVIDER_FAILURE,
+    payload: error
+  }
+}
 export function editProvider(values, history) {
   return (dispatch) => {
-    dispatch({
-      type: provider.EDIT_PROVIDER_LOADING
-    })
-    fetch(API_ROOT + URL.USERS, {
+    dispatch(editProviderLoading())
+    fetch(API_ROOT + URL.USER, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -106,17 +123,11 @@ export function editProvider(values, history) {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch({
-          type: provider.EDIT_PROVIDER_SUCCESS,
-          payload: data.object
-        })
-        history.push('/provider/list');
+       // dispatch(editProviderSuccess(data))
+        history.push('/provider/list')
       })
       .catch(err => {
-        dispatch({
-          type: provider.EDIT_PROVIDER_FAILURE,
-          payload: {err}
-        })
+        dispatch(editProviderFailure(err))
       })
   }
 }
@@ -172,7 +183,7 @@ export function fetchProvider(id) {
       })
       .then(res => res.json())
       .then(json => {
-        console.log("jaon-----", json)
+        console.log("json-----", json)
         if (json.object) {
           dispatch(fetchProviderSuccess(json.object));
         } else {

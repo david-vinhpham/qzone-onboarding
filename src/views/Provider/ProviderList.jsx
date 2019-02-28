@@ -171,7 +171,7 @@ class ProviderList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { providers: state.providers.providers }
+  return { providers: state.provider.providers }
 }
 
 const mapDispatchToProps = (dispatch) => {
