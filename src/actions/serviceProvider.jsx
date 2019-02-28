@@ -1,12 +1,12 @@
 import {API_ROOT, URL} from '../config/config';
 import {serviceProvider} from '../constants/ServiceProvider.constants';
 
-export const editService = (values, history) => {
+export const editServiceProvider = (values, history) => {
     return (dispatch) => {
         dispatch({
-            type: service.EDIT_SERVICE
+            type: serviceProvider.UPDATE_SERVICE_PROVIDER
         })
-        fetch(API_ROOT + URL.CREATE_SERVICE, {
+        fetch(API_ROOT + URL.UPDATE_SERVICE_PROVIDER, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -16,24 +16,24 @@ export const editService = (values, history) => {
         .then(res => res.json())
         .then(data => {
             dispatch({
-                type: service.EDIT_SERVICE_SUCCESS,
+                type: serviceProvider.FETCH_SERVICE_PROVIDER_SUCCESS
                 payload: {data}
             })
-            history.push('/services/list');
+            history.push('/service-providers/list');
         })
         .catch(err => {
             dispatch({
-                type: service.EDIT_SERVICE_FAILURE,
+                type: serviceProvider.UPDATE_SERVICE_PROVIDER_FAILURE,
                 payload: {err}
             })
         })
     }
 }
 
-export const getServiceById = (id) => {
+export const fetchServiceProviderById = (id) => {
         return (dispatch) => {
-        dispatch(getServiceByIdLoading())
-        fetch(API_ROOT + URL.GET_SERVICE_BY_ID + id, {
+        dispatch(fetchServiceProviderByIdLoading())
+        fetch(API_ROOT + URL.FETCH_SERVICE_PROVIDER_BY_ID + id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,38 +41,38 @@ export const getServiceById = (id) => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(getServiceByIdSuccess(data.object))
+            dispatch(fetchServiceProviderByIdSuccess(data.object))
         })
         .catch(err => {
-            dispatch(getServiceByIdFailure(err))
+            dispatch(fetchServiceProviderByIdFailure(err))
         })
     }
 }
 
-export const getServiceByIdLoading = () => {
+export const fetchServiceProviderByIdLoading = () => {
     return {
-        type: service.FETCH_SERVICE_BY_ID
+        type: serviceProvider.FETCH_SERVICE_PROVIDER
     }
 }
 
-export const getServiceByIdSuccess = (data) => {
+export const fetchServiceProviderByIdSuccess = (data) => {
     return {
-        type: service.FETCH_SERVICE_BY_ID_SUCCESS,
+        type: serviceProvider.FETCH_SERVICE_PROVIDER_SUCCESS,
         payload: { data }
     }
 }
 
-export const getServiceByIdFailure = (error) => {
+export const fetchServiceProviderByIdFailure = (error) => {
     return {
-        type: service.FETCH_SERVICE_BY_ID_FAILURE,
+        type: serviceProvider.UPDATE_SERVICE_PROVIDER_FAILURE,
         payload: { error }
     }
 }
 
-export const getServiceCategory = () => {
+export const fetchOganizationByBusinessAdminId = () => {
     return (dispatch) => {
         dispatch(getServiceCategoryLoading())
-        fetch(API_ROOT + URL.GET_SERVICE_CATEGORY, {
+        fetch(API_ROOT + URL.GET_ORGANIZATION_BY_BUSINESS_ADMIN_ID, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

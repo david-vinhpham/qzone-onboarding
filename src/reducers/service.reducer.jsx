@@ -1,60 +1,61 @@
 import { service } from '../constants/Service.constants'
 
 const initialState = {
-    getServiceLodiang : false,
-    getService: [],
-    getServiceError: null,
-
     service: [],
-    serviceLoading: false,
-    serviceError: null,
+    fetchServiceLoading : false,
+    fetchServiceError: null,
 
-    serviceCategory: [],
-    serviceCategoryLoading: false,
-    serviceCategoryError: null,
+    createServiceLoading:false,
+    createServiceError: null,
 
-    getServiceById: [],
-    getServiceByIdLoading: false,
-    getServiceByIdError: null
+    editServiceLoading:false,
+    editServiceError: null,
 
+    services: [],
+    fetchServicesLoading : false,
+    fetchServicesError: null,
+
+    serviceCategories: [],
+    fetchServiceCategoryLoading: false,
+    fetchServiceCategoryError: null,
 }
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
-        case service.FETCH_SERVICES:
-            return { ...state, getServiceLodiang: true }
+        case service.FETCH_SERVICES_LOADING:
+            return { ...state, fetchServicesLoading: true }
         case service.FETCH_SERVICES_SUCCESS:
-            return { ...state, getService: action.payload.data, getServiceLodiang: false }
+            return { ...state, services: action.payload.data, fetchServicesLoading: false }
         case service.FETCH_SERVICES_FAILURE:
-            return { ...state, getService: [], getServiceError: action.payload.error, getServiceLodiang: false }
+            return { ...state, services: [], fetchServicesError: action.payload.error, fetchServicesLoading: false }
 
-        case service.CREATE_SERVICE:
-            return { ...state, serviceLoading: true }
+        case service.CREATE_SERVICE_LOADING:
+            return { ...state, createServiceLoading: true }
         case service.CREATE_SERVICE_SUCCESS:
-            return { ...state, service: action.payload.data, serviceLoading: false }
+            return { ...state, service: action.payload.data, createServiceLoading: false }
         case service.CREATE_SERVICE_FAILURE:
-            return { ...state, service:[], serviceError: action.payload.error, serviceLoading: false }
+            return { ...state, service:[], createServiceError: action.payload.error, createServiceLoading: false }
 
-        case service.EDIT_SERVICE:
-            return { ...state, serviceLoading: true }
+        case service.EDIT_SERVICE_LOADING:
+            return { ...state, editServiceLoading: true }
         case service.EDIT_SERVICE_SUCCESS:
-            return { ...state, service: action.payload.data, serviceLoading: false }
+            return { ...state, service: action.payload.data, editServiceLoading: false }
         case service.EDIT_SERVICE_FAILURE:
-            return { ...state, service:[], serviceError: action.payload.error, serviceLoading: false }
+            return { ...state, service:[], editServiceError: action.payload.error, editServiceLoading: false }
 
-        case service.FETCH_CATEGORY:
-            return { ...state, serviceCategoryLoading: true }
+        case service.FETCH_CATEGORY_LOADING:
+            return { ...state, fetchServiceCategoryLoading: true }
         case service.FETCH_CATEGORY_SUCCESS:
-            return { ...state, serviceCategory: action.payload.data, serviceCategoryLoading: false }
+            return { ...state, serviceCategories: action.payload.data, fetchServiceCategoryLoading: false }
         case service.FETCH_CATEGORY_FAILURE:
-            return { ...state, serviceCategory: [], serviceCategoryError: action.payload.error, serviceCategoryLoading: false }
+            return { ...state, serviceCategories: [], fetchServiceCategoryError: action.payload.error, fetchServiceCategoryLoading: false }
 
-        case service.FETCH_SERVICE_BY_ID:
-            return { ...state, getServiceByIdLoading: true }
-        case service.FETCH_SERVICE_BY_ID_SUCCESS:
-            return { ...state, getServiceById: action.payload.data, getServiceByIdLoading: false }
-        case service.FETCH_SERVICE_BY_ID_FAILURE:
-            return { ...state, getServiceById: [], getServiceByIdError: action.payload.error, getServiceByIdLoading: false }
+        case service.FETCH_SERVICE_LOADING:
+            return { ...state, fetchServiceLoading: true }
+        case service.FETCH_SERVICE_SUCCESS:
+            return { ...state, service: action.payload.data, fetchServiceLoading: false }
+        case service.FETCH_SERVICE_FAILURE:
+            return { ...state, service: [], fetchServiceCategoryError: action.payload.error, fetchServiceLoading: false }
 
         default:
             return state;

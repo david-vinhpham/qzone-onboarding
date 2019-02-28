@@ -4,7 +4,7 @@ import {API_ROOT, URL} from '../config/config';
 export const fetchOrganization = (id) => {
   return (dispatch) => {
     dispatch({ type: organization.FETCH_ORGANIZATION_FAILURE })
-    fetch(API_ROOT + URL.GET_ORGANIZATION + id ,{
+    fetch(API_ROOT + URL.FETCH_ORGANIZATION + id ,{
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -68,10 +68,10 @@ export const editOrganizationFailure = (error) => {
     }
 }
 
-export const getOrganizationByBusinessAdminId = (adminId) => {
+export const fetchOrganizationByBusinessAdminId = (adminId) => {
     return (dispatch) => {
         dispatch(getOrganizationByAdminLoading())
-        fetch(API_ROOT + URL.GET_ORGANIZATION_BY_BUSINESS_ADMIN_ID + adminId, {
+        fetch(API_ROOT + URL.FETCH_ORGANIZATION_BY_BUSINESS_ADMIN_ID + adminId, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -79,28 +79,28 @@ export const getOrganizationByBusinessAdminId = (adminId) => {
         })
         .then(res => res.json())
         .then(json => {
-            dispatch(getOrganizationByAdminSuccess(json.objects))
+            dispatch(fetchOrganizationByAdminSuccess(json.objects))
         })
         .catch(err => {
-            dispatch(getOrganizationByAdminFailure(err))
+            dispatch(fetchOrganizationByAdminFailure(err))
         })
     }
 }
 
-export const getOrganizationByAdminLoading = () => {
+export const fetchOrganizationByAdminLoading = () => {
     return {
         type: organization.ORGANIZATION_BY_ADMIN_LOADING
     }
 }
 
-export const getOrganizationByAdminSuccess = (organizations) => {
+export const fetchOrganizationByAdminSuccess = (organizations) => {
     return {
         type: organization.ORGANIZATION_BY_ADMIN_SUCCESS,
         payload: {organizations}
     }
 }
 
-export const getOrganizationByAdminFailure = (error) => {
+export const fetchOrganizationByAdminFailure = (error) => {
     return {
         type: organization.ORGANIZATION_BY_ADMIN_FAILURE,
         payload: { error }

@@ -30,10 +30,10 @@ export const editService = (values, history) => {
     }
 }
 
-export const getServiceById = (id) => {
+export const fetchServiceById = (id) => {
         return (dispatch) => {
-        dispatch(getServiceByIdLoading())
-        fetch(API_ROOT + URL.GET_SERVICE_BY_ID + id, {
+        dispatch(fetchServiceByIdLoading())
+        fetch(API_ROOT + URL.FETCH_SERVICE_BY_ID + id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,28 +41,28 @@ export const getServiceById = (id) => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(getServiceByIdSuccess(data.object))
+            dispatch(fetchServiceByIdSuccess(data.object))
         })
         .catch(err => {
-            dispatch(getServiceByIdFailure(err))
+            dispatch(fetchServiceByIdFailure(err))
         })
     }
 }
 
-export const getServiceByIdLoading = () => {
+export const fetchServiceByIdLoading = () => {
     return {
         type: service.FETCH_SERVICE_BY_ID
     }
 }
 
-export const getServiceByIdSuccess = (data) => {
+export const fetchServiceByIdSuccess = (data) => {
     return {
         type: service.FETCH_SERVICE_BY_ID_SUCCESS,
         payload: { data }
     }
 }
 
-export const getServiceByIdFailure = (error) => {
+export const fetchServiceByIdFailure = (error) => {
     return {
         type: service.FETCH_SERVICE_BY_ID_FAILURE,
         payload: { error }
@@ -72,7 +72,7 @@ export const getServiceByIdFailure = (error) => {
 export const getServiceCategory = () => {
     return (dispatch) => {
         dispatch(getServiceCategoryLoading())
-        fetch(API_ROOT + URL.GET_SERVICE_CATEGORY, {
+        fetch(API_ROOT + URL.FETCH_SERVICE_CATEGORY, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -88,31 +88,31 @@ export const getServiceCategory = () => {
     }
 }
 
-export const getServiceCategoryLoading = () => {
+export const fetchServiceCategoryLoading = () => {
     return {
         type: service.FETCH_CATEGORY
     }
 }
 
-export const getServiceCategorySuccess = (data) => {
+export const fetchServiceCategorySuccess = (data) => {
     return {
         type: service.FETCH_CATEGORY_SUCCESS,
         payload: { data }
     }
 }
 
-export const getServiceCategoryFailure = (error) => {
+export const fetchServiceCategoryFailure = (error) => {
     return {
         type: service.FETCH_CATEGORY_FAILURE,
         payload: { error }
     }
 }
 
-export const getServicesByOrganization = () => {
+export const fetchServicesByOrganization = () => {
     let orgId = localStorage.getItem('organizationId');
     return (dispatch) => {
-        dispatch(getServicesByOrganizationLoading())
-        fetch(API_ROOT + URL.GET_SERVICES + orgId, {
+        dispatch(fetchServicesByOrganizationLoading())
+        fetch(API_ROOT + URL.FETCH_SERVICES + orgId, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -120,18 +120,18 @@ export const getServicesByOrganization = () => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(getServicesByOrganizationSuccess(data.objects))
+            dispatch(fetchServicesByOrganizationSuccess(data.objects))
         })
         .catch(err => {
-            dispatch(getServicesByOrganizationFailure(err))
+            dispatch(fetchServicesByOrganizationFailure(err))
         })
     }
 }
 
-export const getServicesByBusinessAdminId = (businessAdminId) => {
+export const fetchServicesByBusinessAdminId = (businessAdminId) => {
   return (dispatch) => {
-    dispatch(getServicesByOrganizationLoading())
-    fetch(API_ROOT + URL.GET_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
+    dispatch(fetchServicesByOrganizationLoading())
+    fetch(API_ROOT + URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -139,35 +139,35 @@ export const getServicesByBusinessAdminId = (businessAdminId) => {
     })
     .then(res => res.json())
     .then(data => {
-      dispatch(getServicesByBusinessAdminSuccess(data.objects))
+      dispatch(fetchServicesByBusinessAdminSuccess(data.objects))
     })
     .catch(err => {
-      dispatch(getServicesByBusinessAdminFailure(err))
+      dispatch(fetchServicesByBusinessAdminFailure(err))
     })
   }
 }
 
-export const getServicesByOrganizationLoading = () => {
+export const fetchServicesByOrganizationLoading = () => {
     return {
         type: service.FETCH_SERVICES
     }
 }
 
-export const getServicesByOrganizationSuccess = (data) => {
+export const fetchServicesByOrganizationSuccess = (data) => {
     return {
         type: service.FETCH_SERVICES_SUCCESS,
         payload: { data }
     }
 }
 
-export const getServicesByOrganizationFailure = (error) => {
+export const fetchServicesByOrganizationFailure = (error) => {
   return {
     type: service.FETCH_SERVICES_FAILURE,
     payload: { error }
   }
 }
 
-export const getServicesByBusinessAdminLoading = () => {
+export const fetchServicesByBusinessAdminLoading = () => {
   return {
     type: service.FETCH_SERVICES
   }

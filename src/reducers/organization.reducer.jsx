@@ -3,52 +3,54 @@ import {
 } from '../constants/Organization.constants';
 
 const initialState = {
-    businessCategory: [],
-    businessCategoryError: null,
-    businessCategoryLoading: false,
+    businessCategories: [],
+    fetchBusinessCategoriesError: null,
+    fetchBusinessCategoriesLoading: false,
 
-    createOrganization: [],
+    organizations: [],
+    fetchOrganizationsLoading: null,
+    fetchOrganizationsError: false,
+
+    organization: [],
     createOrganizationError: null,
     createOrganizationLoading: false,
 
-    getOrganizations: [],
-    organizationByAdminError: null,
-    organizationByAdminLoading: false,
+    editOrganizationError: null,
+    editOrganizationLoading: false,
 
-    getOrganization: [],
-    organizationLoading: false,
-    organizationError: null
+    fetchOrganizationLoading: false,
+    fetchOrganizationError: null
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case organization.FETCH_BUSINESS:
-            return { ...state, businessCategoryLoading: true };
-        case organization.FETCH_BUSINESS_SUCCESS:
-            return { ...state, businessCategory: action.payload.data, businessCategoryLoading: false };
-        case organization.FETCH_BUSINESS_FAILURE:
-            return { ...state, businessCategoryError: action.payload.err, businessCategoryLoading: false}
+        case organization.FETCH_BUSINESS_CATEGORIES_LOADING:
+            return { ...state, fetchBusinessCategoriesLoading: true };
+      case organization.FETCH_BUSINESSES_CATEGORIES_SUCCESS:
+            return { ...state, businessCategories: action.payload.data, fetchBusinessCategoriesLoading: false };
+      case organization.FETCH_BUSINESSES_CATEGORIES_FAILURE:
+            return { ...state, fetchBusinessCategoriesError: action.payload.err, fetchBusinessCategoriesLoading: false}
 
         case organization.CREATE_ORGANIZATION_LOADING:
             return { ...state,  createOrganizationLoading: true};
         case organization.CREATE_ORGANIZATION_SUCCESS:
-            return { ...state, createOrganization: action.payload, createOrganizationLoading: false };
+            return { ...state, organization: action.payload, createOrganizationLoading: false };
         case organization.CREATE_ORGANIZATION_FAILURE:
             return { ...state, createOrganizationError: action.payload.error, createOrganizationLoading: false};
 
-        case organization.ORGANIZATION_BY_ADMIN_LOADING:
-            return { ...state, organizationByAdminLoading:true};
-        case organization.ORGANIZATION_BY_ADMIN_SUCCESS:
-            return { ...state, getOrganizations: action.payload.organizations, organizationByAdminLoading: false};
-        case organization.ORGANIZATION_BY_ADMIN_FAILURE:
-            return { ...state, organizationByAdminError: action.payload.error, organizationByAdminLoading: false};
+        case organization.FETCH_ORGANIZATIONS_LOADING:
+            return { ...state, fetchOrganizationsLoading:true};
+      case organization.FETCH_ORGANIZATIONS_SUCCESS:
+            return { ...state, organizations: action.payload.organizations, fetchOrganizationsLoading: false};
+      case organization.FETCH_ORGANIZATIONS_FAILURE:
+            return { ...state, fetchOrganizationsError: action.payload.error, fetchOrganizationsLoading: false};
 
         case organization.FETCH_ORGANIZATION_LOADING:
-            return { ...state, organizationLoading: true};
+            return { ...state, fetchOrganizationLoading: true};
         case organization.FETCH_ORGANIZATION_SUCCESS:
-            return {...state, getOrganization: action.payload, organizationLoading: false};
+            return {...state, organization: action.payload, fetchOrganizationLoading: false};
         case organization.FETCH_ORGANIZATION_FAILURE:
-            return { ...state, organizationError: action.payload, organizationLoading: false};
+            return { ...state, fetchOrganizationError: action.payload, fetchOrganizationLoading: false};
 
         default:
             return state;

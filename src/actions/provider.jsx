@@ -190,7 +190,7 @@ export function fetchProvider(id) {
   };
 }
 
-export function getProvider() {
+export function fetchProvider() {
   return {
     type: provider.FETCH_PROVIDER
   }
