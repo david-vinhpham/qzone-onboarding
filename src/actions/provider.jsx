@@ -4,7 +4,7 @@ import {API_ROOT, URL} from '../config/config';
 export const fetchTimezones = () => {
   return (dispatch) => {
     dispatch({ type: provider.FETCH_TIMEZONES_LOADING })
-    fetch(API_ROOT + URL.GET_TIMEZONES, {
+    fetch(API_ROOT + URL.GET_TIMEZONE, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ export const fetchTimezones = () => {
 
 export function fetchProviders(orgId) {
   return (dispatch) => {
-    dispatch(getProviders());
+    dispatch(fetchProvidersLoading());
     fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_ORG_ID + orgId, {
       method: 'GET',
       headers: {
@@ -51,7 +51,7 @@ export function fetchProviders(orgId) {
 
 export function fetchProvidersBySub(sub) {
   return (dispatch) => {
-    dispatch(getProviders());
+    dispatch(fetchProvidersLoading());
     fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_USER_SUB + sub, {
       method: 'GET',
       headers: {
@@ -73,9 +73,9 @@ export function fetchProvidersBySub(sub) {
 };
 
 
-export function getProviders() {
+export function fetchProvidersLoading() {
   return {
-    type: provider.FETCH_PROVIDERS
+    type: provider.FETCH_PROVIDERS_LOADING
   }
 }
 
@@ -147,12 +147,6 @@ export function createProvider(values, history) {
   };
 }
 
-export function postProvider() {
-  return {
-    type: provider.CREATE_PROVIDER
-  }
-}
-
 export function createProviderSuccess(providers) {
   return {
     type: provider.CREATE_PROVIDER_SUCCESS,
@@ -169,8 +163,8 @@ export function createProviderFailure(error) {
 
 export function fetchProvider(id) {
   return (dispatch) => {
-      dispatch(getProvider())
-      fetch(API_ROOT + URL.USERS + '/' + id, {
+      dispatch(fetchProviderLoading())
+      fetch(API_ROOT + URL.USER + '/' + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -190,9 +184,9 @@ export function fetchProvider(id) {
   };
 }
 
-export function fetchProvider() {
+export function fetchProviderLoading() {
   return {
-    type: provider.FETCH_PROVIDER
+    type: provider.FETCH_PROVIDER_LOADING
   }
 }
 

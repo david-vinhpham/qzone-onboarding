@@ -20,7 +20,7 @@ import Accordion from "components/Accordion/Accordion.jsx";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 
-import { fetchBusinessCategory, createOrganization } from "../../actions/organization.jsx"
+import { fetchBusinessCategories, createOrganization } from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 
@@ -46,7 +46,7 @@ class OrganizationCreate extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getBusinessCategory()
+    this.props.fetchBusinessCategories()
   }
 
   submit = (values) => {
@@ -55,10 +55,10 @@ class OrganizationCreate extends React.Component {
     this.props.createOrganization(values, this.props.history);
   }
   render() {
-    const { classes, businessCategory } = this.props;
+    const { classes, businessCategories } = this.props;
     let categoryOptions = [];
-    if (businessCategory && businessCategory.objects) {
-      categoryOptions = businessCategory.objects;
+    if (businessCategories && businessCategories.objects) {
+      categoryOptions = businessCategories.objects;
     }
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -600,14 +600,15 @@ OrganizationCreate.propTypes = {
 const mapsStateToProp = (state) => ({
   userDetails: state.user.userDetails,
   email: state.user.email,
-  businessCategory: state.organization.businessCategory,
-  businessCategoryLoading: state.organization.businessCategoryLoading,
-  businessCategoryError: state.organization.businessCategoryError,
+  businessCategories: state.organization.businessCategories,
+  fetchBusinessCategoriesLoading: state.organization.fetchBusinessCategoriesLoading,
+  fetchBusinessCategoriesError: state.organization.fetchBusinessCategoriesError,
+  organization: state.organization.organization,
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getBusinessCategory: () => dispatch(fetchBusinessCategory()),
+    fetchBusinessCategories: () => dispatch(fetchBusinessCategories()),
     createOrganization: (data, history) => dispatch(createOrganization(data, history)),
   }
 }

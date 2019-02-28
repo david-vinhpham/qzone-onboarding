@@ -125,7 +125,7 @@ LocationEdit.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        location: state.location.getLocation
+        location: state.location.location
     }
 }
 

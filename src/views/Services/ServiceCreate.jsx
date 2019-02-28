@@ -16,12 +16,12 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import {createService, getServiceCategory} from '../../actions/service';
+import {createService, fetchServiceCategories} from '../../actions/service';
 import defaultImage from "../../assets/img/default-avatar.png";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
-import {getOrganizationByBusinessAdminId} from "../../actions/organization";
+import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 
 const ServiceCreateSchema = Yup.object().shape({
     name: Yup.string()
@@ -63,10 +63,10 @@ class ServiceCreate extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.getServiceCategory();
+		this.props.fetchServiceCategories();
     let userSub = localStorage.getItem('userSub');
     console.log('userSub: ' + userSub);
-    this.props.getOrganizationByBusinessAdminId(userSub);
+    this.props.fetchOrganizationsByBusinessAdminId(userSub);
 
   }
 
@@ -114,14 +114,14 @@ class ServiceCreate extends React.Component {
 	}
 
 	render() {
-		const { classes, serviceCategory, organizationLists} = this.props;
+		const { classes, categories, organizations} = this.props;
 		let categoryOptions = [];
     let organizationOptions = [];
-		if (serviceCategory.length > 0) {
-			categoryOptions = serviceCategory;
+		if (categories.length > 0) {
+			categoryOptions = categories;
 		}
-    if (organizationLists.length > 0) {
-      organizationOptions = organizationLists;
+    if (organizations.length > 0) {
+      organizationOptions = organizations;
     }
 		return (
 			<GridItem xs={12} sm={12} md={12}>
@@ -498,16 +498,16 @@ const mapStateToProps = (state) => {
 		imageObject: state.image.image,
 		imageError: state.image.imageError,
 		imageLoading: state.image.imageLoading,
-		serviceCategory: state.service.serviceCategory,
-    organizationLists: state.organization.getOrganizations
+		categories: state.service.categories,
+    organizations: state.organization.organizations
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-    getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
+    fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
 		createService: (data, history) => dispatch(createService(data, history)),
-		getServiceCategory: () => dispatch(getServiceCategory())
+    fetchServiceCategories: () => dispatch(fetchServiceCategories())
 	}
 }
 

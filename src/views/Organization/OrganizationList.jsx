@@ -20,7 +20,7 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 import {FormLabel} from "@material-ui/core";
-import {getOrganizationByBusinessAdminId} from "../../actions/organization";
+import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 
 const override = css`
     display: block;
@@ -36,12 +36,12 @@ class OrganizationList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.organizationLists })
+    this.setState({ data: nextProps.organizations })
   }
 
   componentDidMount() {
     var userSub = localStorage.getItem('userSub');
-    this.props.getOrganizationByBusinessAdminId(userSub);
+    this.props.fetchOrganizationsByBusinessAdminId(userSub);
   }
 
   render() {
@@ -171,12 +171,12 @@ class OrganizationList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { organizationLists: state.organization.getOrganizations }
+  return { organizations: state.organization.organizations }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
+    fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
   }
 }
 

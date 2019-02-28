@@ -15,7 +15,7 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import { fetchAllLocations } from '../../actions/location';
+import { fetchLocations } from '../../actions/location';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
@@ -34,7 +34,7 @@ class LocationList extends React.Component {
     }
 
     componentDidMount() {
-        this.props.fetchAllLocations()
+        this.props.fetchLocations()
     }
 
     render() {
@@ -143,12 +143,12 @@ class LocationList extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return { locations: state.location.getAllLocations }
+    return { locations: state.location.fetchLocations }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchAllLocations: () => dispatch(fetchAllLocations()),
+      fetchLocations: () => dispatch(fetchLocations()),
     }
 }
 

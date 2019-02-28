@@ -1,9 +1,9 @@
 import { location } from '../constants/Location.constants';
 import { API_ROOT, URL } from '../config/config';
 
-export const fetchAllLocations = () => {
+export const fetchLocations = () => {
     return (dispatch) => {
-        dispatch({ type: location.FETCH_ALL_LOCATIONS_LOADING })
+        dispatch({ type: location.FETCH_LOCATIONS_LOADING })
         fetch(API_ROOT + URL.LOCATION, {
             method: 'GET',
             headers: {
@@ -13,13 +13,13 @@ export const fetchAllLocations = () => {
         .then(res => res.json())
         .then(data => {
             dispatch({
-                type: location.FETCH_ALL_LOCATIONS_SUCCESS,
+                type: location.FETCH_LOCATIONS_SUCCESS,
                 payload: data.objects
             })
         })
         .catch(err => {
             dispatch({
-                type: location.FETCH_ALL_LOCATIONS_FAILURE,
+                type: location.FETCH_LOCATIONS_FAILURE,
                 payload: err
             })
         })

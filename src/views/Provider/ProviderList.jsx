@@ -36,7 +36,7 @@ class ProviderList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.providerLists })
+    this.setState({ data: nextProps.providers })
   }
 
   componentDidMount() {
@@ -171,7 +171,7 @@ class ProviderList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { providerLists: state.providers.providers }
+  return { providers: state.providers.providers }
 }
 
 const mapDispatchToProps = (dispatch) => {

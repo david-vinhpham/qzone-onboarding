@@ -20,7 +20,7 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
-import {getServicesByBusinessAdminId} from '../../actions/service';
+import {fetchServicesByBusinessAdminId} from '../../actions/service';
 import {FormLabel} from "@material-ui/core";
 
 const override = css`
@@ -44,7 +44,6 @@ class ServicesList extends React.Component{
 
   componentDidMount() {
     let businessAdminId = localStorage.getItem('userSub');
-    //console.log('businessAdminId: ' + businessAdminId);
     this.props.getServicesByBusinessAdminId(businessAdminId)
   }
   render() {
@@ -206,16 +205,16 @@ class ServicesList extends React.Component{
 
 const mapStateToProps = (state) => {
   return {
-    services: state.service.getService,
-    serviceLoading: state.service.getServiceLoading,
-    serviceError: state.service.getServiceError
+    services: state.service.services,
+    fetchServicesLoading: state.service.fetchServicesLoading,
+    fetchServiceError: state.service.fetchServiceError
   }
 
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getServicesByBusinessAdminId: (businessAdminId) => dispatch(getServicesByBusinessAdminId(businessAdminId)),
+    getServicesByBusinessAdminId: (businessAdminId) => dispatch(fetchServicesByBusinessAdminId(businessAdminId)),
   }
 }
 

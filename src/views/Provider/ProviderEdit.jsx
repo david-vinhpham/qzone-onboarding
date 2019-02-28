@@ -20,7 +20,7 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import {getOrganizationByBusinessAdminId} from "../../actions/organization";
+import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -49,7 +49,7 @@ class ProviderEdit extends React.Component{
     this.props.fetchProvider(id);
     let userSub = localStorage.getItem('userSub');
     console.log('userSub: ' + userSub);
-    this.props.getOrganizationByBusinessAdminId(userSub);
+    this.props.fetchOrganizationsByBusinessAdminId(userSub);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,14 +68,14 @@ class ProviderEdit extends React.Component{
   }
 
   render() {
-    const { classes, timezones, organizationLists } = this.props;
+    const { classes, timezones, organizations } = this.props;
     let timeZoneOptions = [];
     let organizationOptions = [];
     if ((timezones.length) > 0) {
       timeZoneOptions = timezones;
     }
-    if(organizationLists.length > 0) {
-      organizationOptions = organizationLists;
+    if(organizations.length > 0) {
+      organizationOptions = organizations;
     }
     if (!this.state.provider) {
       return null;
@@ -336,9 +336,7 @@ const mapStateToProps = (state) => {
   return {
     provider: state.providers.provider,
     timezones: state.providers.timezones,
-    getAllLocations: state.location.getAllLocations,
-    getAllLocationsLoading: state.location.getAllLocationsLoading,
-    organizationLists: state.organization.getOrganizations
+    organizations: state.organization.organizations
   }
 }
 
@@ -347,7 +345,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchProvider: (id) => dispatch(fetchProvider(id)),
     editProvider: (provider, history) => dispatch(editProvider(provider, history)),
     fetchTimezones: () => dispatch(fetchTimezones()),
-    getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
+    fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
   }
 }
 

@@ -38,6 +38,14 @@ const reducer = (state = initialState, action) => {
         case organization.CREATE_ORGANIZATION_FAILURE:
             return { ...state, createOrganizationError: action.payload.error, createOrganizationLoading: false};
 
+
+      case organization.EDIT_ORGANIZATION_LOADING:
+        return { ...state,  editOrganizationLoading: true};
+      case organization.EDIT_ORGANIZATION_SUCCESS:
+        return { ...state, organization: action.payload, editOrganizationLoading: false };
+      case organization.EDIT_ORGANIZATION_FAILURE:
+        return { ...state, editOrganizationError: action.payload.error, editOrganizationLoading: false};
+
         case organization.FETCH_ORGANIZATIONS_LOADING:
             return { ...state, fetchOrganizationsLoading:true};
       case organization.FETCH_ORGANIZATIONS_SUCCESS:

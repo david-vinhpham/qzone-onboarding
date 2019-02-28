@@ -17,7 +17,7 @@ import CardText from "components/Card/CardText.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
-import {editOrganization, fetchBusinessCategory, fetchOrganization} from "../../actions/organization.jsx"
+import {editOrganization, fetchBusinessCategories, fetchOrganization} from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import 'react-phone-number-input/style.css'
@@ -46,7 +46,7 @@ class OrganizationEdit extends React.Component {
   componentDidMount() {
     const { id } = this.props.match.params
     this.props.fetchOrganization(id);
-    this.props.getBusinessCategory()
+    this.props.fetchBusinessCategories()
   }
 
   submit = (values) => {
@@ -61,12 +61,12 @@ class OrganizationEdit extends React.Component {
   render() {
     const {
       classes,
-      businessCategory,
+      businessCategories,
     } = this.props;
     const { data } = this.state;
     let categoryOptions = [];
-    if (businessCategory && businessCategory.objects) {
-      categoryOptions = businessCategory.objects;
+    if (businessCategories && businessCategories.objects) {
+      categoryOptions = businessCategories.objects;
     }
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -612,18 +612,18 @@ OrganizationEdit.propTypes = {
 
 
 const mapsStateToProp = (state) => ({
-  businessCategory: state.organization.businessCategory,
-  businessCategoryLoading: state.organization.businessCategoryLoading,
-  businessCategoryError: state.organization.businessCategoryError,
-  organization: state.organization.getOrganization,
-  organizationLoading: state.organization.organizationLoading,
-  organizationError: state.organization.organizationError,
+  businessCategories: state.organization.businessCategories,
+  fetchBusinessCategoriesLoading: state.organization.fetchBusinessCategoriesLoading,
+  fetchBusinessCategoriesError: state.organization.fetchBusinessCategoriesError,
+  organization: state.organization.organization,
+  editOrganizationLoading: state.organization.editOrganizationLoading,
+  editOrganizationError: state.organization.editOrganizationError,
 
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getBusinessCategory: () => dispatch(fetchBusinessCategory()),
+    fetchBusinessCategories: () => dispatch(fetchBusinessCategories()),
     editOrganization: (data, history) => dispatch(editOrganization(data, history)),
     fetchOrganization: (id) => dispatch(fetchOrganization(id))
   }

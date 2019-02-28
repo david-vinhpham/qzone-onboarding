@@ -4,7 +4,7 @@ import {service} from '../constants/Service.constants';
 export const editService = (values, history) => {
     return (dispatch) => {
         dispatch({
-            type: service.EDIT_SERVICE
+            type: service.EDIT_SERVICE_LOADING
         })
         fetch(API_ROOT + URL.CREATE_SERVICE, {
             method: 'PUT',
@@ -32,7 +32,7 @@ export const editService = (values, history) => {
 
 export const fetchServiceById = (id) => {
         return (dispatch) => {
-        dispatch(fetchServiceByIdLoading())
+        dispatch(fetchServiceLoading())
         fetch(API_ROOT + URL.FETCH_SERVICE_BY_ID + id, {
             method: 'GET',
             headers: {
@@ -41,38 +41,38 @@ export const fetchServiceById = (id) => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(fetchServiceByIdSuccess(data.object))
+            dispatch(fetchServiceSuccess(data.object))
         })
         .catch(err => {
-            dispatch(fetchServiceByIdFailure(err))
+            dispatch(fetchServiceFailure(err))
         })
     }
 }
 
-export const fetchServiceByIdLoading = () => {
+export const fetchServiceLoading = () => {
     return {
-        type: service.FETCH_SERVICE_BY_ID
+        type: service.FETCH_SERVICE_LOADING
     }
 }
 
-export const fetchServiceByIdSuccess = (data) => {
+export const fetchServiceSuccess = (data) => {
     return {
-        type: service.FETCH_SERVICE_BY_ID_SUCCESS,
+        type: service.FETCH_SERVICE_SUCCESS,
         payload: { data }
     }
 }
 
-export const fetchServiceByIdFailure = (error) => {
+export const fetchServiceFailure = (error) => {
     return {
-        type: service.FETCH_SERVICE_BY_ID_FAILURE,
+        type: service.FETCH_SERVICE_FAILURE,
         payload: { error }
     }
 }
 
-export const getServiceCategory = () => {
+export const fetchServiceCategories = () => {
     return (dispatch) => {
-        dispatch(getServiceCategoryLoading())
-        fetch(API_ROOT + URL.FETCH_SERVICE_CATEGORY, {
+        dispatch(fetchServiceCategoriesLoading())
+        fetch(API_ROOT + URL.FETCH_SERVICE_CATEGORIES, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -80,38 +80,38 @@ export const getServiceCategory = () => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(getServiceCategorySuccess(data.objects))
+            dispatch(fetchServiceCategoriesSuccess(data.objects))
         })
         .catch(err => {
-            dispatch(getServiceCategoryFailure(err))
+            dispatch(fetchServiceCategoriesFailure(err))
         })
     }
 }
 
-export const fetchServiceCategoryLoading = () => {
+export const fetchServiceCategoriesLoading = () => {
     return {
-        type: service.FETCH_CATEGORY
+        type: service.FETCH_CATEGORIES_LOADING
     }
 }
 
-export const fetchServiceCategorySuccess = (data) => {
+export const fetchServiceCategoriesSuccess = (data) => {
     return {
-        type: service.FETCH_CATEGORY_SUCCESS,
+        type: service.FETCH_CATEGORIES_SUCCESS,
         payload: { data }
     }
 }
 
-export const fetchServiceCategoryFailure = (error) => {
+export const fetchServiceCategoriesFailure = (error) => {
     return {
-        type: service.FETCH_CATEGORY_FAILURE,
+        type: service.FETCH_CATEGORIES_FAILURE,
         payload: { error }
     }
 }
 
-export const fetchServicesByOrganization = () => {
+export const fetchServicesByOrgId = () => {
     let orgId = localStorage.getItem('organizationId');
     return (dispatch) => {
-        dispatch(fetchServicesByOrganizationLoading())
+        dispatch(fetchServicesLoading())
         fetch(API_ROOT + URL.FETCH_SERVICES + orgId, {
             method: 'GET',
             headers: {
@@ -120,17 +120,17 @@ export const fetchServicesByOrganization = () => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(fetchServicesByOrganizationSuccess(data.objects))
+            dispatch(fetchServicesSuccess(data.objects))
         })
         .catch(err => {
-            dispatch(fetchServicesByOrganizationFailure(err))
+            dispatch(fetchServicesFailure(err))
         })
     }
 }
 
 export const fetchServicesByBusinessAdminId = (businessAdminId) => {
   return (dispatch) => {
-    dispatch(fetchServicesByOrganizationLoading())
+    dispatch(fetchServicesLoading())
     fetch(API_ROOT + URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
       method: 'GET',
       headers: {
@@ -139,59 +139,39 @@ export const fetchServicesByBusinessAdminId = (businessAdminId) => {
     })
     .then(res => res.json())
     .then(data => {
-      dispatch(fetchServicesByBusinessAdminSuccess(data.objects))
+      dispatch(fetchServicesSuccess(data.objects))
     })
     .catch(err => {
-      dispatch(fetchServicesByBusinessAdminFailure(err))
+      dispatch(fetchServicesFailure(err))
     })
   }
 }
 
-export const fetchServicesByOrganizationLoading = () => {
+export const fetchServicesLoading = () => {
     return {
-        type: service.FETCH_SERVICES
+        type: service.FETCH_SERVICES_LOADING
     }
 }
 
-export const fetchServicesByOrganizationSuccess = (data) => {
+export const fetchServicesSuccess = (data) => {
     return {
         type: service.FETCH_SERVICES_SUCCESS,
         payload: { data }
     }
 }
 
-export const fetchServicesByOrganizationFailure = (error) => {
+export const fetchServicesFailure = (error) => {
   return {
     type: service.FETCH_SERVICES_FAILURE,
     payload: { error }
   }
 }
 
-export const fetchServicesByBusinessAdminLoading = () => {
-  return {
-    type: service.FETCH_SERVICES
-  }
-}
-
-export const getServicesByBusinessAdminSuccess = (data) => {
-  return {
-    type: service.FETCH_SERVICES_SUCCESS,
-    payload: { data }
-  }
-}
-
-export const getServicesByBusinessAdminFailure = (error) => {
-    return {
-        type: service.FETCH_SERVICES_FAILURE,
-        payload: { error }
-    }
-}
-
 export const createService = (data, history) => {
     console.log("data---", data)
     return (dispatch) => {
         dispatch(createServiceLoading())
-        fetch(API_ROOT + URL.CREATE_SERVICE, {
+        fetch(API_ROOT + URL.SERVICE, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -211,7 +191,7 @@ export const createService = (data, history) => {
 
 export const createServiceLoading = () => {
     return {
-        type: service.CREATE_SERVICE
+        type: service.CREATE_SERVICE_LOADING
     }
 }
 

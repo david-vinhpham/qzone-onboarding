@@ -1,41 +1,43 @@
 import { location } from '../constants/Location.constants';
 
 const initialState = {
-    getAllLocations: [],
-    getAllLocationsLoading: false,
-    getAllLocationsError: null,
-
-    getLocation: [],
-    getLocationLoading: false,
-    getLocationError: null,
+    locations: [],
+    fetchLocationsLoading: false,
+    fetchLocationsError: null,
 
     location: [],
-    locationLoading: false,
-    locationError: null
+    fetchLocationLoading: false,
+    fetchLocationError: null,
+
+    createLocationLoading: false,
+    createLocationError: null,
+
+    editLocationLoading: false,
+    editLocationError: null
 }
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
         case location.FETCH_ALL_LOCATIONS_LOADING:
-            return { ...state, getAllLocationsLoading: true }
+            return { ...state, fetchLocationsLoading: true }
         case location.FETCH_ALL_LOCATIONS_SUCCESS:
-            return { ...state, getAllLocations: action.payload, getAllLocationsLoading: false}
+            return { ...state, locations: action.payload, fetchLocationsLoading: false}
         case location.FETCH_ALL_LOCATIONS_FAILURE:
-            return { ...state, getAllLocations: [], getAllLocationsError: action.payload, getAllLocationsLoading: false }
+            return { ...state, locations: [], fetchLocationsError: action.payload, fetchLocationsLoading: false }
         
         case location.FETCH_LOCATION_LOADING:
-            return { ...state, getLocationLoading: true }
+            return { ...state, fetchLocationLoading: true }
         case location.FETCH_LOCATION_SUCCESS:
-            return { ...state, getLocation: action.payload, getLocationLoading: false}
+            return { ...state, location: action.payload, fetchLocationLoading: false}
         case location.FETCH_LOCATION_FAILURE:
-            return { ...state, getLocation: [], getLocationError: action.payload, getLocationLoading: false }
+            return { ...state, location: [], getLocationError: action.payload, fetchLocationLoading: false }
         
         case location.CREATE_LOCATION_LOADING:
-            return { ...state, locationLoading: true }
+            return { ...state, editLocationLoading: true }
         case location.CREATE_LOCATION_SUCCESS:
-            return { ...state, location: action.payload, locationLoading: false}
+            return { ...state, location: action.payload, editLocationLoading: false}
         case location.CREATE_LOCATION_FAILURE:
-            return { ...state, location: [], locationError: action.payload, locationLoading: false }
+            return { ...state, location: [], createLocationError: action.payload, editLocationLoading: false }
         
         case location.EDIT_LOCATION_LOADING:
             return { ...state, locationLoading: true }

@@ -20,9 +20,9 @@ import defaultImage from "../../assets/img/image_placeholder.jpg";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import ImageUpload from "../../components/CustomUpload/ImageUpload";
-import { getServiceCategory, getServiceById, editService } from "../../actions/service";
+import { fetchServiceCategories, fetchServiceById, editService } from "../../actions/service";
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
-import {getOrganizationByBusinessAdminId} from "../../actions/organization";
+import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 
 const ServiceEditSchema = Yup.object().shape({
     name: Yup.string()
@@ -55,13 +55,11 @@ class ServiceEdit extends React.Component {
 
     componentWillReceiveProps(nextProps) {
       if(!nextProps.imageLoading) {
-        this.setState({data: nextProps.serviceById})
-        if (nextProps.serviceById != null && nextProps.serviceById.image != null) {
-          this.setState({imagePreviewUrl: nextProps.serviceById.image.fileUrl})
-          //console.log('imagePreviewUrl 1: ' +  nextProps.serviceById.image.fileUrl);
+        this.setState({data: nextProps.service})
+        if (nextProps.service != null && nextProps.service.image != null) {
+          this.setState({imagePreviewUrl: nextProps.service.image.fileUrl})
         } else {
           this.setState({imagePreviewUrl: defaultImage})
-          //console.log('imagePreviewUrl 2: ' +  defaultImage);
         }
       }
       else {
@@ -71,11 +69,11 @@ class ServiceEdit extends React.Component {
     }
 
     componentDidMount() {
-      this.props.getServiceCategory();
+      this.props.fetchServiceCategories();
       const { id } = this.props.match.params
       this.props.getServiceById(id);
       let userSub = localStorage.getItem('userSub');
-      this.props.getOrganizationByBusinessAdminId(userSub);
+      this.props.fetchOrganizationsByBusinessAdminId(userSub);
     }
 
     handleService(option) {
@@ -105,13 +103,9 @@ class ServiceEdit extends React.Component {
 
     handleImageChange(e) {
         let self = this;
-        //const {file, imagePreviewUrl} = this.state.provider;
-        //console.log("inside change image function", e);
-        //console.log("event---", e)
         e.preventDefault();
         let reader = new FileReader();
         let files = e.target.files[0];
-       // console.log("file-------", files)
         reader.onloadend = () => {
           self.setState({
             imagePreviewUrl: reader.result
@@ -128,19 +122,18 @@ class ServiceEdit extends React.Component {
 
 
     render() {
-        const { classes, serviceCategory, organizationLists } = this.props;
+        const { classes, categories, organizations } = this.props;
         let categoryOptions = [];
         let organizationOptions = [];
-        if (serviceCategory.length > 0) {
-            categoryOptions = serviceCategory;
+        if (categories.length > 0) {
+            categoryOptions = categories;
         }
-        if (organizationLists.length > 0) {
-          organizationOptions = organizationLists;
+        if (organizations.length > 0) {
+          organizationOptions = organizations;
         }
         if (!this.state.data) {
             return null;
         }
-        //console.log("data-----", this.state.data)
         return (
             <GridItem xs={12} sm={12} md={12}>
                 <Card>
@@ -526,21 +519,21 @@ ServiceEdit.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        imageObject: state.image.image,
-        imageError: state.image.imageError,
-        imageLoading: state.image.imageLoading,
-        serviceCategory: state.service.serviceCategory,
-        serviceById: state.service.getServiceById,
-        organizationLists: state.organization.getOrganizations
+      imageObject: state.image.image,
+      imageError: state.image.imageError,
+      imageLoading: state.image.imageLoading,
+      categories: state.service.fetchServiceCategories,
+      service: state.service.service,
+      organizations: state.organization.organizations
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
-        getServiceCategory: () => dispatch(getServiceCategory()),
-        getServiceById: (id) => dispatch(getServiceById(id)),
-        editService: (values, history) => dispatch(editService(values, history))
+      fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
+      fetchServiceCategories: () => dispatch(fetchServiceCategories()),
+      fetchServiceById: (id) => dispatch(fetchServiceById(id)),
+      editService: (values, history) => dispatch(editService(values, history))
     }
 }
 

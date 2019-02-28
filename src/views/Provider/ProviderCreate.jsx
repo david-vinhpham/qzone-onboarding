@@ -22,7 +22,7 @@ import GridItem from "../../components/Grid/GridItem.jsx";
 import {fetchAllLocations} from '../../actions/location';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import {getOrganizationByBusinessAdminId} from "../../actions/organization";
+import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -48,7 +48,6 @@ class ProviderCreate extends React.Component{
 
   componentDidMount() {
     this.props.fetchTimezones();
-    this.props.fetchAllLocations();
     let userSub = localStorage.getItem('userSub');
     console.log('userSub: ' + userSub);
     this.props.getOrganizationByBusinessAdminId(userSub);
@@ -107,7 +106,6 @@ class ProviderCreate extends React.Component{
   }
 
   changeProfileImage(e) {
-    //const { file, imagePreviewUrl } = this.state.provider;
     console.log("inside change image function", e);
     console.log("event---", e)
     e.preventDefault();
@@ -128,19 +126,18 @@ class ProviderCreate extends React.Component{
   }
 
   handleProvider(values) {
-    console.log("values", values);
     this.props.createProvider(values, this.props.history);
   }
 
 	render() {
-    const { classes, timezones, organizationLists } = this.props;
+    const { classes, timezones, organizations } = this.props;
     let timeZoneOptions = [];
     let organizationOptions = [];
 		if ((timezones.length) > 0) {
       timeZoneOptions = timezones;
     }
-		if(organizationLists.length > 0) {
-      organizationOptions = organizationLists;
+		if(organizations.length > 0) {
+      organizationOptions = organizations;
     }
 		return(
 
@@ -431,9 +428,7 @@ ProviderCreate.propTypes = {
 const mapStateToProps = (state) => {
   return {
     timezones: state.providers.timezones,
-    getAllLocations: state.location.getAllLocations,
-    getAllLocationsLoading: state.location.getAllLocationsLoading,
-    organizationLists: state.organization.getOrganizations
+    organizations: state.organization.organizations
   }
 }
 
@@ -441,8 +436,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     createProvider: (provider, history) => dispatch(createProvider(provider, history)),
     fetchTimezones: () => dispatch(fetchTimezones()),
-    fetchAllLocations: () => dispatch(fetchAllLocations()),
-    getOrganizationByBusinessAdminId: (id) => dispatch(getOrganizationByBusinessAdminId(id)),
+    fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
   }
 }
 
