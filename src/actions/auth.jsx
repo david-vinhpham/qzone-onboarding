@@ -109,7 +109,7 @@ export function loginUser(values, history) {
         if (json) {
           localStorage.setItem('userSub', json.username);
           localStorage.setItem('loginEmail', values.loginEmail);
-          fetch(API_ROOT + URL.USERS + '/' + json.username, {
+          fetch(API_ROOT + URL.USER + '/' + json.username, {
             method: 'GET',
             headers: {
               'Accept': '*/*',
