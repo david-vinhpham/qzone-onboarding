@@ -193,7 +193,7 @@ class ServiceEdit extends React.Component {
                                                   className={classes.selectFormControl}>
                                                   <Select
                                                     value={values.organizationId}
-                                                    onChange={(values) => this.saveClicked(values)}
+                                                    onChange={handleChange('organizationId')}
                                                     name="organizationId"
                                                   >
                                                   {organizationOptions.map(organizationOption => (
