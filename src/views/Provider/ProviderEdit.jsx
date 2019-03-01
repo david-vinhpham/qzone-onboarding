@@ -84,6 +84,7 @@ class ProviderEdit extends React.Component{
     return(
       <Formik
         initialValues={{
+          id: this.state.provider.data.id,
           email: this.state.provider.data.email,
           familyName: this.state.provider.data.familyName == null ? '' : this.state.provider.data.familyName,
           givenName: this.state.provider.data.givenName,

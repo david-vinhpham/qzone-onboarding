@@ -26,7 +26,7 @@ export const fetchTimezones = () => {
 }
 }
 
-export function fetchProviders(orgId) {
+export function fetchProvidersByOrdId(orgId) {
   return (dispatch) => {
     dispatch(fetchProvidersLoading());
     fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_ORG_ID + orgId, {
@@ -112,6 +112,7 @@ export const editProviderFailure = (error) => {
   }
 }
 export function editProvider(values, history) {
+  console.log('editProvider: ' + values);
   return (dispatch) => {
     dispatch(editProviderLoading())
     fetch(API_ROOT + URL.USER, {

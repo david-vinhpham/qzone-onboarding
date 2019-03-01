@@ -1,33 +1,48 @@
 import {API_ROOT, URL} from '../config/config';
 import {service} from '../constants/Service.constants';
 
-export const editService = (values, history) => {
-    return (dispatch) => {
-        dispatch({
-            type: service.EDIT_SERVICE_LOADING
-        })
-        fetch(API_ROOT + URL.CREATE_SERVICE, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-        .then(res => res.json())
-        .then(data => {
-            dispatch({
-                type: service.EDIT_SERVICE_SUCCESS,
-                payload: {data}
-            })
-            history.push('/services/list');
-        })
-        .catch(err => {
-            dispatch({
-                type: service.EDIT_SERVICE_FAILURE,
-                payload: {err}
-            })
-        })
-    }
+
+export const editServiceLoading = () => {
+  return {
+    type: service.EDIT_SERVICE_LOADING
+  }
+}
+
+export const editServiceSuccess = (data) => {
+  return {
+    type: service.EDIT_SERVICE_SUCCESS,
+    payload: { data }
+  }
+}
+
+export const editServiceFailure = (error) => {
+  return {
+    type: service.EDIT_SERVICE_FAILURE,
+    payload: { error }
+  }
+}
+
+
+export const editService = (data, history) => {
+  console.log("editService: ", data)
+  return (dispatch) => {
+    dispatch(editServiceLoading())
+    fetch(API_ROOT + URL.SERVICE, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch(editServiceSuccess(data.objects))
+        history.push('/services/list')
+      })
+      .catch(err => {
+        dispatch(editServiceFailure(err))
+      })
+  }
 }
 
 export const fetchServiceById = (id) => {
@@ -70,6 +85,7 @@ export const fetchServiceFailure = (error) => {
 }
 
 export const fetchServiceCategories = () => {
+    console.log('fetchServiceCategories');
     return (dispatch) => {
         dispatch(fetchServiceCategoriesLoading())
         fetch(API_ROOT + URL.FETCH_SERVICE_CATEGORIES, {

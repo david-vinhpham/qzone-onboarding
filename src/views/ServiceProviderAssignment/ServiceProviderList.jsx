@@ -20,7 +20,7 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 import {FormLabel} from "@material-ui/core";
-import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
+import {fetchServiceProvidersByUserSub} from "../../actions/serviceProvider.jsx";
 
 const override = css`
     display: block;
@@ -36,12 +36,12 @@ class ServiceProviderList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.organizations })
+    this.setState({ data: nextProps.serviceProviders })
   }
 
   componentDidMount() {
     var userSub = localStorage.getItem('userSub');
-    this.props.fetchOrganizationsByBusinessAdminId(userSub);
+    this.props.fetchServiceProvidersByUserSub(userSub);
   }
 
   render() {
@@ -59,14 +59,14 @@ class ServiceProviderList extends React.Component {
       data =  (
         <GridContainer>
           <FormLabel>
-            No Organizations.
+            No Providers.
           </FormLabel>
         </GridContainer>
       )
     } else {
       data = (
         <GridContainer>
-          {this.state.data.map((organization, index) => {
+          {this.state.data.map((serviceProvider, index) => {
             return (
               <GridItem xs={12} sm={12} md={3}>
                 <Card product className={classes.cardHover} >
@@ -96,7 +96,7 @@ class ServiceProviderList extends React.Component {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Link to={`/organization/edit/${organization.id}`}>
+                        <Link to={`/service-provider/edit/${serviceProvider.id}`}>
                           <Button color="success" simple justIcon >
                             <Edit className={classes.underChartIcons} />
                           </Button>
@@ -104,10 +104,10 @@ class ServiceProviderList extends React.Component {
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>
-                      {organization.name}
+                      {serviceProvider.providerName}
                     </h4>
                     <p className={classes.cardProductDesciprion}>
-                      {organization.id}
+                      {serviceProvider.serviceName}
                     </p>
                   </CardBody>
                 </Card>
@@ -126,7 +126,7 @@ class ServiceProviderList extends React.Component {
             <Card>
               <CardHeader color="primary" icon>
                 <CardText color="rose">
-                  <h4 className={classes.cardTitle}>Organization List</h4>
+                  <h4 className={classes.cardTitle}>Service Provider List</h4>
                 </CardText>
                 <div className="centerDiv">
                   <div className="search" md={3}>
@@ -154,9 +154,9 @@ class ServiceProviderList extends React.Component {
                     </Button>
                   </div>
                 </div>
-                <Link to={`/organization/create`}>
+                <Link to={`/service-provider/create`}>
                   <Button size="sm" className={classes.buttonDisplay}>
-                    New Organization
+                    New Service Provider
                   </Button>
                 </Link>
 
@@ -171,12 +171,12 @@ class ServiceProviderList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { organizations: state.organization.organizations }
+  return { serviceProviders: state.serviceProvider.serviceProviders }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
+    fetchServiceProvidersByUserSub: (userSub) => dispatch(fetchServiceProvidersByUserSub(userSub)),
   }
 }
 

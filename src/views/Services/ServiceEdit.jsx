@@ -71,7 +71,7 @@ class ServiceEdit extends React.Component {
     componentDidMount() {
       this.props.fetchServiceCategories();
       const { id } = this.props.match.params
-      this.props.getServiceById(id);
+      this.props.fetchServiceById(id);
       let userSub = localStorage.getItem('userSub');
       this.props.fetchOrganizationsByBusinessAdminId(userSub);
     }
@@ -91,7 +91,9 @@ class ServiceEdit extends React.Component {
             }
         }
     }
-
+    myHandleChange(orgId) {
+      console.log('orgId: ' + orgId);
+    }
     change(event, stateName) {
         if (_.isEmpty(event.target.value))
             this.setState({ [stateName + "State"]: "error" })
@@ -125,10 +127,10 @@ class ServiceEdit extends React.Component {
         const { classes, categories, organizations } = this.props;
         let categoryOptions = [];
         let organizationOptions = [];
-        if (categories.length > 0) {
+        if (categories != null && categories.length > 0) {
             categoryOptions = categories;
         }
-        if (organizations.length > 0) {
+        if (organizations != null && organizations.length > 0) {
           organizationOptions = organizations;
         }
         if (!this.state.data) {
@@ -169,7 +171,7 @@ class ServiceEdit extends React.Component {
                             handleChange,
                             handleSubmit,
                             isSubmitting,
-                            setFieldValue
+                            setFieldValue,
                         }) => (
                                 <div>
                                     <CardHeader color="rose" text>
@@ -191,7 +193,7 @@ class ServiceEdit extends React.Component {
                                                   className={classes.selectFormControl}>
                                                   <Select
                                                     value={values.organizationId}
-                                                    onChange={handleChange('organizationId')}
+                                                    onChange={(values) => this.saveClicked(values)}
                                                     name="organizationId"
                                                   >
                                                   {organizationOptions.map(organizationOption => (
@@ -522,7 +524,7 @@ const mapStateToProps = (state) => {
       imageObject: state.image.image,
       imageError: state.image.imageError,
       imageLoading: state.image.imageLoading,
-      categories: state.service.fetchServiceCategories,
+      categories: state.service.serviceCategories,
       service: state.service.service,
       organizations: state.organization.organizations
     }

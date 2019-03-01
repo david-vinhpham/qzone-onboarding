@@ -30,6 +30,25 @@ export const editServiceProvider = (values, history) => {
     }
 }
 
+export const fetchServiceProvidersByUserSub = (userSub) => {
+  return (dispatch) => {
+    dispatch(fetchServiceProvidersLoading())
+    fetch(API_ROOT + URL.FETCH_SERVICE_PROVIDERS_BY_USER_SUB + userSub, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch(fetchServiceProvidersSuccess(data.objects))
+      })
+      .catch(err => {
+        dispatch(fetchServiceProvidersFailure(err))
+      })
+  }
+}
+
 export const fetchServiceProvidersByServiceId = (serviceId) => {
   return (dispatch) => {
     dispatch(fetchServiceProvidersLoading())

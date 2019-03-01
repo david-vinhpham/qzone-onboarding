@@ -8,7 +8,7 @@ import OrganizationReducer from './organization.reducer';
 import ServiceReducer from './service.reducer';
 import ImageUploadReducer from './imageUpload.reducer';
 import LocationReducer from './location.reducer';
-
+import ServiceProviderReducer from './serviceProvider.reducer';
 const rootReducer = combineReducers({
   provider: ProvidersReducer,
   events: EventsReducer,
@@ -17,7 +17,8 @@ const rootReducer = combineReducers({
   organization: OrganizationReducer,
   service: ServiceReducer,
   image: ImageUploadReducer,
-  location: LocationReducer
+  location: LocationReducer,
+  serviceProvider: ServiceProviderReducer,
 });
 
 export default rootReducer;
