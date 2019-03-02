@@ -6,7 +6,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import _ from 'lodash';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-
 import {FormControl, FormLabel, MenuItem, Select} from "@material-ui/core";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
@@ -16,11 +15,11 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import defaultImage from "../../assets/img/image_placeholder.jpg";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import {editServiceProvider, fetchServiceProviderById} from "../../actions/serviceProvider";
 import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 import {fetchProvidersByOrdId} from "../../actions/provider";
+import {fetchServicesByOrgId} from "../../actions/service";
 
 const ServiceEditSchema = Yup.object().shape({
     name: Yup.string()
@@ -46,18 +45,26 @@ class ServiceProviderEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imagePreviewUrl: defaultImage,
             data: null,
+            organizationId: null,
+            loadProviders: false,
         }
     }
 
     componentWillReceiveProps(nextProps) {
       this.setState({data: nextProps.serviceProvider})
+      if( nextProps.serviceProvider != null && !this.state.loadProviders && nextProps.serviceProvider.organizationId != null) {
+        this.props.fetchProvidersByOrdId( nextProps.serviceProvider.organizationId);
+        this.props.fetchServicesByOrgId( nextProps.serviceProvider.organizationId);
+        this.setState({loadProviders: true})
+      }
     }
 
-    myHandlerChange(organization) {
-      console.log('data: ' + organization);
-      this.props.fetchProvidersByOrdId(organization.id);
+    handleOrgChange(event) {
+      console.log('handleChange: ' + event.target.value);
+      this.setState({organizationId: event.target.value});
+      this.props.fetchProvidersByOrdId(event.target.value);
+      this.props.fetchServicesByOrgId(event.target.value);
     }
 
     componentDidMount() {
@@ -65,7 +72,6 @@ class ServiceProviderEdit extends React.Component {
       this.props.fetchOrganizationsByBusinessAdminId(userSub);
       const { id } = this.props.match.params
       this.props.fetchServiceProviderById(id);
-
     }
 
 
@@ -79,14 +85,21 @@ class ServiceProviderEdit extends React.Component {
     }
 
     render() {
-        const { classes, providers, organizations } = this.props;
+        const { classes, providers, services, organizations } = this.props;
         let providerOptions = [];
+        let serviceOptions = [];
         let organizationOptions = [];
         if (providers != null && providers.length > 0) {
-          providerOptions = providers;
+            console.log('update providerOptions: ' + providerOptions);
+            providerOptions = providers;
+        }
+        if (services != null && services.length > 0) {
+            serviceOptions = services;
+            console.log('update serviceOptions: ' + serviceOptions);
         }
         if (organizations != null && organizations.length > 0) {
-          organizationOptions = organizations;
+            organizationOptions = organizations;
+            console.log('update organizationOptions: ' + organizationOptions);
         }
         console.log('this.state.data: ' + this.state.data);
         let data = null
@@ -111,6 +124,9 @@ class ServiceProviderEdit extends React.Component {
                     <Formik
                         initialValues={{
                             id: this.state.data.id,
+                            providerId: this.state.data.providerId,
+                            serviceId: this.state.data.serviceId,
+                            organizationId: this.state.organizationId === null ? this.state.data.organizationId : this.state.organizationId,
                         }}
                         enableReinitialize={true}
                         validationSchema={ServiceEditSchema}
@@ -129,7 +145,7 @@ class ServiceProviderEdit extends React.Component {
                                 <div>
                                     <CardHeader color="rose" text>
                                         <CardText color="rose">
-                                            <h4 className={classes.cardTitle}>Edit Service</h4>
+                                            <h4 className={classes.cardTitle}>Edit Service Providers</h4>
                                         </CardText>
                                     </CardHeader>
                                     <CardBody>
@@ -146,7 +162,7 @@ class ServiceProviderEdit extends React.Component {
                                                   className={classes.selectFormControl}>
                                                   <Select
                                                     value={values.organizationId}
-                                                    onChange={(organizationId) => this.myHandlerChange(values)}
+                                                    onChange={(e) => {this.handleOrgChange(e)}}
                                                     name="organizationId"
                                                   >
                                                   {organizationOptions.map(organizationOption => (
@@ -162,34 +178,62 @@ class ServiceProviderEdit extends React.Component {
                                                 </FormControl>
                                               </GridItem>
                                             </GridContainer>
-                                            <GridContainer>
-                                                <GridItem xs={12} sm={3}>
-                                                    <FormLabel className={classes.labelHorizontal}>
-                                                        Service Category
-                                                    </FormLabel>
-                                                </GridItem>
-                                                <GridItem xs={12} sm={4}>
-                                                    <FormControl
-                                                        fullWidth
-                                                        className={classes.selectFormControl}>
-                                                        <Select
-                                                            value={values.providerId}
-                                                            onChange={handleChange('providerId')}
-                                                            name="providerId"
-                                                        >
-                                                        {providerOptions.map(providerOption => (
-                                                            <MenuItem
-                                                                key={providerOption.id}
-                                                                value={providerOption.id}
-                                                                id="providerId"
-                                                            >
-                                                                {providerOption.name}
-                                                            </MenuItem>
-                                                        ))}
-                                                        </Select>
-                                                    </FormControl>
-                                                </GridItem>
-                                            </GridContainer>
+                                          <GridContainer>
+                                            <GridItem xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Service
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={4}>
+                                              <FormControl
+                                                fullWidth
+                                                className={classes.selectFormControl}>
+                                                <Select
+                                                  value={values.serviceId}
+                                                  onChange={handleChange('serviceId')}
+                                                  name="serviceId"
+                                                >
+                                                  {serviceOptions.map(serviceOption => (
+                                                    <MenuItem
+                                                      key={serviceOption.id}
+                                                      value={serviceOption.id}
+                                                      id="serviceId"
+                                                    >
+                                                      {serviceOption.name}
+                                                    </MenuItem>
+                                                  ))}
+                                                </Select>
+                                              </FormControl>
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer>
+                                            <GridItem xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Service
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={4}>
+                                              <FormControl
+                                                fullWidth
+                                                className={classes.selectFormControl}>
+                                                <Select
+                                                  value={values.providerId}
+                                                  onChange={handleChange('providerId')}
+                                                  name="providerId"
+                                                >
+                                                  {providerOptions.map(providerOption => (
+                                                    <MenuItem
+                                                      key={providerOption.id}
+                                                      value={providerOption.id}
+                                                      id="providerId"
+                                                    >
+                                                      {providerOption.givenName}
+                                                    </MenuItem>
+                                                  ))}
+                                                </Select>
+                                              </FormControl>
+                                            </GridItem>
+                                          </GridContainer>
                                         </form>
                                     </CardBody>
                                     <CardFooter className={classes.justifyContentCenter}>
@@ -220,6 +264,7 @@ const mapStateToProps = (state) => {
       organizations: state.organization.organizations,
       providers: state.provider.providers,
       serviceProvider: state.serviceProvider.serviceProvider,
+      services: state.service.services,
     }
 }
 
@@ -229,6 +274,7 @@ const mapDispatchToProps = (dispatch) => {
       fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
       fetchServiceProviderById: (id) => dispatch(fetchServiceProviderById(id)),
       editServiceProvider: (values, history) => dispatch(editServiceProvider(values, history)),
+      fetchServicesByOrgId: (orgId) => dispatch(fetchServicesByOrgId(orgId)),
     }
 }
 

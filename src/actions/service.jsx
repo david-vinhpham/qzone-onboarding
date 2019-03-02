@@ -124,8 +124,7 @@ export const fetchServiceCategoriesFailure = (error) => {
     }
 }
 
-export const fetchServicesByOrgId = () => {
-    let orgId = localStorage.getItem('organizationId');
+export const fetchServicesByOrgId = (orgId) => {
     return (dispatch) => {
         dispatch(fetchServicesLoading())
         fetch(API_ROOT + URL.FETCH_SERVICES + orgId, {

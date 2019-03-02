@@ -91,9 +91,6 @@ class ServiceEdit extends React.Component {
             }
         }
     }
-    myHandleChange(orgId) {
-      console.log('orgId: ' + orgId);
-    }
     change(event, stateName) {
         if (_.isEmpty(event.target.value))
             this.setState({ [stateName + "State"]: "error" })
