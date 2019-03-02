@@ -1,4 +1,4 @@
-export const API_ROOT = 'http://13.238.116.171:8080/api/';
+export const API_ROOT = 'http://localhost:8080/api/';
 export const API_MEDIA_URL = 'http://13.238.116.171:8093/api/media/medias'
 export const URL = {
     ORGANIZATION_NAME_VALIDATE: 'validate?name=',
@@ -29,6 +29,6 @@ export const URL = {
     FETCH_PROVIDERS_BY_USER_SUB: 'providers-by-user-sub/',
     ADMIN_CREATE_AWS_USER: 'users/admin-create-new-users'
 }
-export const GOOGLE_ID = '1075505092107-j8821j05r48pco773m0mqb16g1po5gtj.apps.googleusercontent.com'
+export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com'
 
 export const GEO_CODING_KEY = 'AIzaSyCM4fZfA-m2F6ekcl4IyN77YZJlAdydxlc'
