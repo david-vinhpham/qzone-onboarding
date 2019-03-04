@@ -26,6 +26,31 @@ export const fetchLocations = () => {
     }
 }
 
+export const fetchLocationsOption = () => {
+  return (dispatch) => {
+    dispatch({ type: location.FETCH_LOCATIONS_LOADING })
+    fetch(API_ROOT + URL.LOCATIONS_OPTION, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch({
+          type: location.FETCH_LOCATIONS_SUCCESS,
+          payload: data.objects
+        })
+      })
+      .catch(err => {
+        dispatch({
+          type: location.FETCH_LOCATIONS_FAILURE,
+          payload: err
+        })
+      })
+  }
+}
+
 export const fetchLocation = (id) => {
     console.log('fetchLocation: ' +  id);
     return (dispatch) => {

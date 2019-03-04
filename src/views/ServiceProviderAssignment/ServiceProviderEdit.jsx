@@ -18,8 +18,9 @@ import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/v
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import {editServiceProvider, fetchServiceProviderById} from "../../actions/serviceProvider";
 import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organization";
-import {fetchProvidersOptionByOrdId} from "../../actions/provider";
+import {fetchProvidersOptionByServiceProviderId} from "../../actions/provider";
 import {fetchServicesOptionByOrgId} from "../../actions/service";
+import { fetchLocationsOption } from '../../actions/location';
 import Select from 'react-select';
 const ServiceEditSchema = Yup.object().shape({
     name: Yup.string()
@@ -50,29 +51,25 @@ class ServiceProviderEdit extends React.Component {
             providerOption: null,
             organizationOption: null,
             serviceOption: null,
-
+            locationOption: null,
         }
       this.handleOrgChange = this.handleOrgChange.bind(this);
       this.handleProviderChange = this.handleProviderChange.bind(this);
       this.handleServiceChange = this.handleServiceChange.bind(this);
+      this.handleLocationChange = this.handleLocationChange.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
       this.setState({data: nextProps.serviceProvider})
       if( nextProps.serviceProvider != null && !this.state.loadProviders && nextProps.serviceProvider.organizationId != null) {
-        this.props.fetchProvidersOptionByOrdId( nextProps.serviceProvider.organizationId);
         this.props.fetchServicesOptionByOrgId( nextProps.serviceProvider.organizationId);
         this.setState({loadProviders: true})
       }
-      //this.setState({ providerOption: nextProps.serviceProvider.providerId });
-      //this.setState({ serviceOption: nextProps.serviceProvider.serviceId });
-      //this.setState({ organizationOption: nextProps.serviceProvider.organizationId });
     }
 
     handleOrgChange(selectedOption) {
       console.log('handleOrgChange: ' + selectedOption);
       this.setState({ organizationOption: selectedOption });
-      this.props.fetchProvidersOptionByOrdId(selectedOption.value);
       this.props.fetchServicesOptionByOrgId(selectedOption.value);
     }
     handleProviderChange(providerOption) {
@@ -84,11 +81,19 @@ class ServiceProviderEdit extends React.Component {
       console.log('handleServiceChange: ' + selectedOption);
       this.setState({ serviceOption: selectedOption });
     }
+
+    handleLocationChange(selectedOption) {
+      console.log('handleLocationChange: ' + selectedOption);
+      this.setState({ locationOption: selectedOption });
+    }
+
     componentDidMount() {
       let userSub = localStorage.getItem('userSub');
       this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
-      const { id } = this.props.match.params
+      const { id } = this.props.match.params;
+      this.props.fetchProvidersOptionByServiceProviderId(id);
       this.props.fetchServiceProviderById(id);
+      this.props.fetchLocationsOption();
     }
 
 
@@ -102,22 +107,23 @@ class ServiceProviderEdit extends React.Component {
     }
 
     render() {
-        const { classes, services, organizations, providers } = this.props;
-        const { serviceOption, providerOption, organizationOption } = this.state;
+        const { classes, services, organizations, providers, locations } = this.props;
+        const { serviceOption, providerOption, organizationOption, locationOption } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
         let providerOptions = [];
+        let locationOptions = [];
         if (services != null && services.length > 0) {
             serviceOptions = services;
-            //console.log('update serviceOptions: ' + serviceOptions);
         }
         if (organizations != null && organizations.length > 0) {
             organizationOptions = organizations;
-            //console.log('update organizationOptions: ' + organizationOptions);
         }
         if (providers != null && providers.length > 0) {
             providerOptions = providers;
-            //console.log('update providerOptions: ' + providerOptions);
+        }
+        if (locations != null && locations.length > 0) {
+           locationOptions = locations;
         }
         //console.log('this.state.data: ' + this.state.data);
         let data = null
@@ -145,6 +151,7 @@ class ServiceProviderEdit extends React.Component {
                             providerId: this.state.data.providerId,
                             serviceId: this.state.data.serviceId,
                             organizationId: this.state.data.organizationId,
+                            geoLocationId: this.state.data.geoLocationId,
                         }}
                         enableReinitialize={true}
                         validationSchema={ServiceEditSchema}
@@ -179,6 +186,7 @@ class ServiceProviderEdit extends React.Component {
                                                   fullWidth
                                                   className={classes.selectFormControl}>
                                                   <Select
+                                                    isDisabled
                                                     options={organizationOptions}
                                                     value={ organizationOption == null ? organizationOptions.find((element) => {
                                                       return element.value === values.organizationId;
@@ -200,6 +208,7 @@ class ServiceProviderEdit extends React.Component {
                                                 fullWidth
                                                 className={classes.selectFormControl}>
                                                 <Select
+                                                  isDisabled
                                                   value={serviceOption == null ? serviceOptions.find((element) => {
                                                     return element.value === values.serviceId;
                                                   }) : serviceOption}
@@ -221,13 +230,33 @@ class ServiceProviderEdit extends React.Component {
                                                 fullWidth
                                                 className={classes.selectFormControl}>
                                                 <Select
-                                                  isMulti
                                                   value={providerOption == null ? providerOptions.find((element) => {
                                                     return element.value === values.providerId;
                                                   }) : providerOption}
                                                   placeholder="Select your provider(s)"
                                                   options={providerOptions}
                                                   onChange={this.handleProviderChange} />
+                                              </FormControl>
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer>
+                                            <GridItem xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Service Location
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={6}>
+                                              <FormControl
+                                                fullWidth
+                                                className={classes.selectFormControl}>
+                                                <Select
+                                                  value={locationOption == null ? locationOptions.find((element) => {
+                                                    return element.value === values.geoLocationId;
+                                                  }) : locationOption}
+                                                  onChange={this.handleLocationChange}
+                                                  options={locationOptions}
+                                                >
+                                                </Select>
                                               </FormControl>
                                             </GridItem>
                                           </GridContainer>
@@ -262,16 +291,18 @@ const mapStateToProps = (state) => {
       providers: state.provider.providers,
       serviceProvider: state.serviceProvider.serviceProvider,
       services: state.service.services,
+      locations: state.location.locations
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-      fetchProvidersOptionByOrdId: (orgId) => dispatch(fetchProvidersOptionByOrdId(orgId)),
+      fetchProvidersOptionByServiceProviderId: (serviceProviderId) => dispatch(fetchProvidersOptionByServiceProviderId(serviceProviderId)),
       fetchOrganizationsOptionByBusinessAdminId: (id) => dispatch(fetchOrganizationsOptionByBusinessAdminId(id)),
       fetchServiceProviderById: (id) => dispatch(fetchServiceProviderById(id)),
       editServiceProvider: (values, history) => dispatch(editServiceProvider(values, history)),
       fetchServicesOptionByOrgId: (orgId) => dispatch(fetchServicesOptionByOrgId(orgId)),
+      fetchLocationsOption: () => dispatch(fetchLocationsOption()),
     }
 }
 

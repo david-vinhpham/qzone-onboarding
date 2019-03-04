@@ -50,6 +50,30 @@ export function fetchProvidersByOrdId(orgId) {
   };
 };
 
+export function fetchProvidersOptionByServiceProviderId(serviceProviderId) {
+  console.log('fetchProvidersOptionByServiceProviderId');
+  return (dispatch) => {
+    dispatch(fetchProvidersLoading());
+    fetch(API_ROOT + URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID + serviceProviderId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log("json-----------", json)
+        if (json.objects) {
+          dispatch(fetchProvidersSuccess(json.objects));
+        } else {
+          dispatch(fetchProvidersFailure("Topology Error"))
+        }
+        return json;
+      })
+      .catch(err => dispatch(fetchProvidersFailure(err)))
+  };
+};
+
 export function fetchProvidersOptionByOrdId(orgId) {
   console.log('fetchProvidersOptionByOrdId');
   return (dispatch) => {

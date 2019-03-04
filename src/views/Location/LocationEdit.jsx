@@ -60,7 +60,6 @@ class LocationEdit extends React.Component {
         Geocode.fromAddress(values.streetAddress + values.city + values.country + values.postCode).then(
             response => {
               const { lat, lng } = response.results[0].geometry.location;
-              console.log("Geo location------",lat, lng);
               values.coordinates = {};
               values.coordinates.latitude = lat;
               values.coordinates.longitude = lng;
