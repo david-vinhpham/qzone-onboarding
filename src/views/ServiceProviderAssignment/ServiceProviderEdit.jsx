@@ -221,13 +221,13 @@ class ServiceProviderEdit extends React.Component {
                                                   onChange={handleChange('providerId')}
                                                   name="providerId"
                                                 >
-                                                  {providerOptions.map(providerOption => (
+                                                  {providers.map(providerOption => (
                                                     <MenuItem
-                                                      key={providerOption.id}
-                                                      value={providerOption.id}
+                                                      key={providerOption.value}
+                                                      value={providerOption.value}
                                                       id="providerId"
                                                     >
-                                                      {providerOption.givenName}
+                                                      {providerOption.label}
                                                     </MenuItem>
                                                   ))}
                                                 </Select>

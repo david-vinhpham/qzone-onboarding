@@ -27,6 +27,7 @@ export const fetchTimezones = () => {
 }
 
 export function fetchProvidersByOrdId(orgId) {
+  console.log('fetchProvidersByOrdId');
   return (dispatch) => {
     dispatch(fetchProvidersLoading());
     fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_ORG_ID + orgId, {
