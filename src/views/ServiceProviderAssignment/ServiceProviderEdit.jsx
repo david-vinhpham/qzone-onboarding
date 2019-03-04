@@ -64,8 +64,9 @@ class ServiceProviderEdit extends React.Component {
         this.props.fetchServicesOptionByOrgId( nextProps.serviceProvider.organizationId);
         this.setState({loadProviders: true})
       }
-      this.setState({ providerOption: nextProps.serviceProvider.providerId });
-      this.setState({ serviceOption: nextProps.serviceProvider.serviceId });
+      //this.setState({ providerOption: nextProps.serviceProvider.providerId });
+      //this.setState({ serviceOption: nextProps.serviceProvider.serviceId });
+      //this.setState({ organizationOption: nextProps.serviceProvider.organizationId });
     }
 
     handleOrgChange(selectedOption) {
@@ -74,7 +75,6 @@ class ServiceProviderEdit extends React.Component {
       this.props.fetchProvidersOptionByOrdId(selectedOption.value);
       this.props.fetchServicesOptionByOrgId(selectedOption.value);
     }
-
     handleProviderChange(providerOption) {
       console.log('handleProviderChange: ' + providerOption);
       this.setState({ providerOption: providerOption });
@@ -103,7 +103,7 @@ class ServiceProviderEdit extends React.Component {
 
     render() {
         const { classes, services, organizations, providers } = this.props;
-        const { serviceOption, providerOption } = this.state;
+        const { serviceOption, providerOption, organizationOption } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
         let providerOptions = [];
@@ -144,7 +144,7 @@ class ServiceProviderEdit extends React.Component {
                             id: this.state.data.id,
                             providerId: this.state.data.providerId,
                             serviceId: this.state.data.serviceId,
-                            organizationId: this.state.organizationOption === null ? this.state.data.organizationId : this.state.organizationOption,
+                            organizationId: this.state.data.organizationId,
                         }}
                         enableReinitialize={true}
                         validationSchema={ServiceEditSchema}
@@ -180,7 +180,9 @@ class ServiceProviderEdit extends React.Component {
                                                   className={classes.selectFormControl}>
                                                   <Select
                                                     options={organizationOptions}
-                                                    value={values.organizationId}
+                                                    value={ organizationOption == null ? organizationOptions.find((element) => {
+                                                      return element.value === values.organizationId;
+                                                    }) : organizationOption}
                                                     onChange={this.handleOrgChange}
                                                   >
                                                   </Select>
