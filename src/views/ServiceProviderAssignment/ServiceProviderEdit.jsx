@@ -64,6 +64,8 @@ class ServiceProviderEdit extends React.Component {
         this.props.fetchServicesOptionByOrgId( nextProps.serviceProvider.organizationId);
         this.setState({loadProviders: true})
       }
+      this.setState({ providerOption: nextProps.serviceProvider.providerId });
+      this.setState({ serviceOption: nextProps.serviceProvider.serviceId });
     }
 
     handleOrgChange(selectedOption) {
@@ -75,7 +77,7 @@ class ServiceProviderEdit extends React.Component {
 
     handleProviderChange(providerOption) {
       console.log('handleProviderChange: ' + providerOption);
-      this.setState({ providerOption });
+      this.setState({ providerOption: providerOption });
     }
 
     handleServiceChange(selectedOption) {
@@ -107,17 +109,17 @@ class ServiceProviderEdit extends React.Component {
         let providerOptions = [];
         if (services != null && services.length > 0) {
             serviceOptions = services;
-            console.log('update serviceOptions: ' + serviceOptions);
+            //console.log('update serviceOptions: ' + serviceOptions);
         }
         if (organizations != null && organizations.length > 0) {
             organizationOptions = organizations;
-            console.log('update organizationOptions: ' + organizationOptions);
+            //console.log('update organizationOptions: ' + organizationOptions);
         }
         if (providers != null && providers.length > 0) {
             providerOptions = providers;
-            console.log('update providerOptions: ' + providerOptions);
+            //console.log('update providerOptions: ' + providerOptions);
         }
-        console.log('this.state.data: ' + this.state.data);
+        //console.log('this.state.data: ' + this.state.data);
         let data = null
         if (!this.state.data) {
           data =  (
