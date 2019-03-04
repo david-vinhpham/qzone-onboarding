@@ -200,7 +200,9 @@ class ServiceProviderEdit extends React.Component {
                                                 fullWidth
                                                 className={classes.selectFormControl}>
                                                 <Select
-                                                  value={serviceOption}
+                                                  value={serviceOption == null ? serviceOptions.find((element) => {
+                                                    return element.value === values.serviceId;
+                                                  }) : serviceOption}
                                                   onChange={this.handleServiceChange}
                                                   options={serviceOptions}
                                                 >
@@ -220,7 +222,9 @@ class ServiceProviderEdit extends React.Component {
                                                 className={classes.selectFormControl}>
                                                 <Select
                                                   isMulti
-                                                  value={providerOption}
+                                                  value={providerOption == null ? providerOptions.find((element) => {
+                                                    return element.value === values.providerId;
+                                                  }) : providerOption}
                                                   placeholder="Select your provider(s)"
                                                   options={providerOptions}
                                                   onChange={this.handleProviderChange} />
