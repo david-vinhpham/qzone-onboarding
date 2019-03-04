@@ -87,6 +87,25 @@ export const fetchOrganizationsByBusinessAdminId = (adminId) => {
     }
 }
 
+export const fetchOrganizationsOptionByBusinessAdminId = (adminId) => {
+  return (dispatch) => {
+    dispatch(fetchOrganizationsLoading())
+    fetch(API_ROOT + URL.FETCH_ORGANIZATIONS_OPTION_BY_BUSINESS_ADMIN_ID + adminId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        dispatch(fetchOrganizationsSuccess(json.objects))
+      })
+      .catch(err => {
+        dispatch(fetchOrganizationsFailure(err))
+      })
+  }
+}
+
 export const fetchOrganizationsLoading = () => {
     return {
         type: organization.FETCH_ORGANIZATIONS_LOADING

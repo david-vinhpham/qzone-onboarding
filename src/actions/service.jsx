@@ -143,6 +143,25 @@ export const fetchServicesByOrgId = (orgId) => {
     }
 }
 
+export const fetchServicesOptionByOrgId = (orgId) => {
+  return (dispatch) => {
+    dispatch(fetchServicesLoading())
+    fetch(API_ROOT + URL.FETCH_SERVICES_OPTION + orgId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch(fetchServicesSuccess(data.objects))
+      })
+      .catch(err => {
+        dispatch(fetchServicesFailure(err))
+      })
+  }
+}
+
 export const fetchServicesByBusinessAdminId = (businessAdminId) => {
   return (dispatch) => {
     dispatch(fetchServicesLoading())
