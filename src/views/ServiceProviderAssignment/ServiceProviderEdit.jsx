@@ -20,10 +20,10 @@ import {editServiceProvider, fetchServiceProviderById} from "../../actions/servi
 import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organization";
 import {fetchProvidersOptionByServiceProviderId} from "../../actions/provider";
 import {fetchServicesOptionByOrgId} from "../../actions/service";
-import { fetchLocationsOption } from '../../actions/location';
+import {fetchLocationsOption} from '../../actions/location';
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
-import {Link} from "react-router-dom";
+
 const ServiceEditSchema = Yup.object().shape({
     name: Yup.string()
         .min(3, "Name too short")
