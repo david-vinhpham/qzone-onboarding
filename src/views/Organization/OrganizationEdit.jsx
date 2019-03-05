@@ -22,6 +22,15 @@ import {editOrganization, fetchBusinessCategories, fetchOrganization} from "../.
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
+import {ClipLoader} from "react-spinners";
+import {css} from "@emotion/core";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
+
 
 const OrganizationEditSchema = Yup.object().shape({
   name: Yup.string()
@@ -62,6 +71,7 @@ class OrganizationEdit extends React.Component {
     const {
       classes,
       businessCategories,
+      fetchOrganizationLoading,
     } = this.props;
     const { data } = this.state;
     let categoryOptions = [];
@@ -69,7 +79,15 @@ class OrganizationEdit extends React.Component {
       categoryOptions = businessCategories.objects;
     }
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
+    if (!this.state.data || this.state.data.length ===0) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={fetchOrganizationLoading}
+      />;
+    }
     return (
 
                 <GridContainer>
@@ -618,6 +636,7 @@ const mapsStateToProp = (state) => ({
   organization: state.organization.organization,
   editOrganizationLoading: state.organization.editOrganizationLoading,
   editOrganizationError: state.organization.editOrganizationError,
+  fetchOrganizationLoading: state.organization.fetchOrganizationLoading,
 
 })
 

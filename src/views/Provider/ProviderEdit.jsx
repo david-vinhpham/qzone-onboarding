@@ -21,6 +21,15 @@ import GridItem from "../../components/Grid/GridItem.jsx";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
+import {css} from "@emotion/core";
+import {ClipLoader} from "react-spinners";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
+
 
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -68,7 +77,7 @@ class ProviderEdit extends React.Component{
   }
 
   render() {
-    const { classes, timezones, organizations } = this.props;
+    const { classes, timezones, organizations, fetchProviderLoading } = this.props;
     let timeZoneOptions = [];
     let organizationOptions = [];
     if ((timezones.length) > 0) {
@@ -77,8 +86,14 @@ class ProviderEdit extends React.Component{
     if(organizations.length > 0) {
       organizationOptions = organizations;
     }
-    if (!this.state.provider) {
-      return null;
+    if (!this.state.provider || this.state.provider.length === 0) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={fetchProviderLoading}
+      />;
     }
     console.log('this.state.provider: ' + this.state.provider);
     return(
@@ -338,7 +353,8 @@ const mapStateToProps = (state) => {
   return {
     provider: state.provider.provider,
     timezones: state.provider.timezones,
-    organizations: state.organization.organizations
+    organizations: state.organization.organizations,
+    fetchProviderLoading: state.provider.fetchProviderLoading,
   }
 }
 

@@ -14,7 +14,7 @@ export const URL = {
     SERVICE_PROVIDER: 'service-providers',
     FETCH_SERVICE_PROVIDER_BY_ID: 'service-providers/',
     FETCH_SERVICE_PROVIDERS_BY_SERVICE_ID: 'service-providers-by-serviceId/',
-    FETCH_SERVICE_PROVIDERS_BY_USER_SUB: 'service-providers-by-user-sub/',
+    FETCH_SERVICE_PROVIDERS_BY_BUSINESS_ADMIN_ID: 'service-providers-by-business-admin-id/',
 
     FETCH_SERVICES: 'services-by-org-id/',
     FETCH_SERVICES_OPTION: 'services-option-by-org-id/',

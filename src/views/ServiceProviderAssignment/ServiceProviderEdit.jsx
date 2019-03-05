@@ -23,23 +23,16 @@ import {fetchServicesOptionByOrgId} from "../../actions/service";
 import {fetchLocationsOption} from '../../actions/location';
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
+import {ClipLoader} from "react-spinners";
+import {css} from "@emotion/core";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 const ServiceEditSchema = Yup.object().shape({
-    name: Yup.string()
-        .min(3, "Name too short")
-        .max(50, "Name too long")
-        .required("This field is required"),
-    description: Yup.string()
-        .min(50, "Description too short")
-        .max(1500, "Description too long")
-        .required("this field is required"),
-    duration: Yup.number()
-        .min(60),
-    numberOfParallelCustomer: Yup.number()
-        .min(1),
-    bookingHorizon: Yup.number()
-        .min(3)
-        .max(1095)
 
 })
 
@@ -54,16 +47,8 @@ class ServiceProviderEdit extends React.Component {
             organizationOption: null,
             serviceOption: null,
             locationOption: null,
-            serviceTimeSlot: [
-              {
-                "endTime": "18:00",
-                "startTime": "09:00"
-              },
-              {
-                "endTime": "18:00",
-                "startTime": "09:00"
-              }
-            ],
+            serviceTimeSlot: [],
+            originServiceTimeSlot: [],
         }
       this.handleOrgChange = this.handleOrgChange.bind(this);
       this.handleProviderChange = this.handleProviderChange.bind(this);
@@ -71,15 +56,27 @@ class ServiceProviderEdit extends React.Component {
       this.handleLocationChange = this.handleLocationChange.bind(this);
       this.handleNewSlot = this.handleNewSlot.bind(this);
       this.handleDeleteSlot = this.handleDeleteSlot.bind(this);
+      this.handleRevertSlot = this.handleRevertSlot.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
-      this.setState({data: nextProps.serviceProvider})
+      this.setState({data: nextProps.serviceProvider});
+      this.setState({serviceTimeSlot: nextProps.serviceProvider.serviceTimeSlot});
       if( nextProps.serviceProvider != null && !this.state.loadProviders && nextProps.serviceProvider.organizationId != null) {
         this.props.fetchServicesOptionByOrgId( nextProps.serviceProvider.organizationId);
-        this.setState({loadProviders: true})
+        this.setState({loadProviders: true});
+        localStorage.setItem('originServiceTimeSlot', JSON.stringify(nextProps.serviceProvider.serviceTimeSlot));
       }
     }
+
+  handleRevertSlot() {
+    console.log('handleRevertSlot');
+    let newServiceTimeSlot = localStorage.getItem('originServiceTimeSlot');
+    if(newServiceTimeSlot === null) {
+      newServiceTimeSlot = [];
+    }
+    this.setState({ serviceTimeSlot: JSON.parse(newServiceTimeSlot)});
+  }
 
   handleDeleteSlot() {
       const { serviceTimeSlot } = this.state;
@@ -141,8 +138,13 @@ class ServiceProviderEdit extends React.Component {
         this.setState({ [stateName]: (event.target.value || event.target.checked) })
     }
 
+    submit = (values) =>  {
+      console.log('editServiceProvider: ' + values);
+      this.props.editServiceProvider(values, this.props.history)
+    }
+
     render() {
-        const { classes, services, organizations, providers, locations } = this.props;
+        const { classes, services, organizations, providers, locations, serviceProviderLoading } = this.props;
         const { serviceOption, providerOption, organizationOption, locationOption } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
@@ -160,22 +162,15 @@ class ServiceProviderEdit extends React.Component {
         if (locations != null && locations.length > 0) {
            locationOptions = locations;
         }
-        //console.log('this.state.data: ' + this.state.data);
-        let data = null
-        if (!this.state.data) {
-          data =  (
-            <GridContainer>
-              <FormLabel>
-                No Services.
-              </FormLabel>
-              <CardFooter className={classes.justifyContentCenter}>
-                <Button color="rose" onClick={this.props.history.goBack}>
-                  Back
-                </Button>
-              </CardFooter>
-            </GridContainer>
-          )
-            return data;
+        console.log('this.state.data: ' + this.state.data);
+        if (!this.state.data || this.state.data.length ===0) {
+          return < ClipLoader
+            className={override}
+            sizeUnit={"px"}
+            size={150}
+            color={'#123abc'}
+            loading={serviceProviderLoading}
+          />;
         }
         //const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         return (
@@ -188,10 +183,12 @@ class ServiceProviderEdit extends React.Component {
                             serviceId: this.state.data.serviceId,
                             organizationId: this.state.data.organizationId,
                             geoLocationId: this.state.data.geoLocationId,
+                            additionalInfo: this.state.data.additionalInfo,
+                            serviceTimeSlot: this.state.data.serviceTimeSlot,
                         }}
-                        enableReinitialize={true}
                         validationSchema={ServiceEditSchema}
-                        onSubmit={(values) => this.saveClicked(values)}
+                        enableReinitialize={true}
+                        onSubmit={(values) => this.submit(values)}
                         render={({
                             values,
                             errors,
@@ -325,7 +322,7 @@ class ServiceProviderEdit extends React.Component {
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
                                                     {<CustomInput
-                                                      id={`vaule.serviceTimeSlot[${index}].endTime`}
+                                                      id={`value.serviceTimeSlot[${index}].endTime`}
                                                       value={this.state.serviceTimeSlot[index].endTime}
                                                       inputProps={{ placeholder: "End Time", type: "time" }}
                                                       onChange={handleChange}
@@ -340,13 +337,37 @@ class ServiceProviderEdit extends React.Component {
                                               <FormLabel className={classes.labelHorizontal}>
                                               </FormLabel>
                                             </GridItem>
-                                            <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                                            <GridItem xs={12} sm={6} style={{ 'max-width': '100%' }}>
                                               <Button color="rose" onClick={this.handleNewSlot}>
                                                 New Slot
                                               </Button>
                                               <Button color="rose" onClick={this.handleDeleteSlot}>
                                                 Delete Slot
                                               </Button>
+                                              <Button color="rose" onClick={this.handleRevertSlot}>
+                                                Revert
+                                              </Button>
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer>
+                                            <GridItem xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                AdditionalInfo
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={3}>
+                                              <CustomInput
+                                                id="additionalInfo"
+                                                formControlProps={{
+                                                  fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                  multiline: true,
+                                                  rows: 3
+                                                }}
+                                                value={values.additionalInfo}
+                                                onChange={handleChange}
+                                              />
                                             </GridItem>
                                           </GridContainer>
                                         </form>
@@ -379,8 +400,10 @@ const mapStateToProps = (state) => {
       organizations: state.organization.organizations,
       providers: state.provider.providers,
       serviceProvider: state.serviceProvider.serviceProvider,
+      originServiceProvider: state.serviceProvider.serviceProvider,
       services: state.service.services,
-      locations: state.location.locations
+      locations: state.location.locations,
+      serviceProviderLoading:state.provider.serviceProviderLoading,
     }
 }
 

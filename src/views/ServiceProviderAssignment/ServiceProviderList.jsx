@@ -8,7 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import {ClipLoader} from 'react-spinners';
-import { css } from '@emotion/core';
+import {css} from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -19,7 +19,6 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
-import {FormLabel} from "@material-ui/core";
 import {fetchServiceProvidersByUserSub} from "../../actions/serviceProvider.jsx";
 
 const override = css`
@@ -45,24 +44,16 @@ class ServiceProviderList extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-    if (!this.state.data)
+    const { classes, serviceProviderLoading } = this.props;
+    let data = null
+    if(!this.state.data || this.state.data.length === 0) {
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
         size={150}
         color={'#123abc'}
-        loading={true}
+        loading={serviceProviderLoading}
       />;
-    let data = null
-    if(this.state.data.length === 0) {
-      data =  (
-        <GridContainer>
-          <FormLabel>
-            No Providers.
-          </FormLabel>
-        </GridContainer>
-      )
     } else {
       data = (
         <GridContainer>
@@ -171,7 +162,8 @@ class ServiceProviderList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { serviceProviders: state.serviceProvider.serviceProviders }
+  return { serviceProviders: state.serviceProvider.serviceProviders ,
+    serviceProviderLoading:state.provider.serviceProviderLoading,}
 }
 
 const mapDispatchToProps = (dispatch) => {

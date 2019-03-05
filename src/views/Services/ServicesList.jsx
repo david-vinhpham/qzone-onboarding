@@ -9,7 +9,7 @@ import Search from "@material-ui/icons/Search";
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {ClipLoader} from 'react-spinners';
-import { css } from '@emotion/core';
+import {css} from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -21,7 +21,6 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
 import {fetchServicesByBusinessAdminId} from '../../actions/service';
-import {FormLabel} from "@material-ui/core";
 
 const override = css`
     display: block;
@@ -49,28 +48,19 @@ class ServicesList extends React.Component{
   render() {
     const {
       classes,
+      fetchServicesLoading,
     } = this.props;
-
-    if(!this.state.data ) {
+    let data = null;
+    if(!this.state.data || this.state.data.length === 0) {
       return < ClipLoader
-      className={override}
-      sizeUnit={"px"}
-      size={150}
-      color={'#123abc'}
-      loading={true}
-    />;
-    }
-    let data = null
-    if(this.state.data.length === 0) {
-      data =  (
-        <GridContainer>
-         <FormLabel>
-           No Services.
-         </FormLabel>
-        </GridContainer>
-      )
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={fetchServicesLoading}
+      />;
     } else {
-      data = (
+        data = (
         <GridContainer>
           {this.state.data.map((service, index) => {
             return (

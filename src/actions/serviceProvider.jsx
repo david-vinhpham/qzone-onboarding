@@ -15,11 +15,7 @@ export const editServiceProvider = (values, history) => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch({
-                type: serviceProvider.EDIT_SERVICE_PROVIDER_SUCCESS,
-                payload: {data}
-            })
-            history.push('/service-providers/list');
+            history.push('/service-provider/list');
         })
         .catch(err => {
             dispatch({
@@ -33,7 +29,7 @@ export const editServiceProvider = (values, history) => {
 export const fetchServiceProvidersByUserSub = (userSub) => {
   return (dispatch) => {
     dispatch(fetchServiceProvidersLoading())
-    fetch(API_ROOT + URL.FETCH_SERVICE_PROVIDERS_BY_USER_SUB + userSub, {
+    fetch(API_ROOT + URL.FETCH_SERVICE_PROVIDERS_BY_BUSINESS_ADMIN_ID + userSub, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

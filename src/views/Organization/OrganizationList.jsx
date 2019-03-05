@@ -8,7 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import {ClipLoader} from 'react-spinners';
-import { css } from '@emotion/core';
+import {css} from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -19,7 +19,6 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
-import {FormLabel} from "@material-ui/core";
 import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 
 const override = css`
@@ -45,24 +44,16 @@ class OrganizationList extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-    if (!this.state.data)
-      return < ClipLoader
-      className={override}
-      sizeUnit={"px"}
-      size={150}
-      color={'#123abc'}
-      loading={true}
-    />;
+    const { classes, fetchOrganizationsLoading } = this.props;
     let data = null
-    if(this.state.data.length === 0) {
-      data =  (
-        <GridContainer>
-         <FormLabel>
-           No Organizations.
-         </FormLabel>
-        </GridContainer>
-      )
+    if(!this.state.data || this.state.data.length === 0) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={fetchOrganizationsLoading}
+      />;
     } else {
       data = (
         <GridContainer>
@@ -171,7 +162,9 @@ class OrganizationList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { organizations: state.organization.organizations }
+  return { organizations: state.organization.organizations,
+    fetchOrganizationsLoading: state.organization.fetchOrganizationsLoading,
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {

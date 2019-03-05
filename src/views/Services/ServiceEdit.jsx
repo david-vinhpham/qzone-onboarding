@@ -23,6 +23,15 @@ import ImageUpload from "../../components/CustomUpload/ImageUpload";
 import { fetchServiceCategories, fetchServiceById, editService } from "../../actions/service";
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
+import {ClipLoader} from "react-spinners";
+import {css} from "@emotion/core";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
+
 
 const ServiceEditSchema = Yup.object().shape({
     name: Yup.string()
@@ -121,7 +130,7 @@ class ServiceEdit extends React.Component {
 
 
     render() {
-        const { classes, categories, organizations } = this.props;
+        const { classes, categories, organizations, fetchServiceLoading } = this.props;
         let categoryOptions = [];
         let organizationOptions = [];
         if (categories != null && categories.length > 0) {
@@ -130,8 +139,14 @@ class ServiceEdit extends React.Component {
         if (organizations != null && organizations.length > 0) {
           organizationOptions = organizations;
         }
-        if (!this.state.data) {
-            return null;
+        if (!this.state.data || this.state.data.length ===0) {
+          return < ClipLoader
+            className={override}
+            sizeUnit={"px"}
+            size={150}
+            color={'#123abc'}
+            loading={fetchServiceLoading}
+          />;
         }
         return (
             <GridItem xs={12} sm={12} md={12}>
@@ -523,6 +538,7 @@ const mapStateToProps = (state) => {
       imageLoading: state.image.imageLoading,
       categories: state.service.serviceCategories,
       service: state.service.service,
+      fetchServiceLoading: state.service.fetchServiceLoading,
       organizations: state.organization.organizations
     }
 }
