@@ -21,7 +21,9 @@ import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organizat
 import {fetchProvidersOptionByServiceProviderId} from "../../actions/provider";
 import {fetchServicesOptionByOrgId} from "../../actions/service";
 import { fetchLocationsOption } from '../../actions/location';
+import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
+import {Link} from "react-router-dom";
 const ServiceEditSchema = Yup.object().shape({
     name: Yup.string()
         .min(3, "Name too short")
@@ -52,11 +54,23 @@ class ServiceProviderEdit extends React.Component {
             organizationOption: null,
             serviceOption: null,
             locationOption: null,
+            serviceTimeSlot: [
+              {
+                "endTime": "18:00",
+                "startTime": "09:00"
+              },
+              {
+                "endTime": "18:00",
+                "startTime": "09:00"
+              }
+            ],
         }
       this.handleOrgChange = this.handleOrgChange.bind(this);
       this.handleProviderChange = this.handleProviderChange.bind(this);
       this.handleServiceChange = this.handleServiceChange.bind(this);
       this.handleLocationChange = this.handleLocationChange.bind(this);
+      this.handleNewSlot = this.handleNewSlot.bind(this);
+      this.handleDeleteSlot = this.handleDeleteSlot.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -67,11 +81,32 @@ class ServiceProviderEdit extends React.Component {
       }
     }
 
+  handleDeleteSlot() {
+      const { serviceTimeSlot } = this.state;
+      let newServiceTimeSlot = serviceTimeSlot;
+      newServiceTimeSlot.pop();
+      this.setState({ serviceTimeSlot: newServiceTimeSlot });
+      console.log('handleDeleteSlot');
+    }
+
+    handleNewSlot() {
+      const { serviceTimeSlot } = this.state;
+      let newServiceTimeSlot = serviceTimeSlot;
+      let newSlot =  {
+        "startTime": "00:00",
+        "endTime": "00:00",
+      }
+      newServiceTimeSlot.push(newSlot);
+      this.setState({ serviceTimeSlot: newServiceTimeSlot });
+      console.log('handleNewSlot');
+    }
+
     handleOrgChange(selectedOption) {
       console.log('handleOrgChange: ' + selectedOption);
       this.setState({ organizationOption: selectedOption });
       this.props.fetchServicesOptionByOrgId(selectedOption.value);
     }
+
     handleProviderChange(providerOption) {
       console.log('handleProviderChange: ' + providerOption);
       this.setState({ providerOption: providerOption });
@@ -142,6 +177,7 @@ class ServiceProviderEdit extends React.Component {
           )
             return data;
         }
+        //const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         return (
             <GridItem xs={12} sm={12} md={12}>
                 <Card>
@@ -245,7 +281,7 @@ class ServiceProviderEdit extends React.Component {
                                                 Service Location
                                               </FormLabel>
                                             </GridItem>
-                                            <GridItem xs={12} sm={6}>
+                                            <GridItem xs={12} sm={4}>
                                               <FormControl
                                                 fullWidth
                                                 className={classes.selectFormControl}>
@@ -258,6 +294,59 @@ class ServiceProviderEdit extends React.Component {
                                                 >
                                                 </Select>
                                               </FormControl>
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer style={{ paddingBottom: '15px' }}>
+                                            <GridItem  xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Service Time Slot
+                                              </FormLabel>
+                                            </GridItem>
+                                            {this.state.serviceTimeSlot.map((day, index) => (
+                                              <div>
+                                                <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                                                  <FormLabel >
+                                                    Slot {index + 1}
+                                                  </FormLabel>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
+                                                  <FormControl fullWidth style={{ margin: '-3px' }}>
+                                                    <CustomInput
+                                                      id={`value.serviceTimeSlot[${index}].startTime`}
+                                                      inputProps={{
+                                                        placeholder: "Start Time",
+                                                        type: "time"
+                                                      }}
+                                                      onChange={handleChange}
+                                                      value={this.state.serviceTimeSlot[index].startTime}
+                                                    />
+                                                  </FormControl>
+                                                </GridItem>
+                                                <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
+                                                  <FormControl fullWidth style={{ margin: '-3px' }}>
+                                                    {<CustomInput
+                                                      id={`vaule.serviceTimeSlot[${index}].endTime`}
+                                                      value={this.state.serviceTimeSlot[index].endTime}
+                                                      inputProps={{ placeholder: "End Time", type: "time" }}
+                                                      onChange={handleChange}
+                                                    />}
+                                                  </FormControl>
+                                                </GridItem>
+                                              </div>
+                                            ))}
+                                          </GridContainer>
+                                          <GridContainer style={{ paddingBottom: '15px' }}>
+                                            <GridItem  xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                                              <Button color="rose" onClick={this.handleNewSlot}>
+                                                New Slot
+                                              </Button>
+                                              <Button color="rose" onClick={this.handleDeleteSlot}>
+                                                Delete Slot
+                                              </Button>
                                             </GridItem>
                                           </GridContainer>
                                         </form>
