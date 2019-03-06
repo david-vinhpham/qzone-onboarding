@@ -48,7 +48,6 @@ class ServiceProviderEdit extends React.Component {
             serviceOption: null,
             locationOption: null,
             serviceTimeSlot: [],
-            originServiceTimeSlot: [],
         }
       this.handleOrgChange = this.handleOrgChange.bind(this);
       this.handleProviderChange = this.handleProviderChange.bind(this);
@@ -300,7 +299,7 @@ class ServiceProviderEdit extends React.Component {
                                                 Service Time Slot
                                               </FormLabel>
                                             </GridItem>
-                                            {this.state.serviceTimeSlot.map((day, index) => (
+                                            {values.serviceTimeSlot.map((day, index) => (
                                               <div>
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
                                                   <FormLabel >
@@ -310,21 +309,21 @@ class ServiceProviderEdit extends React.Component {
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
                                                     <CustomInput
-                                                      id={`value.serviceTimeSlot[${index}].startTime`}
+                                                      id={`serviceTimeSlot[${index}].startTime`}
                                                       inputProps={{
                                                         placeholder: "Start Time",
                                                         type: "time"
                                                       }}
                                                       onChange={handleChange}
-                                                      value={this.state.serviceTimeSlot[index].startTime}
+                                                      value={values.serviceTimeSlot[index].startTime}
                                                     />
                                                   </FormControl>
                                                 </GridItem>
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
                                                     {<CustomInput
-                                                      id={`value.serviceTimeSlot[${index}].endTime`}
-                                                      value={this.state.serviceTimeSlot[index].endTime}
+                                                      id={`serviceTimeSlot[${index}].endTime`}
+                                                      value={values.serviceTimeSlot[index].endTime}
                                                       inputProps={{ placeholder: "End Time", type: "time" }}
                                                       onChange={handleChange}
                                                     />}

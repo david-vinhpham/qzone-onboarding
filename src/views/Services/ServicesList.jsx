@@ -124,7 +124,7 @@ class ServicesList extends React.Component{
                     </div>
                     <h4 className={classes.cardProductTitle}>
                       <a href="#pablo" onClick={e => e.preventDefault()}>
-                        {service.organizationName}
+                        {service.organizationEntity && service.organizationEntity.name}
                       </a>
                     </h4>
                     <h4 className={classes.cardProductTitle}>

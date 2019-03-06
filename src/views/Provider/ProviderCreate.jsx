@@ -37,7 +37,6 @@ class ProviderCreate extends React.Component{
 	constructor(props) {
     super(props);
 
-
     this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
     this.changeProfileImage = this.changeProfileImage.bind(this);

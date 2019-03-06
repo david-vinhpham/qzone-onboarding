@@ -165,7 +165,7 @@ class ServiceEdit extends React.Component {
                             serviceCategoryId: this.state.data.serviceCategoryId,
                             organizationId: this.state.data.organizationId,
                             organizationName: this.state.data.organizationName,
-                            userSub: this.state.data.userSub,
+                            businessAdminId: this.state.data.businessAdminId,
                             image: this.state.data.image,
                             imageShow: this.state.data.image ? this.state.data.image.fileUrl : defaultImage,
                             tags: this.state.data.tags,

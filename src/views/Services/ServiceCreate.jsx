@@ -56,11 +56,24 @@ class ServiceCreate extends React.Component {
 			gapBetweenBookings: 1,
 			mode: "APPOINTMENT",
 			numberOfParallelCustomer: 1,
-			serviceCategoryId: "",
+			serviceCategoryId: null,
+      organizationId: null,
 			tags: "",
-			imagePreviewUrl: defaultImage
+			imagePreviewUrl: defaultImage,
+      imageChange: false,
 		}
 	}
+
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.imageLoading) {
+      console.log('imageLoading finished...');
+    }
+    else {
+      console.log('imageLoading...');
+      this.setState({ imageChange: true})
+    }
+
+  }
 
 	componentDidMount() {
 		this.props.fetchServiceCategories();
@@ -73,7 +86,7 @@ class ServiceCreate extends React.Component {
 	handleService(values) {
 		values.image = this.props.imageObject;
 		console.log("values-----", values)
-        values.userSub = localStorage.getItem('userSub');
+        values.businessAdminId = localStorage.getItem('userSub');
         this.props.createService(values, this.props.history);
 		// this.setState({
 		// 	organizationId: orgId,
@@ -117,10 +130,10 @@ class ServiceCreate extends React.Component {
 		const { classes, categories, organizations} = this.props;
 		let categoryOptions = [];
     let organizationOptions = [];
-		if (categories.length > 0) {
-			categoryOptions = categories;
-		}
-    if (organizations.length > 0) {
+    if (categories != null && categories.length > 0) {
+      categoryOptions = categories;
+    }
+    if (organizations != null && organizations.length > 0) {
       organizationOptions = organizations;
     }
 		return (
@@ -140,7 +153,7 @@ class ServiceCreate extends React.Component {
                             tags: this.state.tags,
                             organizationId: this.state.organizationId,
                             organizationName: this.state.organizationName,
-                            userSub: this.state.userSub,
+                            businessAdminId: this.state.businessAdminId,
                             imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
                         }}
                         enableReinitialize={true}
@@ -498,7 +511,7 @@ const mapStateToProps = (state) => {
 		imageObject: state.image.image,
 		imageError: state.image.imageError,
 		imageLoading: state.image.imageLoading,
-		categories: state.service.categories,
+		categories: state.service.serviceCategories,
     organizations: state.organization.organizations
 	}
 }
