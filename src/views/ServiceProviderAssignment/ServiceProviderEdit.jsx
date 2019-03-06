@@ -185,6 +185,7 @@ class ServiceProviderEdit extends React.Component {
                             geoLocationId: this.state.data.geoLocationId,
                             additionalInfo: this.state.data.additionalInfo,
                             serviceTimeSlot: this.state.data.serviceTimeSlot,
+                            businessAdminId: this.state.data.businessAdminId,
                         }}
                         validationSchema={ServiceEditSchema}
                         enableReinitialize={true}
