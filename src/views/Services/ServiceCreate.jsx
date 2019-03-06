@@ -80,21 +80,22 @@ class ServiceCreate extends React.Component {
     let userSub = localStorage.getItem('userSub');
     console.log('userSub: ' + userSub);
     this.props.fetchOrganizationsByBusinessAdminId(userSub);
+    localStorage.removeItem('imageObject');
 
   }
 
-        handleService(values) {
-        let imageObject = localStorage.getItem('imageObject');
-        if(imageObject === null) {
-          imageObject = [];
-        }
-        else {
-          imageObject = JSON.parse(imageObject)
-        }
-        //values.image = this.props.imageObject;
-        values.image = imageObject;
-        values.businessAdminId = localStorage.getItem('userSub');
-        this.props.createService(values, this.props.history);
+  handleService(values) {
+    let imageObject = localStorage.getItem('imageObject');
+    if(imageObject === null) {
+      imageObject = [];
+    }
+    else {
+      imageObject = JSON.parse(imageObject)
+    }
+    //values.image = this.props.imageObject;
+    values.image = imageObject;
+    values.businessAdminId = localStorage.getItem('userSub');
+    this.props.createService(values, this.props.history);
 	}
 
 	changeProfileImage(e) {

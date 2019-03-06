@@ -59,6 +59,7 @@ class ServiceEdit extends React.Component {
         this.state = {
             imagePreviewUrl: defaultImage,
             data: null,
+            imageObject: null,
         }
     }
 
@@ -74,7 +75,6 @@ class ServiceEdit extends React.Component {
       else {
         console.log('imageLoading...');
       }
-
     }
 
     componentDidMount() {
@@ -83,6 +83,7 @@ class ServiceEdit extends React.Component {
       this.props.fetchServiceById(id);
       let userSub = localStorage.getItem('userSub');
       this.props.fetchOrganizationsByBusinessAdminId(userSub);
+      localStorage.removeItem('imageObject');
     }
 
     handleService(option) {
@@ -124,8 +125,15 @@ class ServiceEdit extends React.Component {
     }
 
     saveClicked = (values) => {
-        values.image = this.props.imageObject;
-        this.props.editService(values, this.props.history)
+      let imageObject = localStorage.getItem('imageObject');
+      if(imageObject === null) {
+        imageObject = this.state.imageObject;
+      }
+      else {
+        imageObject = JSON.parse(imageObject)
+      }
+      values.image = imageObject;
+      this.props.editService(values, this.props.history);
     }
 
 
@@ -539,7 +547,8 @@ const mapStateToProps = (state) => {
       categories: state.service.serviceCategories,
       service: state.service.service,
       fetchServiceLoading: state.service.fetchServiceLoading,
-      organizations: state.organization.organizations
+      organizations: state.organization.organizations,
+      editServiceLoading: state.service.editServiceLoading,
     }
 }
 
