@@ -82,7 +82,6 @@ class ServiceProviderEdit extends React.Component {
       let newServiceTimeSlot = serviceTimeSlot;
       newServiceTimeSlot.pop();
       this.setState({ serviceTimeSlot: newServiceTimeSlot });
-      console.log('handleDeleteSlot');
     }
 
     handleNewSlot() {
@@ -94,32 +93,28 @@ class ServiceProviderEdit extends React.Component {
       }
       newServiceTimeSlot.push(newSlot);
       this.setState({ serviceTimeSlot: newServiceTimeSlot });
-      console.log('handleNewSlot');
     }
 
     handleOrgChange(selectedOption) {
-      console.log('handleOrgChange: ' + selectedOption);
       this.setState({ organizationOption: selectedOption });
       this.props.fetchServicesOptionByOrgId(selectedOption.value);
     }
 
     handleProviderChange(providerOption) {
-      console.log('handleProviderChange: ' + providerOption);
       this.setState({ providerOption: providerOption });
     }
 
     handleServiceChange(selectedOption) {
-      console.log('handleServiceChange: ' + selectedOption);
       this.setState({ serviceOption: selectedOption });
     }
 
     handleLocationChange(selectedOption) {
-      console.log('handleLocationChange: ' + selectedOption);
       this.setState({ locationOption: selectedOption });
     }
 
     componentDidMount() {
       let userSub = localStorage.getItem('userSub');
+      localStorage.removeItem('originServiceTimeSlot');
       this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
       const { id } = this.props.match.params;
       this.props.fetchProvidersOptionByServiceProviderId(id);
@@ -138,7 +133,6 @@ class ServiceProviderEdit extends React.Component {
     }
 
     submit = (values) =>  {
-      console.log('editServiceProvider: ' + values);
       this.props.editServiceProvider(values, this.props.history)
     }
 

@@ -34,6 +34,7 @@ class ImageUpload extends React.Component {
           this.setState({imagePreviewUrl: nextProps.imagePreviewUrl});
           if (nextProps.imageObject != null && this.state.isUploadImage === 1) {
             this.setState({imagePreviewUrl: nextProps.imageObject.fileUrl});
+            localStorage.setItem('imageObject', JSON.stringify(nextProps.imageObject));
           }
       }
     else {
@@ -42,6 +43,7 @@ class ImageUpload extends React.Component {
   }
   componentDidMount() {
     this.setState({imageObject: ''});
+    localStorage.removeItem('imageObject');
   }
   handleImageChange(e) {
     e.preventDefault();
@@ -70,6 +72,7 @@ class ImageUpload extends React.Component {
       imagePreviewUrl:  this.state.imagePreviewUrlOrg,
     });
     this.refs.fileInput.value = null;
+    localStorage.removeItem('imageObject');
   }
   uploadImage = () => {
     this.setState({

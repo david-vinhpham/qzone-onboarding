@@ -83,18 +83,18 @@ class ServiceCreate extends React.Component {
 
   }
 
-	handleService(values) {
-		values.image = this.props.imageObject;
-		console.log("values-----", values)
+        handleService(values) {
+        let imageObject = localStorage.getItem('imageObject');
+        if(imageObject === null) {
+          imageObject = [];
+        }
+        else {
+          imageObject = JSON.parse(imageObject)
+        }
+        //values.image = this.props.imageObject;
+        values.image = imageObject;
         values.businessAdminId = localStorage.getItem('userSub');
         this.props.createService(values, this.props.history);
-		// this.setState({
-		// 	organizationId: orgId,
-		// 	image: this.props.imageObject
-		// },
-		// 	() => {
-		// 		this.props.createService(this.state);
-		// 	});
 	}
 
 	changeProfileImage(e) {
@@ -508,7 +508,7 @@ ServiceCreate.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		imageObject: state.image.image,
+		//imageObject: state.image.image,
 		imageError: state.image.imageError,
 		imageLoading: state.image.imageLoading,
 		categories: state.service.serviceCategories,
