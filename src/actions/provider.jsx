@@ -98,6 +98,27 @@ export function fetchProvidersOptionByOrdId(orgId) {
   };
 };
 
+export function fetchProvidersOptionByServiceId(serviceId) {
+  return (dispatch) => {
+    dispatch(fetchProvidersLoading());
+    fetch(API_ROOT + URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_ID + serviceId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.objects) {
+          dispatch(fetchProvidersSuccess(json.objects));
+        } else {
+          dispatch(fetchProvidersFailure("Topology Error"))
+        }
+        return json;
+      })
+      .catch(err => dispatch(fetchProvidersFailure(err)))
+  };
+};
 export function fetchProvidersBySub(sub) {
   return (dispatch) => {
     dispatch(fetchProvidersLoading());

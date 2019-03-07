@@ -37,6 +37,7 @@ import EditEmailTemplate from "../views/EmailTemplates/EditEmailTemplate";
 import CreateEmailTemplate from "../views/EmailTemplates/CreateEmailTemplate";
 import ServiceProviderList from "../views/ServiceProviderAssignment/ServiceProviderList.jsx";
 import ServiceProviderEdit from "../views/ServiceProviderAssignment/ServiceProviderEdit.jsx";
+import ServiceProviderCreate from "../views/ServiceProviderAssignment/ServiceProviderCreate.jsx";
 
 export const dashboardRoutes = [
   {
@@ -145,6 +146,12 @@ export const otherRoutes=[
     name: "Service Provider List",
     icon: ContentPaste,
     component: ServiceProviderList
+  },
+  {
+    path: "/service-provider/create",
+    name: "Service Provider Create",
+    icon: ContentPaste,
+    component: ServiceProviderCreate
   },
   {
     path: "/service-provider/edit/:id",

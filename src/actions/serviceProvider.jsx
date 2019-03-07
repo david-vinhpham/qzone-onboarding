@@ -15,6 +15,18 @@ export const editServiceProvider = (values, history) => {
         })
         .then(res => res.json())
         .then(data => {
+            let serviceProviders = localStorage.getItem('serviceProvider');
+            if(serviceProviders !== null) {
+              let listServiceProviders = JSON.parse(serviceProviders);
+              for (let i = 0; i < listServiceProviders.length; i++){
+                // look for the entry with a matching `code` value
+                if (listServiceProviders[i].id === data.object.id){
+                  // we found it
+                  listServiceProviders[i] = data.object;
+                }
+              }
+              localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
+            }
             history.push('/service-provider/list');
         })
         .catch(err => {
@@ -136,8 +148,14 @@ export const createServiceProvider = (data, history) => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(createServiceProviderSuccess(data.objects))
-            history.push('/service-providers/list')
+            //adding to cached
+            let serviceProviders = localStorage.getItem('serviceProvider');
+            if(serviceProviders !== null) {
+              var listServiceProviders = JSON.parse(serviceProviders);
+              listServiceProviders.push(data.object);
+              localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
+            }
+            history.push('/service-provider/list')
         })
         .catch(err => {
             dispatch(createServiceProviderFailure(err))

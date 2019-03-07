@@ -119,7 +119,8 @@ export function loginUser(values, history) {
           .then(json => {
             dispatch(registerUserSuccess(json));
             localStorage.setItem('user', JSON.stringify(json));
-            console.log("loginUser succeeded -> dashboard");
+            //clear cached
+            localStorage.removeItem('serviceProvider');
             history.push('/dashboard');
           })
           .catch(err => {

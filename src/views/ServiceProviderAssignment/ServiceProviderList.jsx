@@ -36,11 +36,20 @@ class ServiceProviderList extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ data: nextProps.serviceProviders })
+    if(nextProps.serviceProviders != null) {
+      localStorage.setItem('serviceProvider', JSON.stringify(nextProps.serviceProviders));
+    }
   }
 
   componentDidMount() {
-    var userSub = localStorage.getItem('userSub');
-    this.props.fetchServiceProvidersByUserSub(userSub);
+    let serviceProviders = localStorage.getItem('serviceProvider');
+    if(serviceProviders !== null) {
+      this.setState({ data: JSON.parse(serviceProviders) })
+    }
+    else {
+      var userSub = localStorage.getItem('userSub');
+      this.props.fetchServiceProvidersByUserSub(userSub);
+    }
   }
 
   render() {

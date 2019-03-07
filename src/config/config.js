@@ -29,6 +29,7 @@ export const URL = {
     USER: 'users',
     TIMEZONE: 'timezones',
     FETCH_PROVIDERS_OPTION_BY_ORG_ID: 'providers-option-by-org-id/',
+    FETCH_PROVIDERS_OPTION_BY_SERVICE_ID: 'providers-option-by-service-id/',
     FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID: 'providers-option-by-service-provider-id/',
     FETCH_PROVIDERS_BY_USER_SUB: 'providers-by-user-sub/',
     ADMIN_CREATE_AWS_USER: 'users/admin-create-new-users'

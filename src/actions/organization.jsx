@@ -149,7 +149,7 @@ export const createOrganization = (values, history) => {
                 })
                 .then(res => res.json())
                 .then(data => {
-                    dispatch(createOrganizationSuccess(data))
+                    dispatch(createOrganizationSuccess(data));
                     history.push('/dashboard');
                 })
                 .catch(err => {
