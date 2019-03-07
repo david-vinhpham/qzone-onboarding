@@ -61,8 +61,9 @@ class ServiceProviderEdit extends React.Component {
     componentWillReceiveProps(nextProps) {
       this.setState({data: nextProps.serviceProvider});
       this.setState({serviceTimeSlot: nextProps.serviceProvider.serviceTimeSlot});
-      if( nextProps.serviceProvider != null && !this.state.loadProviders && nextProps.serviceProvider.organizationId != null) {
-        this.props.fetchServicesOptionByOrgId( nextProps.serviceProvider.organizationId);
+      if( nextProps.serviceProvider != null && nextProps.serviceProvider.serviceEntity
+        && !this.state.loadProviders && nextProps.serviceProvider.serviceEntity.organizationId != null) {
+        this.props.fetchServicesOptionByOrgId( nextProps.serviceProvider.serviceEntity.organizationId);
         this.setState({loadProviders: true});
         localStorage.setItem('originServiceTimeSlot', JSON.stringify(nextProps.serviceProvider.serviceTimeSlot));
       }
@@ -114,7 +115,6 @@ class ServiceProviderEdit extends React.Component {
 
     componentDidMount() {
       let userSub = localStorage.getItem('userSub');
-      localStorage.removeItem('originServiceTimeSlot');
       this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
       const { id } = this.props.match.params;
       this.props.fetchProvidersOptionByServiceProviderId(id);
@@ -174,10 +174,11 @@ class ServiceProviderEdit extends React.Component {
                             id: this.state.data.id,
                             providerId: this.state.data.providerId,
                             serviceId: this.state.data.serviceId,
-                            organizationId: this.state.data.organizationId,
+                            serviceEntity: this.state.data.serviceEntity,
+                            providerEntity: this.state.data.providerEntity,
                             geoLocationId: this.state.data.geoLocationId,
                             additionalInfo: this.state.data.additionalInfo,
-                            serviceTimeSlot: this.state.data.serviceTimeSlot,
+                            serviceTimeSlot: this.state.serviceTimeSlot,
                             businessAdminId: this.state.data.businessAdminId,
                         }}
                         validationSchema={ServiceEditSchema}
@@ -216,7 +217,7 @@ class ServiceProviderEdit extends React.Component {
                                                     isDisabled
                                                     options={organizationOptions}
                                                     value={ organizationOption == null ? organizationOptions.find((element) => {
-                                                      return element.value === values.organizationId;
+                                                      return element.value === values.serviceEntity.organizationId;
                                                     }) : organizationOption}
                                                     onChange={this.handleOrgChange}
                                                   >
