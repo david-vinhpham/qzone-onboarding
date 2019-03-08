@@ -29,6 +29,7 @@ export const URL = {
 
     USER: 'users',
     TIMEZONE: 'timezones',
+    TIMEZONE_OPTION: 'timezones-option',
     FETCH_PROVIDERS_OPTION_BY_ORG_ID: 'providers-option-by-org-id/',
     FETCH_PROVIDERS_OPTION_BY_SERVICE_ID: 'providers-option-by-service-id/',
     FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID: 'providers-option-by-service-provider-id/',

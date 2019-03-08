@@ -26,6 +26,32 @@ export const fetchTimezones = () => {
 }
 }
 
+export const fetchTimezonesOption = () => {
+  return (dispatch) => {
+    dispatch({ type: provider.FETCH_TIMEZONES_LOADING })
+    fetch(API_ROOT + URL.TIMEZONE_OPTION, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch({
+          type: provider.FETCH_TIMEZONES_SUCCESS,
+          payload: data.objects
+        })
+      })
+      .catch(err => {
+        dispatch({
+          type: provider.FETCH_TIMEZONES_FAILURE,
+          payload: err
+        })
+      })
+  }
+}
+
+
 export function fetchProvidersByOrdId(orgId) {
   console.log('fetchProvidersByOrdId');
   return (dispatch) => {
