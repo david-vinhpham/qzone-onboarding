@@ -107,7 +107,9 @@ export const fetchServiceProviderById = (id) => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(fetchServiceProviderSuccess(data.object))
+            dispatch(fetchServiceProviderSuccess(data.object));
+            localStorage.setItem('originServiceTimeSlot', JSON.stringify(data.object.serviceTimeSlot));
+
         })
         .catch(err => {
             dispatch(fetchServiceProviderFailure(err))

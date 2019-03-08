@@ -19,7 +19,7 @@ import GridContainer from "../../components/Grid/GridContainer.jsx";
 import {editServiceProvider, fetchServiceProviderById} from "../../actions/serviceProvider";
 import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organization";
 import {fetchProvidersOptionByServiceProviderId} from "../../actions/provider";
-import {fetchServicesOptionByOrgId} from "../../actions/service";
+import {findServiceOptionByBusinessAdminId} from "../../actions/service";
 import {fetchLocationsOption} from '../../actions/location';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
@@ -61,14 +61,6 @@ class ServiceProviderEdit extends React.Component {
     componentWillReceiveProps(nextProps) {
       this.setState({data: nextProps.serviceProvider});
       this.setState({serviceTimeSlot: nextProps.serviceProvider.serviceTimeSlot});
-      if(nextProps.serviceProvider != null && nextProps.serviceProvider.serviceEntity != null) {
-        this.props.fetchServicesOptionByOrgId(nextProps.serviceProvider.serviceEntity.organizationId);
-        if(!this.state.originServiceTimeSlot) {
-          localStorage.setItem('originServiceTimeSlot', JSON.stringify(nextProps.serviceProvider.serviceTimeSlot));
-          this.setState({originServiceTimeSlot: true});
-        }
-        this.props.fetchServicesOptionByOrgId(nextProps.serviceProvider.serviceEntity.organizationId);
-      }
     }
 
   handleRevertSlot() {
@@ -76,17 +68,17 @@ class ServiceProviderEdit extends React.Component {
     const { serviceTimeSlot } = this.state;
     let newServiceTimeSlot = serviceTimeSlot;
     let originServiceTimeSlot = localStorage.getItem('originServiceTimeSlot');
-    if(newServiceTimeSlot !== null) {
+    if(newServiceTimeSlot === null) {
       newServiceTimeSlot = [];
     }
     originServiceTimeSlot = JSON.parse(originServiceTimeSlot);
-    if(originServiceTimeSlot.length < serviceTimeSlot.length) {
-      let  numOfPop = serviceTimeSlot.length - originServiceTimeSlot.length;
-      for(let i = 0; i < numOfPop; i++) {
-        serviceTimeSlot.pop();
-      }
+    while( serviceTimeSlot.length > 0) {
+      serviceTimeSlot.pop();
     }
-    this.setState({ serviceTimeSlot: serviceTimeSlot});
+    for(let i = 0; i < originServiceTimeSlot.length; i++) {
+      serviceTimeSlot.push(originServiceTimeSlot[i]);
+    }
+    this.setState({ serviceTimeSlot: originServiceTimeSlot});
   }
 
   handleDeleteSlot() {
@@ -125,11 +117,13 @@ class ServiceProviderEdit extends React.Component {
     }
 
     componentDidMount() {
+      localStorage.removeItem('originServiceTimeSlot');
       let userSub = localStorage.getItem('userSub');
       this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
       const { id } = this.props.match.params;
       this.props.fetchProvidersOptionByServiceProviderId(id);
       this.props.fetchServiceProviderById(id);
+      this.props.findServiceOptionByBusinessAdminId(userSub);
       this.props.fetchLocationsOption();
     }
 
@@ -305,7 +299,7 @@ class ServiceProviderEdit extends React.Component {
                                                 Service Time Slot
                                               </FormLabel>
                                             </GridItem>
-                                            {values.serviceTimeSlot.map((day, index) => (
+                                            {this.state.serviceTimeSlot.map((day, index) => (
                                               <div>
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
                                                   <FormLabel >
@@ -321,7 +315,7 @@ class ServiceProviderEdit extends React.Component {
                                                         type: "time"
                                                       }}
                                                       onChange={handleChange}
-                                                      value={values.serviceTimeSlot[index].startTime}
+                                                      value={this.state.serviceTimeSlot[index].startTime}
                                                     />
                                                   </FormControl>
                                                 </GridItem>
@@ -329,7 +323,7 @@ class ServiceProviderEdit extends React.Component {
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
                                                     {<CustomInput
                                                       id={`serviceTimeSlot[${index}].endTime`}
-                                                      value={values.serviceTimeSlot[index].endTime}
+                                                      value={this.state.serviceTimeSlot[index].endTime}
                                                       inputProps={{ placeholder: "End Time", type: "time" }}
                                                       onChange={handleChange}
                                                     />}
@@ -419,7 +413,7 @@ const mapDispatchToProps = (dispatch) => {
       fetchOrganizationsOptionByBusinessAdminId: (id) => dispatch(fetchOrganizationsOptionByBusinessAdminId(id)),
       fetchServiceProviderById: (id) => dispatch(fetchServiceProviderById(id)),
       editServiceProvider: (values, history) => dispatch(editServiceProvider(values, history)),
-      fetchServicesOptionByOrgId: (orgId) => dispatch(fetchServicesOptionByOrgId(orgId)),
+      findServiceOptionByBusinessAdminId: (businessAdminId) => dispatch(findServiceOptionByBusinessAdminId(businessAdminId)),
       fetchLocationsOption: () => dispatch(fetchLocationsOption()),
     }
 }

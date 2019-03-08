@@ -18,6 +18,7 @@ export const URL = {
 
     FETCH_SERVICES: 'services-by-org-id/',
     FETCH_SERVICES_OPTION: 'services-option-by-org-id/',
+    FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID: 'services-option-by-business-admin-id/',
     SERVICE: 'services',
     FETCH_SERVICE_CATEGORIES: 'service-categories',
     FETCH_SERVICE_BY_ID: 'services/',
