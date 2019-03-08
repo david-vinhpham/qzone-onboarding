@@ -67,7 +67,8 @@ const customInputStyle = {
     position: "relative",
     "& svg,& .fab,& .far,& .fal,& .fas": {
       color: "#495057"
-    }
+    },
+    width:100,
   },
   whiteUnderline: {
     "&:hover:not($disabled):before,&:before": {
