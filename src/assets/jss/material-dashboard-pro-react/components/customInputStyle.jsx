@@ -68,6 +68,14 @@ const customInputStyle = {
     "& svg,& .fab,& .far,& .fal,& .fas": {
       color: "#495057"
     },
+  },
+  formControlSlot: {
+    margin: "0 0 17px 0",
+    paddingTop: "27px",
+    position: "relative",
+    "& svg,& .fab,& .far,& .fal,& .fas": {
+      color: "#495057"
+    },
     width:100,
   },
   whiteUnderline: {

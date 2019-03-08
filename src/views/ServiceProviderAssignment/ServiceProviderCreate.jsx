@@ -21,6 +21,7 @@ import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organizat
 import {fetchServicesOptionByOrgId} from "../../actions/service";
 import {fetchProvidersOptionByServiceId} from "../../actions/provider";
 import {fetchLocationsOption} from '../../actions/location';
+import SlotCustomInput from "../../components/CustomInput/SlotCustomInput.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
 
@@ -256,7 +257,7 @@ class ServiceProviderCreate extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
-                                                    <CustomInput
+                                                    <SlotCustomInput
                                                       id={`serviceTimeSlot[${index}].startTime`}
                                                       inputProps={{
                                                         placeholder: "Start Time",
@@ -269,7 +270,7 @@ class ServiceProviderCreate extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
-                                                    {<CustomInput
+                                                    {<SlotCustomInput
                                                       id={`serviceTimeSlot[${index}].endTime`}
                                                       value={values.serviceTimeSlot[index].endTime}
                                                       inputProps={{ placeholder: "End Time", type: "time" }}

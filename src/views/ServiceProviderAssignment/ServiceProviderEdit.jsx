@@ -21,6 +21,7 @@ import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organizat
 import {fetchProvidersOptionByServiceProviderId} from "../../actions/provider";
 import {findServiceOptionByBusinessAdminId} from "../../actions/service";
 import {fetchLocationsOption} from '../../actions/location';
+import SlotCustomInput from "../../components/CustomInput/SlotCustomInput.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
 import {ClipLoader} from "react-spinners";
@@ -308,7 +309,7 @@ class ServiceProviderEdit extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
-                                                    <CustomInput
+                                                    <SlotCustomInput
                                                       id={`serviceTimeSlot[${index}].startTime`}
                                                       inputProps={{
                                                         placeholder: "Start Time",
@@ -321,7 +322,7 @@ class ServiceProviderEdit extends React.Component {
                                                 </GridItem>
                                                 <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
-                                                    {<CustomInput
+                                                    {<SlotCustomInput
                                                       id={`serviceTimeSlot[${index}].endTime`}
                                                       value={values.serviceTimeSlot[index].endTime}
                                                       inputProps={{ placeholder: "End Time", type: "time" }}

@@ -19,6 +19,7 @@ import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/v
 import {createService, fetchServiceCategories} from '../../actions/service';
 import defaultImage from "../../assets/img/default-avatar.png";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
+import SlotCustomInput from "../../components/CustomInput/SlotCustomInput.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
@@ -285,7 +286,7 @@ class ServiceCreate extends React.Component {
                                             </FormLabel>
                                                 </GridItem>
                                                 <GridItem xs={12} sm={4}>
-                                                    <CustomInput
+                                                    <SlotCustomInput
                                                         placeholder="in mins"
                                                         id="duration"
                                                         formControlProps={{
@@ -309,7 +310,7 @@ class ServiceCreate extends React.Component {
                                             </FormLabel>
                                                 </GridItem>
                                                 <GridItem xs={12} sm={4}>
-                                                    <CustomInput
+                                                    <SlotCustomInput
                                                         placeholder="in mins"
                                                         id="bookingHorizon"
                                                         formControlProps={{
