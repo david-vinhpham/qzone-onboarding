@@ -44,9 +44,11 @@ class ServiceProviderList extends React.Component {
   componentDidMount() {
     let serviceProviders = localStorage.getItem('serviceProvider');
     if(serviceProviders !== null) {
-      this.setState({ data: JSON.parse(serviceProviders) })
+      console.log('get from cached data');
+      this.setState({ data: JSON.parse(serviceProviders) });
     }
-    else {
+    if(!this.state.data || this.state.data.length === 0) {
+      console.log('fetchServiceProvidersByUserSub');
       var userSub = localStorage.getItem('userSub');
       this.props.fetchServiceProvidersByUserSub(userSub);
     }

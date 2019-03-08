@@ -112,7 +112,7 @@ export function fetchProvidersOptionByServiceId(serviceId) {
         if (json.objects) {
           dispatch(fetchProvidersSuccess(json.objects));
         } else {
-          dispatch(fetchProvidersFailure("Topology Error"))
+          dispatch(fetchProvidersFailure(json))
         }
         return json;
       })

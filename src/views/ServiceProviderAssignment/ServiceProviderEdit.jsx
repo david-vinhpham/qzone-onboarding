@@ -21,7 +21,7 @@ import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organizat
 import {fetchProvidersOptionByServiceProviderId} from "../../actions/provider";
 import {fetchServicesOptionByOrgId} from "../../actions/service";
 import {fetchLocationsOption} from '../../actions/location';
-import CustomInput from "components/CustomInput/CustomInput.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
 import {ClipLoader} from "react-spinners";
 import {css} from "@emotion/core";
@@ -42,7 +42,7 @@ class ServiceProviderEdit extends React.Component {
         super(props);
         this.state = {
             data: null,
-            loadProviders: false,
+            originServiceTimeSlot: false,
             providerOption: null,
             organizationOption: null,
             serviceOption: null,
@@ -61,21 +61,32 @@ class ServiceProviderEdit extends React.Component {
     componentWillReceiveProps(nextProps) {
       this.setState({data: nextProps.serviceProvider});
       this.setState({serviceTimeSlot: nextProps.serviceProvider.serviceTimeSlot});
-      if( nextProps.serviceProvider != null && nextProps.serviceProvider.serviceEntity
-        && !this.state.loadProviders && nextProps.serviceProvider.serviceEntity.organizationId != null) {
-        this.props.fetchServicesOptionByOrgId( nextProps.serviceProvider.serviceEntity.organizationId);
-        this.setState({loadProviders: true});
-        localStorage.setItem('originServiceTimeSlot', JSON.stringify(nextProps.serviceProvider.serviceTimeSlot));
+      if(nextProps.serviceProvider != null && nextProps.serviceProvider.serviceEntity != null) {
+        this.props.fetchServicesOptionByOrgId(nextProps.serviceProvider.serviceEntity.organizationId);
+        if(!this.state.originServiceTimeSlot) {
+          localStorage.setItem('originServiceTimeSlot', JSON.stringify(nextProps.serviceProvider.serviceTimeSlot));
+          this.setState({originServiceTimeSlot: true});
+        }
+        this.props.fetchServicesOptionByOrgId(nextProps.serviceProvider.serviceEntity.organizationId);
       }
     }
 
   handleRevertSlot() {
     console.log('handleRevertSlot');
-    let newServiceTimeSlot = localStorage.getItem('originServiceTimeSlot');
-    if(newServiceTimeSlot === null) {
+    const { serviceTimeSlot } = this.state;
+    let newServiceTimeSlot = serviceTimeSlot;
+    let originServiceTimeSlot = localStorage.getItem('originServiceTimeSlot');
+    if(newServiceTimeSlot !== null) {
       newServiceTimeSlot = [];
     }
-    this.setState({ serviceTimeSlot: JSON.parse(newServiceTimeSlot)});
+    originServiceTimeSlot = JSON.parse(originServiceTimeSlot);
+    if(originServiceTimeSlot.length < serviceTimeSlot.length) {
+      let  numOfPop = serviceTimeSlot.length - originServiceTimeSlot.length;
+      for(let i = 0; i < numOfPop; i++) {
+        serviceTimeSlot.pop();
+      }
+    }
+    this.setState({ serviceTimeSlot: serviceTimeSlot});
   }
 
   handleDeleteSlot() {

@@ -21,7 +21,7 @@ import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organizat
 import {fetchServicesOptionByOrgId} from "../../actions/service";
 import {fetchProvidersOptionByServiceId} from "../../actions/provider";
 import {fetchLocationsOption} from '../../actions/location';
-import CustomInput from "components/CustomInput/CustomInput.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
 
 const ServiceCreateSchema = Yup.object().shape({
@@ -38,6 +38,7 @@ class ServiceProviderCreate extends React.Component {
             serviceOption: null,
             locationOption: null,
             serviceTimeSlot: [],
+            businessAdminId: null,
         }
       this.handleOrgChange = this.handleOrgChange.bind(this);
       this.handleProviderChange = this.handleProviderChange.bind(this);
@@ -75,13 +76,15 @@ class ServiceProviderCreate extends React.Component {
     }
 
     handleProviderChange(providerOption) {
+      let tmpProviderOption = providerOption;
       this.setState({providerOption: ''});
-      this.setState({ providerOption: providerOption });
+      this.setState({ providerOption: tmpProviderOption });
     }
 
     handleServiceChange(selectedOption) {
+      let tmpServiceOption = selectedOption;
       this.setState({serviceOption: ''});
-      this.setState({ serviceOption: selectedOption });
+      this.setState({ serviceOption: tmpServiceOption });
       this.props.fetchProvidersOptionByServiceId(selectedOption.value);
     }
 
@@ -91,6 +94,7 @@ class ServiceProviderCreate extends React.Component {
 
     componentDidMount() {
       let userSub = localStorage.getItem('userSub');
+      this.setState({businessAdminId: userSub});
       this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
       this.props.fetchLocationsOption();
     }
@@ -111,7 +115,7 @@ class ServiceProviderCreate extends React.Component {
 
     render() {
         const { classes, services, organizations, providers, locations } = this.props;
-        const { serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot } = this.state;
+        const { serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot, businessAdminId } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
         let providerOptions = [];
@@ -138,6 +142,7 @@ class ServiceProviderCreate extends React.Component {
                             geoLocationId: (locationOption === null ? null : locationOption.value),
                             additionalInfo: '',
                             serviceTimeSlot: serviceTimeSlot,
+                            businessAdminId: businessAdminId,
                         }}
                         validationSchema={ServiceCreateSchema}
                         enableReinitialize={true}
