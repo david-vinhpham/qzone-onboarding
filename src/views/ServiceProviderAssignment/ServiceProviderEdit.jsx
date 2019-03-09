@@ -222,7 +222,7 @@ class ServiceProviderEdit extends React.Component {
                                                   <Select
                                                     isDisabled
                                                     options={organizationOptions}
-                                                    value={ organizationOption == null ? organizationOptions.find((element) => {
+                                                    value={ organizationOption === null ? organizationOptions.find((element) => {
                                                       return element.value === values.serviceEntity.organizationId;
                                                     }) : organizationOption}
                                                     onChange={this.handleOrgChange}
@@ -243,7 +243,7 @@ class ServiceProviderEdit extends React.Component {
                                                 className={classes.selectFormControl}>
                                                 <Select
                                                   isDisabled
-                                                  value={serviceOption == null ? serviceOptions.find((element) => {
+                                                  value={serviceOption === null ? serviceOptions.find((element) => {
                                                     return element.value === values.serviceId;
                                                   }) : serviceOption}
                                                   onChange={this.handleServiceChange}
@@ -264,7 +264,7 @@ class ServiceProviderEdit extends React.Component {
                                                 fullWidth
                                                 className={classes.selectFormControl}>
                                                 <Select
-                                                  value={providerOption == null ? providerOptions.find((element) => {
+                                                  value={providerOption === null ? providerOptions.find((element) => {
                                                     return element.value === values.providerId;
                                                   }) : providerOption}
                                                   placeholder="Select your provider(s)"
@@ -284,7 +284,7 @@ class ServiceProviderEdit extends React.Component {
                                                 fullWidth
                                                 className={classes.selectFormControl}>
                                                 <Select
-                                                  value={locationOption == null ? locationOptions.find((element) => {
+                                                  value={locationOption === null ? locationOptions.find((element) => {
                                                     return element.value === values.geoLocationId;
                                                   }) : locationOption}
                                                   onChange={this.handleLocationChange}
@@ -375,7 +375,7 @@ class ServiceProviderEdit extends React.Component {
                                     </CardBody>
                                     <CardFooter className={classes.justifyContentCenter}>
                                         <Button color="rose" onClick={handleSubmit}>
-                                            Save
+                                            Update
                                         </Button>
                                         <Button color="rose" onClick={this.props.history.goBack}>
                                             Exit

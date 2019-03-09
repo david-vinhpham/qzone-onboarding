@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {FormControl, FormLabel, MenuItem, Select} from '@material-ui/core'
+import {FormControl, FormLabel} from '@material-ui/core'
 
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
@@ -14,14 +14,15 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import {createProvider, fetchTimezones} from '../../actions/provider';
+import {createProvider, fetchTimezonesOption} from '../../actions/provider';
 import {verifyEmail, verifyLength} from "../../validation/validation.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
+import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organization";
+import Select from 'react-select';
 
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -36,19 +37,33 @@ const ProviderSchema = Yup.object().shape({
 class ProviderCreate extends React.Component{
 	constructor(props) {
     super(props);
-
+    this.state = {
+      businessAdminId: null,
+      timezoneOption: null,
+      organizationOption: null,
+    }
     this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
     this.changeProfileImage = this.changeProfileImage.bind(this);
     this.doubleClick = this.doubleClick.bind(this);
+    this.handleTimeZone = this.handleTimeZone.bind(this);
+    this.handleOrgChange = this.handleOrgChange.bind(this);
+  }
 
+  handleOrgChange(selectedOption) {
+    this.setState({ organizationOption: selectedOption });
+  }
+
+  handleTimeZone(selectedOption) {
+    this.setState({ timezoneOption: selectedOption });
   }
 
   componentDidMount() {
-    this.props.fetchTimezones();
+    this.props.fetchTimezonesOption();
     let userSub = localStorage.getItem('userSub');
     console.log('userSub: ' + userSub);
-    this.props.fetchOrganizationsByBusinessAdminId(userSub);
+    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    this.setState({ businessAdminId: userSub });
   }
 
   doubleClick(fieldName) {
@@ -129,6 +144,7 @@ class ProviderCreate extends React.Component{
 
 	render() {
     const { classes, timezones, organizations } = this.props;
+    const {  businessAdminId, timezoneOption, organizationOption } = this.state;
     let timeZoneOptions = [];
     let organizationOptions = [];
 		if ((timezones.length) > 0) {
@@ -152,15 +168,24 @@ class ProviderCreate extends React.Component{
                 description: '',
                 qualifications:'',
                 tags:'',
-                organizationId: null,
-                timeZoneId: null,
+                organizationId: organizationOption === null ? null : organizationOption.value,
+                timeZoneId: timezoneOption === null ? null : timezoneOption.label,
                 isAdmin: false,
-                businessId:null,
+                businessId:businessAdminId,
               }
             }}
             validationSchema={ProviderSchema}
+            enableReinitialize={true}
             onSubmit={(values) => {this.handleProvider(values)}}
-            render={({values, handleChange, errors, touched, setFieldValue, handleSubmit}) => (
+            render={({  values,
+                       errors,
+                       status,
+                       touched,
+                       handleBlur,
+                       handleChange,
+                       handleSubmit,
+                       isSubmitting,
+                       setFieldValue}) => (
               <Card>
                 <CardHeader color="rose" text>
                   <CardText color="rose">
@@ -253,7 +278,7 @@ class ProviderCreate extends React.Component{
                               }}
                               inputProps={{
                                   multiline: true,
-                                  rows: 5
+                                  rows: 3
                               }}
                               value={values.providerInformation.description}
                               onChange={handleChange}
@@ -277,24 +302,14 @@ class ProviderCreate extends React.Component{
                     </GridItem>
                     <GridItem xs={12} sm={4}>
                       <FormControl
-                          fullWidth
-                          className={classes.selectFormControl}>
-
-                          <Select
-                              value={values.providerInformation.timeZoneId}
-                              onChange={handleChange('providerInformation.timeZoneId')}
-                              name="timeZoneId"
-                          >
-                              {timeZoneOptions.map(option => (
-                                    <MenuItem
-                                    key={ option }
-                                    value={ option }
-                                    id="providerInformation.timeZoneId"
-                                  >
-                                    {option}
-                                  </MenuItem>
-                              ))}
-                          </Select>
+                        fullWidth
+                        className={classes.selectFormControl}>
+                        <Select
+                          options={timeZoneOptions}
+                          value={ timezoneOption}
+                          onChange={this.handleTimeZone}
+                        >
+                        </Select>
                       </FormControl>
                     </GridItem>
                   </GridContainer>
@@ -310,19 +325,10 @@ class ProviderCreate extends React.Component{
                         fullWidth
                         className={classes.selectFormControl}>
                         <Select
-                          value={values.providerInformation.organizationId}
-                          onChange={handleChange('providerInformation.organizationId')}
-                          name="organizationId"
+                          options={organizationOptions}
+                          value={ organizationOption}
+                          onChange={this.handleOrgChange}
                         >
-                          {organizationOptions.map(organizationOption => (
-                            <MenuItem
-                              key={organizationOption.id}
-                              value={organizationOption.id}
-                              id="providerInformation.organizationId"
-                            >
-                              {organizationOption.name}
-                            </MenuItem>
-                          ))}
                         </Select>
                       </FormControl>
                     </GridItem>
@@ -406,10 +412,10 @@ class ProviderCreate extends React.Component{
                 </CardBody>
                 <CardFooter className={classes.justifyContentCenter}>
                   <Button color="rose" onClick={handleSubmit}>
-                    Add Provider
+                    Create
                   </Button>
                   <Button color="rose" onClick={this.props.history.goBack}>
-                    Back
+                    Exit
                   </Button>
                 </CardFooter>
               </Card>
@@ -433,8 +439,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     createProvider: (provider, history) => dispatch(createProvider(provider, history)),
-    fetchTimezones: () => dispatch(fetchTimezones()),
-    fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
+    fetchTimezonesOption: () => dispatch(fetchTimezonesOption()),
+    fetchOrganizationsOptionByBusinessAdminId: (id) => dispatch(fetchOrganizationsOptionByBusinessAdminId(id)),
   }
 }
 

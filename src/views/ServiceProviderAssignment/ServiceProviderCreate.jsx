@@ -320,7 +320,7 @@ class ServiceProviderCreate extends React.Component {
                                     </CardBody>
                                     <CardFooter className={classes.justifyContentCenter}>
                                         <Button color="rose" onClick={handleSubmit}>
-                                            Save
+                                            Create
                                         </Button>
                                         <Button color="rose" onClick={this.props.history.goBack}>
                                             Exit

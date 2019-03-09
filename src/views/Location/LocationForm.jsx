@@ -196,7 +196,7 @@ class LocationForm extends React.Component {
                     </Button>
                     <Link to={`/location/list`}>
                     <Button color="rose" >
-                        Close
+                        Exit
                     </Button>
                     </Link>
 

@@ -518,7 +518,7 @@ class ServiceEdit extends React.Component {
                                     </CardBody>
                                     <CardFooter className={classes.justifyContentCenter}>
                                         <Button color="rose" onClick={handleSubmit}>
-                                            Save
+                                            Update
                                         </Button>
                                         <Button color="rose" onClick={this.props.history.goBack}>
                                             Exit

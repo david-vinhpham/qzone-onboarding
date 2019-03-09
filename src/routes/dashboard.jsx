@@ -143,7 +143,7 @@ export const otherRoutes=[
   },
   {
     path: "/service-provider/list",
-    name: "Service Provider List",
+    name: "Assigned Service Providers",
     icon: ContentPaste,
     component: ServiceProviderList
   },

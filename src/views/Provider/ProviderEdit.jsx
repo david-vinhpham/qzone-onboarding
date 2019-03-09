@@ -5,8 +5,8 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {FormControl, FormLabel, MenuItem, Select} from '@material-ui/core'
-
+import {FormControl, FormLabel} from '@material-ui/core'
+import Select from 'react-select';
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
@@ -14,13 +14,13 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import {editProvider, fetchProvider, fetchTimezones} from '../../actions/provider';
+import {editProvider, fetchProvider, fetchTimezonesOption} from '../../actions/provider';
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
+import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organization";
 import {css} from "@emotion/core";
 import {ClipLoader} from "react-spinners";
 
@@ -44,21 +44,34 @@ class ProviderEdit extends React.Component{
 	constructor(props) {
     super(props);
     this.state = {
-      provider: null
+      provider: null,
+      businessAdminId: null,
+      timezoneOption: null,
+      organizationOption: null,
     };
 
 
     this.doubleClick = this.doubleClick.bind(this);
+    this.handleTimeZone = this.handleTimeZone.bind(this);
+    this.handleOrgChange = this.handleOrgChange.bind(this);
   }
 
   componentDidMount(){
-    this.props.fetchTimezones();
+    this.props.fetchTimezonesOption();
     const { id } = this.props.match.params
     console.log("id------", id)
     this.props.fetchProvider(id);
     let userSub = localStorage.getItem('userSub');
     console.log('userSub: ' + userSub);
-    this.props.fetchOrganizationsByBusinessAdminId(userSub);
+    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+  }
+
+  handleOrgChange(selectedOption) {
+    this.setState({ organizationOption: selectedOption });
+  }
+
+  handleTimeZone(selectedOption) {
+    this.setState({ timezoneOption: selectedOption });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -78,6 +91,7 @@ class ProviderEdit extends React.Component{
 
   render() {
     const { classes, timezones, organizations, fetchProviderLoading } = this.props;
+    const { timezoneOption, organizationOption, provider } = this.state;
     let timeZoneOptions = [];
     let organizationOptions = [];
     if ((timezones.length) > 0) {
@@ -99,26 +113,35 @@ class ProviderEdit extends React.Component{
     return(
       <Formik
         initialValues={{
-          id: this.state.provider.data.id,
-          email: this.state.provider.data.email,
-          familyName: this.state.provider.data.familyName == null ? '' : this.state.provider.data.familyName,
-          givenName: this.state.provider.data.givenName,
-          telephone: this.state.provider.data.telephone,
-          userStatus: this.state.provider.data.userStatus,
-          userSub: this.state.provider.data.userSub,
-          userType: this.state.provider.data.userType,
+          id: provider.data.id,
+          email: provider.data.email,
+          familyName: provider.data.familyName === null ? '' : provider.data.familyName,
+          givenName:provider.data.givenName,
+          telephone: provider.data.telephone,
+          userStatus: provider.data.userStatus,
+          userSub: provider.data.userSub,
+          userType: provider.data.userType,
           providerInformation: {
-            description: this.state.provider.data.providerInformation.description,
-            qualifications:this.state.provider.data.providerInformation.qualifications,
-            tags:this.state.provider.data.providerInformation.tags,
-            organizationId: this.state.provider.data.providerInformation.organizationId,
-            timeZoneId: this.state.provider.data.providerInformation.timeZoneId,
-            businessId:this.state.provider.data.providerInformation.businessId,
+            description: provider.data.providerInformation.description,
+            qualifications:provider.data.providerInformation.qualifications,
+            tags:provider.data.providerInformation.tags,
+            organizationId: organizationOption !== null ? organizationOption.value : provider.data.providerInformation.organizationId,
+            timeZoneId: timezoneOption === null ? provider.data.providerInformation.timeZoneId : timezoneOption.label,
+            businessId:provider.data.providerInformation.businessId,
           },
         }}
         validationSchema={ProviderSchema}
+        enableReinitialize={true}
         onSubmit={(values) => {this.handleProvider(values)}}
-        render={({values, handleChange, errors, touched, setFieldValue, handleSubmit}) => (
+        render={({ values,
+                   errors,
+                   status,
+                   touched,
+                   handleBlur,
+                   handleChange,
+                   handleSubmit,
+                   isSubmitting,
+                   setFieldValue}) => (
           <Card>
             <CardHeader color="rose" text>
               <CardText color="rose">
@@ -211,7 +234,7 @@ class ProviderEdit extends React.Component{
                     }}
                     inputProps={{
                       multiline: true,
-                      rows: 5
+                      rows: 3
                     }}
                     value={values.providerInformation.description}
                     onChange={handleChange}
@@ -237,21 +260,13 @@ class ProviderEdit extends React.Component{
                   <FormControl
                     fullWidth
                     className={classes.selectFormControl}>
-
                     <Select
-                      value={values.providerInformation.timeZoneId}
-                      onChange={handleChange('providerInformation.timeZoneId')}
-                      name="timeZoneId"
+                      options={timeZoneOptions}
+                      value={ timezoneOption === null ? timeZoneOptions.find((element) => {
+                        return element.label === values.providerInformation.timeZoneId;
+                      }) : timezoneOption}
+                      onChange={this.handleOrgChange}
                     >
-                      {timeZoneOptions.map(option => (
-                        <MenuItem
-                          key={ option }
-                          value={ option }
-                          id="providerInformation.timeZoneId"
-                        >
-                          {option}
-                        </MenuItem>
-                      ))}
                     </Select>
                   </FormControl>
                 </GridItem>
@@ -268,19 +283,12 @@ class ProviderEdit extends React.Component{
                     fullWidth
                     className={classes.selectFormControl}>
                     <Select
-                      value={values.providerInformation.organizationId}
-                      onChange={handleChange('providerInformation.organizationId')}
-                      name="organizationId"
+                      options={organizationOptions}
+                      value={ organizationOption === null ? organizationOptions.find((element) => {
+                        return element.value === values.providerInformation.organizationId;
+                      }) : organizationOption}
+                      onChange={this.handleOrgChange}
                     >
-                      {organizationOptions.map(organizationOption => (
-                        <MenuItem
-                          key={organizationOption.id}
-                          value={organizationOption.id}
-                          id="providerInformation.organizationId"
-                        >
-                          {organizationOption.name}
-                        </MenuItem>
-                      ))}
                     </Select>
                   </FormControl>
                 </GridItem>
@@ -332,10 +340,10 @@ class ProviderEdit extends React.Component{
             </CardBody>
             <CardFooter className={classes.justifyContentCenter}>
               <Button color="rose" onClick={handleSubmit}>
-                Save
+                Update
               </Button>
                <Button color="rose" onClick={this.props.history.goBack}>
-                Back
+                Exit
               </Button>
             </CardFooter>
           </Card>
@@ -362,8 +370,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchProvider: (id) => dispatch(fetchProvider(id)),
     editProvider: (provider, history) => dispatch(editProvider(provider, history)),
-    fetchTimezones: () => dispatch(fetchTimezones()),
-    fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
+    fetchTimezonesOption: () => dispatch(fetchTimezonesOption()),
+    fetchOrganizationsOptionByBusinessAdminId: (id) => dispatch(fetchOrganizationsOptionByBusinessAdminId(id)),
   }
 }
 

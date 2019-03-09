@@ -608,7 +608,7 @@ class OrganizationEdit extends React.Component {
                               </Button>
                                 <Link to={`/organization/list`}>
                                   <Button color="rose" >
-                                    Close
+                                    Exit
                                   </Button>
                                 </Link>
                               </CardFooter>
