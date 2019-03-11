@@ -182,7 +182,7 @@ class RegisterPage extends React.Component {
 
                 <CardBody>
                   <CustomInput
-                    labelText="Given Name"
+                    labelText="Business Name"
                     success={this.state.registerEmailState === "success"}
                     error={this.state.registerEmailState === "error"}
                     id="givenName"
@@ -190,7 +190,7 @@ class RegisterPage extends React.Component {
                       fullWidth: true
                     }}
                     inputProps={{
-                      placeholder: "Given Name",
+                      placeholder: "Business Name",
                       type: "text",
                       endAdornment: (
                         <InputAdornment position="end">
