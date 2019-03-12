@@ -17,7 +17,7 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import {fetchProvidersBySub} from '../../actions/provider';
+import {fetchProvidersByBusinessAdminId} from '../../actions/provider';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 import {FormLabel} from "@material-ui/core";
@@ -41,7 +41,7 @@ class ProviderList extends React.Component {
 
   componentDidMount() {
     let sub = localStorage.getItem('userSub');
-    this.props.fetchProvidersBySub(sub);
+    this.props.fetchProvidersByBusinessAdminId(sub);
   }
 
   render() {
@@ -176,7 +176,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchProvidersBySub: (sub) => dispatch(fetchProvidersBySub(sub)),
+    fetchProvidersByBusinessAdminId: (sub) => dispatch(fetchProvidersByBusinessAdminId(sub)),
   }
 }
 

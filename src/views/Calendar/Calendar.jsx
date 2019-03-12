@@ -5,14 +5,26 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import CalendarStyle from '../../assets/scss/material-dashboard-pro-react/views/calendarStyle.css';
 import '../../../node_modules/fullcalendar/dist/fullcalendar.min.css';
 import FullCalendar from 'fullcalendar-reactwrapper';
-//import '../../assets/scss/full-calender.css'
+import '../../assets/scss/full-calender.css'
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import buttonStyle from "../../assets/jss/material-dashboard-pro-react/components/buttonStyle.jsx";
-import { fetchEvents, createEvent } from "../../actions/events";
-import { connect } from 'react-redux';
+import {createEvent, fetchEventsCalendarByProviderId} from "../../actions/events";
+import {fetchProvidersOptionByBusinessAdminId} from "../../actions/provider";
+import {connect} from 'react-redux';
+import {FormControl, FormLabel} from "@material-ui/core";
+import {css} from "@emotion/core";
+import {ClipLoader} from "react-spinners";
+import Select from 'react-select';
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
+
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -20,15 +32,23 @@ class Calendar extends React.Component {
 
     this.state = {
       view: 'agendaWeek',
-      alert: null
+      alert: null,
+      providerOption: null,
     };
+
+    this.handleProviderChange = this.handleProviderChange.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchEvents();
+    let businessAdminId = localStorage.getItem('userSub');
+    this.props.fetchProvidersOptionByBusinessAdminId(businessAdminId);
   }
-
+  handleProviderChange(selectedOption) {
+    this.setState({ providerOption: selectedOption });
+    this.props.fetchEventsCalendarByProviderId(selectedOption.value);
+  }
   addNewEventAlert(startDate, endDate, jsEvent, view) {
+    console.log('addNewEventAlert');
     this.setState({
       view: view.type,
       alert: (
@@ -78,15 +98,59 @@ class Calendar extends React.Component {
       element.append(event.title);
     }
   }
+  handleDrop = (eventObj, date) => {
+    console.group('onDrop');
+    console.log('date');
+    console.dir(date);
+    console.groupEnd();
+  };
+
+  handleSelect = (start, end, allDay) => {
+    console.group('select');
+    console.log('start');
+    console.dir(start);
+    console.dir('end');
+    console.dir(end);
+    console.groupEnd();
+  };
+
+  handleClick = (calEvent, jsEvent, view) => {
+    console.group('click');
+    console.log('calEvent');
+    console.dir(calEvent);
+    console.groupEnd();
+  };
+
+  dayClick = (date, jsEvent, view) => {
+    console.log('dateClick');
+    alert('Clicked on: ' + date.format());
+  };
+
+  handleChangeView = view => e => {
+    e.preventDefault();
+    this.setState({
+      view: view.name
+    });
+  };
 
   render() {
-    const { events, loading, error } = this.props.eventsList;
-    //const { breakEvent } = this.props.breakEvent;
-   // console.log("business hours--------", events);
-    if (loading) {
-      return <div className="container"><h1>Events</h1><h3>Loading...</h3></div>
-    } else if (error) {
-      return <div className="alert alert-danger">Error: {error.message}</div>
+    const {classes, events, providers, fetchProvidersLoading, fetchProvidersError } = this.props;
+    const { providerOption } = this.state;
+    let providerOptions = [];
+    if(providers && providers.length > 0) {
+      providerOptions = providers;
+    }
+    if (fetchProvidersLoading) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={fetchProvidersLoading}
+      />;
+    }
+    else if (fetchProvidersError) {
+      return <div className="alert alert-danger">Error: {providerOptions}</div>
     }
 
     return (
@@ -96,6 +160,25 @@ class Calendar extends React.Component {
             {this.state.alert}
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={10}>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Service Providers
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem xs={8} sm={4} >
+                    <FormControl
+                      fullWidth
+                      className={classes.selectFormControl}>
+                      <Select
+                        options={providerOptions}
+                        value={ providerOption}
+                        onChange={this.handleProviderChange}
+                      >
+                      </Select>
+                    </FormControl>
+                  </GridItem>
+                </GridContainer>
                 <Card>
                   <CardBody calendar>
                     <FullCalendar
@@ -113,13 +196,27 @@ class Calendar extends React.Component {
                       editable={true}
                       droppable={true}
                       selectable={true}
+                      selectAllow={true}
                       eventLimit={true}
                       nowIndicator={true}
-                      //events = {this.state.events}
+                      events = {events}
+                      eventDrop={function(eventBj, date) {
+                        console.log('eventDrop function');
+                      }}
+                      drop={(date, jsEvent, ui, resourceId) => {
+                        console.log('drop function');
+                      }}
+                      select={(start, end, allDay) => {
+                        this.handleSelect(start, end, allDay);
+                      }}
+                      eventClick={(calEvent, jsEvent, view) => {
+                        this.handleClick(calEvent, jsEvent, view);
+                      }}
+                      dayClick={(date, jsEvent, view) => {
+                        this.dayClick(date, jsEvent, view);
+                      }}
                       eventRender={(event, element) => this.eventRendering(event, element)}
-                      eventSources={[events[0], events[1], events[2], events[3], events[4]]}
                       dropAccept={true}
-                      select={(startDate, endDate, jsEvent, view) => this.addNewEventAlert(startDate, endDate, jsEvent, view)}
                       getView={(view) => this.setState({ view })}
                     />
                   </CardBody>
@@ -133,20 +230,22 @@ class Calendar extends React.Component {
   }
 }
 Calendar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
-    eventsList: state.events.eventsList,
-    breakEvent: state.events.breakEvent,
-    appointmentEvent: state.events.appointmentEvent
+    events: state.event.events,
+    providers: state.provider.providers,
+    fetchProvidersLoading: state.provider.fetchProvidersLoading,
+    fetchProvidersError:  state.provider.fetchProvidersError,
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchEvents: () => dispatch(fetchEvents()),
+    fetchProvidersOptionByBusinessAdminId: (businessAdminId) => dispatch(fetchProvidersOptionByBusinessAdminId(businessAdminId)),
+    fetchEventsCalendarByProviderId: (providerId) => dispatch(fetchEventsCalendarByProviderId(providerId)),
     createEvent: (e) => dispatch(createEvent(e))
   }
 }

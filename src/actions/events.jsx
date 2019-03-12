@@ -1,20 +1,7 @@
 import axios from 'axios';
+import {API_ROOT, URL} from "../config/config";
+import {event} from "../constants/Event.constants";
 
-//events list
-export const FETCH_EVENTS = 'FETCH_EVENTS';
-export const FETCH_APPOINTMENT_EVENT_SUCCESS = 'FETCH_APPOINTMENT_EVENT_SUCCESS';
-export const FETCH_BREAK_EVENT_SUCCESS = 'FETCH_BREAK_EVENT_SUCCESS';
-export const FETCH_EVENTS_SUCCESS = 'FETCH_EVENTS_SUCCESS';
-export const FETCH_EVENTS_FAILURE = 'FETCH_EVENTS_FAILURE';
-export const RESET_EVENTS = 'RESET_EVENTS';
-
-//create a new event
-export const CREATE_EVENT = 'CREATE_EVENT';
-export const CREATE_EVENT_SUCCESS = 'CREATE_EVENT_SUCCESS';
-export const CREATE_EVENT_FAILURE = 'CREATE_EVENT_FAILURE';
-export const RESET_NEW_EVENT = 'RESET_NEW_EVENT';
-
-//const ROOT_URL = 'http://demo3959727.mockable.io';
 const ROOT_URL = 'http://localhost:8080/appointment'
 export const fetchEvents = () => {
   return (dispatch) => {
@@ -24,14 +11,43 @@ export const fetchEvents = () => {
       }
     })
       .then(response => {
-        let eventsArray = [];
+        let eventsArray = [
+          {
+            "id": 0,
+            "title": "Demo 1",
+            "type": "Appointment",
+            "start": '2019-03-04 15:30:00',
+            "end": '2019-03-04 18:25:00'
+          },
+          {
+            "id": 1,
+            "title": "Demo 2",
+            "type": "Off-hours",
+            "start": '2019-03-11T14:00:00',
+            "end": '2019-03-11T15:00:00'
+          },
+          {
+            "id": 2,
+            "title": "Demo 3",
+            "type": "Break",
+            "start": '2019-03-12T12:00:00',
+            "end": '2019-03-12T13:00:00'
+          },
+          {
+            "id": 3,
+            "title": "Demo 4",
+            "type": "Off-hours",
+            "start": '2019-03-13T13:00:00',
+            "end": '2019-03-13T14:00:00'
+          }
+        ];
         let appointmentArray = {};
         let breakArray = {};
         let vacationArray = {};
         let holidayArray = {};
         let offHoursArray = {};
-        eventsArray.push(appointmentArray, breakArray, vacationArray, holidayArray, offHoursArray);
-        
+        //eventsArray.push(appointmentArray, breakArray, vacationArray, holidayArray, offHoursArray);
+
         appointmentArray.events = [];
         breakArray.events = [];
         vacationArray.events = [];
@@ -47,20 +63,19 @@ export const fetchEvents = () => {
         offHoursArray.rendering = 'background';
 
         appointmentArray.color = 'light blue';
-        
         console.log('response data---------',response.data);
         response.data.events.forEach(function(event) {
           switch (event.type) {
             case 'Appointment':
-              appointmentArray.events.push(event);
+              //eventsArray.events.push(event);
               break;
 
             case 'Break':
-              breakArray.events.push(event);
+             // eventsArray.events.push(event);
               break;
 
             case 'Off-hours':
-              offHoursArray.events.push(event);
+              //eventsArray.events.push(event);
               break;
 
             default:
@@ -76,31 +91,91 @@ export const fetchEvents = () => {
   };
 };
 
-export function fetchAppoitmentEventSuccess(appointments) {
+export function fetchEventsCalendarByCustomerId(customerId) {
+  console.log('fetchEventsCalendarByCustomerId');
+  return (dispatch) => {
+    dispatch(fetchEventsLoading());
+    fetch(API_ROOT + URL.FETCH_EVENTS_CALENDAR_BY_CUSTOMER_ID + customerId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log("json-----------", json)
+        if (json.objects) {
+          dispatch(fetchEventsSuccess(json.objects));
+        } else {
+          dispatch(fetchEventsFailure("Topology Error"))
+        }
+        return json;
+      })
+      .catch(err => dispatch(fetchEventsFailure(err)))
+  };
+};
+
+export function fetchEventsCalendarByProviderId(providerId) {
+  console.log('fetchEventsCalendarByProviderId');
+  return (dispatch) => {
+    dispatch(fetchEventsLoading());
+    fetch(API_ROOT + URL.FETCH_EVENTS_CALENDAR_BY_PROVIDER_ID + providerId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log("json-----------", json)
+        if (json.objects) {
+          dispatch(fetchEventsSuccess(json.objects));
+        } else {
+          dispatch(fetchEventsFailure("Topology Error"))
+        }
+        return json;
+      })
+      .catch(err => dispatch(fetchEventsFailure(err)))
+  };
+};
+
+
+export function fetchEventSuccess(payload) {
   return {
-    type: FETCH_APPOINTMENT_EVENT_SUCCESS,
-    payload: appointments
+    type: event.FETCH_EVENT_SUCCESS,
+    payload: payload
+  }
+}
+export function fetchEventLoading() {
+  return {
+    type: event.FETCH_EVENT_LOADING
   }
 }
 
-export function fetchBreakEventsSuccess(breaks) {
+export function fetchEventFailure(error) {
   return {
-    type: FETCH_BREAK_EVENT_SUCCESS,
-    payload: breaks
-  }
+    type: event.FETCH_EVENT_FAILURE,
+    payload: error
+  };
 }
 
+export function fetchEventsLoading() {
+  return {
+    type: event.FETCH_EVENTS_LOADING
+  }
+}
 export function fetchEventsSuccess(events) {
+  console.log('fetchEventsSuccess');
   return {
-    type: FETCH_EVENTS_SUCCESS,
-    payload: events
+    type: event.FETCH_EVENTS_SUCCESS,
+    payload: {events}
   };
 }
 
 export function fetchEventsFailure(error) {
   return {
-    type: FETCH_EVENTS_FAILURE,
-    payload: error
+    type: event.FETCH_EVENTS_FAILURE,
+    payload: {error}
   };
 }
 
@@ -119,20 +194,14 @@ export function createEvent(props) {
 
 export function createEventSuccess(newEvent) {
   return {
-    type: CREATE_EVENT_SUCCESS,
+    type: event.CREATE_EVENT_SUCCESS,
     payload: newEvent
   };
 }
 
 export function createEventFailure(error) {
   return {
-    type: CREATE_EVENT_FAILURE,
+    type: event.CREATE_EVENT_FAILURE,
     payload: error
-  };
-}
-
-export function resetNewEvent() {
-  return {
-    type: RESET_NEW_EVENT
   };
 }

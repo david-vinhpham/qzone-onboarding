@@ -145,10 +145,10 @@ export function fetchProvidersOptionByServiceId(serviceId) {
       .catch(err => dispatch(fetchProvidersFailure(err)))
   };
 };
-export function fetchProvidersBySub(sub) {
+export function fetchProvidersByBusinessAdminId(businessAdminId) {
   return (dispatch) => {
     dispatch(fetchProvidersLoading());
-    fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_USER_SUB + sub, {
+    fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID + businessAdminId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -167,7 +167,28 @@ export function fetchProvidersBySub(sub) {
       .catch(err => dispatch(fetchProvidersFailure(err)))
   };
 };
-
+export function fetchProvidersOptionByBusinessAdminId(businessAdminId) {
+  return (dispatch) => {
+    dispatch(fetchProvidersLoading());
+    fetch(API_ROOT + URL.FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID + businessAdminId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log("json-----------", json)
+        if (json.objects) {
+          dispatch(fetchProvidersSuccess(json.objects));
+        } else {
+          dispatch(fetchProvidersFailure("Topology Error"))
+        }
+        return json;
+      })
+      .catch(err => dispatch(fetchProvidersFailure(err)))
+  };
+};
 
 export function fetchProvidersLoading() {
   return {
