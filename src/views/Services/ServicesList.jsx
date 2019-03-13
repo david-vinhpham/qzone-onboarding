@@ -49,9 +49,11 @@ class ServicesList extends React.Component{
     const {
       classes,
       fetchServicesLoading,
+      fetchServiceError,
+      services,
     } = this.props;
-    let data = null;
-    if(!this.state.data || this.state.data.length === 0) {
+    let data = [];
+    if(fetchServicesLoading) {
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
@@ -59,7 +61,11 @@ class ServicesList extends React.Component{
         color={'#123abc'}
         loading={fetchServicesLoading}
       />;
-    } else {
+    }
+    else if (fetchServiceError) {
+      return <div className="alert alert-danger">Error: {services}</div>
+    }
+    else {
         data = (
         <GridContainer>
           {this.state.data.map((service, index) => {

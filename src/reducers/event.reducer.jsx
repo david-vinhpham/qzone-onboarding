@@ -24,7 +24,7 @@ const reducer = (state = initialState, action) => {
       console.log('FETCH_EVENTS_SUCCESS');
       return { ...state, events: action.payload.events, fetchEventsLoading: false }
     case event.FETCH_EVENTS_FAILURE:
-      return { ...state, events: [], fetchEventError: action.payload.error, fetchEventsLoading: false }
+      return { ...state, events: [], fetchEventsError: action.payload.error, fetchEventsLoading: false }
     case event.CREATE_EVENT_LOADING:
       return { ...state, createEventLoading: true }
     case event.CREATE_EVENT_SUCCESS:

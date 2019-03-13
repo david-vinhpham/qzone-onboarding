@@ -208,7 +208,7 @@ class Sidebar extends React.Component {
                     </span>
                     <ListItemText
                       primary={
-                        "Assigned Service Providers"
+                        "Assign Service Providers"
                       }
                       disableTypography={true}
                       className={collapseItemText}

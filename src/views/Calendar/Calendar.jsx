@@ -5,7 +5,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import CalendarStyle from '../../assets/scss/material-dashboard-pro-react/views/calendarStyle.css';
 import '../../../node_modules/fullcalendar/dist/fullcalendar.min.css';
 import FullCalendar from 'fullcalendar-reactwrapper';
-import '../../assets/scss/full-calender.css'
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Card from "../../components/Card/Card.jsx";
@@ -34,9 +33,13 @@ class Calendar extends React.Component {
       view: 'agendaWeek',
       alert: null,
       providerOption: null,
+      events: []
     };
 
     this.handleProviderChange = this.handleProviderChange.bind(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({ events: nextProps.events })
   }
 
   componentDidMount() {
@@ -134,23 +137,22 @@ class Calendar extends React.Component {
   };
 
   render() {
-    const {classes, events, providers, fetchProvidersLoading, fetchProvidersError } = this.props;
-    const { providerOption } = this.state;
+    const {classes, providers, fetchEventsLoading, fetchEventsError } = this.props;
+    const { providerOption, events } = this.state;
     let providerOptions = [];
     if(providers && providers.length > 0) {
       providerOptions = providers;
     }
-    if (fetchProvidersLoading) {
+    if (fetchEventsLoading)
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
         size={150}
         color={'#123abc'}
-        loading={fetchProvidersLoading}
+        loading={fetchEventsLoading}
       />;
-    }
-    else if (fetchProvidersError) {
-      return <div className="alert alert-danger">Error: {providerOptions}</div>
+    else if (fetchEventsError) {
+      return <div className="alert alert-danger">Error: {events}</div>
     }
 
     return (
@@ -168,6 +170,7 @@ class Calendar extends React.Component {
                   </GridItem>
                   <GridItem xs={8} sm={4} >
                     <FormControl
+
                       fullWidth
                       className={classes.selectFormControl}>
                       <Select
@@ -196,7 +199,7 @@ class Calendar extends React.Component {
                       editable={true}
                       droppable={true}
                       selectable={true}
-                      selectAllow={true}
+                      selectAllow={false}
                       eventLimit={true}
                       nowIndicator={true}
                       events = {events}
@@ -239,6 +242,8 @@ const mapStateToProps = (state) => {
     providers: state.provider.providers,
     fetchProvidersLoading: state.provider.fetchProvidersLoading,
     fetchProvidersError:  state.provider.fetchProvidersError,
+    fetchEventsLoading: state.event.fetchEventsLoading,
+    fetchEventsError:  state.event.fetchEventsError,
   };
 }
 

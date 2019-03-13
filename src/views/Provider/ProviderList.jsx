@@ -8,7 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import {ClipLoader} from 'react-spinners';
-import { css } from '@emotion/core';
+import {css} from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -20,7 +20,6 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import {fetchProvidersByBusinessAdminId} from '../../actions/provider';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
-import {FormLabel} from "@material-ui/core";
 
 const override = css`
     display: block;
@@ -45,26 +44,22 @@ class ProviderList extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-    if (!this.state.data)
+    const { classes, fetchProvidersLoading, fetchProviderError, providers } = this.props;
+    let data = [];
+    if (fetchProvidersLoading) {
       return < ClipLoader
-      className={override}
-      sizeUnit={"px"}
-      size={150}
-      color={'#123abc'}
-      loading={true}
-    />;
-    let data = null
-    if(this.state.data.length === 0) {
-      data =  (
-        <GridContainer>
-         <FormLabel>
-           No Providers.
-         </FormLabel>
-        </GridContainer>
-      )
-    } else {
-      data = (
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={fetchProvidersLoading}
+      />
+    }
+    else if (fetchProviderError) {
+      return <div className="alert alert-danger">Error: {providers}</div>
+    }
+    else {
+        data = (
         <GridContainer>
           {this.state.data.map((provider, index) => {
             return (
@@ -171,7 +166,11 @@ class ProviderList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { providers: state.provider.providers }
+  return {
+    providers: state.provider.providers,
+    fetchProvidersLoading: state.provider.fetchProvidersLoading,
+    fetchProvidersError: state.provider.fetchProvidersError,
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {

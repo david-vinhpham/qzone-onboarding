@@ -44,16 +44,19 @@ class OrganizationList extends React.Component {
   }
 
   render() {
-    const { classes, fetchOrganizationsLoading } = this.props;
-    let data = null
-    if(!this.state.data || this.state.data.length === 0) {
+    const { classes, fetchOrganizationsLoading, fetchOrganizationsError, organizations } = this.props;
+    let data = []
+    if(fetchOrganizationsLoading) {
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
         size={150}
         color={'#123abc'}
-        loading={fetchOrganizationsLoading}
+        loading={fetchOrganizationsError}
       />;
+    }
+    else if (fetchOrganizationsError) {
+      return <div className="alert alert-danger">Error: {organizations}</div>
     } else {
       data = (
         <GridContainer>
@@ -164,6 +167,7 @@ class OrganizationList extends React.Component {
 function mapStateToProps(state) {
   return { organizations: state.organization.organizations,
     fetchOrganizationsLoading: state.organization.fetchOrganizationsLoading,
+    fetchOrganizationsError: state.organization.fetchOrganizationsError,
   }
 }
 

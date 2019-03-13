@@ -55,17 +55,21 @@ class ServiceProviderList extends React.Component {
   }
 
   render() {
-    const { classes, serviceProviderLoading } = this.props;
-    let data = null
-    if(!this.state.data || this.state.data.length === 0) {
+    const { classes, fetchProvidersLoading, fetchProvidersError, serviceProviders } = this.props;
+    let data = []
+    if(fetchProvidersLoading) {
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
         size={150}
         color={'#123abc'}
-        loading={serviceProviderLoading}
+        loading={fetchProvidersLoading}
       />;
-    } else {
+    }
+    else if (fetchProvidersError) {
+      return <div className="alert alert-danger">Error: {serviceProviders}</div>
+    }
+    else {
       data = (
         <GridContainer>
           {this.state.data.map((serviceProvider, index) => {
@@ -177,7 +181,9 @@ class ServiceProviderList extends React.Component {
 
 function mapStateToProps(state) {
   return { serviceProviders: state.serviceProvider.serviceProviders ,
-    serviceProviderLoading:state.provider.serviceProviderLoading,}
+    fetchProvidersLoading:state.provider.fetchProvidersLoading,
+    fetchProvidersError:state.provider.fetchProvidersError,
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
