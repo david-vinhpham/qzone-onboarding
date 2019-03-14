@@ -23,7 +23,13 @@ import SlotCustomInput from "../../components/CustomInput/SlotCustomInput.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
-
+import {ClipLoader} from "react-spinners";
+import {css} from "@emotion/core";
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 const ServiceCreateSchema = Yup.object().shape({
     name: Yup.string()
         .min(3, "Name too short")
@@ -87,10 +93,7 @@ class ServiceCreate extends React.Component {
 
   handleService(values) {
     let imageObject = localStorage.getItem('imageObject');
-    if(imageObject === null) {
-      imageObject = [];
-    }
-    else {
+    if(imageObject !== null) {
       imageObject = JSON.parse(imageObject)
     }
     //values.image = this.props.imageObject;
@@ -129,7 +132,7 @@ class ServiceCreate extends React.Component {
 	}
 
 	render() {
-		const { classes, categories, organizations} = this.props;
+		const { classes, categories, organizations, createServiceError, createServiceLoading } = this.props;
 		let categoryOptions = [];
     let organizationOptions = [];
     if (categories != null && categories.length > 0) {
@@ -138,6 +141,14 @@ class ServiceCreate extends React.Component {
     if (organizations != null && organizations.length > 0) {
       organizationOptions = organizations;
     }
+    if (createServiceLoading) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={createServiceLoading}
+      />; }
 		return (
 			<GridItem xs={12} sm={12} md={12}>
 				<Card>
@@ -179,6 +190,12 @@ class ServiceCreate extends React.Component {
                                         </CardText>
                                     </CardHeader>
                                     <CardBody>
+                                      {createServiceError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                                          <div  style={{ color: "red" }} > {createServiceError.message} </div>
+                                        </CardFooter>)
+                                        :
+                                        ( <CardFooter className={classes.justifyContentCenter}>
+                                        </CardFooter>)}
                                         <form>
                                             <GridContainer>
                                               <GridItem xs={12} sm={3}>
@@ -514,6 +531,8 @@ const mapStateToProps = (state) => {
 		imageError: state.image.imageError,
 		imageLoading: state.image.imageLoading,
 		categories: state.service.serviceCategories,
+    createServiceLoading: state.service.createServiceLoading,
+    createServiceError: state.service.createServiceError,
     organizations: state.organization.organizations
 	}
 }

@@ -15,7 +15,7 @@ export const editServiceProvider = (values, history) => {
         })
         .then(res => res.json())
         .then(data => {
-          if(data.status === 200 || data.status === 201) {
+          if(data.status === 200 || data.status === 201 || data.success === true) {
             let serviceProviders = localStorage.getItem('serviceProvider');
             if (serviceProviders !== null) {
               let listServiceProviders = JSON.parse(serviceProviders);
@@ -159,7 +159,7 @@ export const createServiceProvider = (data, history) => {
         .then(res => res.json())
         .then(data => {
             //adding to cached
-          if(data.status === 200 || data.status === 201) {
+          if(data.status === 200 || data.status === 201 || data.success === true) {
             let serviceProviders = localStorage.getItem('serviceProvider');
             if (serviceProviders !== null) {
               var listServiceProviders = JSON.parse(serviceProviders);

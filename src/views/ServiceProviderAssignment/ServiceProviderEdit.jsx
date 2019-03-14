@@ -35,6 +35,7 @@ const override = css`
 
 const ServiceProviderEditSchema = Yup.object().shape({
   geoLocationId: Yup.string().required("Please select geoLocation"),
+  serviceTimeSlot: Yup.string().required("Please select a serviceTimeSlot "),
 })
 
 class ServiceProviderEdit extends React.Component {
@@ -49,6 +50,7 @@ class ServiceProviderEdit extends React.Component {
             serviceOption: null,
             locationOption: null,
             serviceTimeSlot: [],
+            additionalInfo: '',
         }
       this.handleOrgChange = this.handleOrgChange.bind(this);
       this.handleProviderChange = this.handleProviderChange.bind(this);
@@ -118,16 +120,15 @@ class ServiceProviderEdit extends React.Component {
     }
 
     componentDidMount() {
+      const { id } = this.props.match.params;
+      this.props.fetchServiceProviderById(id);
       localStorage.removeItem('originServiceTimeSlot');
       let userSub = localStorage.getItem('userSub');
       this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
-      const { id } = this.props.match.params;
       this.props.fetchProvidersOptionByServiceProviderId(id);
-      this.props.fetchServiceProviderById(id);
       this.props.findServiceOptionByBusinessAdminId(userSub);
       this.props.fetchLocationsOption();
     }
-
 
     change(event, stateName) {
         if (_.isEmpty(event.target.value))
@@ -139,12 +140,17 @@ class ServiceProviderEdit extends React.Component {
     }
 
     submit = (values) =>  {
+      this.setState({additionalInfo: values.additionalInfo});
+      for(let index = 0; index < values.serviceTimeSlot.length; index++) {
+        values.serviceTimeSlot[index].slotId = index;
+      }
       this.props.editServiceProvider(values, this.props.history)
     }
 
     render() {
-        const { classes, services, serviceProviderError, organizations, providers, locations, editServiceProviderError, editServiceProviderLoading } = this.props;
-        const { serviceOption, providerOption, organizationOption, locationOption } = this.state;
+        const { classes, services, organizations, providers, locations,
+          editServiceProviderError,  fetchServiceProviderLoading } = this.props;
+        const { serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
         let providerOptions = [];
@@ -161,20 +167,15 @@ class ServiceProviderEdit extends React.Component {
         if (locations != null && locations.length > 0) {
            locationOptions = locations;
         }
-        console.log('this.state.data: ' + this.state.data);
-        if (editServiceProviderLoading) {
+        if (fetchServiceProviderLoading || !this.state.data || this.state.data.length === 0) {
           return < ClipLoader
             className={override}
             sizeUnit={"px"}
             size={150}
             color={'#123abc'}
-            loading={editServiceProviderLoading}
+            loading={fetchServiceProviderLoading}
           />;
         }
-        else if (editServiceProviderError) {
-          return <div className="alert alert-danger">Error: {serviceProviderError}</div>
-        }
-        //const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         return (
             <GridItem xs={12} sm={12} md={12}>
                 <Card>
@@ -210,6 +211,12 @@ class ServiceProviderEdit extends React.Component {
                                         </CardText>
                                     </CardHeader>
                                     <CardBody>
+                                      {editServiceProviderError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                                          <div  style={{ color: "red" }} > {editServiceProviderError.message} </div>
+                                        </CardFooter>)
+                                        :
+                                        ( <CardFooter className={classes.justifyContentCenter}>
+                                        </CardFooter>)}
                                         <form>
                                             <GridContainer>
                                               <GridItem xs={12} sm={3}>
@@ -340,6 +347,15 @@ class ServiceProviderEdit extends React.Component {
                                           </GridContainer>
                                           <GridContainer style={{ paddingBottom: '15px' }}>
                                             <GridItem  xs={12} sm={3}>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={6} style={{ 'max-width': '100%' }}>
+                                              {errors.serviceTimeSlot && touched.serviceTimeSlot ? (
+                                                <div style={{ color: "red" }}> {errors.serviceTimeSlot = (serviceTimeSlot.length === 0 ? errors.serviceTimeSlot : '')}</div>
+                                              ) : null}
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer style={{ paddingBottom: '15px' }}>
+                                            <GridItem  xs={12} sm={3}>
                                               <FormLabel className={classes.labelHorizontal}>
                                               </FormLabel>
                                             </GridItem>
@@ -386,6 +402,7 @@ class ServiceProviderEdit extends React.Component {
                                             Exit
                                         </Button>
                                     </CardFooter>
+
                                 </div>
                             )
                         }
@@ -406,12 +423,11 @@ const mapStateToProps = (state) => {
       organizations: state.organization.organizations,
       providers: state.provider.providers,
       serviceProvider: state.serviceProvider.serviceProvider,
-      editServiceProviderLoading: state.serviceProvider.editServiceProviderLoading,
       editServiceProviderError: state.serviceProvider.editServiceProviderError,
       services: state.service.services,
       locations: state.location.locations,
-      serviceProviderLoading:state.provider.serviceProviderLoading,
-      serviceProviderError: state.serviceProvider.serviceProviderError,
+      fetchServiceProviderLoading:state.serviceProvider.fetchServiceProviderLoading,
+      fetchServiceProviderError: state.serviceProvider.fetchServiceProviderError,
     }
 }
 

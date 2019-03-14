@@ -23,7 +23,14 @@ import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organization";
 import Select from 'react-select';
+import {ClipLoader} from "react-spinners";
+import {css} from "@emotion/core";
 
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
             .required("This field is required")
@@ -41,6 +48,24 @@ class ProviderCreate extends React.Component{
       businessAdminId: null,
       timezoneOption: null,
       organizationOption: null,
+      data: {
+        email: null,
+        familyName: null,
+        givenName: null,
+        telephone: null,
+        userStatus: "FORCE_CHANGE_PASSWORD",
+        userSub: null,
+        userType: "PROVIDER",
+        providerInformation: {
+          description: null,
+          qualifications: null,
+          tags: null,
+          organizationId: null,
+          timeZoneId: null,
+          isAdmin: false,
+          businessId: null,
+        }
+      }
     }
     this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
@@ -57,11 +82,17 @@ class ProviderCreate extends React.Component{
   handleTimeZone(selectedOption) {
     this.setState({ timezoneOption: selectedOption });
   }
-
+  componentWillReceiveProps(nextProps) {
+    let createProvider = localStorage.getItem('createProvider');
+    if(createProvider !== null) {
+      console.log('get from cached data');
+      this.setState({ data: JSON.parse(createProvider) });
+    }
+  }
   componentDidMount() {
+    localStorage.removeItem('createProvider');
     this.props.fetchTimezonesOption();
     let userSub = localStorage.getItem('userSub');
-    console.log('userSub: ' + userSub);
     this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
     this.setState({ businessAdminId: userSub });
   }
@@ -139,12 +170,13 @@ class ProviderCreate extends React.Component{
   }
 
   handleProvider(values) {
+    localStorage.setItem('createProvider', JSON.stringify(values));
     this.props.createProvider(values, this.props.history);
   }
 
 	render() {
-    const { classes, timezones, organizations } = this.props;
-    const {  businessAdminId, timezoneOption, organizationOption } = this.state;
+    const { classes, timezones, organizations, createProviderLoading, createProviderError } = this.props;
+    const {  timezoneOption, organizationOption } = this.state;
     let timeZoneOptions = [];
     let organizationOptions = [];
 		if ((timezones.length) > 0) {
@@ -153,25 +185,33 @@ class ProviderCreate extends React.Component{
 		if(organizations.length > 0) {
       organizationOptions = organizations;
     }
+    if (createProviderLoading) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={createProviderLoading}
+      />; }
 		return(
 
           <Formik
             initialValues={{
-              email: '',
-              familyName: '',
-              givenName: '',
-              telephone: '',
+              email: this.state.data.email,
+              familyName: this.state.data.familyName,
+              givenName: this.state.data.givenName,
+              telephone: this.state.data.telephone,
               userStatus: "FORCE_CHANGE_PASSWORD",
-              userSub: '',
+              userSub: this.state.data.userSub,
               userType: "PROVIDER",
               providerInformation:{
-                description: '',
-                qualifications:'',
-                tags:'',
+                description: this.state.data.providerInformation.description,
+                qualifications:this.state.data.providerInformation.qualifications,
+                tags:this.state.data.providerInformation.tags,
                 organizationId: organizationOption === null ? null : organizationOption.value,
                 timeZoneId: timezoneOption === null ? null : timezoneOption.label,
                 isAdmin: false,
-                businessId:businessAdminId,
+                businessId:this.state.data.providerInformation.businessId,
               }
             }}
             validationSchema={ProviderSchema}
@@ -193,6 +233,56 @@ class ProviderCreate extends React.Component{
                   </CardText>
                 </CardHeader>
                 <CardBody>
+                  {createProviderError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                      <div  style={{ color: "red" }} > {createProviderError.message} </div>
+                    </CardFooter>)
+                    :
+                    ( <CardFooter className={classes.justifyContentCenter}>
+                    </CardFooter>)}
+                  <GridContainer>
+                    <GridItem xs={12} sm={3}>
+                      <FormLabel className={classes.labelHorizontal}>
+                        Service Organization
+                      </FormLabel>
+                    </GridItem>
+                    <GridItem xs={12} sm={4}>
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}>
+                        <Select
+                          options={organizationOptions}
+                          value={ organizationOption}
+                          onChange={this.handleOrgChange}
+                        >
+                        </Select>
+                      </FormControl>
+                    </GridItem>
+                  </GridContainer>
+                  <GridContainer>
+                    <GridItem xs={12} sm={3}>
+                      <FormLabel
+                        className={
+                          classes.labelHorizontal +
+                          " " +
+                          classes.labelHorizontalRadioCheckbox
+                        }
+                      >
+                        Time Zone
+                      </FormLabel>
+                    </GridItem>
+                    <GridItem xs={12} sm={4}>
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}>
+                        <Select
+                          options={timeZoneOptions}
+                          value={ timezoneOption}
+                          onChange={this.handleTimeZone}
+                        >
+                        </Select>
+                      </FormControl>
+                    </GridItem>
+                  </GridContainer>
                   <GridContainer>
                     <GridItem xs={12} sm={3}>
                         <FormLabel className={classes.labelHorizontal}>
@@ -287,51 +377,6 @@ class ProviderCreate extends React.Component{
                               <div style={{ color: "red" }}>{errors.description}</div>
                           ) : null}
                       </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                      <FormLabel
-                          className={
-                              classes.labelHorizontal +
-                              " " +
-                              classes.labelHorizontalRadioCheckbox
-                          }
-                      >
-                          Time Zone
-                      </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                      <FormControl
-                        fullWidth
-                        className={classes.selectFormControl}>
-                        <Select
-                          options={timeZoneOptions}
-                          value={ timezoneOption}
-                          onChange={this.handleTimeZone}
-                        >
-                        </Select>
-                      </FormControl>
-                    </GridItem>
-                  </GridContainer>
-
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                      <FormLabel className={classes.labelHorizontal}>
-                        Service Organization
-                      </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                      <FormControl
-                        fullWidth
-                        className={classes.selectFormControl}>
-                        <Select
-                          options={organizationOptions}
-                          value={ organizationOption}
-                          onChange={this.handleOrgChange}
-                        >
-                        </Select>
-                      </FormControl>
-                    </GridItem>
                   </GridContainer>
                   {/*<GridContainer>
                     <GridItem xs={12} sm={3}>
@@ -432,7 +477,9 @@ ProviderCreate.propTypes = {
 const mapStateToProps = (state) => {
   return {
     timezones: state.provider.timezones,
-    organizations: state.organization.organizations
+    organizations: state.organization.organizations,
+    createProviderLoading: state.provider.createProviderLoading,
+    createProviderError: state.provider.createProviderError,
   }
 }
 

@@ -90,7 +90,7 @@ class ProviderEdit extends React.Component{
   }
 
   render() {
-    const { classes, timezones, organizations, fetchProviderLoading } = this.props;
+    const { classes, timezones, organizations, fetchProviderLoading, editProviderError } = this.props;
     const { timezoneOption, organizationOption, provider } = this.state;
     let timeZoneOptions = [];
     let organizationOptions = [];
@@ -100,7 +100,7 @@ class ProviderEdit extends React.Component{
     if(organizations.length > 0) {
       organizationOptions = organizations;
     }
-    if (!this.state.provider || this.state.provider.length === 0) {
+    if (fetchProviderLoading || !this.state.provider || this.state.provider.length === 0) {
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
@@ -149,6 +149,12 @@ class ProviderEdit extends React.Component{
               </CardText>
             </CardHeader>
             <CardBody>
+              {editProviderError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                  <div  style={{ color: "red" }} > {editProviderError.message} </div>
+                </CardFooter>)
+                :
+                ( <CardFooter className={classes.justifyContentCenter}>
+                </CardFooter>)}
               <GridContainer>
                 <GridItem xs={12} sm={3}>
                   <FormLabel className={classes.labelHorizontal}>
@@ -363,6 +369,7 @@ const mapStateToProps = (state) => {
     timezones: state.provider.timezones,
     organizations: state.organization.organizations,
     fetchProviderLoading: state.provider.fetchProviderLoading,
+    editProviderError: state.provider.editProviderError,
   }
 }
 

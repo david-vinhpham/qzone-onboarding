@@ -41,18 +41,18 @@ const reducer = (state = initialState, action) => {
             return { ...state, serviceProvider:[], createServiceProviderError: action.payload.error, createServiceProviderLoading: false }
 
       case serviceProvider.EDIT_SERVICE_PROVIDER_LOADING:
-        return { ...state, editServiceProviderLoading: true }
+        return { ...state, fetchServiceProviderLoading: true }
       case serviceProvider.EDIT_SERVICE_PROVIDER_SUCCESS:
-        return { ...state, serviceProvider: action.payload.data, editServiceProviderLoading: false }
+        return { ...state, serviceProvider: action.payload.data, fetchServiceProviderLoading: false }
       case serviceProvider.EDIT_SERVICE_PROVIDER_FAILURE:
-        return { ...state, serviceProvider:[], editServiceProviderError: action.payload.error, editServiceProviderLoading: false }
+        return { ...state, serviceProvider:[], editServiceProviderError: action.payload.error, fetchServiceProviderLoading: false }
 
       case serviceProvider.FETCH_SERVICE_PROVIDER_LOADING:
-            return { ...state, fetchProviderLoading: true }
+            return { ...state, fetchServiceProviderLoading: true }
         case serviceProvider.FETCH_SERVICE_PROVIDER_SUCCESS:
-            return { ...state, serviceProvider: action.payload.data, fetchProviderLoading: false }
+            return { ...state, serviceProvider: action.payload.data, fetchServiceProviderLoading: false }
         case serviceProvider.FETCH_SERVICE_PROVIDER_FAILURE:
-            return { ...state, serviceProvider:[], fetchProviderError: action.payload.error, fetchProviderLoading: false }
+            return { ...state, serviceProvider:[], fetchServiceProviderError: action.payload.error, fetchServiceProviderLoading: false }
 
         case location.FETCH_LOCATIONS_LOADING:
           return { ...state, locationLoading: true }

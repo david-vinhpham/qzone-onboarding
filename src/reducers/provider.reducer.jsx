@@ -45,22 +45,21 @@ export default function(state = initialState, action) {
     case provider.CREATE_PROVIDER_SUCCESS:
       return { ...state, provider: action.payload, createProviderLoading: false }
     case provider.CREATE_PROVIDER_FAILURE:
-      return { ...state, provider: null, createProviderError: action.payload, createProviderLoading: false }
+      return { ...state, provider: [], createProviderError: action.payload.error, createProviderLoading: false }
 
     case provider.EDIT_PROVIDER_LOADING:
-      return { ...state, editProviderLoading: true };
+      return { ...state, fetchProviderLoading: true };
     case provider.EDIT_PROVIDER_SUCCESS:
-      console.log('reducer: EDIT_PROVIDER_SUCCESS');
-      return { ...state, provider: action.payload, editProviderLoading: false }
+      return { ...state, provider: action.payload, fetchProviderLoading: false }
     case provider.EDIT_PROVIDER_FAILURE:
-      return { ...state, provider: null, editProviderError: action.payload, editProviderLoading: false }
+      return { ...state, provider: [], editProviderError: action.payload.error, fetchProviderLoading: false }
 
     case provider.FETCH_TIMEZONES_LOADING:
       return { ...state, fetchTimezonesLoading:true}
     case provider.FETCH_TIMEZONES_SUCCESS:
       return { ...state, timezones: action.payload, fetchTimezonesLoading: false}
     case provider.FETCH_TIMEZONES_FAILURE:
-      return { ...state, timezones: [], fetchTimezonesError: action.payload, fetchTimezonesLoading: false}
+      return { ...state, timezones: [], fetchTimezonesError: action.payload.error, fetchTimezonesLoading: false}
 
     default:
       return state;

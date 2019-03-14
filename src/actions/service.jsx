@@ -24,7 +24,6 @@ export const editServiceFailure = (error) => {
 
 
 export const editService = (data, history) => {
-  console.log("editService: ", data)
   return (dispatch) => {
     dispatch(editServiceLoading())
     fetch(API_ROOT + URL.SERVICE, {
@@ -36,8 +35,13 @@ export const editService = (data, history) => {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch(editServiceSuccess(data.objects))
-        history.push('/services/list')
+        if(data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch(editServiceSuccess(data.object));
+          history.push('/services/list');
+        }
+        else {
+          dispatch(editServiceFailure(data));
+        }
       })
       .catch(err => {
         dispatch(editServiceFailure(err))
@@ -233,8 +237,13 @@ export const createService = (data, history) => {
         })
         .then(res => res.json())
         .then(data => {
-            dispatch(createServiceSuccess(data.objects))
-            history.push('/services/list')
+          if(data.status === 200 || data.status === 201 || data.success === true) {
+            dispatch(createServiceSuccess(data.object));
+            history.push('/services/list');
+          }
+          else {
+            dispatch(createServiceFailure(data));
+          }
         })
         .catch(err => {
             dispatch(createServiceFailure(err))

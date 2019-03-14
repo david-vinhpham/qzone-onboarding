@@ -132,13 +132,18 @@ class ServiceEdit extends React.Component {
       else {
         imageObject = JSON.parse(imageObject)
       }
-      values.image = imageObject;
+      if(imageObject != null) {
+        values.image = imageObject;
+      }
+      if(values.image === null && values.imagePreviewUrl != null) {
+        values.image = values.imagePreviewUrl;
+      }
       this.props.editService(values, this.props.history);
     }
 
 
     render() {
-        const { classes, categories, organizations, fetchServiceLoading } = this.props;
+        const { classes, categories, organizations, fetchServiceLoading, editServiceError } = this.props;
         let categoryOptions = [];
         let organizationOptions = [];
         if (categories != null && categories.length > 0) {
@@ -147,7 +152,7 @@ class ServiceEdit extends React.Component {
         if (organizations != null && organizations.length > 0) {
           organizationOptions = organizations;
         }
-        if (!this.state.data || this.state.data.length ===0) {
+        if (fetchServiceLoading || !this.state.data || this.state.data.length ===0) {
           return < ClipLoader
             className={override}
             sizeUnit={"px"}
@@ -200,6 +205,12 @@ class ServiceEdit extends React.Component {
                                         </CardText>
                                     </CardHeader>
                                     <CardBody>
+                                      {editServiceError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                                          <div  style={{ color: "red" }} > {editServiceError.message} </div>
+                                        </CardFooter>)
+                                        :
+                                        ( <CardFooter className={classes.justifyContentCenter}>
+                                        </CardFooter>)}
                                         <form>
                                             <GridContainer>
                                               <GridItem xs={12} sm={3}>
@@ -548,7 +559,7 @@ const mapStateToProps = (state) => {
       service: state.service.service,
       fetchServiceLoading: state.service.fetchServiceLoading,
       organizations: state.organization.organizations,
-      editServiceLoading: state.service.editServiceLoading,
+      editServiceError: state.service.editServiceError,
     }
 }
 

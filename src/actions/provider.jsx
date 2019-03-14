@@ -241,8 +241,12 @@ export function editProvider(values, history) {
     })
       .then(res => res.json())
       .then(data => {
-       // dispatch(editProviderSuccess(data))
-        history.push('/provider/list')
+        if(data.status === 200 || data.status === 201 || data.success === true) {
+          history.push('/provider/list');
+        }
+        else {
+          dispatch(editProviderFailure(data));
+        }
       })
       .catch(err => {
         dispatch(editProviderFailure(err))
@@ -267,12 +271,16 @@ export function createProvider(values, history) {
           body: JSON.stringify(values)
         })
         .then(res => res.json())
-        .then(json => {
-          console.log("json-------", json)
-          dispatch({ type: provider.CREATE_PROVIDER_SUCCESS, payload: json.object });
-          history.push('/provider/list');
+        .then(data => {
+          if(data.status === 200 || data.status === 201 || data.success === true) {
+            dispatch(createProviderSuccess(data));
+            history.push('/provider/list');
+          }
+          else {
+            dispatch(createProviderFailure(data));
+          }
         })
-        .catch(err => dispatch({ type: provider.CREATE_PROVIDER_FAILURE, payload: err}))
+        .catch(err => dispatch(createProviderFailure(err)));
   };
 }
 

@@ -38,6 +38,7 @@ const ServiceCreateSchema = Yup.object().shape({
   geoLocationId: Yup.string().required("Please select a geoLocation"),
   serviceId: Yup.string().required("Please select a service"),
   organizationId: Yup.string().required("Please select a organization"),
+  serviceTimeSlot: Yup.string().required("Please select a serviceTimeSlot "),
 })
 
 class ServiceProviderCreate extends React.Component {
@@ -51,6 +52,7 @@ class ServiceProviderCreate extends React.Component {
             locationOption: null,
             serviceTimeSlot: [],
             businessAdminId: null,
+            additionalInfo: '',
         }
       this.handleOrgChange = this.handleOrgChange.bind(this);
       this.handleProviderChange = this.handleProviderChange.bind(this);
@@ -122,12 +124,16 @@ class ServiceProviderCreate extends React.Component {
     }
 
     submit = (values) =>  {
+      this.setState({additionalInfo: values.additionalInfo});
+      for(let index = 0; index < values.serviceTimeSlot.length; index++) {
+        values.serviceTimeSlot[index].slotId = index;
+      }
       this.props.createServiceProvider(values, this.props.history)
     }
 
     render() {
         const { classes, services, organizations, providers, locations, createServiceProviderLoading, createServiceProviderError } = this.props;
-        const { serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot, businessAdminId } = this.state;
+        const { additionalInfo, serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot, businessAdminId } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
         let providerOptions = [];
@@ -165,7 +171,7 @@ class ServiceProviderCreate extends React.Component {
                             serviceId: (serviceOption === null ? null : serviceOption.value),
                             geoLocationId: (locationOption === null ? null : locationOption.value),
                             organizationId: (organizationOption === null ? null : organizationOption.value),
-                            additionalInfo: '',
+                            additionalInfo: additionalInfo,
                             serviceTimeSlot: serviceTimeSlot,
                             businessAdminId: businessAdminId,
                         }}
@@ -190,6 +196,12 @@ class ServiceProviderCreate extends React.Component {
                                         </CardText>
                                     </CardHeader>
                                     <CardBody>
+                                      {createServiceProviderError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                                          <div  style={{ color: "red" }} > {createServiceProviderError.message} </div>
+                                        </CardFooter>)
+                                        :
+                                        ( <CardFooter className={classes.justifyContentCenter}>
+                                        </CardFooter>)}
                                         <form>
                                             <GridContainer>
                                               <GridItem xs={12} sm={3}>
@@ -321,6 +333,15 @@ class ServiceProviderCreate extends React.Component {
                                           </GridContainer>
                                           <GridContainer style={{ paddingBottom: '15px' }}>
                                             <GridItem  xs={12} sm={3}>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={6} style={{ 'max-width': '100%' }}>
+                                              {errors.serviceTimeSlot && touched.serviceTimeSlot ? (
+                                                <div style={{ color: "red" }}> {errors.serviceTimeSlot = (serviceTimeSlot.length === 0 ? errors.serviceTimeSlot : '')}</div>
+                                              ) : null}
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer style={{ paddingBottom: '15px' }}>
+                                            <GridItem  xs={12} sm={3}>
                                               <FormLabel className={classes.labelHorizontal}>
                                               </FormLabel>
                                             </GridItem>
@@ -364,12 +385,6 @@ class ServiceProviderCreate extends React.Component {
                                             Exit
                                         </Button>
                                     </CardFooter>
-                                  {createServiceProviderError !== null ? (<CardFooter className={classes.justifyContentCenter}>
-                                      {createServiceProviderError.message}
-                                   </CardFooter>)
-                                    :
-                                    ( <CardFooter className={classes.justifyContentCenter}>
-                                    </CardFooter>)}
                                 </div>
                             )
                         }
