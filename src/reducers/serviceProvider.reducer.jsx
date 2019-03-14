@@ -30,13 +30,14 @@ const reducer = (state = initialState, action) => {
         case serviceProvider.FETCH_SERVICE_PROVIDERS_SUCCESS:
             return { ...state, serviceProviders: action.payload.data, fetchServiceProvidersLoading: false }
         case serviceProvider.FETCH_SERVICE_PROVIDERS_FAILURE:
-            return { ...state, serviceProviders: [], fetchServiceProvidersError: action.payload.error, fetchServiceProvidersLoading: false }
+            return { ...state, serviceProvidersError: [], fetchServiceProvidersError: action.payload.error, fetchServiceProvidersLoading: false }
 
         case serviceProvider.CREATE_SERVICE_PROVIDER_LOADING:
             return { ...state, createServiceProviderLoading: true }
         case serviceProvider.CREATE_SERVICE_PROVIDER_SUCCESS:
             return { ...state, serviceProvider: action.payload.data, createServiceProviderLoading: false }
         case serviceProvider.CREATE_SERVICE_PROVIDER_FAILURE:
+            console.log("CREATE_SERVICE_PROVIDER_FAILURE");
             return { ...state, serviceProvider:[], createServiceProviderError: action.payload.error, createServiceProviderLoading: false }
 
       case serviceProvider.EDIT_SERVICE_PROVIDER_LOADING:
@@ -47,11 +48,11 @@ const reducer = (state = initialState, action) => {
         return { ...state, serviceProvider:[], editServiceProviderError: action.payload.error, editServiceProviderLoading: false }
 
       case serviceProvider.FETCH_SERVICE_PROVIDER_LOADING:
-            return { ...state, serviceProviderLoading: true }
+            return { ...state, fetchProviderLoading: true }
         case serviceProvider.FETCH_SERVICE_PROVIDER_SUCCESS:
-            return { ...state, serviceProvider: action.payload.data, serviceProviderLoading: false }
+            return { ...state, serviceProvider: action.payload.data, fetchProviderLoading: false }
         case serviceProvider.FETCH_SERVICE_PROVIDER_FAILURE:
-            return { ...state, serviceProvider:[], getServiceProviderError: action.payload.error, serviceProviderLoading: false }
+            return { ...state, serviceProvider:[], fetchProviderError: action.payload.error, fetchProviderLoading: false }
 
         case location.FETCH_LOCATIONS_LOADING:
           return { ...state, locationLoading: true }

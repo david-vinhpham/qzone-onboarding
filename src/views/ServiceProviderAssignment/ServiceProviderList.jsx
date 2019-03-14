@@ -47,7 +47,7 @@ class ServiceProviderList extends React.Component {
       console.log('get from cached data');
       this.setState({ data: JSON.parse(serviceProviders) });
     }
-    if(!this.state.data || this.state.data.length === 0) {
+    if(!serviceProviders || serviceProviders.length === 0) {
       console.log('fetchServiceProvidersByUserSub');
       var userSub = localStorage.getItem('userSub');
       this.props.fetchServiceProvidersByUserSub(userSub);
@@ -55,19 +55,19 @@ class ServiceProviderList extends React.Component {
   }
 
   render() {
-    const { classes, fetchProvidersLoading, fetchProvidersError, serviceProviders } = this.props;
+    const { classes, fetchServiceProvidersLoading, fetchServiceProvidersError } = this.props;
     let data = []
-    if(fetchProvidersLoading) {
+    if(fetchServiceProvidersLoading) {
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
         size={150}
         color={'#123abc'}
-        loading={fetchProvidersLoading}
+        loading={fetchServiceProvidersLoading}
       />;
     }
-    else if (fetchProvidersError) {
-      return <div className="alert alert-danger">Error: {serviceProviders}</div>
+    else if (fetchServiceProvidersError) {
+      return <div className="alert alert-danger">Error: {fetchServiceProvidersError}</div>
     }
     else {
       data = (
@@ -110,13 +110,13 @@ class ServiceProviderList extends React.Component {
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>
-                      {serviceProvider.serviceEntity.organizationEntity.name}
+                      {serviceProvider.orgName}
                     </h4>
                     <h4 className={classes.cardProductTitle}>
-                      {serviceProvider.serviceEntity.name}
+                      {serviceProvider.providerName}
                     </h4>
                     <p className={classes.cardProductDesciprion}>
-                      {serviceProvider.providerEntity.givenName}
+                      {serviceProvider.serviceName}
                     </p>
                   </CardBody>
                 </Card>
@@ -183,6 +183,8 @@ function mapStateToProps(state) {
   return { serviceProviders: state.serviceProvider.serviceProviders ,
     fetchProvidersLoading:state.provider.fetchProvidersLoading,
     fetchProvidersError:state.provider.fetchProvidersError,
+    fetchServiceProvidersLoading: state.serviceProvider.fetchServiceProvidersLoading,
+    fetchServiceProvidersError: state.serviceProvider.fetchServiceProvidersError,
   }
 }
 

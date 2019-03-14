@@ -15,12 +15,13 @@ export const editServiceProvider = (values, history) => {
         })
         .then(res => res.json())
         .then(data => {
+          if(data.status === 200 || data.status === 201) {
             let serviceProviders = localStorage.getItem('serviceProvider');
-            if(serviceProviders !== null) {
+            if (serviceProviders !== null) {
               let listServiceProviders = JSON.parse(serviceProviders);
-              for (let i = 0; i < listServiceProviders.length; i++){
+              for (let i = 0; i < listServiceProviders.length; i++) {
                 // look for the entry with a matching `code` value
-                if (listServiceProviders[i].id === data.object.id){
+                if (listServiceProviders[i].id === data.object.id) {
                   // we found it
                   listServiceProviders[i] = data.object;
                 }
@@ -28,6 +29,13 @@ export const editServiceProvider = (values, history) => {
               localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
             }
             history.push('/service-provider/list');
+          }
+          else {
+            dispatch({
+              type: serviceProvider.EDIT_SERVICE_PROVIDER_FAILURE,
+              payload: {data}
+            })
+          }
         })
         .catch(err => {
             dispatch({
@@ -151,13 +159,18 @@ export const createServiceProvider = (data, history) => {
         .then(res => res.json())
         .then(data => {
             //adding to cached
+          if(data.status === 200 || data.status === 201) {
             let serviceProviders = localStorage.getItem('serviceProvider');
-            if(serviceProviders !== null) {
+            if (serviceProviders !== null) {
               var listServiceProviders = JSON.parse(serviceProviders);
               listServiceProviders.push(data.object);
               localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
+              history.push('/service-provider/list');
             }
-            history.push('/service-provider/list')
+          }
+          else {
+            dispatch(createServiceProviderFailure(data))
+          }
         })
         .catch(err => {
             dispatch(createServiceProviderFailure(err))

@@ -24,9 +24,20 @@ import {fetchLocationsOption} from '../../actions/location';
 import SlotCustomInput from "../../components/CustomInput/SlotCustomInput.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Select from 'react-select';
+import {ClipLoader} from "react-spinners";
+import {css} from "@emotion/core";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 const ServiceCreateSchema = Yup.object().shape({
-  providerId: Yup.string().required("Please select provider"),
+  providerId: Yup.string().required("Please select a provider"),
+  geoLocationId: Yup.string().required("Please select a geoLocation"),
+  serviceId: Yup.string().required("Please select a service"),
+  organizationId: Yup.string().required("Please select a organization"),
 })
 
 class ServiceProviderCreate extends React.Component {
@@ -115,7 +126,7 @@ class ServiceProviderCreate extends React.Component {
     }
 
     render() {
-        const { classes, services, organizations, providers, locations } = this.props;
+        const { classes, services, organizations, providers, locations, createServiceProviderLoading, createServiceProviderError } = this.props;
         const { serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot, businessAdminId } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
@@ -133,6 +144,18 @@ class ServiceProviderCreate extends React.Component {
         if (locations != null && locations.length > 0) {
            locationOptions = locations;
         }
+      if (createServiceProviderLoading) {
+        return < ClipLoader
+          className={override}
+          sizeUnit={"px"}
+          size={150}
+          color={'#123abc'}
+          loading={createServiceProviderLoading}
+        />;
+      }
+      //else if (createServiceProviderError) {
+      //  return <div className="alert alert-danger">Error: {serviceProviderError}</div>
+      //}
         return (
             <GridItem xs={12} sm={12} md={12}>
                 <Card>
@@ -141,6 +164,7 @@ class ServiceProviderCreate extends React.Component {
                             providerId: (providerOption === null ? null : providerOption.value),
                             serviceId: (serviceOption === null ? null : serviceOption.value),
                             geoLocationId: (locationOption === null ? null : locationOption.value),
+                            organizationId: (organizationOption === null ? null : organizationOption.value),
                             additionalInfo: '',
                             serviceTimeSlot: serviceTimeSlot,
                             businessAdminId: businessAdminId,
@@ -170,7 +194,7 @@ class ServiceProviderCreate extends React.Component {
                                             <GridContainer>
                                               <GridItem xs={12} sm={3}>
                                                 <FormLabel className={classes.labelHorizontal}>
-                                                  Service Organization
+                                                  Organization
                                                 </FormLabel>
                                               </GridItem>
                                               <GridItem xs={12} sm={4}>
@@ -183,6 +207,9 @@ class ServiceProviderCreate extends React.Component {
                                                     onChange={this.handleOrgChange}
                                                   >
                                                   </Select>
+                                                  {errors.organizationId && touched.organizationId ? (
+                                                    <div style={{ color: "red" }}>{errors.organizationId}</div>
+                                                  ) : null}
                                                 </FormControl>}
                                               </GridItem>
                                             </GridContainer>
@@ -202,6 +229,9 @@ class ServiceProviderCreate extends React.Component {
                                                   options={serviceOptions}
                                                 >
                                                 </Select>
+                                                {errors.serviceId && touched.serviceId ? (
+                                                  <div style={{ color: "red" }}>{errors.serviceId}</div>
+                                                ) : null}
                                               </FormControl>
                                             </GridItem>
                                           </GridContainer>
@@ -219,7 +249,12 @@ class ServiceProviderCreate extends React.Component {
                                                   value={providerOption}
                                                   placeholder="Select your provider(s)"
                                                   options={providerOptions}
-                                                  onChange={this.handleProviderChange} />
+                                                  onChange={this.handleProviderChange}
+                                                >
+                                                </Select>
+                                                {errors.providerId && touched.providerId ? (
+                                                  <div style={{ color: "red" }}>{errors.providerId}</div>
+                                                ) : null}
                                               </FormControl>
                                             </GridItem>
                                           </GridContainer>
@@ -239,6 +274,9 @@ class ServiceProviderCreate extends React.Component {
                                                   options={locationOptions}
                                                 >
                                                 </Select>
+                                                {errors.geoLocationId && touched.geoLocationId ? (
+                                                  <div style={{ color: "red" }}>{errors.geoLocationId}</div>
+                                                ) : null}
                                               </FormControl>
                                             </GridItem>
                                           </GridContainer>
@@ -326,6 +364,12 @@ class ServiceProviderCreate extends React.Component {
                                             Exit
                                         </Button>
                                     </CardFooter>
+                                  {createServiceProviderError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                                      {createServiceProviderError.message}
+                                   </CardFooter>)
+                                    :
+                                    ( <CardFooter className={classes.justifyContentCenter}>
+                                    </CardFooter>)}
                                 </div>
                             )
                         }
@@ -345,8 +389,8 @@ const mapStateToProps = (state) => {
     return {
       organizations: state.organization.organizations,
       providers: state.provider.providers,
-      serviceProvider: state.serviceProvider.serviceProvider,
-      originServiceProvider: state.serviceProvider.serviceProvider,
+      createServiceProviderLoading: state.serviceProvider.createServiceProviderLoading,
+      createServiceProviderError: state.serviceProvider.createServiceProviderError,
       services: state.service.services,
       fetchServicesLoading: state.service.fetchServicesLoading,
       locations: state.location.locations,

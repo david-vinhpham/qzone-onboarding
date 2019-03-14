@@ -33,8 +33,8 @@ const override = css`
     border-color: red;
 `;
 
-const ServiceEditSchema = Yup.object().shape({
-
+const ServiceProviderEditSchema = Yup.object().shape({
+  geoLocationId: Yup.string().required("Please select geoLocation"),
 })
 
 class ServiceProviderEdit extends React.Component {
@@ -143,7 +143,7 @@ class ServiceProviderEdit extends React.Component {
     }
 
     render() {
-        const { classes, services, organizations, providers, locations, serviceProviderLoading } = this.props;
+        const { classes, services, serviceProviderError, organizations, providers, locations, editServiceProviderError, editServiceProviderLoading } = this.props;
         const { serviceOption, providerOption, organizationOption, locationOption } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
@@ -162,14 +162,17 @@ class ServiceProviderEdit extends React.Component {
            locationOptions = locations;
         }
         console.log('this.state.data: ' + this.state.data);
-        if (!this.state.data || this.state.data.length ===0) {
+        if (editServiceProviderLoading) {
           return < ClipLoader
             className={override}
             sizeUnit={"px"}
             size={150}
             color={'#123abc'}
-            loading={serviceProviderLoading}
+            loading={editServiceProviderLoading}
           />;
+        }
+        else if (editServiceProviderError) {
+          return <div className="alert alert-danger">Error: {serviceProviderError}</div>
         }
         //const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         return (
@@ -180,14 +183,13 @@ class ServiceProviderEdit extends React.Component {
                             id: this.state.data.id,
                             providerId: this.state.data.providerId,
                             serviceId: this.state.data.serviceId,
-                            serviceEntity: this.state.data.serviceEntity,
-                            providerEntity: this.state.data.providerEntity,
-                            geoLocationId: this.state.data.geoLocationId,
+                            geoLocationId: this.state.data.geoLocation.id,
+                            organizationId: this.state.data.organizationId,
                             additionalInfo: this.state.data.additionalInfo,
                             serviceTimeSlot: this.state.serviceTimeSlot,
                             businessAdminId: this.state.data.businessAdminId,
                         }}
-                        validationSchema={ServiceEditSchema}
+                        validationSchema={ServiceProviderEditSchema}
                         enableReinitialize={true}
                         onSubmit={(values) => this.submit(values)}
                         render={({
@@ -223,7 +225,7 @@ class ServiceProviderEdit extends React.Component {
                                                     isDisabled
                                                     options={organizationOptions}
                                                     value={ organizationOption === null ? organizationOptions.find((element) => {
-                                                      return element.value === values.serviceEntity.organizationId;
+                                                      return element.value === values.organizationId;
                                                     }) : organizationOption}
                                                     onChange={this.handleOrgChange}
                                                   >
@@ -291,6 +293,9 @@ class ServiceProviderEdit extends React.Component {
                                                   options={locationOptions}
                                                 >
                                                 </Select>
+                                                {errors.geoLocationId && touched.geoLocationId ? (
+                                                  <div style={{ color: "red" }}>{errors.geoLocationId}</div>
+                                                ) : null}
                                               </FormControl>
                                             </GridItem>
                                           </GridContainer>
@@ -401,10 +406,12 @@ const mapStateToProps = (state) => {
       organizations: state.organization.organizations,
       providers: state.provider.providers,
       serviceProvider: state.serviceProvider.serviceProvider,
-      originServiceProvider: state.serviceProvider.serviceProvider,
+      editServiceProviderLoading: state.serviceProvider.editServiceProviderLoading,
+      editServiceProviderError: state.serviceProvider.editServiceProviderError,
       services: state.service.services,
       locations: state.location.locations,
       serviceProviderLoading:state.provider.serviceProviderLoading,
+      serviceProviderError: state.serviceProvider.serviceProviderError,
     }
 }
 
