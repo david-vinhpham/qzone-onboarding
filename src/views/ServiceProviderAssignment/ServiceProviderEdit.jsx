@@ -332,7 +332,7 @@ class ServiceProviderEdit extends React.Component {
                                                     />
                                                   </FormControl>
                                                 </GridItem>
-                                                <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
+                                                {/*<GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
                                                     {<SlotCustomInput
                                                       id={`serviceTimeSlot[${index}].endTime`}
@@ -341,7 +341,7 @@ class ServiceProviderEdit extends React.Component {
                                                       onChange={handleChange}
                                                     />}
                                                   </FormControl>
-                                                </GridItem>
+                                                </GridItem>*/}
                                               </div>
                                             ))}
                                           </GridContainer>
