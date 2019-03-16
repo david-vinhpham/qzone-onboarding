@@ -72,6 +72,7 @@ class OrganizationEdit extends React.Component {
       classes,
       businessCategories,
       fetchOrganizationLoading,
+      editOrganizationError,
     } = this.props;
     const { data } = this.state;
     let categoryOptions = [];
@@ -79,7 +80,7 @@ class OrganizationEdit extends React.Component {
       categoryOptions = businessCategories.objects;
     }
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    if (!this.state.data || this.state.data.length ===0) {
+    if (fetchOrganizationLoading || !this.state.data || this.state.data.length ===0) {
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
@@ -173,6 +174,12 @@ class OrganizationEdit extends React.Component {
                                   <h4 className={classes.cardTitle}>Edit Organization Details</h4>
                                 </CardText>
                               </CardHeader>
+                              {editOrganizationError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                                  <div  style={{ color: "red" }} > {editOrganizationError.message} </div>
+                                </CardFooter>)
+                                :
+                                ( <CardFooter className={classes.justifyContentCenter}>
+                                </CardFooter>)}
                               <CardBody>
                                 <Accordion
                                   active={0}

@@ -53,6 +53,7 @@ class ServiceProviderCreate extends React.Component {
             serviceTimeSlot: [],
             businessAdminId: null,
             additionalInfo: '',
+            isSaved: false,
         }
       this.handleOrgChange = this.handleOrgChange.bind(this);
       this.handleProviderChange = this.handleProviderChange.bind(this);
@@ -124,16 +125,18 @@ class ServiceProviderCreate extends React.Component {
     }
 
     submit = (values) =>  {
+      this.setState({isSaved: true});
       this.setState({additionalInfo: values.additionalInfo});
       for(let index = 0; index < values.serviceTimeSlot.length; index++) {
         values.serviceTimeSlot[index].slotId = index;
       }
-      this.props.createServiceProvider(values, this.props.history)
+      this.props.createServiceProvider(values, this.props.history);
+      this.setState({isSaved: false});
     }
 
     render() {
         const { classes, services, organizations, providers, locations, createServiceProviderLoading, createServiceProviderError } = this.props;
-        const { additionalInfo, serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot, businessAdminId } = this.state;
+        const { isSaved, additionalInfo, serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot, businessAdminId } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
         let providerOptions = [];
@@ -150,7 +153,7 @@ class ServiceProviderCreate extends React.Component {
         if (locations != null && locations.length > 0) {
            locationOptions = locations;
         }
-      if (createServiceProviderLoading) {
+      if (createServiceProviderLoading && isSaved) {
         return < ClipLoader
           className={override}
           sizeUnit={"px"}

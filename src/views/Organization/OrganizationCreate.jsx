@@ -23,6 +23,14 @@ import PhoneInput from 'react-phone-number-input'
 import { fetchBusinessCategories, createOrganization } from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
+import {ClipLoader} from "react-spinners";
+import {css} from "@emotion/core";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 const OrganizationCreateSchema = Yup.object().shape({
   name: Yup.string()
@@ -55,13 +63,20 @@ class OrganizationCreate extends React.Component {
     this.props.createOrganization(values, this.props.history);
   }
   render() {
-    const { classes, businessCategories } = this.props;
+    const { classes, businessCategories, createOrganizationError, createOrganizationLoading } = this.props;
     let categoryOptions = [];
     if (businessCategories && businessCategories.objects) {
       categoryOptions = businessCategories.objects;
     }
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
+    if (createOrganizationLoading) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={150}
+        color={'#123abc'}
+        loading={createOrganizationLoading}
+      />; }
     return (
       <GridItem xs={12} sm={12} md={12}>
         <Formik
@@ -147,6 +162,12 @@ class OrganizationCreate extends React.Component {
                     <h4 className={classes.cardTitle}>Create Organization</h4>
                   </CardText>
                 </CardHeader>
+                {createOrganizationError !== null ? (<CardFooter className={classes.justifyContentCenter}>
+                    <div  style={{ color: "red" }} > {createOrganizationError.message} </div>
+                  </CardFooter>)
+                  :
+                  ( <CardFooter className={classes.justifyContentCenter}>
+                  </CardFooter>)}
                 <CardBody>
                   <Accordion
                     active={0}
@@ -603,6 +624,7 @@ const mapsStateToProp = (state) => ({
   businessCategories: state.organization.businessCategories,
   fetchBusinessCategoriesLoading: state.organization.fetchBusinessCategoriesLoading,
   fetchBusinessCategoriesError: state.organization.fetchBusinessCategoriesError,
+  createOrganizationError:state.organization.createOrganizationError,
   organization: state.organization.organization,
 })
 

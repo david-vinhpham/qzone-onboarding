@@ -149,8 +149,13 @@ export const createOrganization = (values, history) => {
                 })
                 .then(res => res.json())
                 .then(data => {
+                  if(data.status === 200 || data.status === 201 || data.success === true) {
                     dispatch(createOrganizationSuccess(data));
-                    history.push('/dashboard');
+                    history.push('/organization/list');
+                  }
+                  else {
+                    dispatch(createOrganizationFailure(data));
+                  }
                 })
                 .catch(err => {
                     dispatch(createOrganizationFailure(err))

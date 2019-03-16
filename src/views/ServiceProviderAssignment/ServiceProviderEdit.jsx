@@ -229,7 +229,6 @@ class ServiceProviderEdit extends React.Component {
                                                   fullWidth
                                                   className={classes.selectFormControl}>
                                                   <Select
-                                                    isDisabled
                                                     options={organizationOptions}
                                                     value={ organizationOption === null ? organizationOptions.find((element) => {
                                                       return element.value === values.organizationId;
@@ -251,12 +250,11 @@ class ServiceProviderEdit extends React.Component {
                                                 fullWidth
                                                 className={classes.selectFormControl}>
                                                 <Select
-                                                  isDisabled
+                                                  options={serviceOptions}
                                                   value={serviceOption === null ? serviceOptions.find((element) => {
                                                     return element.value === values.serviceId;
                                                   }) : serviceOption}
                                                   onChange={this.handleServiceChange}
-                                                  options={serviceOptions}
                                                 >
                                                 </Select>
                                               </FormControl>
