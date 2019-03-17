@@ -28,6 +28,8 @@ export const URL = {
   FETCH_LOCATION:'geo-locations/',
 
   USER: 'users',
+  RESET_PASSWORD: 'users/reset-password',
+  CHANGE_PASSWORD: 'users/change-password/',
   TIMEZONE: 'timezones',
   TIMEZONE_OPTION: 'timezones-option',
   FETCH_PROVIDERS_OPTION_BY_ORG_ID: 'providers-by-org-id/',

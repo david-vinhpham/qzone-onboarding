@@ -111,14 +111,11 @@ class ServiceProviderList extends React.Component {
                       </Tooltip>
                     </div>
                     <h4 className={classes.cardProductTitle}>
-                      {serviceProvider.orgName}
+                      {serviceProvider.serviceName}
                     </h4>
                     <h4 className={classes.cardProductTitle}>
                       {serviceProvider.providerName}
                     </h4>
-                    <p className={classes.cardProductDesciprion}>
-                      {serviceProvider.serviceName}
-                    </p>
                   </CardBody>
                 </Card>
               </GridItem>

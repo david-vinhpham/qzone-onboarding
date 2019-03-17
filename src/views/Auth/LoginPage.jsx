@@ -16,8 +16,12 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import loginPageStyle from "../../assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
-import { loginUser } from '../../actions/auth';
-//import { createScript, signIn } from '../../actions/googleAuth';
+import { loginUser, resetPassword } from '../../actions/auth';
+import ForgotPasswordPage from "./ForgotPasswordPage";
+
+import {
+  Typography, Tooltip,
+} from '@material-ui/core';
 
 const override = css`
     display: block;
@@ -33,10 +37,12 @@ class LoginPage extends React.Component {
       loginEmail: "",
       loginEmailState: "",
       loginPassword: "",
-      loginPasswordState: ""
+      loginPasswordState: "",
+      isForgotPassword:false,
     };
 
     this.loginClick = this.loginClick.bind(this);
+    this.handleReqVerificationCode = this.handleReqVerificationCode.bind(this);
   }
 
   componentDidMount() {
@@ -98,12 +104,24 @@ class LoginPage extends React.Component {
       default:
         break;
     }
+    this.setState({isForgotPassword:false})
   }
 
-  render() {
-    const { classes, userLoading } = this.props;
-    return (
+  handleReqVerificationCode = () => {
+   console.log('handleReqVerificationCode: ' + this.state.loginEmail);
+   this.setState({isForgotPassword:true})
+   const data = {email: this.state.loginEmail};
+   this.props.resetPassword(data)
+  };
 
+
+  render() {
+    const { classes, userLoading, history } = this.props;
+    const { loginEmail, isForgotPassword } = this.state;
+    const [forgotPasswordTitle, forgotClass] = !this.verifyEmail(loginEmail)
+      ? ['Enter your email above to reset password!', 'button-pad-bot text-right hover-pointer']
+      : ['', 'button-pad-bot hover-pointer text-right hover-main-color'];
+    return (
        <div className={classes.content}>
           <div className={classes.container}>
             <GridContainer justify="center">
@@ -209,6 +227,27 @@ class LoginPage extends React.Component {
                         </Button>
                           </Link>
                         </div>
+
+                        <ForgotPasswordPage
+                          open={isForgotPassword}
+                          email={loginEmail}
+                          history={history}
+                          page="register"
+                        />
+
+                        <div>
+                          <Tooltip title={forgotPasswordTitle} placement="top-end" classes={{ tooltip: 'tooltip-lg' }}>
+                            <Typography
+                              onClick={this.handleReqVerificationCode}
+                              variant="subtitle2"
+                              color="textSecondary"
+                              className={forgotClass}
+                            >
+                              Forgot Password?
+                            </Typography>
+                          </Tooltip>
+                        </div>
+
                       </CardBody>
                     </Card>
                   </form>
@@ -232,13 +271,15 @@ const mapStateToProps = state => {
     userDetail: state.user.userDetail,
     userLoading: state.user.userLoading,
     userError: state.user.userError,
-    verify: state.user.verify
+    verify: state.user.verify,
+    resetPassword: state.user.resetPassword,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     loginUser: (value, history) => dispatch(loginUser(value, history)),
+    resetPassword: (email) => dispatch(resetPassword(email)),
   }
 }
 

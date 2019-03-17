@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Auth } from 'aws-amplify';
-import { API_ROOT, URL } from '../config/config';
-import { auth } from '../constants/Auth.constants';
+import {Auth} from 'aws-amplify';
+import {API_ROOT, URL} from '../config/config';
+import {auth} from '../constants/Auth.constants';
 
 const client_id = '3ov1blo2eji4acnqfcv88tcidn'
 
@@ -97,6 +97,40 @@ export function registerUser(values) {
    //   dispatch(register(values));
   }
 }
+export const resetPassword = (values) => {
+  return (dispatch) => {
+    dispatch(storeEmail(values.email))
+    dispatch({ type: auth.RESET_PASSWORD_LOADING })
+    fetch(API_ROOT + URL.RESET_PASSWORD ,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch({
+            type: auth.RESET_PASSWORD_SUCCESS,
+            payload: data
+          })
+        }
+        else {
+          dispatch({
+            type: auth.RESET_PASSWORD_FAILURE,
+            payload: data
+          })
+        }
+      })
+      .catch(err => {
+        dispatch({
+          type: auth.RESET_PASSWORD_FAILURE,
+          payload: err
+        })
+      })
+  }
+}
 
 export function loginUser(values, history) {
   console.log("loginUser: ", values);
@@ -153,6 +187,40 @@ export function registerUserFailure(error) {
       type: auth.REGISTER_USER_FAILURE,
       payload: {error}
   };
+}
+export const changePassword = (values, history) => {
+  return (dispatch) => {
+      dispatch({ type: auth.RESET_PASSWORD_LOADING })
+      fetch(API_ROOT + URL.CHANGE_PASSWORD ,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch({
+            type: auth.RESET_PASSWORD_SUCCESS,
+            payload: data
+          })
+          history.push('/login');
+        }
+        else {
+          dispatch({
+            type: auth.RESET_PASSWORD_FAILURE,
+            payload: data
+          })
+        }
+      })
+      .catch(err => {
+        dispatch({
+          type: auth.RESET_PASSWORD_FAILURE,
+          payload: err
+        })
+      })
+  }
 }
 
 export function verifyUserCode(user, email, code, history) {
