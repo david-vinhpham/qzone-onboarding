@@ -30,16 +30,15 @@ import {
         return { ...state, token: null };
 
       case auth.RESET_PASSWORD_LOADING:
-        return { ...state,  resetPasswordRsp: null, resetPasswordLoading: true };
+        return { ...state, resetPasswordError:[], changePasswordRsp: [], resetPasswordRsp: [], resetPasswordLoading: true };
       case auth.RESET_PASSWORD_SUCCESS:
         return { ...state, resetPasswordRsp: action.payload, resetPasswordLoading: false };
       case auth.RESET_PASSWORD_FAILURE:
         return { ...state, resetPasswordRsp: [], changePasswordRsp:[], resetPasswordError: action.payload, resetPasswordLoading: false};
 
       case auth.CHANGE_PASSWORD_LOADING:
-        return { ...state,  changePasswordRsp: null, resetPasswordLoading: true };
+        return { ...state, resetPasswordError:[], changePasswordRsp: [], resetPasswordLoading: true };
       case auth.CHANGE_PASSWORD_SUCCESS:
-        console.log('CHANGE_PASSWORD_SUCCESS');
         return { ...state, changePasswordRsp: action.payload, resetPasswordLoading: false, verify: false };
       case auth.CHANGE_PASSWORD_FAILURE:
         return { ...state, changePasswordRsp: [], resetPasswordError: action.payload, resetPasswordLoading: false};
