@@ -108,10 +108,14 @@ class LoginPage extends React.Component {
   }
 
   handleReqVerificationCode = () => {
-   console.log('handleReqVerificationCode: ' + this.state.loginEmail);
-   this.setState({isForgotPassword:true})
-   const data = {email: this.state.loginEmail};
-   this.props.resetPassword(data)
+     const { loginEmail } = this.state;
+     if(!this.verifyEmail(loginEmail)) {
+       console.log('noop');
+        return;
+     }
+     this.setState({isForgotPassword:true})
+     const data = {email: loginEmail};
+     this.props.resetPassword(data)
   };
 
 

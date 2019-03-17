@@ -78,7 +78,6 @@ class ForgotPasswordPage extends React.PureComponent {
   render() {
     const { classes, resetPasswordError, resetPasswordLoading, changePasswordRsp } = this.props;
     const { errorCode, errorMessage, isOpen } = this.state;
-    console.log('changePasswordRsp: ' + changePasswordRsp);
     if (resetPasswordLoading) {
       return < ClipLoader
         className={override}
