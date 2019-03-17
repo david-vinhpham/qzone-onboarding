@@ -19,11 +19,20 @@ import { connect } from 'react-redux';
 import Button from "../../components/CustomButtons/Button";
 import { changePassword } from "../../actions/auth";
 import verificationPageStyle from '../../assets/jss/material-dashboard-pro-react/views/verificationPageStyle';
+import {ClipLoader} from "react-spinners";
+import {css} from "@emotion/core";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 class ForgotPasswordPage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {email: '',  code: '', newPassword: '', confirmedPassword: '', errorMessage: '', isOpen: false };
+    this.handleChangePassword = this.handleChangePassword.bind(this);
   };
 
   componentDidMount() {
@@ -67,9 +76,18 @@ class ForgotPasswordPage extends React.PureComponent {
   }
 
   render() {
-    const { email, classes, resetPasswordError } = this.props;
+    const { classes, resetPasswordError, resetPasswordLoading, changePasswordRsp } = this.props;
     const { errorCode, errorMessage, isOpen } = this.state;
-    console.log('resetPasswordError: ' + resetPasswordError);
+    console.log('changePasswordRsp: ' + changePasswordRsp);
+    if (resetPasswordLoading) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={50}
+        color={'#123abc'}
+        loading={resetPasswordLoading}
+      />;
+    }
     return (
       <React.Fragment>
         <Dialog
@@ -80,14 +98,18 @@ class ForgotPasswordPage extends React.PureComponent {
           <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
           <DialogContent>
             {resetPasswordError !== null ? (<div className={classes.justifyContentCenter}>
-                <div  style={{ color: "red" }} > {(resetPasswordError.status === 400 || resetPasswordError.status === 500) ? resetPasswordError.message: "Internal Error..."} </div>
+                <div  style={{ color: "red" }} > {(resetPasswordError.status === 400 || resetPasswordError.status === 500) ? resetPasswordError.message: ''} </div>
               </div>)
               :
               ( <div className={classes.justifyContentCenter}>
               </div>)}
-            <DialogContentText id="alert-dialog-description">
-              { resetPasswordError.status !== 400 && resetPasswordError.status === 500? '' : 'Code was sent to your email ' + {email} }
-            </DialogContentText>
+            {changePasswordRsp !== null ? (<div className={classes.justifyContentCenter}>
+                <div  style={{ color: "blue" }} > {(changePasswordRsp.success === true) ? 'Changed password successfully!': ''} </div>
+              </div>)
+              :
+            (<DialogContentText id="alert-dialog-description">
+              { changePasswordRsp === null || (resetPasswordError.status === 400 || resetPasswordError.status === 500 )? '' : 'Code was sent to your email' }
+            </DialogContentText>)}
             <FormControl
               fullWidth
               error={errorCode}
@@ -138,8 +160,8 @@ class ForgotPasswordPage extends React.PureComponent {
           </DialogContent>
           <DialogActions className={classes.dialogActions}>
             <div>
-              <Button onClick={this.handleChangePassword} color="rose">
-                Submit
+              <Button disabled={changePasswordRsp.success|| resetPasswordError.status === 400 || resetPasswordError.status === 500} onClick={this.handleChangePassword} color="rose">
+                Save
               </Button>
             </div>
             <div>
@@ -173,7 +195,9 @@ const mapStateToProps = state => {
       verifyDetail: state.user.verifyDetail,
       verifyLoading: state.user.verifyLoading,
       resetPasswordError: state.user.resetPasswordError,
+      changePasswordRsp: state.user.changePasswordRsp,
       email: state.user.email,
+      resetPasswordLoading: state.user.resetPasswordLoading,
     }
   }
 

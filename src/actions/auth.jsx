@@ -190,7 +190,7 @@ export function registerUserFailure(error) {
 }
 export const changePassword = (values, history) => {
   return (dispatch) => {
-      dispatch({ type: auth.RESET_PASSWORD_LOADING })
+      dispatch({ type: auth.CHANGE_PASSWORD_LOADING })
       fetch(API_ROOT + URL.CHANGE_PASSWORD ,{
         method: 'POST',
         headers: {
@@ -202,14 +202,14 @@ export const changePassword = (values, history) => {
       .then(data => {
         if(data.status === 200 || data.status === 201 || data.success === true) {
           dispatch({
-            type: auth.RESET_PASSWORD_SUCCESS,
+            type: auth.CHANGE_PASSWORD_SUCCESS,
             payload: data
           })
           history.push('/login');
         }
         else {
           dispatch({
-            type: auth.RESET_PASSWORD_FAILURE,
+            type: auth.CHANGE_PASSWORD_FAILURE,
             payload: data
           })
         }

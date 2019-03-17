@@ -27,7 +27,6 @@ export default function(state = initialState, action) {
     case provider.FETCH_PROVIDERS_LOADING:
       return { ...state, providers: null, fetchProvidersLoading: true  }
     case provider.FETCH_PROVIDERS_SUCCESS:
-      console.log('FETCH_PROVIDERS_SUCCESS');
       return { ...state, providers: action.payload.providers, fetchProvidersLoading: false }
     case provider.FETCH_PROVIDERS_FAILURE:
       return { ...state, providers: [], fetchProvidersError: action.payload.error, fetchProvidersLoading: false}
@@ -35,7 +34,6 @@ export default function(state = initialState, action) {
     case provider.FETCH_PROVIDER_LOADING:
       return { ...state, provider: null, fetchProviderLoading: true };
     case provider.FETCH_PROVIDER_SUCCESS:
-      console.log('FETCH_PROVIDER_SUCCESS');
       return { ...state, provider: action.payload, fetchProviderLoading: false }
     case provider.FETCH_PROVIDER_FAILURE:
       return { ...state, provider: [], fetchProviderError: action.payload.error, fetchProviderLoading: false }

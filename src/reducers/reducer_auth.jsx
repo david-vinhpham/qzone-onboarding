@@ -13,13 +13,10 @@ import {
     verifyLoading: false,
     email: null,
 
-    resetPassword: [], //verification code
+    resetPasswordRsp: [], //verification code
     resetPasswordError: [], //verification code
     resetPasswordLoading: false,
-
-    changePassword: [], //verification code
-    changePasswordError: [], //verification code
-    changePasswordLoading: false,
+    changePasswordRsp: [], //verification code
   };
 
   const reducer = (state = initialState, action) => {
@@ -33,18 +30,19 @@ import {
         return { ...state, token: null };
 
       case auth.RESET_PASSWORD_LOADING:
-        return { ...state,  resetPassword: null, resetPasswordLoading: true };
+        return { ...state,  resetPasswordRsp: null, resetPasswordLoading: true };
       case auth.RESET_PASSWORD_SUCCESS:
-        return { ...state, resetPassword: action.payload, resetPasswordLoading: false };
+        return { ...state, resetPasswordRsp: action.payload, resetPasswordLoading: false };
       case auth.RESET_PASSWORD_FAILURE:
-        return { ...state, resetPassword: [], resetPasswordError: action.payload, resetPasswordLoading: false};
+        return { ...state, resetPasswordRsp: [], changePasswordRsp:[], resetPasswordError: action.payload, resetPasswordLoading: false};
 
       case auth.CHANGE_PASSWORD_LOADING:
-        return { ...state,  changePassword: null, changePasswordLoading: true };
+        return { ...state,  changePasswordRsp: null, resetPasswordLoading: true };
       case auth.CHANGE_PASSWORD_SUCCESS:
-        return { ...state, changePassword: action.payload, changePasswordLoading: false, verify: false };
+        console.log('CHANGE_PASSWORD_SUCCESS');
+        return { ...state, changePasswordRsp: action.payload, resetPasswordLoading: false, verify: false };
       case auth.CHANGE_PASSWORD_FAILURE:
-        return { ...state, changePassword: [], changePasswordError: action.payload, changePasswordLoading: false};
+        return { ...state, changePasswordRsp: [], resetPasswordError: action.payload, resetPasswordLoading: false};
 
       case auth.REGISTER_USER:// start fetching posts and set loading = true
         return { ...state,  userError: null, userLoading: true };
