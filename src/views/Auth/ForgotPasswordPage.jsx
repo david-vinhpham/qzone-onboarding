@@ -76,7 +76,7 @@ class ForgotPasswordPage extends React.PureComponent {
   }
 
   render() {
-    const { classes, resetPasswordError, resetPasswordLoading, changePasswordRsp } = this.props;
+    const { classes, resetPasswordError, resetPasswordLoading, changePasswordRsp, resetPasswordRsp } = this.props;
     const { errorCode, errorMessage, isOpen } = this.state;
     if (resetPasswordLoading) {
       return < ClipLoader
@@ -97,18 +97,16 @@ class ForgotPasswordPage extends React.PureComponent {
           <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
           <DialogContent>
             {resetPasswordError !== null ? (<div className={classes.justifyContentCenter}>
-                <div  style={{ color: "red" }} > {(resetPasswordError.status === 400 || resetPasswordError.status === 500) ? resetPasswordError.message: ''} </div>
+                <div  style={{ color: "red" }} > {(resetPasswordError.status === 400 || resetPasswordError.status === 500) ? resetPasswordError.message: (changePasswordRsp.length === 0  ?
+                  (<DialogContentText id="alert-dialog-description">
+                    { !resetPasswordRsp && resetPasswordRsp.success !==true ? '' : 'Code was sent to your email' }
+                  </DialogContentText>) : (<div className={classes.justifyContentCenter}>
+                    <div  style={{ color: "blue" }} > {changePasswordRsp.success === true ? 'Changed password successfully!': ''} </div>
+                  </div>))} </div>
               </div>)
               :
               ( <div className={classes.justifyContentCenter}>
               </div>)}
-            {changePasswordRsp !== null ? (<div className={classes.justifyContentCenter}>
-                <div  style={{ color: "blue" }} > {(changePasswordRsp.success === true) ? 'Changed password successfully!': ''} </div>
-              </div>)
-              :
-            (<DialogContentText id="alert-dialog-description">
-              { changePasswordRsp === null || (resetPasswordError.status === 400 || resetPasswordError.status === 500 )? '' : 'Code was sent to your email' }
-            </DialogContentText>)}
             <FormControl
               fullWidth
               error={errorCode}
@@ -195,6 +193,7 @@ const mapStateToProps = state => {
       verifyLoading: state.user.verifyLoading,
       resetPasswordError: state.user.resetPasswordError,
       changePasswordRsp: state.user.changePasswordRsp,
+      resetPasswordRsp: state.user.resetPasswordRsp,
       email: state.user.email,
       resetPasswordLoading: state.user.resetPasswordLoading,
     }

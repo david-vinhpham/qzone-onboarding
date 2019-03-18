@@ -2,12 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { Email, LockOutline } from "@material-ui/icons";
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { ClipLoader } from 'react-spinners';
-import { css } from '@emotion/core';
+import {Email, LockOutline} from "@material-ui/icons";
+import {compose} from 'redux';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
+import {ClipLoader} from 'react-spinners';
+import {css} from '@emotion/core';
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
@@ -16,12 +16,10 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import loginPageStyle from "../../assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
-import { loginUser, resetPassword } from '../../actions/auth';
+import {loginUser, resetPassword} from '../../actions/auth';
 import ForgotPasswordPage from "./ForgotPasswordPage";
 
-import {
-  Typography, Tooltip,
-} from '@material-ui/core';
+import {Tooltip, Typography,} from '@material-ui/core';
 
 const override = css`
     display: block;
@@ -117,8 +115,6 @@ class LoginPage extends React.Component {
      const data = {email: loginEmail};
      this.props.resetPassword(data)
   };
-
-
   render() {
     const { classes, userLoading, history } = this.props;
     const { loginEmail, isForgotPassword } = this.state;
