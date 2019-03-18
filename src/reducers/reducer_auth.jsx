@@ -44,14 +44,14 @@ import {
         return { ...state, changePasswordRsp: [], resetPasswordError: action.payload, resetPasswordLoading: false};
 
       case auth.REGISTER_USER:// start fetching posts and set loading = true
-        return { ...state,  userError: null, userLoading: true };
+        return { ...state,  userError: [], userLoading: true };
       case auth.REGISTER_USER_SUCCESS:// return list of posts and make loading = false
-        return { ...state, userDetails: action.payload.user, userError:null, userLoading: false, verify: true };
+        return { ...state, userDetails: action.payload.user, userError:[], userLoading: false, verify: true };
       case auth.REGISTER_USER_FAILURE:// return error and make loading = false
-        return { ...state, userDetails: [], userError: action.payload.error, userLoading: false};
+        return { ...state, userDetails: [], userError: action.payload, userLoading: false};
 
       case auth.VERIFY_USER:// start fetching posts and set loading = true
-        return { ...state,  verifyError: null, verifyLoading: true };
+        return { ...state,  verifyError: [], verifyLoading: true };
       case auth.VERIFY_USER_SUCCESS:// return list of posts and make loading = false
         return { ...state, verifyDetails: action.payload.user, verifyError:null, verifyLoading: false};
       case auth.VERIFY_USER_FAILURE:// return error and make loading = false

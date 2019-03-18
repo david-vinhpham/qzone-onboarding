@@ -171,7 +171,7 @@ class ServiceProviderEdit extends React.Component {
           return < ClipLoader
             className={override}
             sizeUnit={"px"}
-            size={150}
+            size={100}
             color={'#123abc'}
             loading={fetchServiceProviderLoading}
           />;
