@@ -50,11 +50,40 @@ export const fetchLocationsOption = () => {
       })
   }
 }
+export const delLocation = (id, history) => {
+  console.log('delLocation: ' +  id);
+  return (dispatch) => {
+    dispatch({ type: location.DEL_LOCATION_LOADING })
+    fetch(API_ROOT + URL.LOCATION + '/' + id ,{
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch({
+            type: location.DEL_LOCATION_SUCCESS,
+            payload: data
+          });
+          //history.push('/location/list');
+        }
+        else {
+          dispatch({
+            type: location.DEL_LOCATION_FAILURE,
+            payload: data
+          })
+        }
+      })
+  }
+}
 
 export const fetchLocation = (id) => {
     console.log('fetchLocation: ' +  id);
     return (dispatch) => {
-        dispatch({ type: location.FETCH_LOCATION_FAILURE })
+        dispatch({ type: location.FETCH_LOCATION_LOADING });
+        console.log('url: ' +  API_ROOT + URL.LOCATION + '/' + id);
         fetch(API_ROOT + URL.LOCATION + '/' + id ,{
             method: 'GET',
             headers: {

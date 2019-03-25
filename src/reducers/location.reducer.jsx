@@ -13,7 +13,11 @@ const initialState = {
     createLocationError: null,
 
     editLocationLoading: false,
-    editLocationError: null
+    editLocationError: null,
+
+    delLocationLoading: false,
+    delLocationError: null
+
 }
 
 const reducer = (state = initialState, action) => {
@@ -30,7 +34,7 @@ const reducer = (state = initialState, action) => {
         case location.FETCH_LOCATION_SUCCESS:
             return { ...state, location: action.payload, fetchLocationLoading: false}
         case location.FETCH_LOCATION_FAILURE:
-            return { ...state, location: [], getLocationError: action.payload.error, fetchLocationLoading: false }
+            return { ...state, location: [], fetchLocationError: action.payload.error, fetchLocationLoading: false }
 
         case location.CREATE_LOCATION_LOADING:
             return { ...state, fetchLocationLoading: true }
@@ -45,6 +49,13 @@ const reducer = (state = initialState, action) => {
             return { ...state, location: action.payload, locationLoading: false}
         case location.EDIT_LOCATION_FAILURE:
             return { ...state, location: [], locationError: action.payload.error, locationLoading: false }
+
+        case location.DEL_LOCATION_LOADING:
+          return { ...state, delLocationLoading: false }
+        case location.DEL_LOCATION_SUCCESS:
+          return { ...state, location: action.payload, delLocationLoading: false}
+        case location.DEL_LOCATION_FAILURE:
+          return { ...state, location: [], delLocationError: action.payload.error, delLocationLoading: false }
 
         default:
             return state;

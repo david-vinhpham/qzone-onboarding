@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
 import Search from "@material-ui/icons/Search";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -15,7 +15,7 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import { fetchLocations } from '../../actions/location';
+import {fetchLocations, delLocation} from '../../actions/location';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
@@ -29,6 +29,11 @@ class LocationList extends React.Component {
         }
     }
 
+  deleteLocation(locationId) {
+    console.log("Delete a location: " + locationId);
+    this.props.delLocation(locationId, this.props.history);
+    window.location.href = '/location/list';
+  }
     componentWillReceiveProps(nextProps) {
         this.setState({ data: nextProps.locations })
     }
@@ -42,7 +47,7 @@ class LocationList extends React.Component {
         if (!this.state.data)
             return null;
         return (
-            <div>
+            <div id="geo-location-id">
                 <GridContainer>
                     <GridItem xs={12}>
                         <Card>
@@ -105,6 +110,7 @@ class LocationList extends React.Component {
                                                 classes={{ tooltip: classes.tooltip }}
                                             >
                                                 <Button
+                                                    onClick = {e => this.deleteLocation(location.id)}
                                                     color="danger"
                                                     simple
                                                     justIcon>
@@ -113,7 +119,7 @@ class LocationList extends React.Component {
                                             </Tooltip>
                                             <Tooltip
                                                 id="tooltip-top"
-                                                title="Edit"
+                                                title={location.id}
                                                 placement="bottom"
                                                 classes={{ tooltip: classes.tooltip }}
                                             >
@@ -149,6 +155,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
       fetchLocations: () => dispatch(fetchLocations()),
+      delLocation:(id, history) => dispatch(delLocation(id, history)),
     }
 }
 
