@@ -20,7 +20,7 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
-import {fetchServicesByBusinessAdminId} from '../../actions/service';
+import {fetchServicesByBusinessAdminId, deleteService} from '../../actions/service';
 
 const override = css`
     display: block;
@@ -35,6 +35,12 @@ class ServicesList extends React.Component{
       data: [],
       imageLoadError: true
     }
+  }
+
+  deleteService(serviceId) {
+    console.log("deleteService a serviceId: " + serviceId);
+    let businessAdminId = localStorage.getItem('userSub');
+    this.props.deleteService(serviceId, businessAdminId);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -109,6 +115,7 @@ class ServicesList extends React.Component{
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <Button
+                          onClick = {e => this.deleteService(service.id)}
                           color="danger"
                           simple
                           justIcon>
@@ -211,6 +218,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getServicesByBusinessAdminId: (businessAdminId) => dispatch(fetchServicesByBusinessAdminId(businessAdminId)),
+    deleteService:(id, businessAdminId) => dispatch(deleteService(id, businessAdminId)),
   }
 }
 

@@ -17,6 +17,9 @@ const initialState = {
     editServiceProviderLoading: false,
     editServiceProviderError: null,
 
+    delServiceProviderLoading: false,
+    delServiceProviderError: null,
+
     locations: [],
     locationLoading: false,
     locationLoadingError: false,
@@ -37,7 +40,6 @@ const reducer = (state = initialState, action) => {
         case serviceProvider.CREATE_SERVICE_PROVIDER_SUCCESS:
             return { ...state, serviceProvider: action.payload.data, createServiceProviderLoading: false }
         case serviceProvider.CREATE_SERVICE_PROVIDER_FAILURE:
-            console.log("CREATE_SERVICE_PROVIDER_FAILURE");
             return { ...state, serviceProvider:[], createServiceProviderError: action.payload.error, createServiceProviderLoading: false }
 
       case serviceProvider.EDIT_SERVICE_PROVIDER_LOADING:
@@ -46,6 +48,13 @@ const reducer = (state = initialState, action) => {
         return { ...state, serviceProvider: action.payload.data, fetchServiceProviderLoading: false }
       case serviceProvider.EDIT_SERVICE_PROVIDER_FAILURE:
         return { ...state, serviceProvider:[], editServiceProviderError: action.payload.error, fetchServiceProviderLoading: false }
+
+      case serviceProvider.DEL_SERVICE_PROVIDER_LOADING:
+        return { ...state, delServiceProviderLoading: true }
+      case serviceProvider.DEL_SERVICE_PROVIDER_SUCCESS:
+        return { ...state, serviceProvider: action.payload.data, delServiceProviderLoading: false }
+      case serviceProvider.DEL_SERVICE_PROVIDER_FAILURE:
+        return { ...state, serviceProvider:[], editServiceProviderError: action.payload.error, delServiceProviderLoading: false }
 
       case serviceProvider.FETCH_SERVICE_PROVIDER_LOADING:
             return { ...state, fetchServiceProviderLoading: true }

@@ -22,6 +22,33 @@ export const editServiceFailure = (error) => {
   }
 }
 
+export const deleteService = (id, businessAdminId) => {
+  console.log('deleteService: ' +  id);
+  return (dispatch) => {
+    dispatch({ type: service.DEL_SERVICE_LOADING })
+    fetch(API_ROOT + URL.SERVICE + '/' + id  + '/' + businessAdminId,{
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch({
+            type: service.DEL_SERVICE_SUCCESS,
+            payload: data.objects
+          });
+        }
+        else {
+          dispatch({
+            type: service.DEL_SERVICE_FAILURE,
+            payload: data
+          })
+        }
+      })
+  }
+}
 
 export const editService = (data, history) => {
   return (dispatch) => {

@@ -24,6 +24,7 @@ export const editServiceProvider = (values, history) => {
                 if (listServiceProviders[i].id === data.object.id) {
                   // we found it
                   listServiceProviders[i] = data.object;
+                  break;
                 }
               }
               localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
@@ -143,6 +144,46 @@ export const fetchServiceProviderFailure = (error) => {
         type: serviceProvider.FETCH_SERVICE_PROVIDER_FAILURE,
         payload: { error }
     }
+}
+
+export const delServiceProvider = (id, history) => {
+  console.log('delServiceProvider: ' +  id);
+  return (dispatch) => {
+    dispatch({ type: serviceProvider.DEL_SERVICE_PROVIDER_LOADING })
+    fetch(API_ROOT + URL.LOCATION + '/' + id ,{
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch({
+            type: serviceProvider.DEL_SERVICE_PROVIDER_SUCCESS,
+            payload: data.object
+          });
+          let serviceProviders = localStorage.getItem('serviceProvider');
+          if (serviceProviders !== null) {
+            let listServiceProviders = JSON.parse(serviceProviders);
+            for (let i = 0; i < listServiceProviders.length; i++) {
+              if (listServiceProviders[i].id === id) {
+                // we found it
+                console.log('delete obj ' + id);
+                delete listServiceProviders[i];
+                break;
+              }
+            }
+            localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
+        }}
+        else {
+          dispatch({
+            type: serviceProvider.DEL_SERVICE_PROVIDER_FAILURE,
+            payload: data
+          })
+        }
+      })
+  }
 }
 
 export const createServiceProvider = (data, history) => {

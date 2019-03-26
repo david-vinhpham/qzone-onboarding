@@ -11,6 +11,9 @@ const initialState = {
     editServiceLoading:false,
     editServiceError: null,
 
+    delServiceLoading:false,
+    delServiceError: null,
+
     services: [],
     fetchServicesLoading : false,
     fetchServicesError: null,
@@ -43,7 +46,14 @@ const reducer = (state = initialState, action) => {
         case service.EDIT_SERVICE_FAILURE:
             return { ...state, service:[], editServiceError: action.payload.error, fetchServiceLoading: false }
 
-        case service.FETCH_CATEGORIES_LOADING:
+        case service.DEL_SERVICE_LOADING:
+          return { ...state, fetchServicesLoading: true }
+        case service.DEL_SERVICE_SUCCESS:
+          return { ...state, services: action.payload.data, fetchServicesLoading: false }
+        case service.DEL_SERVICE_FAILURE:
+          return { ...state, services:[], fetchServicesError: action.payload.error, fetchServicesLoading: false }
+
+      case service.FETCH_CATEGORIES_LOADING:
             return { ...state, fetchServiceCategoriesLoading: true }
         case service.FETCH_CATEGORIES_SUCCESS:
             return { ...state, serviceCategories: action.payload.data, fetchServiceCategoriesLoading: false }
