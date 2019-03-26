@@ -34,7 +34,9 @@ class LocationList extends React.Component {
     this.props.delLocation(locationId, this.props.history);
   }
     componentWillReceiveProps(nextProps) {
-        this.setState({ data: nextProps.locations })
+      if(nextProps.locations != null) {
+        this.setState({data: nextProps.locations})
+      }
     }
 
     componentDidMount() {

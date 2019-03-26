@@ -44,7 +44,9 @@ class ServicesList extends React.Component{
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.services })
+    if( nextProps.services != null) {
+      this.setState({data: nextProps.services})
+    }
   }
 
   componentDidMount() {
