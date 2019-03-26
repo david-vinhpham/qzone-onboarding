@@ -51,9 +51,9 @@ const reducer = (state = initialState, action) => {
             return { ...state, location: [], locationError: action.payload.error, locationLoading: false }
 
         case location.DEL_LOCATION_LOADING:
-          return { ...state, delLocationLoading: false }
+          return { ...state, delLocationLoading: true }
         case location.DEL_LOCATION_SUCCESS:
-          return { ...state, location: action.payload, delLocationLoading: false}
+          return { ...state, locations: action.payload, delLocationLoading: false}
         case location.DEL_LOCATION_FAILURE:
           return { ...state, location: [], delLocationError: action.payload.error, delLocationLoading: false }
 

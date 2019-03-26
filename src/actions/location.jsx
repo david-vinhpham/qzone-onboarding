@@ -65,7 +65,7 @@ export const delLocation = (id, history) => {
         if(data.status === 200 || data.status === 201 || data.success === true) {
           dispatch({
             type: location.DEL_LOCATION_SUCCESS,
-            payload: data
+            payload: data.objects
           });
           //history.push('/location/list');
         }

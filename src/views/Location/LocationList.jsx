@@ -32,7 +32,7 @@ class LocationList extends React.Component {
   deleteLocation(locationId) {
     console.log("Delete a location: " + locationId);
     this.props.delLocation(locationId, this.props.history);
-    window.location.href = '/location/list';
+    //re-fetch locations
   }
     componentWillReceiveProps(nextProps) {
         this.setState({ data: nextProps.locations })
