@@ -10,17 +10,17 @@ import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {ClipLoader} from 'react-spinners';
 import {css} from '@emotion/core';
-
+import {Table, TableBody, TableCell, TableHead, TableRow,} from '@material-ui/core';
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
-import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
-import {fetchServicesByBusinessAdminId, deleteService} from '../../actions/service';
+import {deleteService, fetchServicesByBusinessAdminId} from '../../actions/service';
+import DeletionModal from '../../shared/deletion-modal';
 
 const override = css`
     display: block;
@@ -33,25 +33,53 @@ class ServicesList extends React.Component{
     super(props);
     this.state = {
       data: [],
-      imageLoadError: true
+      imageLoadError: true,
+      deleteService: {
+        id: 0,
+        isDel:false,
+      }
     }
   }
 
   deleteService(serviceId) {
     console.log("deleteService a serviceId: " + serviceId);
-    let businessAdminId = localStorage.getItem('userSub');
-    this.props.deleteService(serviceId, businessAdminId);
+    let data = {
+      id: serviceId,
+      isDel:true,
+    };
+    this.setState({ deleteService: data });
   }
-
+  cancelDelete = () => {
+    let data = {
+      isDel:false,
+    };
+    this.setState({ deleteService: data });
+  };
+  confirmDelete = (serviceId) => {
+    this.props.deleteService(serviceId);
+    let data = {
+      isDel:false,
+    };
+    this.setState({ deleteService: data });
+  };
   componentWillReceiveProps(nextProps) {
     if( nextProps.services != null) {
-      this.setState({data: nextProps.services})
+      this.setState({data: nextProps.services});
+      localStorage.setItem('serviceCached', JSON.stringify(nextProps.services));
     }
   }
 
   componentDidMount() {
-    let businessAdminId = localStorage.getItem('userSub');
-    this.props.getServicesByBusinessAdminId(businessAdminId)
+    let servicesCached = localStorage.getItem('serviceCached');
+    servicesCached = JSON.parse(servicesCached);
+    if(servicesCached !== null && servicesCached.length > 0) {
+      console.log('get from cached data');
+      this.setState({ data: servicesCached });
+    }
+    else {
+      let businessAdminId = localStorage.getItem('userSub');
+      this.props.getServicesByBusinessAdminId(businessAdminId);
+    }
   }
   render() {
     const {
@@ -60,12 +88,15 @@ class ServicesList extends React.Component{
       fetchServiceError,
       services,
     } = this.props;
+    const {
+      deleteService
+    } = this.state;
     let data = [];
     if(fetchServicesLoading) {
       return < ClipLoader
         className={override}
         sizeUnit={"px"}
-        size={100}
+        size={70}
         color={'#123abc'}
         loading={fetchServicesLoading}
       />;
@@ -76,88 +107,83 @@ class ServicesList extends React.Component{
     else {
         data = (
         <GridContainer>
-          {this.state.data.map((service, index) => {
-            return (
-              <GridItem xs={12} sm={12} md={3}>
-                <Card product >
-                  {/* <CardHeader image className={classes.cardHeaderHover}>
-
-                      <img
-                        alt=''
-                        src={service.image ? service.image.fileUrl : null}
-                        onError={e => {
-                          if(self.state.imageLoadError) {
-                            self.setState({
-                                imageLoadError: false
-                            });
-                            e.target.src = priceImage1;
-
-                          }
-                          this.setState({imageLoadError: true})
-                        }}
-                      />
-
-                  </CardHeader> */}
-                  <CardBody>
-                    <div className={classes.cardHoverUnder}>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="View"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button color="transparent" simple justIcon>
-                          <ArtTrack className={classes.underChartIcons} />
+          <Table aria-labelledby="tableTitle">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  Service Name
+                </TableCell>
+                <TableCell>
+                  Description
+                </TableCell>
+                <TableCell>
+                  Organization
+                </TableCell>
+                <TableCell>
+                  BookingHorizon
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.data.map((service, index) => (
+                <TableRow key={service.id}>
+                  <TableCell>{service.name}</TableCell>
+                  <TableCell>{service.description.substring(0,150) + "..."}</TableCell>
+                  <TableCell>{service.organizationEntity.name}</TableCell>
+                  <TableCell>{service.bookingHorizon}</TableCell>
+                  <TableCell>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="View"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Button color="transparent" simple justIcon>
+                        <ArtTrack className={classes.underChartIcons} />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Edit"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Link to={`/service/edit/${service.id}`}>
+                        <Button color="success" simple justIcon >
+                          <Edit className={classes.underChartIcons} />
                         </Button>
-                      </Tooltip>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Remove"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button
-                          onClick = {e => this.deleteService(service.id)}
-                          color="danger"
-                          simple
-                          justIcon>
-                          <Delete className={classes.underChartIcons} />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Edit"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Link to={`/service/edit/${service.id}`}>
-                          <Button color="success" simple justIcon >
-                            <Edit className={classes.underChartIcons} />
-                          </Button>
-                        </Link>
-                      </Tooltip>
-                    </div>
-                    <h4 className={classes.cardProductTitle}>
-                      <a href="#pablo" onClick={e => e.preventDefault()}>
-                        {service.organizationEntity && service.organizationEntity.name}
-                      </a>
-                    </h4>
-                    <h4 className={classes.cardProductTitle}>
-                      <a href="#pablo" onClick={e => e.preventDefault()}>
-                        {service.name}
-                      </a>
-                    </h4>
-                    <p className={classes.cardProductDesciprion}>
-                      {service.description}
-                    </p>
-                  </CardBody>
-                </Card>
-              </GridItem>
-            )
-          })}
+                      </Link>
+                    </Tooltip>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Remove"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Button
+                        onClick = {e => this.deleteService(service.id)}
+                        color="danger"
+                        simple
+                        justIcon>
+                        <Delete className={classes.underChartIcons} />
+                      </Button>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </GridContainer>
       )
     }
+    const deletionPopup = deleteService.isDel ? (
+      <DeletionModal
+        openDialog={deleteService.isDel}
+        closeDialog={this.cancelDelete}
+        itemDeleteHandler={this.confirmDelete}
+        itemId={deleteService.id}
+      />
+    ) : null;
     return (
       <div>
         <GridContainer>
@@ -203,6 +229,7 @@ class ServicesList extends React.Component{
           </GridItem>
         </GridContainer>
         {data}
+        {deletionPopup}
       </div>
     );
   }
@@ -212,7 +239,8 @@ const mapStateToProps = (state) => {
   return {
     services: state.service.services,
     fetchServicesLoading: state.service.fetchServicesLoading,
-    fetchServiceError: state.service.fetchServiceError
+    fetchServiceError: state.service.fetchServiceError,
+    isShowPopup: state.service.isShowPopup,
   }
 
 }
@@ -220,7 +248,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getServicesByBusinessAdminId: (businessAdminId) => dispatch(fetchServicesByBusinessAdminId(businessAdminId)),
-    deleteService:(id, businessAdminId) => dispatch(deleteService(id, businessAdminId)),
+    deleteService:(id) => dispatch(deleteService(id)),
   }
 }
 

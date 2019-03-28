@@ -22,11 +22,11 @@ export const editServiceFailure = (error) => {
   }
 }
 
-export const deleteService = (id, businessAdminId) => {
+export const deleteService = (id) => {
   console.log('deleteService: ' +  id);
   return (dispatch) => {
     dispatch({ type: service.DEL_SERVICE_LOADING })
-    fetch(API_ROOT + URL.SERVICE + '/' + id  + '/' + businessAdminId,{
+    fetch(API_ROOT + URL.SERVICE + '/' + id,{
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -35,9 +35,28 @@ export const deleteService = (id, businessAdminId) => {
       .then(res => res.json())
       .then(data => {
         if(data.status === 200 || data.status === 201 || data.success === true) {
+          let objects = {
+            data:[],
+          }
+          let serviceCached = localStorage.getItem('serviceCached');
+          if (serviceCached !== null) {
+            serviceCached = JSON.parse(serviceCached);//json
+            for (let i = 0; i < serviceCached.length; i++) {
+              if (serviceCached[i].id === id) {
+                // we found it
+                console.log('delete obj ' + id);
+                delete serviceCached[i];
+                break;
+              }
+            }
+            if(serviceCached.length > 0) {
+              objects.data = serviceCached;//json
+              localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
+            }
+          }
           dispatch({
             type: service.DEL_SERVICE_SUCCESS,
-            payload: data.objects
+            payload: objects
           });
         }
         else {
@@ -51,6 +70,7 @@ export const deleteService = (id, businessAdminId) => {
 }
 
 export const editService = (data, history) => {
+  console.log('editService');
   return (dispatch) => {
     dispatch(editServiceLoading())
     fetch(API_ROOT + URL.SERVICE, {
@@ -63,7 +83,21 @@ export const editService = (data, history) => {
       .then(res => res.json())
       .then(data => {
         if(data.status === 200 || data.status === 201 || data.success === true) {
-          dispatch(editServiceSuccess(data.object));
+          let serviceCached = localStorage.getItem('serviceCached');
+          if (serviceCached !== null) {
+            serviceCached = JSON.parse(serviceCached);
+            for (let i = 0; i < serviceCached.length; i++) {
+              // look for the entry with a matching `code` value
+              if (serviceCached[i].id === data.object.id) {
+                // we found it
+                serviceCached[i] = data.object;
+                break;
+              }
+            }
+            if(serviceCached.length > 0) {
+              localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
+            }
+          }
           history.push('/services/list');
         }
         else {
@@ -266,7 +300,13 @@ export const createService = (data, history) => {
         .then(data => {
           if(data.status === 200 || data.status === 201 || data.success === true) {
             dispatch(createServiceSuccess(data.object));
-            history.push('/services/list');
+            let serviceCached = localStorage.getItem('serviceCached');
+            if (serviceCached !== null) {
+              serviceCached = JSON.parse(serviceCached);
+              serviceCached.push(data.object);
+              localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
+              history.push('/services/list');
+            }
           }
           else {
             dispatch(createServiceFailure(data));
