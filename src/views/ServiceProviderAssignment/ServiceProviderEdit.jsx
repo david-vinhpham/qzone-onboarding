@@ -49,6 +49,7 @@ class ServiceProviderEdit extends React.Component {
             organizationOption: null,
             serviceOption: null,
             locationOption: null,
+            numberOfParallelCustomer: 1,
             serviceTimeSlot: [],
             additionalInfo: '',
         }
@@ -187,6 +188,7 @@ class ServiceProviderEdit extends React.Component {
                             geoLocationId: this.state.data.geoLocation.id,
                             organizationId: this.state.data.organizationId,
                             additionalInfo: this.state.data.additionalInfo,
+                            numberOfParallelCustomer: this.state.data.numberOfParallelCustomer,
                             serviceTimeSlot: this.state.serviceTimeSlot,
                             businessAdminId: this.state.data.businessAdminId,
                         }}
@@ -302,6 +304,29 @@ class ServiceProviderEdit extends React.Component {
                                                   <div style={{ color: "red" }}>{errors.geoLocationId}</div>
                                                 ) : null}
                                               </FormControl>
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer style={{ paddingBottom: '15px' }}>
+                                            <GridItem xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                No. of Parallel Customer
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={4}>
+                                              <CustomInput
+                                                id="numberOfParallelCustomer"
+                                                formControlProps={{
+                                                  fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                  type: "number",
+                                                }}
+                                                onChange={handleChange}
+                                                value={values.numberOfParallelCustomer}
+                                              />
+                                              {errors.numberOfParallelCustomer && touched.numberOfParallelCustomer ? (
+                                                <div style={{ color: "red" }}>{errors.numberOfParallelCustomer}</div>
+                                              ) : null}
                                             </GridItem>
                                           </GridContainer>
                                           <GridContainer style={{ paddingBottom: '15px' }}>

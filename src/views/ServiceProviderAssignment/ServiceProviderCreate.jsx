@@ -51,6 +51,7 @@ class ServiceProviderCreate extends React.Component {
             serviceOption: null,
             locationOption: null,
             serviceTimeSlot: [],
+            numberOfParallelCustomer: 1,
             businessAdminId: null,
             additionalInfo: '',
             isSaved: false,
@@ -293,6 +294,29 @@ class ServiceProviderCreate extends React.Component {
                                                   <div style={{ color: "red" }}>{errors.geoLocationId}</div>
                                                 ) : null}
                                               </FormControl>
+                                            </GridItem>
+                                          </GridContainer>
+                                          <GridContainer style={{ paddingBottom: '15px' }}>
+                                            <GridItem xs={12} sm={3}>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                No. of Parallel Customer
+                                              </FormLabel>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={4}>
+                                              <CustomInput
+                                                id="numberOfParallelCustomer"
+                                                formControlProps={{
+                                                  fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                  type: "number",
+                                                }}
+                                                onChange={handleChange}
+                                                value={values.numberOfParallelCustomer}
+                                              />
+                                              {errors.numberOfParallelCustomer && touched.numberOfParallelCustomer ? (
+                                                <div style={{ color: "red" }}>{errors.numberOfParallelCustomer}</div>
+                                              ) : null}
                                             </GridItem>
                                           </GridContainer>
                                           <GridContainer style={{ paddingBottom: '15px' }}>

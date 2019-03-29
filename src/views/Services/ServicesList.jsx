@@ -114,6 +114,9 @@ class ServicesList extends React.Component{
                   Service Name
                 </TableCell>
                 <TableCell>
+                  Service Mode
+                </TableCell>
+                <TableCell>
                   Description
                 </TableCell>
                 <TableCell>
@@ -128,6 +131,7 @@ class ServicesList extends React.Component{
               {this.state.data.map((service, index) => (
                 <TableRow key={service.id}>
                   <TableCell>{service.name}</TableCell>
+                  <TableCell>{service.mode}</TableCell>
                   <TableCell>{service.description.substring(0,150) + "..."}</TableCell>
                   <TableCell>{service.organizationEntity.name}</TableCell>
                   <TableCell>{service.bookingHorizon}</TableCell>
