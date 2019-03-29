@@ -108,6 +108,9 @@ class ProviderList extends React.Component {
             <TableHead>
               <TableRow>
                 <TableCell>
+                  No
+                </TableCell>
+                <TableCell>
                   Provider Name
                 </TableCell>
                 <TableCell>
@@ -127,6 +130,7 @@ class ProviderList extends React.Component {
             <TableBody>
               {this.state.data.map((provider, index) => (
                 <TableRow key={provider.id}>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{provider.givenName}</TableCell>
                   <TableCell>{provider.telephone}</TableCell>
                   <TableCell>{provider.email}</TableCell>
