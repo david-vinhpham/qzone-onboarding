@@ -125,6 +125,9 @@ class ServicesList extends React.Component{
                 <TableCell>
                   BookingHorizon
                 </TableCell>
+                <TableCell>
+                  View|Edit|Delete
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

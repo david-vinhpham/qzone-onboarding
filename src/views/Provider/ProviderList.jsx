@@ -9,17 +9,18 @@ import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import {ClipLoader} from 'react-spinners';
 import {css} from '@emotion/core';
-
+import ArtTrack from "@material-ui/icons/ArtTrack";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
-import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import {fetchProvidersByBusinessAdminId} from '../../actions/provider';
+import {deleteProvider, fetchProvidersByBusinessAdminId} from '../../actions/provider';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
+import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import DeletionModal from '../../shared/deletion-modal';
 
 const override = css`
     display: block;
@@ -30,22 +31,51 @@ class ProviderList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: []
+      data: [],
+      deleteProvider: {
+        id: 0,
+        isDel:false,
+      }
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('nextProps.providers {}', nextProps.providers);
     this.setState({ data: nextProps.providers })
   }
 
+  deleteProvider(providerId) {
+    console.log("deleteProvider a providerId: " + providerId);
+    let data = {
+      id: providerId,
+      isDel:true,
+    };
+    this.setState({ deleteProvider: data });
+  }
+  cancelDelete = () => {
+    let data = {
+      isDel:false,
+    };
+    this.setState({ deleteProvider: data });
+  };
+  confirmDelete = (providerId) => {
+    this.props.deleteProvider(providerId);
+    let data = {
+      isDel:false,
+    };
+    this.setState({ deleteProvider: data });
+  };
   componentDidMount() {
     let sub = localStorage.getItem('userSub');
     this.props.fetchProvidersByBusinessAdminId(sub);
   }
 
   render() {
-    const { classes, fetchProvidersLoading, fetchProviderError, providers } = this.props;
+    const { classes, fetchProvidersLoading, fetchProviderError, delProviderLoading, delProviderError  } = this.props;
     let data = [];
+    const {
+      deleteProvider
+    } = this.state;
     if (fetchProvidersLoading) {
       return < ClipLoader
         className={override}
@@ -56,63 +86,105 @@ class ProviderList extends React.Component {
       />
     }
     else if (fetchProviderError) {
-      return <div className="alert alert-danger">Error: {providers}</div>
+      return <div className="alert alert-danger">Error</div>
+    }
+    if (delProviderLoading) {
+      return < ClipLoader
+        className={override}
+        sizeUnit={"px"}
+        size={100}
+        color={'#123abc'}
+        loading={delProviderLoading}
+      />
+    }
+    else if (delProviderError) {
+      return <div className="alert alert-danger">Error</div>
     }
     else {
         data = (
+
         <GridContainer>
-          {this.state.data.map((provider, index) => {
-            return (
-              <GridItem xs={12} sm={12} md={3}>
-                <Card product className={classes.cardHover} >
-                  {/* <CardHeader image className={classes.cardHeaderHover}>
-                    <a href="#pablo" onClick={e => e.preventDefault()}>
-                      <img src={priceImage1} alt="..." />
-                    </a>
-                  </CardHeader> */}
-                  <CardBody>
-                    <div className={classes.cardHoverUnder}>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Remove"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button
-                          color="danger"
-                          simple
-                          justIcon>
-                          <Delete className={classes.underChartIcons} />
+          <Table aria-labelledby="tableTitle">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  Provider Name
+                </TableCell>
+                <TableCell>
+                  Telephone
+                </TableCell>
+                <TableCell>
+                  Email
+                </TableCell>
+                <TableCell>
+                description
+              </TableCell>
+                <TableCell>
+                  View|Edit|Delete
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.data.map((provider, index) => (
+                <TableRow key={provider.id}>
+                  <TableCell>{provider.givenName}</TableCell>
+                  <TableCell>{provider.telephone}</TableCell>
+                  <TableCell>{provider.email}</TableCell>
+                  <TableCell>{provider.providerInformation.description !== null ? provider.providerInformation.description.substring(0,150) : ''}</TableCell>
+                  <TableCell>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="View"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Button color="transparent" simple justIcon>
+                        <ArtTrack className={classes.underChartIcons} />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Edit"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Link to={`/provider/edit/${provider.id}`}>
+                        <Button color="success" simple justIcon >
+                          <Edit className={classes.underChartIcons} />
                         </Button>
-                      </Tooltip>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Edit"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Link to={`/provider/edit/${provider.id}`}>
-                          <Button color="success" simple justIcon >
-                            <Edit className={classes.underChartIcons} />
-                          </Button>
-                        </Link>
-                      </Tooltip>
-                    </div>
-                    <h4 className={classes.cardProductTitle}>
-                      {provider.givenName} {/*provider.familyName*/}
-                    </h4>
-                    <p className={classes.cardProductDesciprion}>
-                      {provider.id}
-                    </p>
-                  </CardBody>
-                </Card>
-              </GridItem>
-            )
-          })}
+                      </Link>
+                    </Tooltip>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Remove"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Button
+                        onClick = {e => this.deleteProvider(provider.id)}
+                        color="danger"
+                        simple
+                        justIcon>
+                        <Delete className={classes.underChartIcons} />
+                      </Button>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </GridContainer>
 
       )
     }
+    const deletionPopup = deleteProvider.isDel ? (
+      <DeletionModal
+        openDialog={deleteProvider.isDel}
+        closeDialog={this.cancelDelete}
+        itemDeleteHandler={this.confirmDelete}
+        itemId={deleteProvider.id}
+      />
+    ) : null;
     return (
 
       <div>
@@ -160,6 +232,7 @@ class ProviderList extends React.Component {
           </GridItem>
         </GridContainer>
         {data}
+        {deletionPopup}
          </div>
     );
   }
@@ -170,12 +243,15 @@ function mapStateToProps(state) {
     providers: state.provider.providers,
     fetchProvidersLoading: state.provider.fetchProvidersLoading,
     fetchProvidersError: state.provider.fetchProvidersError,
+    delProviderLoading: state.provider.delProviderLoading,
+    delProviderError: state.provider.delProviderError,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProvidersByBusinessAdminId: (sub) => dispatch(fetchProvidersByBusinessAdminId(sub)),
+    deleteProvider:(id) => dispatch(deleteProvider(id)),
   }
 }
 

@@ -53,7 +53,6 @@ export const fetchTimezonesOption = () => {
 
 
 export function fetchProvidersByOrdId(orgId) {
-  console.log('fetchProvidersByOrdId');
   return (dispatch) => {
     dispatch(fetchProvidersLoading());
     fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_ORG_ID + orgId, {
@@ -77,7 +76,6 @@ export function fetchProvidersByOrdId(orgId) {
 };
 
 export function fetchProvidersOptionByServiceProviderId(serviceProviderId) {
-  console.log('fetchProvidersOptionByServiceProviderId');
   return (dispatch) => {
     dispatch(fetchProvidersLoading());
     fetch(API_ROOT + URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID + serviceProviderId, {
@@ -101,7 +99,6 @@ export function fetchProvidersOptionByServiceProviderId(serviceProviderId) {
 };
 
 export function fetchProvidersOptionByOrdId(orgId) {
-  console.log('fetchProvidersOptionByOrdId');
   return (dispatch) => {
     dispatch(fetchProvidersLoading());
     fetch(API_ROOT + URL.FETCH_PROVIDERS_OPTION_BY_ORG_ID + orgId, {
@@ -228,8 +225,36 @@ export const editProviderFailure = (error) => {
     payload: error
   }
 }
+
+export const deleteProvider = (providerId) => {
+  return (dispatch) => {
+    dispatch({ type: provider.DEL_PROVIDER_LOADING })
+    fetch(API_ROOT + URL.USER + '/' + providerId,{
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch({
+            type: provider.DEL_PROVIDER_SUCCESS,
+            payload: data.object
+          });
+          let sub = localStorage.getItem('userSub');
+          dispatch(fetchProvidersByBusinessAdminId(sub));
+        }
+        else {
+          dispatch({
+            type: provider.DEL_PROVIDER_FAILURE,
+            payload: data
+          })
+        }
+      })
+  }
+}
 export function editProvider(values, history) {
-  console.log('editProvider: ' + values);
   return (dispatch) => {
     dispatch(editProviderLoading())
     fetch(API_ROOT + URL.USER, {
