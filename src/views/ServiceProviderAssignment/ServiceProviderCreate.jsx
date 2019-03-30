@@ -414,7 +414,7 @@ class ServiceProviderCreate extends React.Component {
                           <GridContainer>
                             <GridItem xs={12} sm={3}>
                               <FormLabel className={classes.labelHorizontal}>
-                                AdditionalInfo
+                                Description
                               </FormLabel>
                             </GridItem>
                             <GridItem xs={12} sm={3}>

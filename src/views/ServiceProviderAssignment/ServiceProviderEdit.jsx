@@ -412,7 +412,7 @@ class ServiceProviderEdit extends React.Component {
                     </GridContainer>
                     <GridContainer>
                       <GridItem xs={12} sm={3}>
-                        <FormLabel className={classes.labelHorizontal}>AdditionalInfo</FormLabel>
+                        <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
                       </GridItem>
                       <GridItem xs={12} sm={3}>
                         <CustomInput
