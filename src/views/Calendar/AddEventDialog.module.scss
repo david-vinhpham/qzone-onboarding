@@ -1,0 +1,40 @@
+.calendarDialogTitle {
+  border-bottom: #e0e0e0 1px solid;
+  display: flex;
+}
+
+.calendarDatetimePicker {
+  .label {
+    display: flex;
+    align-items: flex-end;
+
+    &:not(:first-child) {
+      justify-content: center;
+    }
+  }
+
+  div[class*="DateFormatInput-form"],
+  div[class*="TimeFormatInput-form"] {
+    width: 100%;
+  }
+
+  div[class*="DateFormatInput-input"],
+  div[class*="TimeFormatInput-input"] {
+    min-height: 2.5rem;
+    line-height: 2.5rem;
+  }
+}
+
+.eventTypeSelect {
+  width: 100%;
+}
+
+.calendarDesc {
+  width: 100%;
+}
+
+.calendarDialogFooter {
+  border-top: #e0e0e0 1px solid;
+  padding: 16px;
+  margin: 0;
+}

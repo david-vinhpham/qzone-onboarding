@@ -1,14 +1,14 @@
 import React from "react";
-import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
-import {compose} from 'redux';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import Search from "@material-ui/icons/Search";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import {ClipLoader} from 'react-spinners';
-import {css} from '@emotion/core';
+import { ClipLoader } from 'react-spinners';
+import { css } from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -19,7 +19,7 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
-import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
+import { fetchOrganizationsByBusinessAdminId } from "../../actions/organization";
 
 const override = css`
     display: block;
@@ -46,9 +46,9 @@ class OrganizationList extends React.Component {
   render() {
     const { classes, fetchOrganizationsLoading, fetchOrganizationsError, organizations } = this.props;
     let data = []
-    if(fetchOrganizationsLoading) {
+    if (fetchOrganizationsLoading) {
       return < ClipLoader
-        className={override}
+        css={override}
         sizeUnit={"px"}
         size={100}
         color={'#123abc'}
@@ -159,13 +159,14 @@ class OrganizationList extends React.Component {
           </GridItem>
         </GridContainer>
         {data}
-         </div>
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return { organizations: state.organization.organizations,
+  return {
+    organizations: state.organization.organizations,
     fetchOrganizationsLoading: state.organization.fetchOrganizationsLoading,
     fetchOrganizationsError: state.organization.fetchOrganizationsError,
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography  from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -10,20 +10,20 @@ import Button from 'components/CustomButtons/Button.jsx';
 
 const styles = () => ({
   root: {
-    color: roseColor,
+    color: roseColor
   }
 });
 
 class Error extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, children, cancelError } = this.props;
     return (
       <Card>
         <CardBody>
-          <Typography classes={classes}>{this.props.children}</Typography>
+          <Typography classes={classes}>{}</Typography>
         </CardBody>
         <CardFooter>
-          <Button onClick={this.props.cancelError}>OK</Button>
+          <Button onClick={cancelError}>OK</Button>
         </CardFooter>
       </Card>
     );
@@ -31,7 +31,7 @@ class Error extends Component {
 }
 
 Error.propTypes = {
-  cancelError: PropTypes.func.isRequired,
+  cancelError: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Error);
