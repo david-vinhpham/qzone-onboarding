@@ -135,8 +135,10 @@ class ServiceEdit extends React.Component {
       if(imageObject != null) {
         values.image = imageObject;
       }
-      if (Object.is(values.imagePreviewUrl, null) || Object.is(values.imagePreviewUrl, undefined)) {
-        values.image = values.imagePreviewUrl;
+      if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
+        if (values.logo === null) {
+          values.image = values.imagePreviewUrl;
+        }
       }
       this.props.editService(values, this.props.history);
     }

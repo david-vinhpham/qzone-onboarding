@@ -24,6 +24,9 @@ import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import {ClipLoader} from "react-spinners";
 import {css} from "@emotion/core";
+import defaultImage from "../../assets/img/image_placeholder.jpg";
+import ImageUpload from "../../components/CustomUpload/ImageUpload";
+import _ from "lodash";
 
 const override = css`
     display: block;
@@ -43,23 +46,69 @@ class OrganizationEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      imagePreviewUrl: defaultImage,
+      imageObject: null,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("organization", nextProps.organization)
-    this.setState({ data: nextProps.organization })
+    if(!nextProps.imageLoading) {
+      this.setState({ data: nextProps.organization });
+      if (nextProps.organization != null && nextProps.organization.logo != null) {
+        this.setState({imagePreviewUrl: nextProps.organization.logo.fileUrl})
+      } else {
+        this.setState({imagePreviewUrl: defaultImage})
+      }
+    }
+    else {
+      console.log('imageLoading...');
+    }
   }
 
   componentDidMount() {
     const { id } = this.props.match.params
     this.props.fetchOrganization(id);
-    this.props.fetchBusinessCategories()
+    this.props.fetchBusinessCategories();
+    localStorage.removeItem('imageObject');
+  }
+  change(event, stateName) {
+    if (_.isEmpty(event.target.value))
+      this.setState({ [stateName + "State"]: "error" })
+    else {
+      this.setState({ [stateName + "State"]: "success" });
+    }
+    this.setState({ [stateName]: (event.target.value || event.target.checked) })
+  }
+  handleImageChange(e) {
+    let self = this;
+    e.preventDefault();
+    let reader = new FileReader();
+    let files = e.target.files[0];
+    reader.onloadend = () => {
+      self.setState({
+        imagePreviewUrl: reader.result
+      });
+    };
+    reader.readAsDataURL(files);
   }
 
   submit = (values) => {
-    // this is the case of 1st time registering the organization along with admin
+    let imageObject = localStorage.getItem('imageObject');
+    if(imageObject === null) {
+      imageObject = this.state.imageObject;
+    }
+    else {
+      imageObject = JSON.parse(imageObject)
+    }
+    if(imageObject != null) {
+      values.logo = imageObject;
+    }
+    if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
+      if (values.logo === null) {
+        values.logo = values.imagePreviewUrl;
+      }
+    }
     this.props.editOrganization(values, this.props.history);
   }
 
@@ -100,6 +149,8 @@ class OrganizationEdit extends React.Component {
                           name: data.name,
                           orgMode: data.orgMode,
                           businessCategoryId: data.businessCategoryId,
+                          imageShow: data.logo ? data.logo.fileUrl : defaultImage,
+                          imagePreviewUrl: this.props.imageObject || (this.state.data.logo ? this.state.data.logo.fileUrl : this.state.imagePreviewUrl),
                           preferences: {
                             allowListingOnQuezone: data.preferences.allowListingOnQuezone,
                             allowReschedule: data.preferences.allowReschedule,
@@ -587,7 +638,7 @@ class OrganizationEdit extends React.Component {
                                             </GridItem>
                                           </GridContainer>
                                           <GridContainer>
-                                            <GridItem>
+                                            {/*<GridItem>
                                               <FormLabel className={classes.labelHorizontal}>
                                                 Queue Model
                                             </FormLabel>
@@ -602,6 +653,14 @@ class OrganizationEdit extends React.Component {
                                                 onChange={handleChange}
                                                 value={values.queueModel}
                                               />
+                                            </GridItem>*/}
+                                            <GridItem>
+                                            <FormLabel className={classes.labelHorizontal}>
+                                              Organization Image
+                                            </FormLabel>
+                                          </GridItem>
+                                            <GridItem xs={12} md={12}>
+                                              <ImageUpload imagePreviewUrl={values.imageShow} />
                                             </GridItem>
                                           </GridContainer>
                                         </Grid>
@@ -644,6 +703,9 @@ const mapsStateToProp = (state) => ({
   editOrganizationLoading: state.organization.editOrganizationLoading,
   editOrganizationError: state.organization.editOrganizationError,
   fetchOrganizationLoading: state.organization.fetchOrganizationLoading,
+  imageObject: state.image.image,
+  imageError: state.image.imageError,
+  imageLoading: state.image.imageLoading,
 
 })
 
