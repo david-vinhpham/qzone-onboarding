@@ -52,9 +52,9 @@ const reducer = (state = initialState, action) => {
       case serviceProvider.DEL_SERVICE_PROVIDER_LOADING:
         return { ...state, delServiceProviderLoading: true }
       case serviceProvider.DEL_SERVICE_PROVIDER_SUCCESS:
-        return { ...state, serviceProvider: action.payload.data, delServiceProviderLoading: false }
+        return { ...state, serviceProviders: action.payload.data, delServiceProviderLoading: false }
       case serviceProvider.DEL_SERVICE_PROVIDER_FAILURE:
-        return { ...state, serviceProvider:[], editServiceProviderError: action.payload.error, delServiceProviderLoading: false }
+        return { ...state, serviceProvider:[], delServiceProviderError: action.payload.error, delServiceProviderLoading: false }
 
       case serviceProvider.FETCH_SERVICE_PROVIDER_LOADING:
             return { ...state, fetchServiceProviderLoading: true }

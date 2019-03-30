@@ -65,7 +65,11 @@ class ServiceProviderCreate extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      console.log('componentWillReceiveProps');
+      if(this.state.organizationOption === null && nextProps.organizations !== null && nextProps.organizations.length > 0) {
+        this.setState({ organizationOption: nextProps.organizations[0] });
+        this.props.fetchServicesOptionByOrgId(nextProps.organizations[0].value);
+        console.log('componentWillReceiveProps');
+      }
     }
 
   handleDeleteSlot() {
@@ -88,7 +92,6 @@ class ServiceProviderCreate extends React.Component {
 
     handleOrgChange(selectedOption) {
       this.setState({ organizationOption: selectedOption });
-      this.props.fetchServicesOptionByOrgId(selectedOption.value);
     }
 
     handleProviderChange(providerOption) {
@@ -136,8 +139,10 @@ class ServiceProviderCreate extends React.Component {
     }
 
     render() {
-        const { classes, services, organizations, providers, locations, createServiceProviderLoading, createServiceProviderError } = this.props;
-        const { isSaved, additionalInfo, serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot, businessAdminId } = this.state;
+        const { classes, services, organizations, providers, locations, fetchProviderLoading,
+          createServiceProviderLoading, createServiceProviderError } = this.props;
+        const { isSaved, additionalInfo, serviceOption, providerOption,
+          organizationOption, locationOption, serviceTimeSlot, businessAdminId } = this.state;
         let serviceOptions = [];
         let organizationOptions = [];
         let providerOptions = [];
@@ -163,6 +168,15 @@ class ServiceProviderCreate extends React.Component {
           loading={createServiceProviderLoading}
         />;
       }
+      if(fetchProviderLoading) {
+        return < ClipLoader
+          className={override}
+          sizeUnit={"px"}
+          size={100}
+          color={'#123abc'}
+          loading={fetchProviderLoading}
+        />;
+      }
       //else if (createServiceProviderError) {
       //  return <div className="alert alert-danger">Error: {serviceProviderError}</div>
       //}
@@ -178,6 +192,7 @@ class ServiceProviderCreate extends React.Component {
                             additionalInfo: additionalInfo,
                             serviceTimeSlot: serviceTimeSlot,
                             businessAdminId: businessAdminId,
+                            numberOfParallelCustomer: 1,
                         }}
                         validationSchema={ServiceCreateSchema}
                         enableReinitialize={true}
@@ -436,6 +451,7 @@ const mapStateToProps = (state) => {
       services: state.service.services,
       fetchServicesLoading: state.service.fetchServicesLoading,
       locations: state.location.locations,
+      fetchProviderLoading: state.provider.fetchProviderLoading,
       serviceProviderLoading:state.provider.serviceProviderLoading,
       fetchOrganizationsLoading:  state.organization.fetchOrganizationsLoading,
     }

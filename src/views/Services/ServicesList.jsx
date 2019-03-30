@@ -63,7 +63,7 @@ class ServicesList extends React.Component{
     this.setState({ deleteService: data });
   };
   componentWillReceiveProps(nextProps) {
-    if( nextProps.services != null) {
+    if( nextProps.services != null && !nextProps.delServiceLoading) {
       this.setState({data: nextProps.services});
       localStorage.setItem('serviceCached', JSON.stringify(nextProps.services));
     }
@@ -247,7 +247,6 @@ const mapStateToProps = (state) => {
     services: state.service.services,
     fetchServicesLoading: state.service.fetchServicesLoading,
     fetchServiceError: state.service.fetchServiceError,
-    isShowPopup: state.service.isShowPopup,
   }
 
 }

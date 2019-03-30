@@ -155,6 +155,7 @@ export function loginUser(values, history) {
             localStorage.setItem('user', JSON.stringify(json));
             //clear cached
             localStorage.removeItem('serviceProvider');
+            localStorage.removeItem('serviceCached');
             history.push('/dashboard');
           })
           .catch(err => {

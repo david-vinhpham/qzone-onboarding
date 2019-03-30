@@ -146,11 +146,10 @@ export const fetchServiceProviderFailure = (error) => {
     }
 }
 
-export const delServiceProvider = (id, history) => {
-  console.log('delServiceProvider: ' +  id);
+export const deleteServiceProvider = (id) => {
   return (dispatch) => {
     dispatch({ type: serviceProvider.DEL_SERVICE_PROVIDER_LOADING })
-    fetch(API_ROOT + URL.LOCATION + '/' + id ,{
+    fetch(API_ROOT + URL.SERVICE_PROVIDER + '/' + id ,{
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -159,10 +158,9 @@ export const delServiceProvider = (id, history) => {
       .then(res => res.json())
       .then(data => {
         if(data.status === 200 || data.status === 201 || data.success === true) {
-          dispatch({
-            type: serviceProvider.DEL_SERVICE_PROVIDER_SUCCESS,
-            payload: data.object
-          });
+          let objects = {
+            data:[],
+          }
           let serviceProviders = localStorage.getItem('serviceProvider');
           if (serviceProviders !== null) {
             let listServiceProviders = JSON.parse(serviceProviders);
@@ -174,7 +172,14 @@ export const delServiceProvider = (id, history) => {
                 break;
               }
             }
-            localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
+            if(listServiceProviders.length > 0) {
+              objects.data = listServiceProviders;//json
+              localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
+            }
+            dispatch({
+              type: serviceProvider.DEL_SERVICE_PROVIDER_SUCCESS,
+              payload: objects
+            });
         }}
         else {
           dispatch({
@@ -187,7 +192,6 @@ export const delServiceProvider = (id, history) => {
 }
 
 export const createServiceProvider = (data, history) => {
-    console.log("data---", data)
     return (dispatch) => {
         dispatch(createServiceProviderLoading())
         fetch(API_ROOT + URL.SERVICE_PROVIDER, {
