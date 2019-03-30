@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {
   ExpansionPanel,
@@ -28,6 +29,7 @@ import {
 } from 'actions/email_templates';
 
 import { connect } from 'react-redux';
+import { classesType, historyType } from 'types/global';
 import { eTemplateUrl, restApiResponseCodes } from '../../constants';
 
 const styles = () => ({
@@ -43,7 +45,6 @@ const styles = () => ({
 
 class EmailTemplates extends Component {
   state = {
-    templates: [],
     isDeleting: false,
     templateIdTobeDeleted: null
   };
@@ -66,9 +67,6 @@ class EmailTemplates extends Component {
     }
     const nameList = computedTemplates.map(template => template.name);
     this.props.saveTemplateNameList(nameList);
-    this.setState({
-      templates: computedTemplates
-    });
   }
 
   deleteTemplateHandler = id => {
@@ -80,8 +78,7 @@ class EmailTemplates extends Component {
 
   closeModal = () => {
     this.setState({
-      isDeleting: false,
-      templateTobeDeleted: null
+      isDeleting: false
     });
   };
 
@@ -164,6 +161,7 @@ const mapStateToProps = state => ({
   deleteStatus: state.email.deleteStatus,
   templateIdDeleted: state.email.templateIdDeleted
 });
+
 const mapDispatchToProps = dispatch => ({
   fetchTemplates: () => dispatch(fetchTemplates()),
   deleteTemplate: id => dispatch(deleteTemplate(id)),
@@ -171,6 +169,25 @@ const mapDispatchToProps = dispatch => ({
   updateEmailTemplate: templates => dispatch(updateEmailTemplate(templates)),
   saveTemplateNameList: list => dispatch(saveTemplateNameList(list))
 });
+
+EmailTemplates.propTypes = {
+  fetchTemplates: PropTypes.func.isRequired,
+  templates: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string
+    })
+  ).isRequired,
+  loading: PropTypes.bool.isRequired,
+  deleteStatus: PropTypes.number.isRequired,
+  templateIdDeleted: PropTypes.string.isRequired,
+  resetDeleteStatus: PropTypes.func.isRequired,
+  classes: classesType.isRequired,
+  history: historyType.isRequired,
+  deleteTemplate: PropTypes.func.isRequired,
+  updateEmailTemplate: PropTypes.func.isRequired,
+  saveTemplateNameList: PropTypes.func.isRequired
+};
 
 export default withStyles({ ...gridSystemStyle, ...styles() })(
   connect(

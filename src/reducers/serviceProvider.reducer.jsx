@@ -16,17 +16,13 @@ const initialState = {
   editServiceProviderLoading: false,
   editServiceProviderError: null,
 
-  editServiceProviderLoading: false,
-  editServiceProviderError: null,
-
   delServiceProviderLoading: false,
   delServiceProviderError: null,
 
   locations: [],
   locationLoading: false,
-  locationLoadingError: false,
-
-}
+  locationLoadingError: false
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -47,11 +43,20 @@ const reducer = (state = initialState, action) => {
       };
 
     case serviceProvider.CREATE_SERVICE_PROVIDER_LOADING:
-      return { ...state, createServiceProviderLoading: true }
+      return { ...state, createServiceProviderLoading: true };
     case serviceProvider.CREATE_SERVICE_PROVIDER_SUCCESS:
-      return { ...state, serviceProvider: action.payload.data, createServiceProviderLoading: false }
+      return {
+        ...state,
+        serviceProvider: action.payload.data,
+        createServiceProviderLoading: false
+      };
     case serviceProvider.CREATE_SERVICE_PROVIDER_FAILURE:
-      return { ...state, serviceProvider: [], createServiceProviderError: action.payload.error, createServiceProviderLoading: false }
+      return {
+        ...state,
+        serviceProvider: [],
+        createServiceProviderError: action.payload.error,
+        createServiceProviderLoading: false
+      };
 
     case serviceProvider.EDIT_SERVICE_PROVIDER_LOADING:
       return { ...state, fetchServiceProviderLoading: true };
@@ -66,18 +71,28 @@ const reducer = (state = initialState, action) => {
       };
 
     case serviceProvider.DEL_SERVICE_PROVIDER_LOADING:
-      return { ...state, delServiceProviderLoading: true }
+      return { ...state, delServiceProviderLoading: true };
     case serviceProvider.DEL_SERVICE_PROVIDER_SUCCESS:
-      return { ...state, serviceProviders: action.payload.data, delServiceProviderLoading: false }
+      return { ...state, serviceProviders: action.payload.data, delServiceProviderLoading: false };
     case serviceProvider.DEL_SERVICE_PROVIDER_FAILURE:
-      return { ...state, serviceProvider: [], delServiceProviderError: action.payload.error, delServiceProviderLoading: false }
+      return {
+        ...state,
+        serviceProvider: [],
+        delServiceProviderError: action.payload.error,
+        delServiceProviderLoading: false
+      };
 
     case serviceProvider.FETCH_SERVICE_PROVIDER_LOADING:
-      return { ...state, fetchServiceProviderLoading: true }
+      return { ...state, fetchServiceProviderLoading: true };
     case serviceProvider.FETCH_SERVICE_PROVIDER_SUCCESS:
-      return { ...state, serviceProvider: action.payload.data, fetchServiceProviderLoading: false }
+      return { ...state, serviceProvider: action.payload.data, fetchServiceProviderLoading: false };
     case serviceProvider.FETCH_SERVICE_PROVIDER_FAILURE:
-      return { ...state, serviceProvider: [], fetchServiceProviderError: action.payload.error, fetchServiceProviderLoading: false }
+      return {
+        ...state,
+        serviceProvider: [],
+        fetchServiceProviderError: action.payload.error,
+        fetchServiceProviderLoading: false
+      };
 
     case location.FETCH_LOCATIONS_LOADING:
       return { ...state, locationLoading: true };

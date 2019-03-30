@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
@@ -11,6 +12,7 @@ import CardText from 'components/Card/CardText.jsx';
 import Button from 'components/CustomButtons/Button.jsx';
 import gridSystemStyle from 'assets/jss/material-dashboard-pro-react/views/gridSystemStyle.jsx';
 import { createTemplate, fetchTemplates, cleanCreateTemplateError } from 'actions/email_templates';
+import { historyType, classesType } from 'types/global';
 import { eTemplateUrl, eTemplateNameMax, eTemplateContentMax } from '../../constants';
 import { dangerColor } from '../../assets/jss/material-dashboard-pro-react';
 
@@ -51,8 +53,8 @@ class CreateEmailTemplate extends Component {
   }
 
   cleanTemplateCreateError = () => {
-    const { history, cleanCreateTemplateError } = this.props;
-    cleanCreateTemplateError();
+    const { history } = this.props;
+    this.props.cleanCreateTemplateError();
     history.push(eTemplateUrl);
   };
 
@@ -158,6 +160,20 @@ const mapDispatchToProps = dispatch => ({
   fetchTemplates: () => dispatch(fetchTemplates()),
   cleanCreateTemplateError: () => dispatch(cleanCreateTemplateError())
 });
+
+CreateEmailTemplate.propTypes = {
+  history: historyType.isRequired,
+  templateId: PropTypes.number.isRequired,
+  isTemplateCreated: PropTypes.bool.isRequired,
+  fetchTemplates: PropTypes.func.isRequired,
+  cleanCreateTemplateError: PropTypes.func.isRequired,
+  createTemplate: PropTypes.func.isRequired,
+  classes: classesType.isRequired,
+  error: PropTypes.shape({
+    message: PropTypes.string
+  }).isRequired,
+  templateNameList: PropTypes.arrayOf(PropTypes.string).isRequired
+};
 
 export default withStyles({ ...gridSystemStyle, ...styles() })(
   connect(

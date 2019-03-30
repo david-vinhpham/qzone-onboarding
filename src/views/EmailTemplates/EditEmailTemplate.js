@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
@@ -16,6 +17,7 @@ import {
   fetchTemplate
 } from 'actions/email_templates';
 import Loading from 'components/Loading/Loading';
+import { matchType, historyType, classesType } from 'types/global';
 import { dangerColor } from '../../assets/jss/material-dashboard-pro-react';
 import { isDirty } from '../../validation/validation';
 import { eTemplateContentMax, eTemplateNameMax, eTemplateUrl } from '../../constants';
@@ -57,22 +59,22 @@ class EditEmailTemplate extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { templateName, templateContent, isTemplateEdited } = nextProps;
-    const { cleanEditTemplateStatus, history } = this.props;
+    const { history } = this.props;
     const newState = {};
     if (!this.state.isTemplateTouched) {
       newState.editTemplateName = templateName;
       newState.editTemplateContent = templateContent;
     }
     if (isTemplateEdited) {
-      cleanEditTemplateStatus();
+      this.props.cleanEditTemplateStatus();
       history.push(eTemplateUrl);
     }
     this.setState({ ...newState, templateName, templateContent });
   }
 
   cancelEditHandler = () => {
-    const { history, cleanTemplateStatus } = this.props;
-    cleanTemplateStatus();
+    const { history } = this.props;
+    this.props.cleanTemplateStatus();
     history.push(eTemplateUrl);
   };
 
@@ -91,11 +93,10 @@ class EditEmailTemplate extends Component {
     const {
       match: {
         params: { id }
-      },
-      editTemplate
+      }
     } = this.props;
     const { templateName, templateContent } = this.state;
-    editTemplate(id, templateName, templateContent);
+    this.props.editTemplate(id, templateName, templateContent);
   };
 
   render() {
@@ -115,7 +116,7 @@ class EditEmailTemplate extends Component {
             `${classes.templateBoxError} ${classes.templateBoxError}`
           ]
         : ['Template Name', ''];
-    const editTemplate = editTemplateName ? (
+    return editTemplateName ? (
       <Card>
         <CardHeader color="rose" icon>
           <CardText color="rose">
@@ -176,7 +177,6 @@ class EditEmailTemplate extends Component {
     ) : (
       <Loading />
     );
-    return editTemplate;
   }
 }
 
@@ -193,6 +193,20 @@ const mapDispatchToProps = dispatch => ({
   editTemplate: (id, name, content) => dispatch(editTemplate(id, name, content)),
   cleanEditTemplateStatus: () => dispatch(cleanEditTemplateStatus())
 });
+
+EditEmailTemplate.propTypes = {
+  match: matchType.isRequired,
+  templateName: PropTypes.string.isRequired,
+  templateContent: PropTypes.string.isRequired,
+  isTemplateEdited: PropTypes.bool.isRequired,
+  fetchTemplate: PropTypes.func.isRequired,
+  cleanEditTemplateStatus: PropTypes.func.isRequired,
+  history: historyType.isRequired,
+  cleanTemplateStatus: PropTypes.func.isRequired,
+  editTemplate: PropTypes.func.isRequired,
+  classes: classesType.isRequired,
+  templateNameList: PropTypes.arrayOf(PropTypes.string).isRequired
+};
 
 export default withStyles({ ...gridSystemStyle, ...styles() })(
   connect(
