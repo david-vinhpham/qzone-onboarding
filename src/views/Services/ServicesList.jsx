@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Delete from '@material-ui/icons/Delete';
@@ -11,6 +12,7 @@ import { compose } from 'redux';
 import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { classesType } from 'types/global.js';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
@@ -34,36 +36,23 @@ class ServicesList extends React.Component {
     this.state = {
       data: [],
       imageLoadError: true,
-      deleteService: {
+      deletedService: {
         id: 0,
         isDel: false
       }
     };
   }
 
-  deleteService(serviceId) {
-    console.log(`deleteService a serviceId: ${serviceId}`);
-    const data = {
-      id: serviceId,
-      isDel: true
-    };
-    this.setState({ deleteService: data });
+  componentDidMount() {
+    let servicesCached = localStorage.getItem('serviceCached');
+    servicesCached = JSON.parse(servicesCached);
+    if (servicesCached !== null && servicesCached.length > 0) {
+      this.setState({ data: servicesCached });
+    } else {
+      const businessAdminId = localStorage.getItem('userSub');
+      this.props.getServicesByBusinessAdminId(businessAdminId);
+    }
   }
-
-  cancelDelete = () => {
-    const data = {
-      isDel: false
-    };
-    this.setState({ deleteService: data });
-  };
-
-  confirmDelete = serviceId => {
-    this.props.deleteService(serviceId);
-    const data = {
-      isDel: false
-    };
-    this.setState({ deleteService: data });
-  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.services != null && !nextProps.delServiceLoading) {
@@ -72,21 +61,32 @@ class ServicesList extends React.Component {
     }
   }
 
-  componentDidMount() {
-    let servicesCached = localStorage.getItem('serviceCached');
-    servicesCached = JSON.parse(servicesCached);
-    if (servicesCached !== null && servicesCached.length > 0) {
-      console.log('get from cached data');
-      this.setState({ data: servicesCached });
-    } else {
-      const businessAdminId = localStorage.getItem('userSub');
-      this.props.getServicesByBusinessAdminId(businessAdminId);
-    }
+  cancelDelete = () => {
+    const data = {
+      isDel: false
+    };
+    this.setState({ deletedService: data });
+  };
+
+  confirmDelete = serviceId => {
+    this.props.deleteService(serviceId);
+    const data = {
+      isDel: false
+    };
+    this.setState({ deletedService: data });
+  };
+
+  deleteService(serviceId) {
+    const data = {
+      id: serviceId,
+      isDel: true
+    };
+    this.setState({ deletedService: data });
   }
 
   render() {
     const { classes, fetchServicesLoading, fetchServiceError, services } = this.props;
-    const { deleteService } = this.state;
+    const { deletedService } = this.state;
     let data = [];
     if (fetchServicesLoading) {
       return (
@@ -170,12 +170,12 @@ class ServicesList extends React.Component {
       </GridContainer>
     );
 
-    const deletionPopup = deleteService.isDel ? (
+    const deletionPopup = deletedService.isDel ? (
       <DeletionModal
-        openDialog={deleteService.isDel}
+        openDialog={deletedService.isDel}
         closeDialog={this.cancelDelete}
         itemDeleteHandler={this.confirmDelete}
-        itemId={deleteService.id}
+        itemId={deletedService.id}
       />
     ) : null;
     return (
@@ -242,6 +242,16 @@ const mapDispatchToProps = dispatch => {
       dispatch(fetchServicesByBusinessAdminId(businessAdminId)),
     deleteService: id => dispatch(deleteService(id))
   };
+};
+
+ServicesList.propTypes = {
+  getServicesByBusinessAdminId: PropTypes.func.isRequired,
+  deleteService: PropTypes.func.isRequired,
+  services: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fetchServicesLoading: PropTypes.bool.isRequired,
+  fetchServiceError: PropTypes.string.isRequired,
+  delServiceLoading: PropTypes.bool.isRequired,
+  classes: classesType.isRequired
 };
 
 export default compose(

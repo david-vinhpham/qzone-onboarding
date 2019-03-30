@@ -10,6 +10,7 @@ import { FormControl, FormLabel } from '@material-ui/core';
 import Select from 'react-select';
 import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';
+import { classesType, historyType } from 'types/global.js';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
 import Card from '../../components/Card/Card.jsx';
@@ -63,6 +64,13 @@ class ServiceProviderCreate extends React.Component {
     this.handleDeleteSlot = this.handleDeleteSlot.bind(this);
   }
 
+  componentDidMount() {
+    const userSub = localStorage.getItem('userSub');
+    this.setState({ businessAdminId: userSub });
+    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    this.props.fetchLocationsOption();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (
       this.state.organizationOption === null &&
@@ -74,6 +82,16 @@ class ServiceProviderCreate extends React.Component {
       console.log('componentWillReceiveProps');
     }
   }
+
+  submit = values => {
+    this.setState({ isSaved: true });
+    this.setState({ additionalInfo: values.additionalInfo });
+    for (let index = 0; index < values.serviceTimeSlot.length; index += 1) {
+      values.serviceTimeSlot[index].slotId = index;
+    }
+    this.props.createServiceProvider(values, this.props.history);
+    this.setState({ isSaved: false });
+  };
 
   handleDeleteSlot() {
     const { serviceTimeSlot } = this.state;
@@ -114,13 +132,6 @@ class ServiceProviderCreate extends React.Component {
     this.setState({ locationOption: selectedOption });
   }
 
-  componentDidMount() {
-    const userSub = localStorage.getItem('userSub');
-    this.setState({ businessAdminId: userSub });
-    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
-    this.props.fetchLocationsOption();
-  }
-
   change(event, stateName) {
     if (_.isEmpty(event.target.value)) this.setState({ [`${stateName}State`]: 'error' });
     else {
@@ -128,16 +139,6 @@ class ServiceProviderCreate extends React.Component {
     }
     this.setState({ [stateName]: event.target.value || event.target.checked });
   }
-
-  submit = values => {
-    this.setState({ isSaved: true });
-    this.setState({ additionalInfo: values.additionalInfo });
-    for (let index = 0; index < values.serviceTimeSlot.length; index++) {
-      values.serviceTimeSlot[index].slotId = index;
-    }
-    this.props.createServiceProvider(values, this.props.history);
-    this.setState({ isSaved: false });
-  };
 
   render() {
     const {
@@ -454,7 +455,20 @@ class ServiceProviderCreate extends React.Component {
 }
 
 ServiceProviderCreate.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: classesType.isRequired,
+  services: PropTypes.arrayOf(PropTypes.string).isRequired,
+  organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  fetchProviderLoading: PropTypes.bool.isRequired,
+  createServiceProviderLoading: PropTypes.bool.isRequired,
+  createServiceProviderError: PropTypes.string.isRequired,
+  fetchOrganizationsOptionByBusinessAdminId: PropTypes.func.isRequired,
+  createServiceProvider: PropTypes.func.isRequired,
+  fetchServicesOptionByOrgId: PropTypes.func.isRequired,
+  fetchLocationsOption: PropTypes.func.isRequired,
+  fetchProvidersOptionByServiceId: PropTypes.func.isRequired,
+  history: historyType.isRequired
 };
 
 const mapStateToProps = state => {

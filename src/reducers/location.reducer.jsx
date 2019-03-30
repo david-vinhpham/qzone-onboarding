@@ -17,49 +17,73 @@ const initialState = {
 
   delLocationLoading: false,
   delLocationError: null
-
-}
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case location.FETCH_LOCATIONS_LOADING:
-      return { ...state, fetchLocationsLoading: true }
+      return { ...state, fetchLocationsLoading: true };
     case location.FETCH_LOCATIONS_SUCCESS:
-      return { ...state, locations: action.payload, fetchLocationsLoading: false }
+      return { ...state, locations: action.payload, fetchLocationsLoading: false };
     case location.FETCH_LOCATIONS_FAILURE:
-      return { ...state, locations: [], fetchLocationsError: action.payload.error, fetchLocationsLoading: false }
+      return {
+        ...state,
+        locations: [],
+        fetchLocationsError: action.payload.error,
+        fetchLocationsLoading: false
+      };
 
     case location.FETCH_LOCATION_LOADING:
-      return { ...state, fetchLocationLoading: true }
+      return { ...state, fetchLocationLoading: true };
     case location.FETCH_LOCATION_SUCCESS:
-      return { ...state, location: action.payload, fetchLocationLoading: false }
+      return { ...state, location: action.payload, fetchLocationLoading: false };
     case location.FETCH_LOCATION_FAILURE:
-      return { ...state, location: [], fetchLocationError: action.payload.error, fetchLocationLoading: false }
+      return {
+        ...state,
+        location: [],
+        fetchLocationError: action.payload.error,
+        fetchLocationLoading: false
+      };
 
     case location.CREATE_LOCATION_LOADING:
-      return { ...state, fetchLocationLoading: true }
+      return { ...state, fetchLocationLoading: true };
     case location.CREATE_LOCATION_SUCCESS:
-      return { ...state, location: action.payload, fetchLocationLoading: false }
+      return { ...state, location: action.payload, fetchLocationLoading: false };
     case location.CREATE_LOCATION_FAILURE:
-      return { ...state, location: [], createLocationError: action.payload.error, fetchLocationLoading: false }
+      return {
+        ...state,
+        location: [],
+        createLocationError: action.payload.error,
+        fetchLocationLoading: false
+      };
 
     case location.EDIT_LOCATION_LOADING:
-      return { ...state, locationLoading: true }
+      return { ...state, locationLoading: true };
     case location.EDIT_LOCATION_SUCCESS:
-      return { ...state, location: action.payload, locationLoading: false }
+      return { ...state, location: action.payload, locationLoading: false };
     case location.EDIT_LOCATION_FAILURE:
-      return { ...state, location: [], locationError: action.payload.error, locationLoading: false }
+      return {
+        ...state,
+        location: [],
+        locationError: action.payload.error,
+        locationLoading: false
+      };
 
     case location.DEL_LOCATION_LOADING:
-      return { ...state, delLocationLoading: true }
+      return { ...state, delLocationLoading: true };
     case location.DEL_LOCATION_SUCCESS:
-      return { ...state, locations: action.payload, delLocationLoading: false }
+      return { ...state, locations: action.payload, delLocationLoading: false };
     case location.DEL_LOCATION_FAILURE:
-      return { ...state, location: [], delLocationError: action.payload.error, delLocationLoading: false }
+      return {
+        ...state,
+        location: [],
+        delLocationError: action.payload.error,
+        delLocationLoading: false
+      };
 
     default:
       return state;
   }
-}
+};
 
 export default reducer;

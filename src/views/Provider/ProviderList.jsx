@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -11,6 +12,7 @@ import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import ArtTrack from '@material-ui/icons/ArtTrack';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { classesType } from 'types/global.js';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
@@ -32,30 +34,27 @@ class ProviderList extends React.Component {
     super(props);
     this.state = {
       data: [],
-      deleteProvider: {
+      deletedProvider: {
         id: 0,
         isDel: false
       }
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.providers });
+  componentDidMount() {
+    const sub = localStorage.getItem('userSub');
+    this.props.fetchProvidersByBusinessAdminId(sub);
   }
 
-  deleteProvider(providerId) {
-    const data = {
-      id: providerId,
-      isDel: true
-    };
-    this.setState({ deleteProvider: data });
+  componentWillReceiveProps(nextProps) {
+    this.setState({ data: nextProps.providers });
   }
 
   cancelDelete = () => {
     const data = {
       isDel: false
     };
-    this.setState({ deleteProvider: data });
+    this.setState({ deletedProvider: data });
   };
 
   confirmDelete = providerId => {
@@ -63,12 +62,15 @@ class ProviderList extends React.Component {
     const data = {
       isDel: false
     };
-    this.setState({ deleteProvider: data });
+    this.setState({ deletedProvider: data });
   };
 
-  componentDidMount() {
-    const sub = localStorage.getItem('userSub');
-    this.props.fetchProvidersByBusinessAdminId(sub);
+  deleteProvider(providerId) {
+    const data = {
+      id: providerId,
+      isDel: true
+    };
+    this.setState({ deletedProvider: data });
   }
 
   render() {
@@ -80,7 +82,7 @@ class ProviderList extends React.Component {
       delProviderError
     } = this.props;
     let data = [];
-    const { deleteProvider } = this.state;
+    const { deletedProvider } = this.state;
     if (fetchProvidersLoading) {
       return (
         <ClipLoader
@@ -181,12 +183,12 @@ class ProviderList extends React.Component {
       </GridContainer>
     );
 
-    const deletionPopup = deleteProvider.isDel ? (
+    const deletionPopup = deletedProvider.isDel ? (
       <DeletionModal
-        openDialog={deleteProvider.isDel}
+        openDialog={deletedProvider.isDel}
         closeDialog={this.cancelDelete}
         itemDeleteHandler={this.confirmDelete}
-        itemId={deleteProvider.id}
+        itemId={deletedProvider.id}
       />
     ) : null;
     return (
@@ -254,6 +256,17 @@ const mapDispatchToProps = dispatch => {
     fetchProvidersByBusinessAdminId: sub => dispatch(fetchProvidersByBusinessAdminId(sub)),
     deleteProvider: id => dispatch(deleteProvider(id))
   };
+};
+
+ProviderList.propTypes = {
+  fetchProvidersByBusinessAdminId: PropTypes.func.isRequired,
+  deleteProvider: PropTypes.func.isRequired,
+  providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: classesType.isRequired,
+  fetchProvidersLoading: PropTypes.bool.isRequired,
+  fetchProviderError: PropTypes.string.isRequired,
+  delProviderLoading: PropTypes.bool.isRequired,
+  delProviderError: PropTypes.string.isRequired
 };
 
 export default compose(
