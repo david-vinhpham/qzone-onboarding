@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Switch, Route, Redirect } from "react-router-dom";
-import withStyles from "@material-ui/core/styles/withStyles";
-import AuthHeader from "../components/Header/AuthHeader.jsx";
-import authRoutes from "../routes/auth.jsx";
-import pagesStyle from "../assets/jss/material-dashboard-pro-react/layouts/pagesStyle.jsx";
-import bgImage from "../assets/img/register.jpeg";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import withStyles from '@material-ui/core/styles/withStyles';
+import AuthHeader from '../components/Header/AuthHeader.jsx';
+import authRoutes from '../routes/auth.js';
+import pagesStyle from '../assets/jss/material-dashboard-pro-react/layouts/pagesStyle.jsx';
+import bgImage from '../assets/img/register.jpeg';
 
 class Auth extends React.Component {
   render() {
@@ -21,22 +21,14 @@ class Auth extends React.Component {
                   return null;
                 }
                 if (prop.redirect) {
-                  return (
-                    <Redirect from={prop.path} to={prop.pathTo} key={key} />
-                  );
+                  return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
                 }
-                return (
-                  <Route
-                    path={prop.path}
-                    component={prop.component}
-                    key={key}
-                  />
-                );
+                return <Route path={prop.path} component={prop.component} key={key} />;
               })}
             </Switch>
             <div
               className={classes.fullPageBackground}
-              style={{ backgroundImage: "url(" + bgImage + ")" }}
+              style={{ backgroundImage: `url(${bgImage})` }}
             />
           </div>
         </div>

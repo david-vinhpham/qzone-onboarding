@@ -1,56 +1,65 @@
-import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import { Manager, Target, Popper } from "react-popper";
-import withStyles from "@material-ui/core/styles/withStyles";
-import { MenuItem, MenuList, ClickAwayListener, Paper, Grow, Hidden, TextField } from "@material-ui/core";
-import { Person, Notifications, Dashboard, Search } from "@material-ui/icons";
-import { Auth } from 'aws-amplify'
-import Button from "../CustomButtons/Button";
-import headerLinksStyle from "../../assets/jss/material-dashboard-pro-react/components/headerLinksStyle";
-import { logout} from '../../actions/auth';
+import React from 'react';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { Manager, Target, Popper } from 'react-popper';
+import withStyles from '@material-ui/core/styles/withStyles';
+import {
+  MenuItem,
+  MenuList,
+  ClickAwayListener,
+  Paper,
+  Grow,
+  Hidden,
+  TextField
+} from '@material-ui/core';
+import { Person, Notifications, Dashboard, Search } from '@material-ui/icons';
+import { Auth } from 'aws-amplify';
+import Button from '../CustomButtons/Button';
+import headerLinksStyle from '../../assets/jss/material-dashboard-pro-react/components/headerLinksStyle';
+import { logout } from '../../actions/auth';
 
 class HeaderLinks extends React.Component {
   state = {
     notificationOpen: false,
     userOpen: false
   };
+
   handleClick = () => {
     this.setState({ notificationOpen: !this.state.notificationOpen });
   };
+
   handleUserClick = () => {
     this.setState({ userOpen: !this.state.userOpen });
   };
+
   handleClose = () => {
     this.setState({ notificationOpen: false });
   };
+
   handleUserClose = () => {
     this.setState({ userOpen: false });
   };
+
   handleLogout = () => {
     Auth.signOut({ global: true })
       .then(data => console.log(data))
       .catch(err => console.log(err));
-    //this.setState({ userOpen: false });
-    //window.location = "/login"
-  }
+    // this.setState({ userOpen: false });
+    // window.location = "/login"
+  };
+
   render() {
     const { classes } = this.props;
-    const { notificationOpen , userOpen} = this.state;
-    const dropdownItem =
-      classes.dropdownItem +
-      " " 
+    const { notificationOpen, userOpen } = this.state;
+    const dropdownItem = `${classes.dropdownItem} `;
     const managerClasses = classNames({
       [classes.managerClasses]: true
     });
     return (
       <div>
-        <TextField id="time" placeholder="Search"  />
-        <Button
-          justIcon
-          round
-          color="white">
-            <Search className={classes.miniIcon} />
+        <TextField id="time" placeholder="Search" />
+        <Button justIcon round color="white">
+          <Search className={classes.miniIcon} />
         </Button>
         <Button
           color="transparent"
@@ -60,48 +69,34 @@ class HeaderLinks extends React.Component {
           justIcon
           className={classes.buttonLink}
           muiClasses={{
-            label: ""
+            label: ''
           }}
         >
-          <Dashboard
-            className={
-              classes.headerLinksSvg +
-              " " +
-              classes.links
-            }
-          />
+          <Dashboard className={`${classes.headerLinksSvg} ${classes.links}`} />
           <Hidden mdUp>
-            <span className={classes.linkText}>
-              {"Dashboard"}
-            </span>
+            <span className={classes.linkText}>Dashboard</span>
           </Hidden>
         </Button>
-        
+
         <Manager className={managerClasses}>
           <Target>
             <Button
               color="transparent"
               justIcon
               aria-label="Notifications"
-              aria-owns={notificationOpen ? "menu-list" : null}
+              aria-owns={notificationOpen ? 'menu-list' : null}
               aria-haspopup="true"
               onClick={this.handleClick}
               className={classes.buttonLink}
               muiClasses={{
-                label: ""
+                label: ''
               }}
             >
-              <Notifications
-                className={
-                  classes.headerLinksSvg +
-                  " " +
-                  classes.links
-                }
-              />
+              <Notifications className={`${classes.headerLinksSvg} ${classes.links}`} />
               <span className={classes.notifications}>5</span>
               <Hidden mdUp>
                 <span onClick={this.handleClick} className={classes.linkText}>
-                  {"Notification"}
+                  {'Notification'}
                 </span>
               </Hidden>
             </Button>
@@ -109,49 +104,28 @@ class HeaderLinks extends React.Component {
           <Popper
             placement="bottom-start"
             eventsEnabled={notificationOpen}
-            className={
-              classNames({ [classes.popperClose]: !notificationOpen }) +
-              " " +
+            className={`${classNames({ [classes.popperClose]: !notificationOpen })} ${
               classes.pooperResponsive
-            }
+            }`}
           >
             <ClickAwayListener onClickAway={this.handleClose}>
-              <Grow
-                in={notificationOpen}
-                id="menu-list"
-                style={{ transformOrigin: "0 0 0" }}
-              >
+              <Grow in={notificationOpen} id="menu-list" style={{ transformOrigin: '0 0 0' }}>
                 <Paper className={classes.dropdown}>
                   <MenuList role="menu">
-                    <MenuItem
-                      onClick={this.handleClose}
-                      className={dropdownItem}
-                    >
-                      {"Mike John responded to your email"}
+                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                      {'Mike John responded to your email'}
                     </MenuItem>
-                    <MenuItem
-                      onClick={this.handleClose}
-                      className={dropdownItem}
-                    >
-                      {"You have 5 new tasks"}
+                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                      {'You have 5 new tasks'}
                     </MenuItem>
-                    <MenuItem
-                      onClick={this.handleClose}
-                      className={dropdownItem}
-                    >
+                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
                       {"You're now friend with Andrew"}
                     </MenuItem>
-                    <MenuItem
-                      onClick={this.handleClose}
-                      className={dropdownItem}
-                    >
-                      {"Another Notification"}
+                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                      {'Another Notification'}
                     </MenuItem>
-                    <MenuItem
-                      onClick={this.handleClose}
-                      className={dropdownItem}
-                    >
-                      {"Another One"}
+                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                      {'Another One'}
                     </MenuItem>
                   </MenuList>
                 </Paper>
@@ -166,56 +140,36 @@ class HeaderLinks extends React.Component {
               color="transparent"
               justIcon
               aria-label="Person"
-              aria-owns={userOpen ? "menu-list" : null}
+              aria-owns={userOpen ? 'menu-list' : null}
               aria-haspopup="true"
               onClick={this.handleUserClick}
               className={classes.buttonLink}
               muiClasses={{
-                label:  ""
+                label: ''
               }}
             >
-              <Person
-                className={
-                  classes.headerLinksSvg +
-                  " " +
-                  classes.links
-                }
-              />
+              <Person className={`${classes.headerLinksSvg} ${classes.links}`} />
               <Hidden mdUp>
-                <span className={classes.linkText}>
-                  {"Profile"}
-                </span>
+                <span className={classes.linkText}>Profile</span>
               </Hidden>
             </Button>
           </Target>
           <Popper
             placement="bottom-start"
             eventsEnabled={userOpen}
-            className={
-              classNames({ [classes.popperClose]: !userOpen }) +
-              " " +
+            className={`${classNames({ [classes.popperClose]: !userOpen })} ${
               classes.pooperResponsive
-            }
+            }`}
           >
             <ClickAwayListener onClickAway={this.handleUserClose}>
-              <Grow
-                in={userOpen}
-                id="menu-list"
-                style={{ transformOrigin: "0 0 0" }}
-              >
+              <Grow in={userOpen} id="menu-list" style={{ transformOrigin: '0 0 0' }}>
                 <Paper className={classes.dropdown}>
                   <MenuList role="menu">
-                    <MenuItem
-                      onClick={this.handleUserClose}
-                      className={dropdownItem}
-                    >
-                      {"Profile"}
+                    <MenuItem onClick={this.handleUserClose} className={dropdownItem}>
+                      {'Profile'}
                     </MenuItem>
-                    <MenuItem
-                      onClick={logout}
-                      className={dropdownItem}
-                    >
-                      {"Logout"}
+                    <MenuItem onClick={logout} className={dropdownItem}>
+                      {'Logout'}
                     </MenuItem>
                   </MenuList>
                 </Paper>

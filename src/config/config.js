@@ -1,5 +1,5 @@
 export const API_ROOT = 'http://13.238.116.171:8080/api/';
-export const API_MEDIA_URL = 'http://13.238.116.171:8093/api/media/medias'
+export const API_MEDIA_URL = 'http://13.238.116.171:8093/api/media/medias';
 export const URL = {
   ORGANIZATION_NAME_VALIDATE: 'validate?name=',
   ORGANIZATION: 'organizations',
@@ -7,7 +7,7 @@ export const URL = {
   FETCH_ORGANIZATIONS_BY_ADMIN_ID: 'organizations-by-admin-id/',
   FETCH_ORGANIZATIONS_BY_BUSINESS_ADMIN_ID: 'organizations-by-business-admin-id/',
   FETCH_ORGANIZATIONS_OPTION_BY_BUSINESS_ADMIN_ID: 'organizations-option-by-business-admin-id/',
-  FETCH_ORGANIZATION:'organizations/',
+  FETCH_ORGANIZATION: 'organizations/',
 
   FETCH_SERVICES_BY_BUSINESS_ADMIN_ID: 'services-by-business-admin-id/',
   FETCH_SERVICES_BY_ORG_ID: 'services-by-org-id/',
@@ -25,7 +25,7 @@ export const URL = {
 
   LOCATION: 'geo-locations',
   LOCATIONS_OPTION: 'geo-locations-option',
-  FETCH_LOCATION:'geo-locations/',
+  FETCH_LOCATION: 'geo-locations/',
 
   USER: 'users',
   RESET_PASSWORD: 'users/reset-password',
@@ -42,7 +42,13 @@ export const URL = {
 
   FETCH_EVENTS_CALENDAR_BY_CUSTOMER_ID: 'find-events-calendar-by-customer-id/',
   FETCH_EVENTS_CALENDAR_BY_PROVIDER_ID: 'find-events-calendar-by-provider-id/',
-}
-export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com'
 
-export const GEO_CODING_KEY = 'AIzaSyCM4fZfA-m2F6ekcl4IyN77YZJlAdydxlc'
+  FIND_ORGS_BY_BUSINESS_ID: 'organizations-by-business-admin-id/',
+  FIND_PROVIDER_BY_ORG_ID: 'providers-by-org-id/',
+  FIND_NORMAL_EVENTS_BY_PROVIDER_ID: 'find-normal-events-by-provider-id/',
+  NEW_NORMAL_EVENT: 'normal-events',
+  NEW_SPECIAL_EVENT: 'special-events'
+};
+export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';
+
+export const GEO_CODING_KEY = 'AIzaSyCM4fZfA-m2F6ekcl4IyN77YZJlAdydxlc';

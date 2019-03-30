@@ -1,13 +1,22 @@
-import React from "react";
-import cx from "classnames";
-import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
-import withStyles from "@material-ui/core/styles/withStyles";
-import { AppBar, Toolbar, Hidden, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { Menu } from "@material-ui/icons";
-import Button from "../CustomButtons/Button";
-import authRoutes from "../../routes/auth.jsx";
-import authHeaderStyle from "../../assets/jss/material-dashboard-pro-react/components/authHeaderStyle.jsx";
+import React from 'react';
+import cx from 'classnames';
+import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
+import withStyles from '@material-ui/core/styles/withStyles';
+import {
+  AppBar,
+  Toolbar,
+  Hidden,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from '@material-ui/core';
+import { Menu } from '@material-ui/icons';
+import Button from '../CustomButtons/Button';
+import authRoutes from '../../routes/auth.js';
+import authHeaderStyle from '../../assets/jss/material-dashboard-pro-react/components/authHeaderStyle.jsx';
 
 class AuthHeader extends React.Component {
   constructor(props) {
@@ -16,42 +25,46 @@ class AuthHeader extends React.Component {
       open: false
     };
   }
-  handleDrawerToggle = () => {
-    this.setState({ open: !this.state.open });
-  };
-  activeRoute(routeName) {
-    return this.props.location.pathname.indexOf(routeName) > -1 ? true : false;
-  }
+
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
-      this.setState({open: false});
+      this.setState({ open: false });
     }
   }
+
+  handleDrawerToggle = () => {
+    this.setState(oldState => ({ open: !oldState.open }));
+  };
+
+  activeRoute(routeName) {
+    return this.props.location.pathname.indexOf(routeName) > -1;
+  }
+
   render() {
     const { classes, color } = this.props;
     const appBarClasses = cx({
-      [" " + classes[color]]: color
+      [` ${classes[color]}`]: color
     });
-    var list = (
+    const list = (
       <List className={classes.list}>
-        {authRoutes.map((prop, key) => {
+        {authRoutes.map(prop => {
           if (prop.redirect) {
             return null;
           }
           const navLink =
             classes.navLink +
             cx({
-              [" " + classes.navLinkActive]: this.activeRoute(prop.path)
+              [` ${classes.navLinkActive}`]: this.activeRoute(prop.path)
             });
           return (
-            <ListItem key={key} className={classes.listItem}>
+            <ListItem key={prop.path} className={classes.listItem}>
               <NavLink to={prop.path} className={navLink}>
                 <ListItemIcon className={classes.listItemIcon}>
                   <prop.icon />
                 </ListItemIcon>
                 <ListItemText
                   primary={prop.short}
-                  disableTypography={true}
+                  disableTypography
                   className={classes.listItemText}
                 />
               </NavLink>
@@ -95,7 +108,7 @@ class AuthHeader extends React.Component {
             <Hidden mdUp>
               <Drawer
                 variant="temporary"
-                anchor={"right"}
+                anchor="right"
                 open={this.state.open}
                 classes={{
                   paper: classes.drawerPaper
@@ -117,7 +130,7 @@ class AuthHeader extends React.Component {
 
 AuthHeader.propTypes = {
   classes: PropTypes.object.isRequired,
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
+  color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger'])
 };
 
 export default withStyles(authHeaderStyle)(AuthHeader);
