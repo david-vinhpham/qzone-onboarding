@@ -1,0 +1,35 @@
+.eventActions {
+  display: flex;
+  flex-direction: row;
+}
+
+.eventTitle {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.eventMarker {
+  height: 18px;
+  width: 18px;
+  border-radius: 5px;
+}
+
+.eventMarkerWrapper {
+  padding-right: 8px;
+}
+
+.eventPopoverTime {
+  display: flex;
+  align-items: center;
+
+  > div {
+    margin-left: 16px;
+  }
+}
+
+.eventPopoverContent {
+  > div {
+    padding: 8px;
+  }
+}

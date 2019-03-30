@@ -4,12 +4,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import ArtTrack from "@material-ui/icons/ArtTrack";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Search from "@material-ui/icons/Search";
-import {connect} from 'react-redux';
-import {compose} from 'redux';
-import {ClipLoader} from 'react-spinners';
-import {css} from '@emotion/core';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { ClipLoader } from 'react-spinners';
+import { css } from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -20,7 +20,7 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx";
-import {fetchServicesByBusinessAdminId} from '../../actions/service';
+import { fetchServicesByBusinessAdminId } from '../../actions/service';
 
 const override = css`
     display: block;
@@ -28,7 +28,7 @@ const override = css`
     border-color: red;
 `;
 
-class ServicesList extends React.Component{
+class ServicesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,9 +53,9 @@ class ServicesList extends React.Component{
       services,
     } = this.props;
     let data = [];
-    if(fetchServicesLoading) {
+    if (fetchServicesLoading) {
       return < ClipLoader
-        className={override}
+        css={override}
         sizeUnit={"px"}
         size={100}
         color={'#123abc'}
@@ -66,7 +66,7 @@ class ServicesList extends React.Component{
       return <div className="alert alert-danger">Error: {services}</div>
     }
     else {
-        data = (
+      data = (
         <GridContainer>
           {this.state.data.map((service, index) => {
             return (

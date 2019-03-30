@@ -1,36 +1,36 @@
-import React from "react";
+import React from 'react';
 
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-import Email from "@material-ui/icons/Email";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Phone from "@material-ui/icons/Phone";
-import { FormLabel, FormControlLabel, Switch } from "@material-ui/core";
+import withStyles from '@material-ui/core/styles/withStyles';
+import Email from '@material-ui/icons/Email';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Phone from '@material-ui/icons/Phone';
+import { FormLabel, FormControlLabel, Switch } from '@material-ui/core';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import CustomInput from "../../../components/CustomInput/CustomInput.jsx";
-import GridContainer from "../../../components/Grid/GridContainer.jsx";
-import GridItem from "../../../components/Grid/GridItem.jsx";
-import customSelectStyle from "../../../assets/jss/material-dashboard-pro-react/customSelectStyle.jsx";
-import customCheckboxRadioSwitch from "../../../assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.jsx";
+import CustomInput from '../../../components/CustomInput/CustomInput.jsx';
+import GridContainer from '../../../components/Grid/GridContainer.jsx';
+import GridItem from '../../../components/Grid/GridItem.jsx';
+import customSelectStyle from '../../../assets/jss/material-dashboard-pro-react/customSelectStyle.jsx';
+import customCheckboxRadioSwitch from '../../../assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.jsx';
 
 import { fetchAllLocations } from '../../../actions/location';
 
 const style = {
   infoText: {
-    fontWeight: "300",
-    margin: "10px 0 30px",
-    textAlign: "center"
+    fontWeight: '300',
+    margin: '10px 0 30px',
+    textAlign: 'center'
   },
   inputAdornmentIcon: {
-    color: "#555"
+    color: '#555'
   },
   choiche: {
-    textAlign: "center",
-    cursor: "pointer",
-    marginTop: "20px"
+    textAlign: 'center',
+    cursor: 'pointer',
+    marginTop: '20px'
   },
   ...customSelectStyle,
   ...customCheckboxRadioSwitch
@@ -42,26 +42,24 @@ const options = [
   { value: 'vanilla', label: 'Vanilla' }
 ];
 
-
 class Step2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      telephone: "",
+      telephone: '',
       isAdmin: false,
-      email: "",
-      emailState: "",
-      selectedOption: null,
-
+      email: '',
+      emailState: '',
+      selectedOption: null
     };
   }
 
   componentDidMount() {
-    //this.props.fetchAllLocations();
+    // this.props.fetchAllLocations();
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({geoLocation: nextProps.getAllLocations})
+    this.setState({ geoLocation: nextProps.getAllLocations });
   }
 
   sendState() {
@@ -69,7 +67,7 @@ class Step2 extends React.Component {
   }
 
   verifyEmail(value) {
-    var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (emailRex.test(value)) {
       return true;
     }
@@ -78,11 +76,11 @@ class Step2 extends React.Component {
 
   change(event, stateName, type) {
     switch (type) {
-      case "email":
+      case 'email':
         if (this.verifyEmail(event.target.value)) {
-          this.setState({ [stateName + "State"]: "success" });
+          this.setState({ [`${stateName}State`]: 'success' });
         } else {
-          this.setState({ [stateName + "State"]: "error" });
+          this.setState({ [`${stateName}State`]: 'error' });
         }
         break;
       default:
@@ -99,48 +97,39 @@ class Step2 extends React.Component {
     return true;
   }
 
-  handleChangeSelect = (selectedOption) => {
+  handleChangeSelect = selectedOption => {
     this.setState({ selectedOption });
-    console.log(`Option selected:`, selectedOption);
-  }
+  };
 
   render() {
     const { classes } = this.props;
     const { selectedOption } = this.state;
-    console.log("this.state 2-----", this.state)
     return (
       <div>
         <h4 className={classes.infoText}> Further Details </h4>
         <GridContainer justify="center">
           <GridItem xs={12} sm={5}>
             <CustomInput
-              labelText={
-                <span>
-                  Phone Number
-              </span>
-              }
+              labelText={<span>Phone Number</span>}
               id="telephone"
               formControlProps={{
                 fullWidth: true
               }}
               inputProps={{
-                type: "number",
+                type: 'number',
                 endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    className={classes.inputAdornment}
-                  >
+                  <InputAdornment position="end" className={classes.inputAdornment}>
                     <Phone className={classes.inputAdornmentIcon} />
                   </InputAdornment>
                 )
               }}
-              onChange={event => this.change(event, "telephone")}
+              onChange={event => this.change(event, 'telephone')}
             />
           </GridItem>
           <GridItem xs={12} sm={5}>
             <CustomInput
-              success={this.state.emailState === "success"}
-              error={this.state.emailState === "error"}
+              success={this.state.emailState === 'success'}
+              error={this.state.emailState === 'error'}
               labelText={
                 <span>
                   Email <small>(required)</small>
@@ -151,26 +140,18 @@ class Step2 extends React.Component {
                 fullWidth: true
               }}
               inputProps={{
-
                 endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    className={classes.inputAdornment}
-                  >
+                  <InputAdornment position="end" className={classes.inputAdornment}>
                     <Email className={classes.inputAdornmentIcon} />
                   </InputAdornment>
                 )
               }}
-              onChange={event => this.change(event, "email", "email")}
+              onChange={event => this.change(event, 'email', 'email')}
             />
           </GridItem>
           <GridItem xs={12} sm={3}>
             <FormLabel
-              className={
-                classes.labelHorizontal +
-                " " +
-                classes.labelHorizontalRadioCheckbox
-              }
+              className={`${classes.labelHorizontal} ${classes.labelHorizontalRadioCheckbox}`}
             >
               Is Provider Admin?
             </FormLabel>
@@ -182,41 +163,36 @@ class Step2 extends React.Component {
                   name="isAdmin"
                   checked={this.state.isAdmin}
                   value="isAdmin"
-                  onChange={this.handleChange("isAdmin")}
+                  onChange={this.handleChange('isAdmin')}
                 />
               }
             />
           </GridItem>
           <GridItem xs={12} sm={5}>
-            <Select
-              value={selectedOption}
-              onChange={this.handleChangeSelect}
-              options={options}
-            />
+            <Select value={selectedOption} onChange={this.handleChangeSelect} options={options} />
           </GridItem>
         </GridContainer>
-
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     getAllLocations: state.location.getAllLocations,
     getAllLocationsLoading: state.location.getAllLocationsLoading
-  }
-}
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchAllLocations: () => dispatch(fetchAllLocations())
-  }
-}
+  };
+};
 
 // export default compose(
 // 	withStyles(style),
 // 	connect(mapStateToProps, mapDispatchToProps),
 // )(Step2);
 
-export default withStyles(style)(Step2)
+export default withStyles(style)(Step2);

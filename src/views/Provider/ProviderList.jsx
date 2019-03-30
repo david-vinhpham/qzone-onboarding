@@ -1,14 +1,14 @@
 import React from "react";
-import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
-import {compose} from 'redux';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import Search from "@material-ui/icons/Search";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import {ClipLoader} from 'react-spinners';
-import {css} from '@emotion/core';
+import { ClipLoader } from 'react-spinners';
+import { css } from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -17,7 +17,7 @@ import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import {fetchProvidersByBusinessAdminId} from '../../actions/provider';
+import { fetchProvidersByBusinessAdminId } from '../../actions/provider';
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx"
 
@@ -48,7 +48,7 @@ class ProviderList extends React.Component {
     let data = [];
     if (fetchProvidersLoading) {
       return < ClipLoader
-        className={override}
+        css={override}
         sizeUnit={"px"}
         size={100}
         color={'#123abc'}
@@ -59,7 +59,7 @@ class ProviderList extends React.Component {
       return <div className="alert alert-danger">Error: {providers}</div>
     }
     else {
-        data = (
+      data = (
         <GridContainer>
           {this.state.data.map((provider, index) => {
             return (
@@ -160,7 +160,7 @@ class ProviderList extends React.Component {
           </GridItem>
         </GridContainer>
         {data}
-         </div>
+      </div>
     );
   }
 }

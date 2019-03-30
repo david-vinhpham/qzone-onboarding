@@ -1,31 +1,29 @@
-import {API_ROOT, URL} from '../config/config';
-import {service} from '../constants/Service.constants';
-
+import { API_ROOT, URL } from '../config/config';
+import { service } from '../constants/Service.constants';
 
 export const editServiceLoading = () => {
   return {
     type: service.EDIT_SERVICE_LOADING
-  }
-}
+  };
+};
 
-export const editServiceSuccess = (data) => {
+export const editServiceSuccess = data => {
   return {
     type: service.EDIT_SERVICE_SUCCESS,
     payload: { data }
-  }
-}
+  };
+};
 
-export const editServiceFailure = (error) => {
+export const editServiceFailure = error => {
   return {
     type: service.EDIT_SERVICE_FAILURE,
     payload: { error }
-  }
-}
-
+  };
+};
 
 export const editService = (data, history) => {
-  return (dispatch) => {
-    dispatch(editServiceLoading())
+  return dispatch => {
+    dispatch(editServiceLoading());
     fetch(API_ROOT + URL.SERVICE, {
       method: 'PUT',
       headers: {
@@ -34,122 +32,140 @@ export const editService = (data, history) => {
       body: JSON.stringify(data)
     })
       .then(res => res.json())
-      .then(data => {
-        if(data.status === 200 || data.status === 201 || data.success === true) {
-          dispatch(editServiceSuccess(data.object));
+      .then(svc => {
+        if (svc.status === 200 || svc.status === 201 || svc.success === true) {
+          dispatch(editServiceSuccess(svc.object));
           history.push('/services/list');
-        }
-        else {
-          dispatch(editServiceFailure(data));
+        } else {
+          dispatch(editServiceFailure(svc));
         }
       })
       .catch(err => {
-        dispatch(editServiceFailure(err))
-      })
-  }
-}
-
-export const fetchServiceById = (id) => {
-        return (dispatch) => {
-        dispatch(fetchServiceLoading())
-        fetch(API_ROOT + URL.FETCH_SERVICE_BY_ID + id, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            dispatch(fetchServiceSuccess(data.object))
-        })
-        .catch(err => {
-            dispatch(fetchServiceFailure(err))
-        })
-    }
-}
+        dispatch(editServiceFailure(err));
+      });
+  };
+};
 
 export const fetchServiceLoading = () => {
-    return {
-        type: service.FETCH_SERVICE_LOADING
-    }
-}
+  return {
+    type: service.FETCH_SERVICE_LOADING
+  };
+};
 
-export const fetchServiceSuccess = (data) => {
-    return {
-        type: service.FETCH_SERVICE_SUCCESS,
-        payload: { data }
-    }
-}
+export const fetchServiceSuccess = data => {
+  return {
+    type: service.FETCH_SERVICE_SUCCESS,
+    payload: { data }
+  };
+};
 
-export const fetchServiceFailure = (error) => {
-    return {
-        type: service.FETCH_SERVICE_FAILURE,
-        payload: { error }
-    }
-}
+export const fetchServiceFailure = error => {
+  return {
+    type: service.FETCH_SERVICE_FAILURE,
+    payload: { error }
+  };
+};
 
-export const fetchServiceCategories = () => {
-    console.log('fetchServiceCategories');
-    return (dispatch) => {
-        dispatch(fetchServiceCategoriesLoading())
-        fetch(API_ROOT + URL.FETCH_SERVICE_CATEGORIES, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            dispatch(fetchServiceCategoriesSuccess(data.objects))
-        })
-        .catch(err => {
-            dispatch(fetchServiceCategoriesFailure(err))
-        })
-    }
-}
+export const fetchServiceById = id => {
+  return dispatch => {
+    dispatch(fetchServiceLoading());
+    fetch(API_ROOT + URL.FETCH_SERVICE_BY_ID + id, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch(fetchServiceSuccess(data.object));
+      })
+      .catch(err => {
+        dispatch(fetchServiceFailure(err));
+      });
+  };
+};
 
 export const fetchServiceCategoriesLoading = () => {
-    return {
-        type: service.FETCH_CATEGORIES_LOADING
-    }
-}
+  return {
+    type: service.FETCH_CATEGORIES_LOADING
+  };
+};
 
-export const fetchServiceCategoriesSuccess = (data) => {
-    return {
-        type: service.FETCH_CATEGORIES_SUCCESS,
-        payload: { data }
-    }
-}
+export const fetchServiceCategoriesSuccess = data => {
+  return {
+    type: service.FETCH_CATEGORIES_SUCCESS,
+    payload: { data }
+  };
+};
 
-export const fetchServiceCategoriesFailure = (error) => {
-    return {
-        type: service.FETCH_CATEGORIES_FAILURE,
-        payload: { error }
-    }
-}
+export const fetchServiceCategoriesFailure = error => {
+  return {
+    type: service.FETCH_CATEGORIES_FAILURE,
+    payload: { error }
+  };
+};
 
-export const fetchServicesByOrgId = (orgId) => {
-    return (dispatch) => {
-        dispatch(fetchServicesLoading())
-        fetch(API_ROOT + URL.FETCH_SERVICES + orgId, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            dispatch(fetchServicesSuccess(data.objects))
-        })
-        .catch(err => {
-            dispatch(fetchServicesFailure(err))
-        })
-    }
-}
+export const fetchServiceCategories = () => {
+  return dispatch => {
+    dispatch(fetchServiceCategoriesLoading());
+    fetch(API_ROOT + URL.FETCH_SERVICE_CATEGORIES, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch(fetchServiceCategoriesSuccess(data.objects));
+      })
+      .catch(err => {
+        dispatch(fetchServiceCategoriesFailure(err));
+      });
+  };
+};
 
-export const fetchServicesOptionByOrgId = (orgId) => {
-  return (dispatch) => {
-    dispatch(fetchServicesLoading())
+export const fetchServicesLoading = () => {
+  return {
+    type: service.FETCH_SERVICES_LOADING
+  };
+};
+
+export const fetchServicesSuccess = data => {
+  return {
+    type: service.FETCH_SERVICES_SUCCESS,
+    payload: { data }
+  };
+};
+
+export const fetchServicesFailure = error => {
+  return {
+    type: service.FETCH_SERVICES_FAILURE,
+    payload: { error }
+  };
+};
+
+export const fetchServicesByOrgId = orgId => {
+  return dispatch => {
+    dispatch(fetchServicesLoading());
+    fetch(API_ROOT + URL.FETCH_SERVICES + orgId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch(fetchServicesSuccess(data.objects));
+      })
+      .catch(err => {
+        dispatch(fetchServicesFailure(err));
+      });
+  };
+};
+
+export const fetchServicesOptionByOrgId = orgId => {
+  return dispatch => {
+    dispatch(fetchServicesLoading());
     fetch(API_ROOT + URL.FETCH_SERVICES_OPTION + orgId, {
       method: 'GET',
       headers: {
@@ -158,17 +174,17 @@ export const fetchServicesOptionByOrgId = (orgId) => {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch(fetchServicesSuccess(data.objects))
+        dispatch(fetchServicesSuccess(data.objects));
       })
       .catch(err => {
-        dispatch(fetchServicesFailure(err))
-      })
-  }
-}
+        dispatch(fetchServicesFailure(err));
+      });
+  };
+};
 
-export const findServiceOptionByBusinessAdminId = (businessAdminId) => {
-  return (dispatch) => {
-    dispatch(fetchServicesLoading())
+export const findServiceOptionByBusinessAdminId = businessAdminId => {
+  return dispatch => {
+    dispatch(fetchServicesLoading());
     fetch(API_ROOT + URL.FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID + businessAdminId, {
       method: 'GET',
       headers: {
@@ -177,97 +193,74 @@ export const findServiceOptionByBusinessAdminId = (businessAdminId) => {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch(fetchServicesSuccess(data.objects))
+        dispatch(fetchServicesSuccess(data.objects));
       })
       .catch(err => {
-        dispatch(fetchServicesFailure(err))
-      })
-  }
-}
+        dispatch(fetchServicesFailure(err));
+      });
+  };
+};
 
-export const fetchServicesByBusinessAdminId = (businessAdminId) => {
-  return (dispatch) => {
-    dispatch(fetchServicesLoading())
+export const fetchServicesByBusinessAdminId = businessAdminId => {
+  return dispatch => {
+    dispatch(fetchServicesLoading());
     fetch(API_ROOT + URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     })
-    .then(res => res.json())
-    .then(data => {
-      dispatch(fetchServicesSuccess(data.objects))
-    })
-    .catch(err => {
-      dispatch(fetchServicesFailure(err))
-    })
-  }
-}
-
-export const fetchServicesLoading = () => {
-    return {
-        type: service.FETCH_SERVICES_LOADING
-    }
-}
-
-export const fetchServicesSuccess = (data) => {
-    return {
-        type: service.FETCH_SERVICES_SUCCESS,
-        payload: { data }
-    }
-}
-
-export const fetchServicesFailure = (error) => {
-  return {
-    type: service.FETCH_SERVICES_FAILURE,
-    payload: { error }
-  }
-}
-
-export const createService = (data, history) => {
-    console.log("data---", data)
-    return (dispatch) => {
-        dispatch(createServiceLoading())
-        fetch(API_ROOT + URL.SERVICE, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(data => {
-          if(data.status === 200 || data.status === 201 || data.success === true) {
-            dispatch(createServiceSuccess(data.object));
-            history.push('/services/list');
-          }
-          else {
-            dispatch(createServiceFailure(data));
-          }
-        })
-        .catch(err => {
-            dispatch(createServiceFailure(err))
-        })
-    }
-}
+      .then(res => res.json())
+      .then(data => {
+        dispatch(fetchServicesSuccess(data.objects));
+      })
+      .catch(err => {
+        dispatch(fetchServicesFailure(err));
+      });
+  };
+};
 
 export const createServiceLoading = () => {
-    return {
-        type: service.CREATE_SERVICE_LOADING
-    }
-}
+  return {
+    type: service.CREATE_SERVICE_LOADING
+  };
+};
 
-export const createServiceSuccess = (data) => {
-    return {
-        type: service.CREATE_SERVICE_SUCCESS,
-        payload: { data }
-    }
-}
+export const createServiceSuccess = data => {
+  return {
+    type: service.CREATE_SERVICE_SUCCESS,
+    payload: { data }
+  };
+};
 
-export const createServiceFailure = (error) => {
-    return {
-        type: service.CREATE_SERVICE_FAILURE,
-        payload: { error }
-    }
-}
+export const createServiceFailure = error => {
+  return {
+    type: service.CREATE_SERVICE_FAILURE,
+    payload: { error }
+  };
+};
 
+export const createService = (data, history) => {
+  return dispatch => {
+    dispatch(createServiceLoading());
+    fetch(API_ROOT + URL.SERVICE, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(svc => {
+        if (svc.status === 200 || svc.status === 201 || svc.success === true) {
+          dispatch(createServiceSuccess(svc.object));
+          history.push('/services/list');
+        } else {
+          dispatch(createServiceFailure(svc));
+        }
+      })
+      .catch(err => {
+        dispatch(createServiceFailure(err));
+      });
+  };
+};
