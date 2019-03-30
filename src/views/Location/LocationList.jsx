@@ -40,7 +40,9 @@ class LocationList extends React.Component {
   deleteLocation(locationId) {
     this.props.delLocation(locationId, this.props.history);
   }
-
+  componentDidMount() {
+    this.props.fetchLocations();
+  }
   render() {
     const { classes } = this.props;
     if (!this.state.data) return null;
