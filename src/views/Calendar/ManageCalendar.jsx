@@ -2,12 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 import moment from 'moment';
+import { isEmpty } from 'lodash';
 
 import { fetchNormalEventByBusinessId, createNewEvent } from 'actions/calendar';
-import { EVENT_LEVEL, EVENT_TYPE } from 'constants/Calendar.constants';
+import {
+  EVENT_LEVEL,
+  EVENT_TYPE,
+  EVENT_REPEAT_TYPE,
+  REPEAT_END_TYPE
+} from 'constants/Calendar.constants';
 import { providerType } from 'types/global';
 import Calendar from './CalendarV2';
 import AddEventDialog from './AddEventDialog';
+import CalendarLoading from './CalendarLoading';
 
 class ManageCalendar extends React.PureComponent {
   constructor(props) {
@@ -15,16 +22,24 @@ class ManageCalendar extends React.PureComponent {
 
     this.initialState = {
       isOpenAddDialog: false,
-      addEventData: { eventType: '' },
+      addEventData: {
+        eventType: '',
+        repeat: {
+          repeatEnd: {}
+        }
+      },
       eventLevel: EVENT_LEVEL.ORGANIZATION
     };
-    this.state = { ...this.initialState };
+    this.state = { ...this.initialState, isLoading: false };
   }
 
   componentDidMount() {
     const userId = localStorage.getItem('userSub');
     if (userId) {
-      this.props.fetchNormalEventByBusinessId(userId);
+      this.setState({ isLoading: true });
+      this.props
+        .fetchNormalEventByBusinessId(userId)
+        .finally(() => this.setState({ isLoading: false }));
     }
   }
 
@@ -32,22 +47,28 @@ class ManageCalendar extends React.PureComponent {
 
   onClickNewEvent = (schedulerData, providerId, providerName, startTime, endTime) => {
     this.setState(() => {
-      const addEventData =
-        providerId === undefined
+      let addEventData = {
+        eventType: Object.values(EVENT_TYPE)[0],
+        description: '',
+        repeat: {
+          type: Object.values(EVENT_REPEAT_TYPE)[0],
+          repeatEnd: {}
+        }
+      };
+      addEventData = {
+        ...addEventData,
+        ...(providerId === undefined
           ? {
               startTime: moment(),
-              endTime: moment().add(1, 'hour'),
-              eventType: Object.values(EVENT_TYPE)[0],
-              description: ''
+              endTime: moment().add(1, 'hour')
             }
           : {
               providerId,
               providerName,
-              startTime: moment(startTime),
-              endTime: moment(endTime),
-              eventType: Object.values(EVENT_TYPE)[0],
-              description: ''
-            };
+              startTime,
+              endTime
+            })
+      };
 
       return {
         eventLevel: providerId ? EVENT_LEVEL.PROVIDER : EVENT_LEVEL.ORGANIZATION,
@@ -57,58 +78,127 @@ class ManageCalendar extends React.PureComponent {
     });
   };
 
+  generateRepeatPayload = repeat => {
+    let repeatPayload = { isAllowRepeat: true };
+
+    if (repeat.type === EVENT_REPEAT_TYPE.DAILY) {
+      repeatPayload = {
+        ...repeatPayload,
+        repeatType: EVENT_REPEAT_TYPE.DAILY,
+        repeat: {
+          repeatDaily: {
+            repeatEvery: repeat.every
+          }
+        }
+      };
+    }
+
+    if (repeat.type === EVENT_REPEAT_TYPE.WEEKLY) {
+      repeatPayload = {
+        ...repeatPayload,
+        repeatType: EVENT_REPEAT_TYPE.WEEKLY,
+        repeat: {
+          repeatWeekly: {
+            repeatEveryNumWeeks: repeat.every,
+            repeatOn: repeat.everyDate.join(',')
+          }
+        }
+      };
+    }
+
+    if (isEmpty(repeat.repeatEnd)) {
+      repeatPayload = { ...repeatPayload, repeatEndType: REPEAT_END_TYPE.NEVER };
+    } else {
+      if (repeat.repeatEnd.afterOccur !== undefined) {
+        repeatPayload = {
+          ...repeatPayload,
+          repeatEndType: REPEAT_END_TYPE.AFTER_NUM_OCCUR,
+          repeatEnd: {
+            afterNumOccurrences: repeat.repeatEnd.afterOccur
+          }
+        };
+      }
+
+      if (repeat.repeatEnd.onDate !== undefined) {
+        repeatPayload = {
+          ...repeatPayload,
+          repeatEndType: REPEAT_END_TYPE.ON_DATE,
+          repeatEnd: {
+            repeatEndOn: moment(repeat.repeatEnd.onDate)
+              .startOf('day')
+              .unix()
+          }
+        };
+      }
+    }
+
+    return repeatPayload;
+  };
+
+  generatePayload = addEventData => {
+    const { providerId, startTime, endTime, eventType, description, repeat } = addEventData;
+
+    let payload = {
+      description,
+      providerId,
+      slot: { startTime: moment(startTime).unix(), endTime: moment(endTime).unix() },
+      type: eventType
+    };
+
+    if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
+      payload = { ...payload, ...this.generateRepeatPayload(repeat) };
+    } else {
+      payload = { ...payload, isAllowRepeat: false };
+    }
+    return payload;
+  };
+
   createNewEvent = addEventData => {
     if (this.state.eventLevel === EVENT_LEVEL.ORGANIZATION) {
       this.createOrgNewEvent(addEventData);
       return;
     }
 
-    const { providerId, startTime, endTime, eventType, description } = addEventData;
-
-    const payload = {
-      description,
-      isAllowRepeat: false,
-      providerId,
-      slot: { startTime: moment(startTime).unix(), endTime: moment(endTime).unix() },
-      type: eventType
-    };
-
-    this.props.createNewEvent(payload).then(this.closeAddDialog);
+    this.closeAddDialog();
+    this.setState({ isLoading: true });
+    const payload = this.generatePayload(addEventData);
+    this.props.createNewEvent(payload).finally(() => this.setState({ isLoading: false }));
   };
 
   createOrgNewEvent = addEventData => {
-    const { startTime, endTime, eventType, description } = addEventData;
-
     const fetchMap = this.props.providers.map(provider => {
-      const payload = {
-        description,
-        isAllowRepeat: false,
-        providerId: provider.id,
-        slot: { startTime: moment(startTime).unix(), endTime: moment(endTime).unix() },
-        type: eventType
-      };
-
+      const payload = this.generatePayload({ ...addEventData, providerId: provider.id });
       return this.props.createNewEvent(payload);
     });
 
-    Promise.all(fetchMap).then(this.closeAddDialog);
+    this.closeAddDialog();
+    this.setState({ isLoading: true });
+    Promise.all(fetchMap).finally(() => this.setState({ isLoading: false }));
   };
+
+  updateEventLevel = eventLevel => this.setState({ eventLevel });
 
   render() {
     const { providers } = this.props;
-    const { isOpenAddDialog, eventLevel, addEventData } = this.state;
+    const { isOpenAddDialog, eventLevel, addEventData, isLoading } = this.state;
 
     return (
       <>
-        <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} />
-        <AddEventDialog
-          eventLevel={eventLevel}
-          providers={providers}
-          isOpenAddDialog={isOpenAddDialog}
-          closeAddDialog={this.closeAddDialog}
-          addEventData={addEventData}
-          createNewEvent={this.createNewEvent}
-        />
+        <div>
+          <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} />
+          <CalendarLoading isLoading={isLoading} />
+        </div>
+        {isOpenAddDialog && (
+          <AddEventDialog
+            eventLevel={eventLevel}
+            providers={providers}
+            isOpenAddDialog={isOpenAddDialog}
+            closeAddDialog={this.closeAddDialog}
+            addEventData={addEventData}
+            createNewEvent={this.createNewEvent}
+            updateEventLevel={this.updateEventLevel}
+          />
+        )}
       </>
     );
   }

@@ -10,13 +10,25 @@ import {
   DialogActions,
   Select,
   MenuItem,
-  TextField
+  TextField,
+  Chip,
+  Checkbox,
+  ListItemText,
+  Radio
 } from '@material-ui/core';
-import { get } from 'lodash';
+import { get, debounce, map, isEmpty, isNaN } from 'lodash';
 import { DateFormatInput, TimeFormatInput } from 'material-ui-next-pickers';
 import moment from 'moment';
 import produce from 'immer';
-import { EVENT_BG_COLOR, EVENT_TYPE, EVENT_LEVEL } from 'constants/Calendar.constants';
+import {
+  EVENT_BG_COLOR,
+  EVENT_TYPE,
+  EVENT_LEVEL,
+  EVENT_REPEAT_TYPE,
+  REPEAT_EVERY_DEF,
+  REPEAT_DATE_DEF,
+  REPEAT_END_TYPE
+} from 'constants/Calendar.constants';
 import { providerType } from 'types/global';
 import styles from './AddEventDialog.module.scss';
 
@@ -26,22 +38,8 @@ class AddEventDialog extends PureComponent {
     this.state = { eventLevel: props.eventLevel, addEventData: props.addEventData };
   }
 
-  static getDerivedStateFromProps(props, state) {
-    let newState = null;
-
-    if (props.eventLevel !== state.eventLevel) {
-      newState = { eventLevel: props.eventLevel };
-    }
-
-    if (Object.keys(props.addEventData).length !== Object.keys(state.addEventData).length) {
-      newState = { ...(newState || {}), addEventData: props.addEventData };
-    }
-
-    return newState;
-  }
-
-  onSelectEventLevel = event => {
-    const level = event.target.value;
+  onSelectEventLevel = ({ target: { value: level } }) => {
+    this.props.updateEventLevel(level);
     this.setState(oldState =>
       produce(oldState, draftState => {
         draftState.eventLevel = level;
@@ -54,12 +52,13 @@ class AddEventDialog extends PureComponent {
     );
   };
 
-  onDescriptionChange = event => {
-    const description = event.target.value;
-    this.setState(oldState => ({
-      addEventData: { ...oldState.addEventData, description }
-    }));
-  };
+  onDescriptionChange = debounce(
+    description =>
+      this.setState(oldState => ({
+        addEventData: { ...oldState.addEventData, description }
+      })),
+    100
+  );
 
   onSelectProvider = event => {
     const provider = this.props.providers.find(p => p.id === event.target.value);
@@ -72,8 +71,7 @@ class AddEventDialog extends PureComponent {
     }));
   };
 
-  onChangeEventType = event => {
-    const eventType = event.target.value;
+  onChangeEventType = ({ target: { value: eventType } }) => {
     this.setState(oldState => ({
       addEventData: { ...oldState.addEventData, eventType }
     }));
@@ -111,6 +109,100 @@ class AddEventDialog extends PureComponent {
     }
   };
 
+  onSelectRepeatType = ({ target: { value: repeatType } }) =>
+    this.setState(({ addEventData, addEventData: { repeat } }) => ({
+      addEventData: {
+        ...addEventData,
+        repeat: {
+          ...repeat,
+          type: repeatType,
+          every: repeatType === EVENT_REPEAT_TYPE.NEVER ? 0 : REPEAT_EVERY_DEF[repeatType][0],
+          everyDate:
+            repeatType === EVENT_REPEAT_TYPE.WEEKLY
+              ? [moment(addEventData.startTime).format('dddd')]
+              : [],
+          repeatEnd: {}
+        }
+      }
+    }));
+
+  onSelectRepeatEvery = ({ target: { value: repeatEvery } }) =>
+    this.setState(({ addEventData, addEventData: { repeat } }) => ({
+      addEventData: {
+        ...addEventData,
+        repeat: { ...repeat, every: repeatEvery }
+      }
+    }));
+
+  onSelectRepeatDay = ({ target: { value: options } }) => {
+    if (options.length === 0) return;
+    this.setState(({ addEventData, addEventData: { repeat } }) => ({
+      addEventData: {
+        ...addEventData,
+        repeat: { ...repeat, everyDate: options }
+      }
+    }));
+  };
+
+  onRepeatEndSelect = ({ target: { value } }) => {
+    this.setState(({ addEventData, addEventData: { repeat } }) => ({
+      addEventData: {
+        ...addEventData,
+        repeat: {
+          ...repeat,
+          repeatEnd: (type => {
+            let data = {};
+            if (type === REPEAT_END_TYPE.AFTER_NUM_OCCUR) {
+              data = { ...data, afterOccur: 10 };
+            }
+            if (type === REPEAT_END_TYPE.ON_DATE) {
+              data = {
+                ...data,
+                onDate: moment(addEventData.startTime)
+                  .add(1, 'week')
+                  .toDate()
+              };
+            }
+            return data;
+          })(value)
+        }
+      }
+    }));
+  };
+
+  onChangeOccurence = ({ target: { value } }) => {
+    if (isNaN(Number(value))) return;
+    this.setState(({ addEventData, addEventData: { repeat } }) => ({
+      addEventData: {
+        ...addEventData,
+        repeat: { ...repeat, repeatEnd: { afterOccur: value.length === 0 ? '' : Number(value) } }
+      }
+    }));
+  };
+
+  onBlurOccurence = ({ target: { value } }) => {
+    if (this.state.addEventData.repeat.repeatEnd.afterOccur !== undefined && value.length === 0) {
+      this.setState(({ addEventData, addEventData: { repeat } }) => ({
+        addEventData: {
+          ...addEventData,
+          repeat: { ...repeat, repeatEnd: { afterOccur: 1 } }
+        }
+      }));
+    }
+  };
+
+  onChangeRepeatEndDate = data => {
+    this.setState(({ addEventData, addEventData: { repeat } }) => {
+      if (moment(addEventData.endTime).isAfter(data, 'days')) return {};
+      return {
+        addEventData: {
+          ...addEventData,
+          repeat: { ...repeat, repeatEnd: { onDate: moment(data).toDate() } }
+        }
+      };
+    });
+  };
+
   createNewEvent = () => {
     this.props.createNewEvent(this.state.addEventData);
   };
@@ -122,7 +214,7 @@ class AddEventDialog extends PureComponent {
     const endTime = moment(addEventData.endTime).toDate();
 
     return (
-      <Dialog open={isOpenAddDialog} onClose={closeAddDialog} maxWidth="sm">
+      <Dialog open={isOpenAddDialog} onClose={closeAddDialog} maxWidth="md">
         <DialogTitle
           disableTypography
           classes={{ root: styles.calendarDialogTitle }}
@@ -219,7 +311,7 @@ class AddEventDialog extends PureComponent {
                 </Grid>
                 <Grid item md={10}>
                   <DateFormatInput
-                    name="date-input"
+                    name="StartDateInput"
                     value={startTime}
                     onChange={this.onChangeNewEventDateTime('date')}
                   />
@@ -235,7 +327,7 @@ class AddEventDialog extends PureComponent {
                 </Grid>
                 <Grid item md={5}>
                   <TimeFormatInput
-                    name="time-input"
+                    name="StartTimeInput"
                     value={startTime}
                     onChange={this.onChangeNewEventDateTime('fromTime')}
                   />
@@ -247,7 +339,7 @@ class AddEventDialog extends PureComponent {
                 </Grid>
                 <Grid item md={5}>
                   <TimeFormatInput
-                    name="time-input"
+                    name="EndTimeInput"
                     value={endTime}
                     onChange={this.onChangeNewEventDateTime('toTime')}
                   />
@@ -261,10 +353,159 @@ class AddEventDialog extends PureComponent {
                 placeholder="Type a meaningful description about the event"
                 margin="normal"
                 variant="outlined"
-                onChange={this.onDescriptionChange}
+                onChange={({ target: { value } }) => this.onDescriptionChange(value)}
                 multiline
                 rows={3}
               />
+            </Grid>
+            <Grid item md={12}>
+              <Grid container spacing={8}>
+                <Grid item md={2} className={styles.label}>
+                  <Typography variant="body2" noWrap inline>
+                    Repeat:
+                  </Typography>
+                </Grid>
+                <Grid item md={4}>
+                  <Select
+                    value={addEventData.repeat.type}
+                    onChange={this.onSelectRepeatType}
+                    className={styles.eventTypeSelect}
+                  >
+                    {map(EVENT_REPEAT_TYPE, value => (
+                      <MenuItem value={value} key={`EVENT_REPEAT_TYPE-${value}`}>
+                        {value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Grid>
+                {addEventData.repeat.type !== EVENT_REPEAT_TYPE.NEVER && (
+                  <>
+                    <Grid item md={2} className={styles.label}>
+                      <Typography variant="body2" noWrap inline>
+                        on every
+                      </Typography>
+                    </Grid>
+                    <Grid item md={3}>
+                      <Select
+                        value={addEventData.repeat.every}
+                        onChange={this.onSelectRepeatEvery}
+                        className={styles.eventTypeSelect}
+                      >
+                        {map(REPEAT_EVERY_DEF[addEventData.repeat.type], value => (
+                          <MenuItem value={value} key={`REPEAT_EVERY_DEF-${value}`}>
+                            {value}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Grid>
+                    <Grid item md={1} className={styles.label}>
+                      <Typography variant="body2" noWrap inline>
+                        {(() => {
+                          if (addEventData.repeat.type === EVENT_REPEAT_TYPE.DAILY) {
+                            return addEventData.repeat.every === 1 ? 'day' : 'days';
+                          }
+                          return addEventData.repeat.every === 1 ? 'week' : 'weeks';
+                        })()}
+                      </Typography>
+                    </Grid>
+                    {addEventData.repeat.type === EVENT_REPEAT_TYPE.WEEKLY && (
+                      <Grid item md={12}>
+                        <Grid container spacing={8}>
+                          <Grid item md={2} className={styles.label}>
+                            <Typography variant="body2" noWrap inline>
+                              Repeat on:
+                            </Typography>
+                          </Grid>
+                          <Grid item md={10}>
+                            <Select
+                              multiple
+                              value={addEventData.repeat.everyDate}
+                              onChange={this.onSelectRepeatDay}
+                              renderValue={selected => (
+                                <div className={styles.repeatDayChip}>
+                                  {selected.map(value => (
+                                    <Chip
+                                      key={`REPEAT_DATE_DEF-${value}-Chip`}
+                                      label={value}
+                                      className={styles.repeatDayChip}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                              className={styles.eventTypeSelect}
+                            >
+                              {REPEAT_DATE_DEF.map(dateDef => (
+                                <MenuItem key={`REPEAT_DATE_DEF-${dateDef}-Menu`} value={dateDef}>
+                                  <Checkbox
+                                    checked={addEventData.repeat.everyDate.includes(dateDef)}
+                                    disabled={
+                                      addEventData.repeat.everyDate.includes(dateDef) &&
+                                      addEventData.repeat.everyDate.length === 1
+                                    }
+                                  />
+                                  <ListItemText>{dateDef}</ListItemText>
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    )}
+                    <Grid item md={12}>
+                      <div className={styles.repeatEndWrapper}>
+                        <Typography variant="body2" noWrap inline>
+                          Repeat ends:
+                        </Typography>
+                        <div>
+                          <div className={styles.repeatEndRadio}>
+                            <Radio
+                              value={REPEAT_END_TYPE.NEVER}
+                              onChange={this.onRepeatEndSelect}
+                              checked={isEmpty(addEventData.repeat.repeatEnd)}
+                            />
+                            <Typography variant="body2" noWrap inline>
+                              Never
+                            </Typography>
+                          </div>
+                          <div className={styles.repeatEndRadio}>
+                            <Radio
+                              value={REPEAT_END_TYPE.AFTER_NUM_OCCUR}
+                              onChange={this.onRepeatEndSelect}
+                              checked={addEventData.repeat.repeatEnd.afterOccur !== undefined}
+                            />
+                            <Typography variant="body2" inline>
+                              After
+                            </Typography>
+                            <TextField
+                              value={addEventData.repeat.repeatEnd.afterOccur || ''}
+                              onChange={this.onChangeOccurence}
+                              onBlur={this.onBlurOccurence}
+                            />
+                            <Typography variant="body2" inline>
+                              occurrences
+                            </Typography>
+                          </div>
+                          <div className={styles.repeatEndRadio}>
+                            <Radio
+                              value={REPEAT_END_TYPE.ON_DATE}
+                              onChange={this.onRepeatEndSelect}
+                              checked={addEventData.repeat.repeatEnd.onDate !== undefined}
+                            />
+                            <Typography variant="body2" noWrap inline>
+                              On:
+                            </Typography>
+                            <DateFormatInput
+                              name="EndDateInput"
+                              value={addEventData.repeat.repeatEnd.onDate}
+                              onChange={this.onChangeRepeatEndDate}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </Grid>
+                  </>
+                )}
+              </Grid>
             </Grid>
           </Grid>
         </DialogContent>
@@ -293,7 +534,8 @@ AddEventDialog.propTypes = {
     eventType: PropTypes.string,
     description: PropTypes.string
   }).isRequired,
-  createNewEvent: PropTypes.func.isRequired
+  createNewEvent: PropTypes.func.isRequired,
+  updateEventLevel: PropTypes.func.isRequired
 };
 
 export default AddEventDialog;
