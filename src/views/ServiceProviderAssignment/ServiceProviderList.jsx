@@ -138,8 +138,8 @@ class ServiceProviderList extends React.Component {
               {this.state.data.map((serviceProvider, index) => (
                 <TableRow key={serviceProvider.id}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{serviceProvider.providerName}</TableCell>
                   <TableCell>{serviceProvider.serviceName}</TableCell>
+                  <TableCell>{serviceProvider.providerName}</TableCell>
                   <TableCell>{serviceProvider.numberOfParallelCustomer}</TableCell>
                   <TableCell>
                     <Tooltip
