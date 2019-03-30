@@ -8,16 +8,14 @@ const loading = {
   height: '100vh',
   display: 'flex',
   justifyContent: 'center',
-  margin: '5em auto',
+  margin: '5em auto'
 };
 
 class Loading extends Component {
   render() {
     return (
       <div style={loading}>
-        <ClipLoader
-          color={roseColor}
-          size={62} />
+        <ClipLoader color={roseColor} size={62} />
       </div>
     );
   }

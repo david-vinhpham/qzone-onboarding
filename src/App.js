@@ -22,7 +22,7 @@
 //     // REQUIRED - Amazon Cognito Region
 //     region: 'AP-SOUTHEAST-2',
 
-//     // OPTIONAL - Amazon Cognito Federated Identity Pool Region 
+//     // OPTIONAL - Amazon Cognito Federated Identity Pool Region
 //     // Required only if it's different from Amazon Cognito Region
 //     identityPoolRegion: 'AP-SOUTHEAST-2',
 
@@ -35,7 +35,6 @@
 //     // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
 //     mandatorySignIn: true,
 
-
 //     // OPTIONAL - customized storage object
 //     //storage: new MyStorage(),
 
@@ -46,7 +45,6 @@
 // const hist = createBrowserHistory();
 // const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
 // const store = createStoreWithMiddleware(reducers)
-
 
 // class App extends Component {
 
@@ -68,5 +66,3 @@
 // }
 
 // export default withAuthenticator(App, true);
-
-

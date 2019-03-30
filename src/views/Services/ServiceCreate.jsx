@@ -128,7 +128,6 @@ class ServiceCreate extends React.Component {
 		} else {
 			this.setState({ [stateName]: (event.target.value) })
 		}
-		console.log("state---", this.state)
 	}
 
 	render() {

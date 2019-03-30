@@ -1,48 +1,48 @@
 import React from 'react';
-import PropTypes from "prop-types";
-import withStyles from "@material-ui/core/styles/withStyles";
-import {connect} from 'react-redux';
-import {compose} from 'redux';
-import {Formik} from 'formik';
+import PropTypes from 'prop-types';
+import withStyles from '@material-ui/core/styles/withStyles';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
-import {FormControl, FormLabel} from '@material-ui/core'
+import { FormControl, FormLabel } from '@material-ui/core';
 
-import Button from "../../components/CustomButtons/Button.jsx";
-import Card from "../../components/Card/Card.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";
-import CardText from "../../components/Card/CardText.jsx";
-import CardBody from "../../components/Card/CardBody.jsx";
-import CardFooter from "../../components/Card/CardFooter.jsx";
-import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import {createProvider, fetchTimezonesOption} from '../../actions/provider';
-import {verifyEmail, verifyLength} from "../../validation/validation.jsx";
-import GridContainer from "../../components/Grid/GridContainer.jsx";
-import CustomInput from "../../components/CustomInput/CustomInput.jsx";
-import GridItem from "../../components/Grid/GridItem.jsx";
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
-import {fetchOrganizationsOptionByBusinessAdminId} from "../../actions/organization";
+import Button from '../../components/CustomButtons/Button.jsx';
+import Card from '../../components/Card/Card.jsx';
+import CardHeader from '../../components/Card/CardHeader.jsx';
+import CardText from '../../components/Card/CardText.jsx';
+import CardBody from '../../components/Card/CardBody.jsx';
+import CardFooter from '../../components/Card/CardFooter.jsx';
+import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
+import { createProvider, fetchTimezonesOption } from '../../actions/provider';
+import { verifyEmail, verifyLength } from '../../validation/validation.jsx';
+import GridContainer from '../../components/Grid/GridContainer.jsx';
+import CustomInput from '../../components/CustomInput/CustomInput.jsx';
+import GridItem from '../../components/Grid/GridItem.jsx';
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
+import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organization';
 import Select from 'react-select';
-import {ClipLoader} from "react-spinners";
-import {css} from "@emotion/core";
+import { ClipLoader } from 'react-spinners';
+import { css } from '@emotion/core';
 
 const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: red;
+  display: block;
+  margin: 0 auto;
+  border-color: red;
 `;
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
-            .required("This field is required")
-            .email("Please write correct format"),
+    .required('This field is required')
+    .email('Please write correct format'),
   givenName: Yup.string()
-                .required("This field is required")
-                .min(3, "Name should be atleast 3 letters")
-                .max(40, "Too Long"),
-  telephone: Yup.string().required("Please enter a valid phone Number")
-})
-class ProviderCreate extends React.Component{
-	constructor(props) {
+    .required('This field is required')
+    .min(3, 'Name should be atleast 3 letters')
+    .max(40, 'Too Long'),
+  telephone: Yup.string().required('Please enter a valid phone Number')
+});
+class ProviderCreate extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       businessAdminId: null,
@@ -53,9 +53,9 @@ class ProviderCreate extends React.Component{
         familyName: null,
         givenName: null,
         telephone: null,
-        userStatus: "FORCE_CHANGE_PASSWORD",
+        userStatus: 'FORCE_CHANGE_PASSWORD',
         userSub: null,
-        userType: "PROVIDER",
+        userType: 'PROVIDER',
         providerInformation: {
           description: null,
           qualifications: null,
@@ -63,10 +63,10 @@ class ProviderCreate extends React.Component{
           organizationId: null,
           timeZoneId: null,
           isAdmin: false,
-          businessId: null,
+          businessId: null
         }
       }
-    }
+    };
     this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
     this.changeProfileImage = this.changeProfileImage.bind(this);
@@ -82,50 +82,50 @@ class ProviderCreate extends React.Component{
   handleTimeZone(selectedOption) {
     this.setState({ timezoneOption: selectedOption });
   }
+
   componentWillReceiveProps(nextProps) {
-    let createProvider = localStorage.getItem('createProvider');
-    if(createProvider !== null) {
-      console.log('get from cached data');
+    const createProvider = localStorage.getItem('createProvider');
+    if (createProvider !== null) {
       this.setState({ data: JSON.parse(createProvider) });
     }
   }
+
   componentDidMount() {
     localStorage.removeItem('createProvider');
     this.props.fetchTimezonesOption();
-    let userSub = localStorage.getItem('userSub');
+    const userSub = localStorage.getItem('userSub');
     this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
     this.setState({ businessAdminId: userSub });
   }
 
   doubleClick(fieldName) {
-    console.log("This has been clicked");
     this.setState({ isEditMode: fieldName });
   }
 
-  change(event, stateName, type){
-    const { provider } = this.state
-    provider[stateName]= (event.target.value || event.target.checked)
-    this.setState({provider: provider})
+  change(event, stateName, type) {
+    const { provider } = this.state;
+    provider[stateName] = event.target.value || event.target.checked;
+    this.setState({ provider });
     switch (type) {
-      case "first-name":
+      case 'first-name':
         if (verifyLength(event.target.value, 3)) {
-          this.setState({ [stateName + "State"]: "success" });
+          this.setState({ [`${stateName}State`]: 'success' });
         } else {
-          this.setState({ [stateName + "State"]: "error" });
+          this.setState({ [`${stateName}State`]: 'error' });
         }
         break;
-      case "email":
+      case 'email':
         if (verifyEmail(event.target.value)) {
-          this.setState({ [stateName + "State"]: "success" });
+          this.setState({ [`${stateName}State`]: 'success' });
         } else {
-          this.setState({ [stateName + "State"]: "error" });
+          this.setState({ [`${stateName}State`]: 'error' });
         }
         break;
-      case "last-name":
+      case 'last-name':
         if (verifyLength(event.target.value, 3)) {
-          this.setState({ [stateName + "State"]: "success" });
+          this.setState({ [`${stateName}State`]: 'success' });
         } else {
-          this.setState({ [stateName + "State"]: "error" });
+          this.setState({ [`${stateName}State`]: 'error' });
         }
         break;
       default:
@@ -133,7 +133,7 @@ class ProviderCreate extends React.Component{
     }
   }
 
-  changeCheckbox(event, stateName, type){
+  changeCheckbox(event, stateName, type) {
     const { emailPreference } = this.state.provider;
     const currentIndex = emailPreference.indexOf(event.target.value);
     const newChecked = [...emailPreference];
@@ -142,28 +142,25 @@ class ProviderCreate extends React.Component{
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    const {provider} = this.state
-    provider['emailPreference']= newChecked
+    const { provider } = this.state;
+    provider.emailPreference = newChecked;
     this.setState({
-      provider: provider
+      provider
     });
   }
 
   changeProfileImage(e) {
-    console.log("inside change image function", e);
-    console.log("event---", e)
     e.preventDefault();
-    let reader = new FileReader();
-    let files = e.target.files[0];
-    const { provider } = this.state
-    console.log("file-------", files)
+    const reader = new FileReader();
+    const files = e.target.files[0];
+    const { provider } = this.state;
     reader.onloadend = () => {
-      provider['file'] = files
-      provider['imagePreviewUrl'] = reader.result
+      provider.file = files;
+      provider.imagePreviewUrl = reader.result;
       this.setState({
         // file: file,
         // imagePreviewUrl: reader.result
-        provider: provider
+        provider
       });
     };
     reader.readAsDataURL(files);
@@ -174,211 +171,202 @@ class ProviderCreate extends React.Component{
     this.props.createProvider(values, this.props.history);
   }
 
-	render() {
-    const { classes, timezones, organizations, createProviderLoading, createProviderError } = this.props;
-    const {  timezoneOption, organizationOption } = this.state;
+  render() {
+    const {
+      classes,
+      timezones,
+      organizations,
+      createProviderLoading,
+      createProviderError
+    } = this.props;
+    const { timezoneOption, organizationOption } = this.state;
     let timeZoneOptions = [];
     let organizationOptions = [];
-		if ((timezones.length) > 0) {
+    if (timezones.length > 0) {
       timeZoneOptions = timezones;
     }
-		if(organizations.length > 0) {
+    if (organizations.length > 0) {
       organizationOptions = organizations;
     }
     if (createProviderLoading) {
-      return < ClipLoader
-        className={override}
-        sizeUnit={"px"}
-        size={100}
-        color={'#123abc'}
-        loading={createProviderLoading}
-      />; }
-		return(
-
-          <Formik
-            initialValues={{
-              email: this.state.data.email,
-              familyName: this.state.data.familyName,
-              givenName: this.state.data.givenName,
-              telephone: this.state.data.telephone,
-              userStatus: "FORCE_CHANGE_PASSWORD",
-              userSub: this.state.data.userSub,
-              userType: "PROVIDER",
-              providerInformation:{
-                description: this.state.data.providerInformation.description,
-                qualifications:this.state.data.providerInformation.qualifications,
-                tags:this.state.data.providerInformation.tags,
-                organizationId: organizationOption === null ? null : organizationOption.value,
-                timeZoneId: timezoneOption === null ? null : timezoneOption.label,
-                isAdmin: false,
-                businessId:this.state.data.providerInformation.businessId,
-              }
-            }}
-            validationSchema={ProviderSchema}
-            enableReinitialize={true}
-            onSubmit={(values) => {this.handleProvider(values)}}
-            render={({  values,
-                       errors,
-                       status,
-                       touched,
-                       handleBlur,
-                       handleChange,
-                       handleSubmit,
-                       isSubmitting,
-                       setFieldValue}) => (
-              <Card>
-                <CardHeader color="rose" text>
-                  <CardText color="rose">
-                    <h4 className={classes.cardTitle}>Create Provider</h4>
-                  </CardText>
-                </CardHeader>
-                <CardBody>
-                  {createProviderError !== null ? (<CardFooter className={classes.justifyContentCenter}>
-                      <div  style={{ color: "red" }} > {createProviderError.message} </div>
-                    </CardFooter>)
-                    :
-                    ( <CardFooter className={classes.justifyContentCenter}>
-                    </CardFooter>)}
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                      <FormLabel className={classes.labelHorizontal}>
-                        Service Organization
-                      </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                      <FormControl
-                        fullWidth
-                        className={classes.selectFormControl}>
-                        <Select
-                          options={organizationOptions}
-                          value={ organizationOption}
-                          onChange={this.handleOrgChange}
-                        >
-                        </Select>
-                      </FormControl>
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                      <FormLabel
-                        className={
-                          classes.labelHorizontal +
-                          " " +
-                          classes.labelHorizontalRadioCheckbox
-                        }
-                      >
-                        Time Zone
-                      </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                      <FormControl
-                        fullWidth
-                        className={classes.selectFormControl}>
-                        <Select
-                          options={timeZoneOptions}
-                          value={ timezoneOption}
-                          onChange={this.handleTimeZone}
-                        >
-                        </Select>
-                      </FormControl>
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel className={classes.labelHorizontal}>
-                            Given Name
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                        <CustomInput
-                            id="givenName"
-                            name="givenName"
-                            onChange={handleChange}
-                            value={values.givenName}
-                        />
-                        {errors.givenName && touched.givenName ? (
-                            <div style={{ color: "red" }}>{errors.givenName}</div>
-                        ) : null}
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                        <FormLabel className={classes.labelHorizontal}>
-                            Family Name
-                        </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                        <CustomInput
-                            id="familyName"
-                            name="familyName"
-                            onChange={handleChange}
-                            value={values.familyName}
-                        />
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                  <GridItem xs={12} sm={3}>
-                      <FormLabel className={classes.labelHorizontal}>
-                          Email
-                      </FormLabel>
-                  </GridItem>
-                  <GridItem xs={12} sm={4}>
-                      <CustomInput
-                          id="email"
-                          name="email"
-                          onChange={handleChange}
-                          value={values.email}
-                      />
-                      {errors.email && touched.email ? (
-                            <div style={{ color: "red" }}>{errors.email}</div>
-                        ) : null}
-                  </GridItem>
-                </GridContainer>
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                      <FormLabel className={classes.labelHorizontal}>
-                        Telephone
-                      </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={4}>
-                      <PhoneInput
-                        id="telephone"
-                        placeholder="e.g.+61 3 xxxx xxxx"
-                        country="AU"
-                        name={'telephone'}
-                        value={values['telephone']}
-                        onChange={e => setFieldValue('telephone', e)}
-                      />
-                      {errors.telephone && touched.telephone ? (
-                        <div style={{ color: "red" }}>{errors.telephone}</div>
-                      ) : null}
-                    </GridItem>
-                  </GridContainer>
-                  <GridContainer>
-                      <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal}>
-                              Description
-                          </FormLabel>
-                      </GridItem>
-                      <GridItem xs={12} sm={3}>
-                          <CustomInput
-                              id="providerInformation.description"
-                              formControlProps={{
-                                  fullWidth: true
-                              }}
-                              inputProps={{
-                                  multiline: true,
-                                  rows: 3
-                              }}
-                              value={values.providerInformation.description}
-                              onChange={handleChange}
-                          />
-                          {errors.description && touched.description ? (
-                              <div style={{ color: "red" }}>{errors.description}</div>
-                          ) : null}
-                      </GridItem>
-                  </GridContainer>
-                  {/*<GridContainer>
+      return (
+        <ClipLoader
+          className={override}
+          sizeUnit="px"
+          size={100}
+          color="#123abc"
+          loading={createProviderLoading}
+        />
+      );
+    }
+    return (
+      <Formik
+        initialValues={{
+          email: this.state.data.email,
+          familyName: this.state.data.familyName,
+          givenName: this.state.data.givenName,
+          telephone: this.state.data.telephone,
+          userStatus: 'FORCE_CHANGE_PASSWORD',
+          userSub: this.state.data.userSub,
+          userType: 'PROVIDER',
+          providerInformation: {
+            description: this.state.data.providerInformation.description,
+            qualifications: this.state.data.providerInformation.qualifications,
+            tags: this.state.data.providerInformation.tags,
+            organizationId: organizationOption === null ? null : organizationOption.value,
+            timeZoneId: timezoneOption === null ? null : timezoneOption.label,
+            isAdmin: false,
+            businessId: this.state.data.providerInformation.businessId
+          }
+        }}
+        validationSchema={ProviderSchema}
+        enableReinitialize
+        onSubmit={values => {
+          this.handleProvider(values);
+        }}
+        render={({
+          values,
+          errors,
+          status,
+          touched,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+          isSubmitting,
+          setFieldValue
+        }) => (
+          <Card>
+            <CardHeader color="rose" text>
+              <CardText color="rose">
+                <h4 className={classes.cardTitle}>Create Provider</h4>
+              </CardText>
+            </CardHeader>
+            <CardBody>
+              {createProviderError !== null ? (
+                <CardFooter className={classes.justifyContentCenter}>
+                  <div style={{ color: 'red' }}> {createProviderError.message} </div>
+                </CardFooter>
+              ) : (
+                <CardFooter className={classes.justifyContentCenter} />
+              )}
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>Service Organization</FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <FormControl fullWidth className={classes.selectFormControl}>
+                    <Select
+                      options={organizationOptions}
+                      value={organizationOption}
+                      onChange={this.handleOrgChange}
+                    />
+                  </FormControl>
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel
+                    className={`${classes.labelHorizontal} ${classes.labelHorizontalRadioCheckbox}`}
+                  >
+                    Time Zone
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <FormControl fullWidth className={classes.selectFormControl}>
+                    <Select
+                      options={timeZoneOptions}
+                      value={timezoneOption}
+                      onChange={this.handleTimeZone}
+                    />
+                  </FormControl>
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>Given Name</FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <CustomInput
+                    id="givenName"
+                    name="givenName"
+                    onChange={handleChange}
+                    value={values.givenName}
+                  />
+                  {errors.givenName && touched.givenName ? (
+                    <div style={{ color: 'red' }}>{errors.givenName}</div>
+                  ) : null}
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>Family Name</FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <CustomInput
+                    id="familyName"
+                    name="familyName"
+                    onChange={handleChange}
+                    value={values.familyName}
+                  />
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>Email</FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <CustomInput
+                    id="email"
+                    name="email"
+                    onChange={handleChange}
+                    value={values.email}
+                  />
+                  {errors.email && touched.email ? (
+                    <div style={{ color: 'red' }}>{errors.email}</div>
+                  ) : null}
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>Telephone</FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                  <PhoneInput
+                    id="telephone"
+                    placeholder="e.g.+61 3 xxxx xxxx"
+                    country="AU"
+                    name="telephone"
+                    value={values.telephone}
+                    onChange={e => setFieldValue('telephone', e)}
+                  />
+                  {errors.telephone && touched.telephone ? (
+                    <div style={{ color: 'red' }}>{errors.telephone}</div>
+                  ) : null}
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={3}>
+                  <CustomInput
+                    id="providerInformation.description"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 3
+                    }}
+                    value={values.providerInformation.description}
+                    onChange={handleChange}
+                  />
+                  {errors.description && touched.description ? (
+                    <div style={{ color: 'red' }}>{errors.description}</div>
+                  ) : null}
+                </GridItem>
+              </GridContainer>
+              {/* <GridContainer>
                     <GridItem xs={12} sm={3}>
                       <FormLabel className={classes.labelHorizontal}>
                           Tags
@@ -393,30 +381,28 @@ class ProviderCreate extends React.Component{
                         tagProps={{ className: "react-tagsinput-tag info" }}
                       />
                     </GridItem>
-                  </GridContainer>*/}
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                      <FormLabel className={classes.labelHorizontal}>
-                        Tags
-                      </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={3}>
-                      <CustomInput
-                        id="providerInformation.tags"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          multiline: true,
-                          rows: 3
-                        }}
-                        placeholder="tag1,tag2,tag3,..."
-                        value={values.providerInformation.tags}
-                        onChange={handleChange}
-                      />
-                    </GridItem>
-                  </GridContainer>
-                  {/*<GridContainer>
+                  </GridContainer> */}
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={3}>
+                  <CustomInput
+                    id="providerInformation.tags"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 3
+                    }}
+                    placeholder="tag1,tag2,tag3,..."
+                    value={values.providerInformation.tags}
+                    onChange={handleChange}
+                  />
+                </GridItem>
+              </GridContainer>
+              {/* <GridContainer>
                     <GridItem xs={12} sm={3}>
                       <FormLabel className={classes.labelHorizontal}>
                           Qualifications
@@ -431,67 +417,68 @@ class ProviderCreate extends React.Component{
                         tagProps={{ className: "react-tagsinput-tag info" }}
                       />
                     </GridItem>
-                  </GridContainer>*/}
-                  <GridContainer>
-                    <GridItem xs={12} sm={3}>
-                      <FormLabel className={classes.labelHorizontal}>
-                        Qualifications
-                      </FormLabel>
-                    </GridItem>
-                    <GridItem xs={12} sm={3}>
-                      <CustomInput
-                        id="providerInformation.qualifications"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          multiline: true,
-                          rows: 3
-                        }}
-                        placeholder="Empathy,Thick Skin,Flexibility,..."
-                        value={values.providerInformation.qualifications}
-                        onChange={handleChange}
-                      />
-                    </GridItem>
-                  </GridContainer>
-                </CardBody>
-                <CardFooter className={classes.justifyContentCenter}>
-                  <Button color="rose" onClick={handleSubmit}>
-                    Create
-                  </Button>
-                  <Button color="rose" onClick={this.props.history.goBack}>
-                    Exit
-                  </Button>
-                </CardFooter>
-              </Card>
-      )}
-          />
-
-		)
-	}
+                  </GridContainer> */}
+              <GridContainer>
+                <GridItem xs={12} sm={3}>
+                  <FormLabel className={classes.labelHorizontal}>Qualifications</FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={3}>
+                  <CustomInput
+                    id="providerInformation.qualifications"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      multiline: true,
+                      rows: 3
+                    }}
+                    placeholder="Empathy,Thick Skin,Flexibility,..."
+                    value={values.providerInformation.qualifications}
+                    onChange={handleChange}
+                  />
+                </GridItem>
+              </GridContainer>
+            </CardBody>
+            <CardFooter className={classes.justifyContentCenter}>
+              <Button color="rose" onClick={handleSubmit}>
+                Create
+              </Button>
+              <Button color="rose" onClick={this.props.history.goBack}>
+                Exit
+              </Button>
+            </CardFooter>
+          </Card>
+        )}
+      />
+    );
+  }
 }
 
 ProviderCreate.propTypes = {
   classes: PropTypes.object.isRequired
 };
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     timezones: state.provider.timezones,
     organizations: state.organization.organizations,
     createProviderLoading: state.provider.createProviderLoading,
-    createProviderError: state.provider.createProviderError,
-  }
-}
+    createProviderError: state.provider.createProviderError
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     createProvider: (provider, history) => dispatch(createProvider(provider, history)),
     fetchTimezonesOption: () => dispatch(fetchTimezonesOption()),
-    fetchOrganizationsOptionByBusinessAdminId: (id) => dispatch(fetchOrganizationsOptionByBusinessAdminId(id)),
-  }
-}
+    fetchOrganizationsOptionByBusinessAdminId: id =>
+      dispatch(fetchOrganizationsOptionByBusinessAdminId(id))
+  };
+};
 
 export default compose(
   withStyles(validationFormStyle),
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )(ProviderCreate);
