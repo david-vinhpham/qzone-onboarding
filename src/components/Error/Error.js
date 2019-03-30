@@ -20,7 +20,7 @@ class Error extends Component {
     return (
       <Card>
         <CardBody>
-          <Typography classes={classes}>{}</Typography>
+          <Typography classes={classes}>{children}</Typography>
         </CardBody>
         <CardFooter>
           <Button onClick={cancelError}>OK</Button>
