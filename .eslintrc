@@ -23,6 +23,7 @@
     "import/no-absolute-path": 0,
     "react/prefer-stateless-function": 0,
     "react/jsx-wrap-multilines": 0,
-    "no-param-reassign": 0
+    "no-param-reassign": 0,
+    "prefer-destructuring": 0
   }
 }

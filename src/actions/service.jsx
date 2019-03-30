@@ -21,6 +21,49 @@ export const editServiceFailure = error => {
   };
 };
 
+export const deleteService = id => {
+  return dispatch => {
+    dispatch({ type: service.DEL_SERVICE_LOADING });
+    fetch(`${API_ROOT + URL.SERVICE}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 200 || data.status === 201 || data.success === true) {
+          const objects = {
+            data: []
+          };
+          let serviceCached = localStorage.getItem('serviceCached');
+          if (serviceCached !== null) {
+            serviceCached = JSON.parse(serviceCached); // json
+            for (let i = 0; i < serviceCached.length; i += 1) {
+              if (serviceCached[i].id === id) {
+                delete serviceCached[i];
+                break;
+              }
+            }
+            if (serviceCached.length > 0) {
+              objects.data = serviceCached; // json
+              localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
+            }
+          }
+          dispatch({
+            type: service.DEL_SERVICE_SUCCESS,
+            payload: objects
+          });
+        } else {
+          dispatch({
+            type: service.DEL_SERVICE_FAILURE,
+            payload: data
+          });
+        }
+      });
+  };
+};
+
 export const editService = (data, history) => {
   return dispatch => {
     dispatch(editServiceLoading());
@@ -34,7 +77,21 @@ export const editService = (data, history) => {
       .then(res => res.json())
       .then(svc => {
         if (svc.status === 200 || svc.status === 201 || svc.success === true) {
-          dispatch(editServiceSuccess(svc.object));
+          let serviceCached = localStorage.getItem('serviceCached');
+          if (serviceCached !== null) {
+            serviceCached = JSON.parse(serviceCached);
+            for (let i = 0; i < serviceCached.length; i += 1) {
+              // look for the entry with a matching `code` value
+              if (serviceCached[i].id === svc.object.id) {
+                // we found it
+                serviceCached[i] = svc.object;
+                break;
+              }
+            }
+            if (serviceCached.length > 0) {
+              localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
+            }
+          }
           history.push('/services/list');
         } else {
           dispatch(editServiceFailure(svc));
@@ -254,7 +311,13 @@ export const createService = (data, history) => {
       .then(svc => {
         if (svc.status === 200 || svc.status === 201 || svc.success === true) {
           dispatch(createServiceSuccess(svc.object));
-          history.push('/services/list');
+          let serviceCached = localStorage.getItem('serviceCached');
+          if (serviceCached !== null) {
+            serviceCached = JSON.parse(serviceCached);
+            serviceCached.push(svc.object);
+            localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
+            history.push('/services/list');
+          }
         } else {
           dispatch(createServiceFailure(svc));
         }

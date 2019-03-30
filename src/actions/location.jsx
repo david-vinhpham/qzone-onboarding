@@ -51,10 +51,36 @@ export const fetchLocationsOption = () => {
   };
 };
 
-export const fetchLocation = id => {
-  console.log(`fetchLocation: ${id}`);
+export const delLocation = id => {
   return dispatch => {
-    dispatch({ type: location.FETCH_LOCATION_FAILURE });
+    dispatch({ type: location.DEL_LOCATION_LOADING });
+    fetch(`${API_ROOT + URL.LOCATION}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch({
+            type: location.DEL_LOCATION_SUCCESS,
+            payload: data.objects
+          });
+          // history.push('/location/list');
+        } else {
+          dispatch({
+            type: location.DEL_LOCATION_FAILURE,
+            payload: data
+          });
+        }
+      });
+  };
+};
+
+export const fetchLocation = id => {
+  return dispatch => {
+    dispatch({ type: location.FETCH_LOCATION_LOADING });
     fetch(`${API_ROOT + URL.LOCATION}/${id}`, {
       method: 'GET',
       headers: {
@@ -115,7 +141,7 @@ export const editLocation = (values, history) => {
       body: JSON.stringify(values)
     })
       .then(res => res.json())
-      .then(data => {
+      .then(() => {
         // dispatch({
         //    type: location.EDIT_LOCATION_SUCCESS,
         //    payload: data.object

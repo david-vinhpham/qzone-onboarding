@@ -13,7 +13,10 @@ const initialState = {
   createLocationError: null,
 
   editLocationLoading: false,
-  editLocationError: null
+  editLocationError: null,
+
+  delLocationLoading: false,
+  delLocationError: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -38,7 +41,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         location: [],
-        getLocationError: action.payload.error,
+        fetchLocationError: action.payload.error,
         fetchLocationLoading: false
       };
 
@@ -64,6 +67,18 @@ const reducer = (state = initialState, action) => {
         location: [],
         locationError: action.payload.error,
         locationLoading: false
+      };
+
+    case location.DEL_LOCATION_LOADING:
+      return { ...state, delLocationLoading: true };
+    case location.DEL_LOCATION_SUCCESS:
+      return { ...state, locations: action.payload, delLocationLoading: false };
+    case location.DEL_LOCATION_FAILURE:
+      return {
+        ...state,
+        location: [],
+        delLocationError: action.payload.error,
+        delLocationLoading: false
       };
 
     default:

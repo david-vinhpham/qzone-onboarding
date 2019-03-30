@@ -220,6 +220,35 @@ export const editProviderFailure = error => {
     payload: error
   };
 };
+
+export const deleteProvider = providerId => {
+  return dispatch => {
+    dispatch({ type: provider.DEL_PROVIDER_LOADING });
+    fetch(`${API_ROOT + URL.USER}/${providerId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch({
+            type: provider.DEL_PROVIDER_SUCCESS,
+            payload: data.object
+          });
+          const sub = localStorage.getItem('userSub');
+          dispatch(fetchProvidersByBusinessAdminId(sub));
+        } else {
+          dispatch({
+            type: provider.DEL_PROVIDER_FAILURE,
+            payload: data
+          });
+        }
+      });
+  };
+};
+
 export function editProvider(values, history) {
   return dispatch => {
     dispatch(editProviderLoading());

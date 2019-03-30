@@ -19,12 +19,13 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-
+import ImageUpload from "../../components/CustomUpload/ImageUpload"
 import { fetchBusinessCategories, createOrganization } from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import {ClipLoader} from "react-spinners";
 import {css} from "@emotion/core";
+import defaultImage from "../../assets/img/default-avatar.png";
 
 const override = css`
     display: block;
@@ -50,14 +51,56 @@ class OrganizationCreate extends React.Component {
         userSub: localStorage.getItem('userSub'),
       },
       businessAdminEmail: localStorage.getItem('loginEmail'),
+      imagePreviewUrl: defaultImage,
+      imageChange: false,
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.imageLoading) {
+      console.log('imageLoading finished...');
+    }
+    else {
+      console.log('imageLoading...');
+      this.setState({ imageChange: true})
+    }
 
+  }
   componentDidMount() {
     this.props.fetchBusinessCategories()
   }
+  changeProfileImage(e) {
+    console.log("inside change image function", e);
+    console.log("event---", e)
+    e.preventDefault();
+    let reader = new FileReader();
+    let files = e.target.files[0];
+    console.log("file-------", files)
+    reader.onloadend = () => {
+      this.setState({
+        imagePreviewUrl: reader.result
+        //provider: provider
+      });
+    };
+    reader.readAsDataURL(files);
+  }
 
+
+  change(event, stateName, value) {
+    if (value !== undefined) {
+      this.setState({ [stateName]: (value) })
+    } else if (event.target.type === "number") {
+      this.setState({ [stateName]: (event.target.valueAsNumber) })
+    } else {
+      this.setState({ [stateName]: (event.target.value) })
+    }
+    console.log("state---", this.state)
+  }
   submit = (values) => {
+    let imageObject = localStorage.getItem('imageObject');
+    if(imageObject !== null) {
+      imageObject = JSON.parse(imageObject)
+    }
+    values.logo = imageObject;
     values.businessAdminEmail = localStorage.getItem('loginEmail');
     values.userSub = localStorage.getItem('userSub');
     this.props.createOrganization(values, this.props.history);
@@ -133,16 +176,11 @@ class OrganizationCreate extends React.Component {
               ],
             },
             telephone:'',
-            logo: {
-              id: "string",
-              fileUrl: "string",
-              originName: "string",
-              keyName: "string"
-            },
             website: '',
             queueModel: '',
             businessAdminEmail: '',
-            userSub: ''
+            userSub: '',
+            imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
           }}
           validationSchema={OrganizationCreateSchema}
           enableReinitialize={true}
@@ -571,7 +609,7 @@ class OrganizationCreate extends React.Component {
                                 />
                               </GridItem>
 
-                              <GridItem>
+                              {/* <GridItem>
                                 <FormLabel className={classes.labelHorizontal}>
                                   Queue Model
                                             </FormLabel>
@@ -586,8 +624,14 @@ class OrganizationCreate extends React.Component {
                                   onChange={handleChange}
                                   value={values.queueModel}
                                 />
+                              </GridItem>*/}
+                              <GridItem xs={12} md={12}>
+                                <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
                               </GridItem>
                             </GridContainer>
+
+
+
                       },
                     ]}
                   />
@@ -626,6 +670,8 @@ const mapsStateToProp = (state) => ({
   fetchBusinessCategoriesError: state.organization.fetchBusinessCategoriesError,
   createOrganizationError:state.organization.createOrganizationError,
   organization: state.organization.organization,
+  imageError: state.image.imageError,
+  imageLoading: state.image.imageLoading,
 })
 
 const mapDispatchToProps = (dispatch) => {

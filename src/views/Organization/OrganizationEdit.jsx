@@ -30,6 +30,10 @@ import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';
+import _ from 'lodash';
+import { classesType, historyType, matchType } from 'types/global.js';
+import defaultImage from '../../assets/img/image_placeholder.jpg';
+import ImageUpload from '../../components/CustomUpload/ImageUpload';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
 import {
   editOrganization,
@@ -53,28 +57,72 @@ class OrganizationEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      imagePreviewUrl: defaultImage,
+      imageObject: null
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.organization });
   }
 
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.fetchOrganization(id);
     this.props.fetchBusinessCategories();
+    localStorage.removeItem('imageObject');
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.imageLoading) {
+      this.setState({ data: nextProps.organization });
+      if (nextProps.organization != null && nextProps.organization.logo != null) {
+        this.setState({ imagePreviewUrl: nextProps.organization.logo.fileUrl });
+      } else {
+        this.setState({ imagePreviewUrl: defaultImage });
+      }
+    }
   }
 
   submit = values => {
-    // this is the case of 1st time registering the organization along with admin
+    let imageObject = localStorage.getItem('imageObject');
+    if (imageObject === null) {
+      imageObject = this.state.imageObject;
+    } else {
+      imageObject = JSON.parse(imageObject);
+    }
+    if (imageObject != null) {
+      values.logo = imageObject;
+    }
+    if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
+      if (values.logo === null) {
+        values.logo = values.imagePreviewUrl;
+      }
+    }
     this.props.editOrganization(values, this.props.history);
   };
 
   moveToCreate = () => {
     this.props.history.push('/organization/list');
   };
+
+  change(event, stateName) {
+    if (_.isEmpty(event.target.value)) this.setState({ [`${stateName}State`]: 'error' });
+    else {
+      this.setState({ [`${stateName}State`]: 'success' });
+    }
+    this.setState({ [stateName]: event.target.value || event.target.checked });
+  }
+
+  handleImageChange(e) {
+    const self = this;
+    e.preventDefault();
+    const reader = new FileReader();
+    const files = e.target.files[0];
+    reader.onloadend = () => {
+      self.setState({
+        imagePreviewUrl: reader.result
+      });
+    };
+    reader.readAsDataURL(files);
+  }
 
   render() {
     const {
@@ -110,6 +158,12 @@ class OrganizationEdit extends React.Component {
                 name: data.name,
                 orgMode: data.orgMode,
                 businessCategoryId: data.businessCategoryId,
+                imageShow: data.logo ? data.logo.fileUrl : defaultImage,
+                imagePreviewUrl:
+                  this.props.imageObject ||
+                  (this.state.data.logo
+                    ? this.state.data.logo.fileUrl
+                    : this.state.imagePreviewUrl),
                 preferences: {
                   allowListingOnQuezone: data.preferences.allowListingOnQuezone,
                   allowReschedule: data.preferences.allowReschedule,
@@ -211,15 +265,7 @@ class OrganizationEdit extends React.Component {
               validationSchema={OrganizationEditSchema}
               enableReinitialize
               onSubmit={values => this.submit(values)}
-              render={({
-                values,
-                errors,
-                status,
-                touched,
-                handleChange,
-                handleSubmit,
-                setFieldValue
-              }) => (
+              render={({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
                 <Card>
                   <CardHeader color="rose" text>
                     <CardText color="rose">
@@ -609,21 +655,29 @@ class OrganizationEdit extends React.Component {
                                 </GridItem>
                               </GridContainer>
                               <GridContainer>
+                                {/* <GridItem>
+                                              <FormLabel className={classes.labelHorizontal}>
+                                                Queue Model
+                                            </FormLabel>
+                                            </GridItem>
+                                            <GridItem >
+                                              <CustomInput
+                                                id="queueModel"
+                                                inputProps={{
+                                                  placeholder: "Queue Model",
+                                                  type: "text"
+                                                }}
+                                                onChange={handleChange}
+                                                value={values.queueModel}
+                                              />
+                                            </GridItem> */}
                                 <GridItem>
                                   <FormLabel className={classes.labelHorizontal}>
-                                    Queue Model
+                                    Organization Image
                                   </FormLabel>
                                 </GridItem>
-                                <GridItem>
-                                  <CustomInput
-                                    id="queueModel"
-                                    inputProps={{
-                                      placeholder: 'Queue Model',
-                                      type: 'text'
-                                    }}
-                                    onChange={handleChange}
-                                    value={values.queueModel}
-                                  />
+                                <GridItem xs={12} md={12}>
+                                  <ImageUpload imagePreviewUrl={values.imageShow} />
                                 </GridItem>
                               </GridContainer>
                             </Grid>
@@ -651,7 +705,18 @@ class OrganizationEdit extends React.Component {
 }
 
 OrganizationEdit.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: classesType.isRequired,
+  imageObject: PropTypes.string.isRequired,
+  history: historyType.isRequired,
+  match: matchType.isRequired,
+  fetchBusinessCategories: PropTypes.func.isRequired,
+  editOrganization: PropTypes.func.isRequired,
+  fetchOrganization: PropTypes.func.isRequired,
+  imageLoading: PropTypes.bool.isRequired,
+  organization: PropTypes.objectOf(PropTypes.object).isRequired,
+  businessCategories: PropTypes.objectOf(PropTypes.array).isRequired,
+  fetchOrganizationLoading: PropTypes.bool.isRequired,
+  editOrganizationError: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
 const mapsStateToProp = state => ({
@@ -661,7 +726,10 @@ const mapsStateToProp = state => ({
   organization: state.organization.organization,
   editOrganizationLoading: state.organization.editOrganizationLoading,
   editOrganizationError: state.organization.editOrganizationError,
-  fetchOrganizationLoading: state.organization.fetchOrganizationLoading
+  fetchOrganizationLoading: state.organization.fetchOrganizationLoading,
+  imageObject: state.image.image,
+  imageError: state.image.imageError,
+  imageLoading: state.image.imageLoading
 });
 
 const mapDispatchToProps = dispatch => {

@@ -10,6 +10,7 @@ import { FormControl, FormLabel } from '@material-ui/core';
 import Select from 'react-select';
 import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';
+import { classesType, matchType, historyType } from 'types/global.js';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
 import Card from '../../components/Card/Card.jsx';
@@ -48,6 +49,7 @@ class ServiceProviderEdit extends React.Component {
       organizationOption: null,
       serviceOption: null,
       locationOption: null,
+      numberOfParallelCustomer: 1,
       serviceTimeSlot: [],
       additionalInfo: ''
     };
@@ -60,9 +62,36 @@ class ServiceProviderEdit extends React.Component {
     this.handleRevertSlot = this.handleRevertSlot.bind(this);
   }
 
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    this.props.fetchServiceProviderById(id);
+    localStorage.removeItem('originServiceTimeSlot');
+    const userSub = localStorage.getItem('userSub');
+    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    this.props.fetchProvidersOptionByServiceProviderId(id);
+    this.props.findServiceOptionByBusinessAdminId(userSub);
+    this.props.fetchLocationsOption();
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({ data: nextProps.serviceProvider });
     this.setState({ serviceTimeSlot: nextProps.serviceProvider.serviceTimeSlot });
+  }
+
+  submit = values => {
+    this.setState({ additionalInfo: values.additionalInfo });
+    for (let index = 0; index < values.serviceTimeSlot.length; index += 1) {
+      values.serviceTimeSlot[index].slotId = index;
+    }
+    this.props.editServiceProvider(values, this.props.history);
+  };
+
+  change(event, stateName) {
+    if (_.isEmpty(event.target.value)) this.setState({ [`${stateName}State`]: 'error' });
+    else {
+      this.setState({ [`${stateName}State`]: 'success' });
+    }
+    this.setState({ [stateName]: event.target.value || event.target.checked });
   }
 
   handleRevertSlot() {
@@ -76,7 +105,7 @@ class ServiceProviderEdit extends React.Component {
     while (serviceTimeSlot.length > 0) {
       serviceTimeSlot.pop();
     }
-    for (let i = 0; i < originServiceTimeSlot.length; i++) {
+    for (let i = 0; i < originServiceTimeSlot.length; i += 1) {
       serviceTimeSlot.push(originServiceTimeSlot[i]);
     }
     this.setState({ serviceTimeSlot: originServiceTimeSlot });
@@ -116,33 +145,6 @@ class ServiceProviderEdit extends React.Component {
   handleLocationChange(selectedOption) {
     this.setState({ locationOption: selectedOption });
   }
-
-  componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props.fetchServiceProviderById(id);
-    localStorage.removeItem('originServiceTimeSlot');
-    const userSub = localStorage.getItem('userSub');
-    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
-    this.props.fetchProvidersOptionByServiceProviderId(id);
-    this.props.findServiceOptionByBusinessAdminId(userSub);
-    this.props.fetchLocationsOption();
-  }
-
-  change(event, stateName) {
-    if (_.isEmpty(event.target.value)) this.setState({ [`${stateName}State`]: 'error' });
-    else {
-      this.setState({ [`${stateName}State`]: 'success' });
-    }
-    this.setState({ [stateName]: event.target.value || event.target.checked });
-  }
-
-  submit = values => {
-    this.setState({ additionalInfo: values.additionalInfo });
-    for (let index = 0; index < values.serviceTimeSlot.length; index++) {
-      values.serviceTimeSlot[index].slotId = index;
-    }
-    this.props.editServiceProvider(values, this.props.history);
-  };
 
   render() {
     const {
@@ -199,6 +201,7 @@ class ServiceProviderEdit extends React.Component {
               geoLocationId: this.state.data.geoLocation.id,
               organizationId: this.state.data.organizationId,
               additionalInfo: this.state.data.additionalInfo,
+              numberOfParallelCustomer: this.state.data.numberOfParallelCustomer,
               serviceTimeSlot: this.state.serviceTimeSlot,
               businessAdminId: this.state.data.businessAdminId
             }}
@@ -230,7 +233,6 @@ class ServiceProviderEdit extends React.Component {
                   ) : (
                     <CardFooter className={classes.justifyContentCenter} />
                   )}
-                  )}
                   <form>
                     <GridContainer>
                       <GridItem xs={12} sm={3}>
@@ -253,7 +255,6 @@ class ServiceProviderEdit extends React.Component {
                               onChange={this.handleOrgChange}
                             />
                           </FormControl>
-                        }
                         }
                       </GridItem>
                     </GridContainer>
@@ -319,6 +320,29 @@ class ServiceProviderEdit extends React.Component {
                             <div style={{ color: 'red' }}>{errors.geoLocationId}</div>
                           ) : null}
                         </FormControl>
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer style={{ paddingBottom: '15px' }}>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>
+                          No. of Parallel Customer
+                        </FormLabel>
+                      </GridItem>
+                      <GridItem xs={12} sm={4}>
+                        <CustomInput
+                          id="numberOfParallelCustomer"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            type: 'number'
+                          }}
+                          onChange={handleChange}
+                          value={values.numberOfParallelCustomer}
+                        />
+                        {errors.numberOfParallelCustomer && touched.numberOfParallelCustomer ? (
+                          <div style={{ color: 'red' }}>{errors.numberOfParallelCustomer}</div>
+                        ) : null}
                       </GridItem>
                     </GridContainer>
                     <GridContainer style={{ paddingBottom: '15px' }}>
@@ -425,7 +449,23 @@ class ServiceProviderEdit extends React.Component {
 }
 
 ServiceProviderEdit.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: classesType.isRequired,
+  services: PropTypes.arrayOf(PropTypes.string).isRequired,
+  organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  fetchProvidersOptionByServiceProviderId: PropTypes.func.isRequired,
+  fetchOrganizationsOptionByBusinessAdminId: PropTypes.func.isRequired,
+  fetchServiceProviderById: PropTypes.func.isRequired,
+  editServiceProvider: PropTypes.func.isRequired,
+  findServiceOptionByBusinessAdminId: PropTypes.func.isRequired,
+  fetchLocationsOption: PropTypes.func.isRequired,
+  serviceProvider: PropTypes.objectOf(PropTypes.string).isRequired,
+  editServiceProviderError: PropTypes.string.isRequired,
+  fetchServiceProviderLoading: PropTypes.bool.isRequired,
+  match: matchType.isRequired,
+  history: historyType.isRequired,
+  fetchServicesOptionByOrgId: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {

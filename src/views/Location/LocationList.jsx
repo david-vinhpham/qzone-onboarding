@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -8,6 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 
+import { classesType, historyType } from 'types/global.js';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
@@ -15,7 +17,7 @@ import Card from '../../components/Card/Card.jsx';
 import CardBody from '../../components/Card/CardBody.jsx';
 import CardText from '../../components/Card/CardText.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
-import { fetchLocations } from '../../actions/location';
+import { fetchLocations, delLocation } from '../../actions/location';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
 
@@ -29,19 +31,21 @@ class LocationList extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.fetchLocations();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.locations != null) {
+      this.setState({ data: nextProps.locations });
+    }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.locations });
+  deleteLocation(locationId) {
+    this.props.delLocation(locationId, this.props.history);
   }
 
   render() {
     const { classes } = this.props;
     if (!this.state.data) return null;
     return (
-      <div>
+      <div id="geo-location-id">
         <GridContainer>
           <GridItem xs={12}>
             <Card>
@@ -101,13 +105,18 @@ class LocationList extends React.Component {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Button color="danger" simple justIcon>
+                        <Button
+                          onClick={() => this.deleteLocation(location.id)}
+                          color="danger"
+                          simple
+                          justIcon
+                        >
                           <Delete className={classes.underChartIcons} />
                         </Button>
                       </Tooltip>
                       <Tooltip
                         id="tooltip-top"
-                        title="Edit"
+                        title={location.id}
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
@@ -138,8 +147,16 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchLocations: () => dispatch(fetchLocations())
+    fetchLocations: () => dispatch(fetchLocations()),
+    delLocation: (id, history) => dispatch(delLocation(id, history))
   };
+};
+
+LocationList.propTypes = {
+  classes: classesType.isRequired,
+  delLocation: PropTypes.func.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  history: historyType.isRequired
 };
 
 export default compose(

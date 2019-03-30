@@ -160,7 +160,6 @@ class ServiceCreate extends React.Component {
                             duration: this.state.duration,
                             gapBetweenBookings: this.state.gapBetweenBookings,
                             mode: this.state.mode,
-                            numberOfParallelCustomer: this.state.numberOfParallelCustomer,
                             serviceCategoryId: this.state.serviceCategoryId,
                             tags: this.state.tags,
                             organizationId: this.state.organizationId,
@@ -446,29 +445,6 @@ class ServiceCreate extends React.Component {
                                                     />
                                                 </GridItem>
 
-                                            </GridContainer>
-                                            <GridContainer>
-                                                <GridItem xs={12} sm={3}>
-                                                    <FormLabel className={classes.labelHorizontal}>
-                                                        No. of Parallel Customer
-                                            </FormLabel>
-                                                </GridItem>
-                                                <GridItem xs={12} sm={4}>
-                                                    <CustomInput
-                                                        id="numberOfParallelCustomer"
-                                                        formControlProps={{
-                                                            fullWidth: true
-                                                        }}
-                                                        inputProps={{
-                                                            type: "number",
-														}}
-														onChange={handleChange}
-                                                        value={values.numberOfParallelCustomer}
-                                                    />
-													 {errors.numberOfParallelCustomer && touched.numberOfParallelCustomer ? (
-                                                        <div style={{ color: "red" }}>{errors.numberOfParallelCustomer}</div>
-                                                    ) : null}
-                                                </GridItem>
                                             </GridContainer>
                                             <GridContainer>
                                                 <GridItem xs={12} sm={3}>

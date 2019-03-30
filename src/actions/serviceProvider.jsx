@@ -24,6 +24,7 @@ export const editServiceProvider = (values, history) => {
               if (listServiceProviders[i].id === data.object.id) {
                 // we found it
                 listServiceProviders[i] = data.object;
+                break;
               }
             }
             localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
@@ -160,6 +161,49 @@ export const createServiceProviderFailure = error => {
   return {
     type: serviceProvider.CREATE_SERVICE_PROVIDER_FAILURE,
     payload: { error }
+  };
+};
+
+export const deleteServiceProvider = id => {
+  return dispatch => {
+    dispatch({ type: serviceProvider.DEL_SERVICE_PROVIDER_LOADING });
+    fetch(`${API_ROOT + URL.SERVICE_PROVIDER}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 200 || data.status === 201 || data.success === true) {
+          const objects = {
+            data: []
+          };
+          const serviceProviders = localStorage.getItem('serviceProvider');
+          if (serviceProviders !== null) {
+            const listServiceProviders = JSON.parse(serviceProviders);
+            for (let i = 0; i < listServiceProviders.length; i += 1) {
+              if (listServiceProviders[i].id === id) {
+                delete listServiceProviders[i];
+                break;
+              }
+            }
+            if (listServiceProviders.length > 0) {
+              objects.data = listServiceProviders; // json
+              localStorage.setItem('serviceProvider', JSON.stringify(listServiceProviders));
+            }
+            dispatch({
+              type: serviceProvider.DEL_SERVICE_PROVIDER_SUCCESS,
+              payload: objects
+            });
+          }
+        } else {
+          dispatch({
+            type: serviceProvider.DEL_SERVICE_PROVIDER_FAILURE,
+            payload: data
+          });
+        }
+      });
   };
 };
 

@@ -13,6 +13,7 @@ import indexRoutes from './routes/index';
 import reducers from './reducers';
 import './assets/scss/material-dashboard-pro-react.css';
 
+// eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 Amplify.configure({

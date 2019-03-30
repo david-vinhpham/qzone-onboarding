@@ -7,6 +7,7 @@ import CardBody from 'components/Card/CardBody.jsx';
 import CardFooter from 'components/Card/CardFooter.jsx';
 import { roseColor } from 'assets/jss/material-dashboard-pro-react';
 import Button from 'components/CustomButtons/Button.jsx';
+import { classesType } from 'types/global';
 
 const styles = () => ({
   root: {
@@ -16,14 +17,14 @@ const styles = () => ({
 
 class Error extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, children, cancelError } = this.props;
     return (
       <Card>
         <CardBody>
-          <Typography classes={classes}>{this.props.children}</Typography>
+          <Typography classes={classes}>{children}</Typography>
         </CardBody>
         <CardFooter>
-          <Button onClick={this.props.cancelError}>OK</Button>
+          <Button onClick={cancelError}>OK</Button>
         </CardFooter>
       </Card>
     );
@@ -31,7 +32,9 @@ class Error extends Component {
 }
 
 Error.propTypes = {
-  cancelError: PropTypes.func.isRequired
+  cancelError: PropTypes.func.isRequired,
+  classes: classesType.isRequired,
+  children: PropTypes.element.isRequired
 };
 
 export default withStyles(styles)(Error);

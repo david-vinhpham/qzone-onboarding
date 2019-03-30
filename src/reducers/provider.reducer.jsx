@@ -15,6 +15,9 @@ const initialState = {
   editProviderError: null,
   editProviderLoading: false,
 
+  delProviderError: null,
+  delProviderLoading: false,
+
   timezones: [],
   fetchTimezonesLoading: false,
   fetchTimezonesError: null
@@ -68,6 +71,18 @@ export default function(state = initialState, action) {
         provider: [],
         editProviderError: action.payload.error,
         fetchProviderLoading: false
+      };
+
+    case provider.DEL_PROVIDER_LOADING:
+      return { ...state, delProviderLoading: true };
+    case provider.DEL_PROVIDER_SUCCESS:
+      return { ...state, provider: [], delProviderLoading: false };
+    case provider.DEL_PROVIDER_FAILURE:
+      return {
+        ...state,
+        provider: [],
+        delProviderError: action.payload.error,
+        delProviderLoading: false
       };
 
     case provider.FETCH_TIMEZONES_LOADING:
