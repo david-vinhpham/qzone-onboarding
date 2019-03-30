@@ -10,6 +10,7 @@ import { FormControl, FormLabel } from '@material-ui/core';
 import Select from 'react-select';
 import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';
+import { classesType, matchType, historyType } from 'types/global.js';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
 import Card from '../../components/Card/Card.jsx';
@@ -50,8 +51,8 @@ class ServiceProviderEdit extends React.Component {
       locationOption: null,
       numberOfParallelCustomer: 1,
       serviceTimeSlot: [],
-      additionalInfo: '',
-    }
+      additionalInfo: ''
+    };
     this.handleOrgChange = this.handleOrgChange.bind(this);
     this.handleProviderChange = this.handleProviderChange.bind(this);
     this.handleServiceChange = this.handleServiceChange.bind(this);
@@ -61,9 +62,36 @@ class ServiceProviderEdit extends React.Component {
     this.handleRevertSlot = this.handleRevertSlot.bind(this);
   }
 
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    this.props.fetchServiceProviderById(id);
+    localStorage.removeItem('originServiceTimeSlot');
+    const userSub = localStorage.getItem('userSub');
+    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    this.props.fetchProvidersOptionByServiceProviderId(id);
+    this.props.findServiceOptionByBusinessAdminId(userSub);
+    this.props.fetchLocationsOption();
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({ data: nextProps.serviceProvider });
     this.setState({ serviceTimeSlot: nextProps.serviceProvider.serviceTimeSlot });
+  }
+
+  submit = values => {
+    this.setState({ additionalInfo: values.additionalInfo });
+    for (let index = 0; index < values.serviceTimeSlot.length; index += 1) {
+      values.serviceTimeSlot[index].slotId = index;
+    }
+    this.props.editServiceProvider(values, this.props.history);
+  };
+
+  change(event, stateName) {
+    if (_.isEmpty(event.target.value)) this.setState({ [`${stateName}State`]: 'error' });
+    else {
+      this.setState({ [`${stateName}State`]: 'success' });
+    }
+    this.setState({ [stateName]: event.target.value || event.target.checked });
   }
 
   handleRevertSlot() {
@@ -77,7 +105,7 @@ class ServiceProviderEdit extends React.Component {
     while (serviceTimeSlot.length > 0) {
       serviceTimeSlot.pop();
     }
-    for (let i = 0; i < originServiceTimeSlot.length; i++) {
+    for (let i = 0; i < originServiceTimeSlot.length; i += 1) {
       serviceTimeSlot.push(originServiceTimeSlot[i]);
     }
     this.setState({ serviceTimeSlot: originServiceTimeSlot });
@@ -118,37 +146,23 @@ class ServiceProviderEdit extends React.Component {
     this.setState({ locationOption: selectedOption });
   }
 
-  componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props.fetchServiceProviderById(id);
-    localStorage.removeItem('originServiceTimeSlot');
-    const userSub = localStorage.getItem('userSub');
-    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
-    this.props.fetchProvidersOptionByServiceProviderId(id);
-    this.props.findServiceOptionByBusinessAdminId(userSub);
-    this.props.fetchLocationsOption();
-  }
-
-  change(event, stateName) {
-    if (_.isEmpty(event.target.value)) this.setState({ [`${stateName}State`]: 'error' });
-    else {
-      this.setState({ [`${stateName}State`]: 'success' });
-    }
-    this.setState({ [stateName]: event.target.value || event.target.checked });
-  }
-
-  submit = values => {
-    this.setState({ additionalInfo: values.additionalInfo });
-    for (let index = 0; index < values.serviceTimeSlot.length; index++) {
-      values.serviceTimeSlot[index].slotId = index;
-    }
-    this.props.editServiceProvider(values, this.props.history);
-  };
-
   render() {
-    const { classes, services, organizations, providers, locations,
-      editServiceProviderError, fetchServiceProviderLoading } = this.props;
-    const { serviceOption, providerOption, organizationOption, locationOption, serviceTimeSlot } = this.state;
+    const {
+      classes,
+      services,
+      organizations,
+      providers,
+      locations,
+      editServiceProviderError,
+      fetchServiceProviderLoading
+    } = this.props;
+    const {
+      serviceOption,
+      providerOption,
+      organizationOption,
+      locationOption,
+      serviceTimeSlot
+    } = this.state;
     let serviceOptions = [];
     let organizationOptions = [];
     let providerOptions = [];
@@ -166,13 +180,15 @@ class ServiceProviderEdit extends React.Component {
       locationOptions = locations;
     }
     if (fetchServiceProviderLoading || !this.state.data || this.state.data.length === 0) {
-      return < ClipLoader
-        className={override}
-        sizeUnit={"px"}
-        size={100}
-        color={'#123abc'}
-        loading={fetchServiceProviderLoading}
-      />;
+      return (
+        <ClipLoader
+          className={override}
+          sizeUnit="px"
+          size={100}
+          color="#123abc"
+          loading={fetchServiceProviderLoading}
+        />
+      );
     }
     return (
       <GridItem xs={12} sm={12} md={12}>
@@ -187,11 +203,11 @@ class ServiceProviderEdit extends React.Component {
               additionalInfo: this.state.data.additionalInfo,
               numberOfParallelCustomer: this.state.data.numberOfParallelCustomer,
               serviceTimeSlot: this.state.serviceTimeSlot,
-              businessAdminId: this.state.data.businessAdminId,
+              businessAdminId: this.state.data.businessAdminId
             }}
             validationSchema={ServiceProviderEditSchema}
-            enableReinitialize={true}
-            onSubmit={(values) => this.submit(values)}
+            enableReinitialize
+            onSubmit={values => this.submit(values)}
             render={({
               values,
               errors,
@@ -203,156 +219,155 @@ class ServiceProviderEdit extends React.Component {
               isSubmitting,
               setFieldValue
             }) => (
-                <div>
-                  <CardHeader color="rose" text>
-                    <CardText color="rose">
-                      <h4 className={classes.cardTitle}>Edit Service Providers</h4>
-                    </CardText>
-                  </CardHeader>
-                  <CardBody>
-                    {editServiceProviderError !== null ? (<CardFooter className={classes.justifyContentCenter}>
-                      <div style={{ color: "red" }} > {editServiceProviderError.message} </div>
-                    </CardFooter>)
-                      :
-                      (<CardFooter className={classes.justifyContentCenter}>
-                      </CardFooter>)}
-                    <form>
-                      <GridContainer>
-                        <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal}>
-                            Service Organization
-                                                </FormLabel>
-                        </GridItem>
-                        <GridItem xs={12} sm={4}>
-                          {<FormControl
-                            fullWidth
-                            className={classes.selectFormControl}>
+              <div>
+                <CardHeader color="rose" text>
+                  <CardText color="rose">
+                    <h4 className={classes.cardTitle}>Edit Service Providers</h4>
+                  </CardText>
+                </CardHeader>
+                <CardBody>
+                  {editServiceProviderError !== null ? (
+                    <CardFooter className={classes.justifyContentCenter}>
+                      <div style={{ color: 'red' }}> {editServiceProviderError.message} </div>
+                    </CardFooter>
+                  ) : (
+                    <CardFooter className={classes.justifyContentCenter} />
+                  )}
+                  <form>
+                    <GridContainer>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>
+                          Service Organization
+                        </FormLabel>
+                      </GridItem>
+                      <GridItem xs={12} sm={4}>
+                        {
+                          <FormControl fullWidth className={classes.selectFormControl}>
                             <Select
                               options={organizationOptions}
-                              value={organizationOption === null ? organizationOptions.find((element) => {
-                                return element.value === values.organizationId;
-                              }) : organizationOption}
+                              value={
+                                organizationOption === null
+                                  ? organizationOptions.find(element => {
+                                      return element.value === values.organizationId;
+                                    })
+                                  : organizationOption
+                              }
                               onChange={this.handleOrgChange}
-                            >
-                            </Select>
-                          </FormControl>}
-                        </GridItem>
-                      </GridContainer>
-                      <GridContainer>
-                        <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal}>
-                            Service
-                                              </FormLabel>
-                        </GridItem>
-                        <GridItem xs={12} sm={4}>
-                          <FormControl
-                            fullWidth
-                            className={classes.selectFormControl}>
-                            <Select
-                              options={serviceOptions}
-                              value={serviceOption === null ? serviceOptions.find((element) => {
-                                return element.value === values.serviceId;
-                              }) : serviceOption}
-                              onChange={this.handleServiceChange}
-                            >
-                            </Select>
+                            />
                           </FormControl>
-                        </GridItem>
-                      </GridContainer>
-                      <GridContainer>
-                        <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal}>
-                            Provider
-                                              </FormLabel>
-                        </GridItem>
-                        <GridItem xs={12} sm={4}>
-                          <FormControl
-                            fullWidth
-                            className={classes.selectFormControl}>
-                            <Select
-                              value={providerOption === null ? providerOptions.find((element) => {
-                                return element.value === values.providerId;
-                              }) : providerOption}
-                              placeholder="Select your provider(s)"
-                              options={providerOptions}
-                              onChange={this.handleProviderChange} />
-                          </FormControl>
-                        </GridItem>
-                      </GridContainer>
-                      <GridContainer>
-                        <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal}>
-                            Service Location
-                                              </FormLabel>
-                        </GridItem>
-                        <GridItem xs={12} sm={4}>
-                          <FormControl
-                            fullWidth
-                            className={classes.selectFormControl}>
-                            <Select
-                              value={locationOption === null ? locationOptions.find((element) => {
-                                return element.value === values.geoLocationId;
-                              }) : locationOption}
-                              onChange={this.handleLocationChange}
-                              options={locationOptions}
-                            >
-                            </Select>
-                            {errors.geoLocationId && touched.geoLocationId ? (
-                              <div style={{ color: "red" }}>{errors.geoLocationId}</div>
-                            ) : null}
-                          </FormControl>
-                        </GridItem>
-                      </GridContainer>
-                      <GridContainer style={{ paddingBottom: '15px' }}>
-                        <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal}>
-                            No. of Parallel Customer
-                                              </FormLabel>
-                        </GridItem>
-                        <GridItem xs={12} sm={4}>
-                          <CustomInput
-                            id="numberOfParallelCustomer"
-                            formControlProps={{
-                              fullWidth: true
-                            }}
-                            inputProps={{
-                              type: "number",
-                            }}
-                            onChange={handleChange}
-                            value={values.numberOfParallelCustomer}
+                        }
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>Service</FormLabel>
+                      </GridItem>
+                      <GridItem xs={12} sm={4}>
+                        <FormControl fullWidth className={classes.selectFormControl}>
+                          <Select
+                            options={serviceOptions}
+                            value={
+                              serviceOption === null
+                                ? serviceOptions.find(element => {
+                                    return element.value === values.serviceId;
+                                  })
+                                : serviceOption
+                            }
+                            onChange={this.handleServiceChange}
                           />
-                          {errors.numberOfParallelCustomer && touched.numberOfParallelCustomer ? (
-                            <div style={{ color: "red" }}>{errors.numberOfParallelCustomer}</div>
+                        </FormControl>
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>Provider</FormLabel>
+                      </GridItem>
+                      <GridItem xs={12} sm={4}>
+                        <FormControl fullWidth className={classes.selectFormControl}>
+                          <Select
+                            value={
+                              providerOption === null
+                                ? providerOptions.find(element => {
+                                    return element.value === values.providerId;
+                                  })
+                                : providerOption
+                            }
+                            placeholder="Select your provider(s)"
+                            options={providerOptions}
+                            onChange={this.handleProviderChange}
+                          />
+                        </FormControl>
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>Service Location</FormLabel>
+                      </GridItem>
+                      <GridItem xs={12} sm={4}>
+                        <FormControl fullWidth className={classes.selectFormControl}>
+                          <Select
+                            value={
+                              locationOption === null
+                                ? locationOptions.find(element => {
+                                    return element.value === values.geoLocationId;
+                                  })
+                                : locationOption
+                            }
+                            onChange={this.handleLocationChange}
+                            options={locationOptions}
+                          />
+                          {errors.geoLocationId && touched.geoLocationId ? (
+                            <div style={{ color: 'red' }}>{errors.geoLocationId}</div>
                           ) : null}
-                        </GridItem>
-                      </GridContainer>
-                      <GridContainer style={{ paddingBottom: '15px' }}>
-                        <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal}>
-                            Service Time Slot
-                                              </FormLabel>
-                        </GridItem>
-                        {values.serviceTimeSlot.map((day, index) => (
-                          <div>
-                            <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
-                              <FormLabel >
-                                Slot {index + 1}
-                              </FormLabel>
-                            </GridItem>
-                            <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
-                              <FormControl fullWidth style={{ margin: '-3px' }}>
-                                <SlotCustomInput
-                                  id={`serviceTimeSlot[${index}].startTime`}
-                                  inputProps={{
-                                    placeholder: "Start Time",
-                                    type: "time"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.serviceTimeSlot[index].startTime}
-                                />
-                              </FormControl>
-                            </GridItem>
-                            {/*<GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
+                        </FormControl>
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer style={{ paddingBottom: '15px' }}>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>
+                          No. of Parallel Customer
+                        </FormLabel>
+                      </GridItem>
+                      <GridItem xs={12} sm={4}>
+                        <CustomInput
+                          id="numberOfParallelCustomer"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            type: 'number'
+                          }}
+                          onChange={handleChange}
+                          value={values.numberOfParallelCustomer}
+                        />
+                        {errors.numberOfParallelCustomer && touched.numberOfParallelCustomer ? (
+                          <div style={{ color: 'red' }}>{errors.numberOfParallelCustomer}</div>
+                        ) : null}
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer style={{ paddingBottom: '15px' }}>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>Service Time Slot</FormLabel>
+                      </GridItem>
+                      {values.serviceTimeSlot.map((day, index) => (
+                        <div>
+                          <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                            <FormLabel>Slot {index + 1}</FormLabel>
+                          </GridItem>
+                          <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
+                            <FormControl fullWidth style={{ margin: '-3px' }}>
+                              <SlotCustomInput
+                                id={`serviceTimeSlot[${index}].startTime`}
+                                inputProps={{
+                                  placeholder: 'Start Time',
+                                  type: 'time'
+                                }}
+                                onChange={handleChange}
+                                value={values.serviceTimeSlot[index].startTime}
+                              />
+                            </FormControl>
+                          </GridItem>
+                          {/* <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
                                                   <FormControl fullWidth style={{ margin: '-3px' }}>
                                                     {<SlotCustomInput
                                                       id={`serviceTimeSlot[${index}].endTime`}
@@ -362,70 +377,70 @@ class ServiceProviderEdit extends React.Component {
                                                     />}
                                                   </FormControl>
                                                 </GridItem> */}
+                        </div>
+                      ))}
+                    </GridContainer>
+                    <GridContainer style={{ paddingBottom: '15px' }}>
+                      <GridItem xs={12} sm={3} />
+                      <GridItem xs={12} sm={6} style={{ 'max-width': '100%' }}>
+                        {errors.serviceTimeSlot && touched.serviceTimeSlot ? (
+                          <div style={{ color: 'red' }}>
+                            {' '}
+                            {
+                              (errors.serviceTimeSlot =
+                                serviceTimeSlot.length === 0 ? errors.serviceTimeSlot : '')
+                            }
                           </div>
-                        ))}
-                      </GridContainer>
-                      <GridContainer style={{ paddingBottom: '15px' }}>
-                        <GridItem xs={12} sm={3} />
-                        <GridItem xs={12} sm={6} style={{ 'max-width': '100%' }}>
-                          {errors.serviceTimeSlot && touched.serviceTimeSlot ? (
-                            <div style={{ color: 'red' }}>
-                              {' '}
-                              {
-                                (errors.serviceTimeSlot =
-                                  serviceTimeSlot.length === 0 ? errors.serviceTimeSlot : '')
-                              }
-                            </div>
-                          ) : null}
-                        </GridItem>
-                      </GridContainer>
-                      <GridContainer style={{ paddingBottom: '15px' }}>
-                        <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal} />
-                        </GridItem>
-                        <GridItem xs={12} sm={6} style={{ 'max-width': '100%' }}>
-                          <Button color="rose" onClick={this.handleNewSlot}>
-                            New Slot
+                        ) : null}
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer style={{ paddingBottom: '15px' }}>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal} />
+                      </GridItem>
+                      <GridItem xs={12} sm={6} style={{ 'max-width': '100%' }}>
+                        <Button color="rose" onClick={this.handleNewSlot}>
+                          New Slot
                         </Button>
-                          <Button color="rose" onClick={this.handleDeleteSlot}>
-                            Delete Slot
+                        <Button color="rose" onClick={this.handleDeleteSlot}>
+                          Delete Slot
                         </Button>
-                          <Button color="rose" onClick={this.handleRevertSlot}>
-                            Revert
+                        <Button color="rose" onClick={this.handleRevertSlot}>
+                          Revert
                         </Button>
-                        </GridItem>
-                      </GridContainer>
-                      <GridContainer>
-                        <GridItem xs={12} sm={3}>
-                          <FormLabel className={classes.labelHorizontal}>AdditionalInfo</FormLabel>
-                        </GridItem>
-                        <GridItem xs={12} sm={3}>
-                          <CustomInput
-                            id="additionalInfo"
-                            formControlProps={{
-                              fullWidth: true
-                            }}
-                            inputProps={{
-                              multiline: true,
-                              rows: 3
-                            }}
-                            value={values.additionalInfo}
-                            onChange={handleChange}
-                          />
-                        </GridItem>
-                      </GridContainer>
-                    </form>
-                  </CardBody>
-                  <CardFooter className={classes.justifyContentCenter}>
-                    <Button color="rose" onClick={handleSubmit}>
-                      Update
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer>
+                      <GridItem xs={12} sm={3}>
+                        <FormLabel className={classes.labelHorizontal}>AdditionalInfo</FormLabel>
+                      </GridItem>
+                      <GridItem xs={12} sm={3}>
+                        <CustomInput
+                          id="additionalInfo"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            multiline: true,
+                            rows: 3
+                          }}
+                          value={values.additionalInfo}
+                          onChange={handleChange}
+                        />
+                      </GridItem>
+                    </GridContainer>
+                  </form>
+                </CardBody>
+                <CardFooter className={classes.justifyContentCenter}>
+                  <Button color="rose" onClick={handleSubmit}>
+                    Update
                   </Button>
-                    <Button color="rose" onClick={this.props.history.goBack}>
-                      Exit
+                  <Button color="rose" onClick={this.props.history.goBack}>
+                    Exit
                   </Button>
-                  </CardFooter>
-                </div>
-              )}
+                </CardFooter>
+              </div>
+            )}
           />
         </Card>
       </GridItem>
@@ -434,7 +449,23 @@ class ServiceProviderEdit extends React.Component {
 }
 
 ServiceProviderEdit.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: classesType.isRequired,
+  services: PropTypes.arrayOf(PropTypes.string).isRequired,
+  organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  fetchProvidersOptionByServiceProviderId: PropTypes.func.isRequired,
+  fetchOrganizationsOptionByBusinessAdminId: PropTypes.func.isRequired,
+  fetchServiceProviderById: PropTypes.func.isRequired,
+  editServiceProvider: PropTypes.func.isRequired,
+  findServiceOptionByBusinessAdminId: PropTypes.func.isRequired,
+  fetchLocationsOption: PropTypes.func.isRequired,
+  serviceProvider: PropTypes.objectOf(PropTypes.string).isRequired,
+  editServiceProviderError: PropTypes.string.isRequired,
+  fetchServiceProviderLoading: PropTypes.bool.isRequired,
+  match: matchType.isRequired,
+  history: historyType.isRequired,
+  fetchServicesOptionByOrgId: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {

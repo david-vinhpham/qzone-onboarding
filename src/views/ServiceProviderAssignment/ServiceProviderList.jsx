@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -11,6 +12,7 @@ import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import ArtTrack from '@material-ui/icons/ArtTrack';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { classesType } from 'types/global.js';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
@@ -35,43 +37,12 @@ class ServiceProviderList extends React.Component {
     super(props);
     this.state = {
       data: [],
-      deleteServiceProvider: {
+      deletedServiceProvider: {
         id: 0,
         isDel: false
       }
     };
   }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.serviceProviders });
-    if (nextProps.serviceProviders != null && !nextProps.delServiceProviderLoading) {
-      localStorage.setItem('serviceProvider', JSON.stringify(nextProps.serviceProviders));
-    }
-  }
-
-  deleteServiceProvider(id) {
-    console.log(`deleteProvider a id: ${id}`);
-    const data = {
-      id,
-      isDel: true
-    };
-    this.setState({ deleteServiceProvider: data });
-  }
-
-  cancelDelete = () => {
-    const data = {
-      isDel: false
-    };
-    this.setState({ deleteServiceProvider: data });
-  };
-
-  confirmDelete = id => {
-    this.props.deleteServiceProvider(id);
-    const data = {
-      isDel: false
-    };
-    this.setState({ deleteServiceProvider: data });
-  };
 
   componentDidMount() {
     let serviceProviders = localStorage.getItem('serviceProvider');
@@ -84,6 +55,36 @@ class ServiceProviderList extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ data: nextProps.serviceProviders });
+    if (nextProps.serviceProviders != null && !nextProps.delServiceProviderLoading) {
+      localStorage.setItem('serviceProvider', JSON.stringify(nextProps.serviceProviders));
+    }
+  }
+
+  cancelDelete = () => {
+    const data = {
+      isDel: false
+    };
+    this.setState({ deletedServiceProvider: data });
+  };
+
+  confirmDelete = id => {
+    this.props.deleteServiceProvider(id);
+    const data = {
+      isDel: false
+    };
+    this.setState({ deletedServiceProvider: data });
+  };
+
+  deleteServiceProvider(id) {
+    const data = {
+      id,
+      isDel: true
+    };
+    this.setState({ deletedServiceProvider: data });
+  }
+
   render() {
     const {
       classes,
@@ -92,7 +93,7 @@ class ServiceProviderList extends React.Component {
       delServiceProviderLoading,
       delServiceProviderError
     } = this.props;
-    const { deleteServiceProvider } = this.state;
+    const { deletedServiceProvider } = this.state;
     let data = [];
     if (fetchServiceProvidersLoading) {
       return (
@@ -172,7 +173,7 @@ class ServiceProviderList extends React.Component {
                     classes={{ tooltip: classes.tooltip }}
                   >
                     <Button
-                      onClick={e => this.deleteServiceProvider(serviceProvider.id)}
+                      onClick={() => this.deleteServiceProvider(serviceProvider.id)}
                       color="danger"
                       simple
                       justIcon
@@ -188,12 +189,12 @@ class ServiceProviderList extends React.Component {
       </GridContainer>
     );
 
-    const deletionPopup = deleteServiceProvider.isDel ? (
+    const deletionPopup = deletedServiceProvider.isDel ? (
       <DeletionModal
-        openDialog={deleteServiceProvider.isDel}
+        openDialog={deletedServiceProvider.isDel}
         closeDialog={this.cancelDelete}
         itemDeleteHandler={this.confirmDelete}
-        itemId={deleteServiceProvider.id}
+        itemId={deletedServiceProvider.id}
       />
     ) : null;
     return (
@@ -263,6 +264,17 @@ const mapDispatchToProps = dispatch => {
     fetchServiceProvidersByUserSub: userSub => dispatch(fetchServiceProvidersByUserSub(userSub)),
     deleteServiceProvider: id => dispatch(deleteServiceProvider(id))
   };
+};
+
+ServiceProviderList.propTypes = {
+  serviceProviders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fetchServiceProvidersLoading: PropTypes.bool.isRequired,
+  fetchServiceProvidersError: PropTypes.string.isRequired,
+  delServiceProviderLoading: PropTypes.bool.isRequired,
+  delServiceProviderError: PropTypes.string.isRequired,
+  fetchServiceProvidersByUserSub: PropTypes.func.isRequired,
+  deleteServiceProvider: PropTypes.func.isRequired,
+  classes: classesType.isRequired
 };
 
 export default compose(

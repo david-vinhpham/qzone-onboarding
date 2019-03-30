@@ -62,18 +62,32 @@ const reducer = (state = initialState, action) => {
       };
 
     case service.DEL_SERVICE_LOADING:
-      return { ...state, delServiceLoading: true }
+      return { ...state, delServiceLoading: true };
     case service.DEL_SERVICE_SUCCESS:
-      return { ...state, services: action.payload.data, delServiceLoading: false }
+      return { ...state, services: action.payload.data, delServiceLoading: false };
     case service.DEL_SERVICE_FAILURE:
-      return { ...state, service: [], fetchServicesError: action.payload.error, delServiceLoading: false }
+      return {
+        ...state,
+        service: [],
+        fetchServicesError: action.payload.error,
+        delServiceLoading: false
+      };
 
     case service.FETCH_CATEGORIES_LOADING:
-      return { ...state, fetchServiceCategoriesLoading: true }
+      return { ...state, fetchServiceCategoriesLoading: true };
     case service.FETCH_CATEGORIES_SUCCESS:
-      return { ...state, serviceCategories: action.payload.data, fetchServiceCategoriesLoading: false }
+      return {
+        ...state,
+        serviceCategories: action.payload.data,
+        fetchServiceCategoriesLoading: false
+      };
     case service.FETCH_CATEGORIES_FAILURE:
-      return { ...state, serviceCategories: [], fetchServiceCategoriesError: action.payload.error, fetchServiceCategoriesLoading: false }
+      return {
+        ...state,
+        serviceCategories: [],
+        fetchServiceCategoriesError: action.payload.error,
+        fetchServiceCategoriesLoading: false
+      };
 
     case service.FETCH_SERVICE_LOADING:
       return { ...state, fetchServiceLoading: true };

@@ -51,8 +51,7 @@ export const fetchLocationsOption = () => {
   };
 };
 
-export const delLocation = (id, history) => {
-  console.log(`delLocation: ${id}`);
+export const delLocation = id => {
   return dispatch => {
     dispatch({ type: location.DEL_LOCATION_LOADING });
     fetch(`${API_ROOT + URL.LOCATION}/${id}`, {
@@ -80,10 +79,8 @@ export const delLocation = (id, history) => {
 };
 
 export const fetchLocation = id => {
-  console.log(`fetchLocation: ${id}`);
   return dispatch => {
     dispatch({ type: location.FETCH_LOCATION_LOADING });
-    console.log(`url: ${API_ROOT}${URL.LOCATION}/${id}`);
     fetch(`${API_ROOT + URL.LOCATION}/${id}`, {
       method: 'GET',
       headers: {
@@ -144,7 +141,7 @@ export const editLocation = (values, history) => {
       body: JSON.stringify(values)
     })
       .then(res => res.json())
-      .then(data => {
+      .then(() => {
         // dispatch({
         //    type: location.EDIT_LOCATION_SUCCESS,
         //    payload: data.object

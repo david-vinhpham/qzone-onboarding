@@ -1,6 +1,7 @@
 import React from 'react';
 import { arrayOf, any, func, string, bool } from 'prop-types';
 import moment from 'moment';
+import { debounce } from 'lodash';
 import Scheduler, { SchedulerData, ViewTypes, DATETIME_FORMAT } from 'react-big-scheduler';
 import ReactResizeDetector from 'react-resize-detector';
 import { Button } from '@material-ui/core';
@@ -85,13 +86,14 @@ class Calendar extends React.Component {
     this.setState({ viewModel: schedulerData });
   };
 
-  onCalendarResize = width => {
+  onCalendarResize = debounce((width, height) => {
     this.setState(oldState =>
       produce(oldState, draftState => {
         draftState.viewModel.config.schedulerWidth = width;
+        draftState.viewModel.config.schedulerMaxHeight = height - 100;
       })
     );
-  };
+  }, 150);
 
   rightCustomHeader = () => (
     <Button
@@ -106,7 +108,7 @@ class Calendar extends React.Component {
 
   render() {
     return (
-      <div style={{ padding: '8px 16px', backgroundColor: 'white' }}>
+      <div style={{ padding: '8px 16px', backgroundColor: 'white', height: 'calc(100vh - 130px)' }}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.onCalendarResize}>
           <Scheduler
             schedulerData={this.state.viewModel}
