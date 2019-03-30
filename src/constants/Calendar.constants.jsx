@@ -1,3 +1,5 @@
+import { range } from 'lodash';
+
 export const FETCH_PROVIDER_BY_ORG = {
   SUCCESS: 'FETCH_PROVIDER_BY_ORG_SUCCESS'
 };
@@ -17,6 +19,16 @@ export const EVENT_TYPE = Object.freeze({
   HOLIDAY: 'HOLIDAY',
   SPECIAL: 'SPECIAL',
   VACATION: 'VACATION'
+});
+
+export const EVENT_TYPE_TITLE = Object.freeze({
+  [EVENT_TYPE.APPOINTMENT]: 'Appointment',
+  [EVENT_TYPE.BREAK]: 'Break',
+  [EVENT_TYPE.CLOSED]: 'Closed',
+  [EVENT_TYPE.WEEKEND]: 'Weekend',
+  [EVENT_TYPE.HOLIDAY]: 'Holiday',
+  [EVENT_TYPE.SPECIAL]: 'Special',
+  [EVENT_TYPE.VACATION]: 'Vacation'
 });
 
 export const EVENT_BG_COLOR = Object.freeze({
@@ -50,4 +62,31 @@ export const EVENT_BG_COLOR = Object.freeze({
 export const EVENT_LEVEL = Object.freeze({
   ORGANIZATION: 'ORGANIZATION',
   PROVIDER: 'PROVIDER'
+});
+
+export const EVENT_REPEAT_TYPE = Object.freeze({
+  NEVER: 'Never',
+  DAILY: 'Daily',
+  WEEKLY: 'Weekly'
+});
+
+export const REPEAT_EVERY_DEF = {
+  [EVENT_REPEAT_TYPE.WEEKLY]: range(1, 4),
+  [EVENT_REPEAT_TYPE.DAILY]: range(1, 7)
+};
+
+export const REPEAT_DATE_DEF = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+];
+
+export const REPEAT_END_TYPE = Object.freeze({
+  NEVER: 'Never',
+  AFTER_NUM_OCCUR: 'AfterNumOccurrences',
+  ON_DATE: 'On'
 });

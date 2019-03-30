@@ -10,12 +10,13 @@ import { providerType } from 'types/global';
 import styles from './CalendarV2.module.scss';
 
 class ManageCalendar extends React.PureComponent {
-  getEventStyle = eventType => {
+  getEventStyle = (eventType, mustBeHeight) => {
     return {
-      borderLeft: `4px solid ${EVENT_BG_COLOR[eventType].marker}`,
       backgroundColor: EVENT_BG_COLOR[eventType].backgroundColor,
       color: EVENT_BG_COLOR[eventType].color,
-      height: '100%'
+      height: mustBeHeight,
+      paddingLeft: '8px',
+      borderRadius: '10px'
     };
   };
 
@@ -30,9 +31,9 @@ class ManageCalendar extends React.PureComponent {
     agendaMaxEventWidth
   ) => {
     const titleText = schedulerData.behaviors.getEventTextFunc(schedulerData, event);
-    let divStyle = this.getEventStyle(event.type);
+    let divStyle = this.getEventStyle(event.type, mustBeHeight);
     if (agendaMaxEventWidth) divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth };
-    const titleStyle = { color: EVENT_BG_COLOR[event.type].color, marginLeft: '4px' };
+    const titleStyle = { color: EVENT_BG_COLOR[event.type].color };
 
     return (
       <div key={event.id} className={mustAddCssClass} style={divStyle}>
