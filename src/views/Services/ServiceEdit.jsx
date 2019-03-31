@@ -51,7 +51,7 @@ const ServiceEditSchema = Yup.object().shape({
     .max(1500, 'Description too long')
     .required('this field is required'),
   duration: Yup.number().min(60),
-  numberOfParallelCustomer: Yup.number().min(1),
+  numberOfParallelCustomer: Yup.number().min(1).max(30),
   bookingHorizon: Yup.number()
     .min(3)
     .max(1095)
@@ -98,7 +98,7 @@ class ServiceEdit extends React.Component {
       values.image = imageObject;
     }
     if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
-      if (values.logo === null) {
+      if (values.image === null) {
         values.image = values.imagePreviewUrl;
       }
     }
