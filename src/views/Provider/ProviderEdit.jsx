@@ -23,6 +23,9 @@ import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organization';
+import defaultImage from "../../assets/img/image_placeholder.jpg";
+import _ from "lodash";
+import ImageUpload from '../../components/CustomUpload/ImageUpload';
 
 const override = css`
   display: block;
@@ -46,7 +49,14 @@ class ProviderEdit extends React.Component {
       provider: null,
       businessAdminId: null,
       timezoneOption: null,
-      organizationOption: null
+      organizationOption: null,
+      imagePreviewUrl: defaultImage,
+      imageObject: null,
+      data: {
+        providerInformation: {
+          image: null,
+        }
+      }
     };
 
     this.doubleClick = this.doubleClick.bind(this);
@@ -60,10 +70,18 @@ class ProviderEdit extends React.Component {
     this.props.fetchProvider(id);
     const userSub = localStorage.getItem('userSub');
     this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    localStorage.removeItem('imageObject');
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ provider: nextProps.provider });
+    if (!nextProps.imageLoading) {
+      this.setState({ provider: nextProps.provider });
+      if (nextProps.provider != null && nextProps.provider.image != null) {
+        this.setState({ imagePreviewUrl: nextProps.service.image.fileUrl });
+      } else {
+        this.setState({ imagePreviewUrl: defaultImage });
+      }
+    }
   }
 
   handleOrgChange(selectedOption) {
@@ -78,7 +96,46 @@ class ProviderEdit extends React.Component {
     this.setState({ isEditMode: fieldName });
   }
 
+  change(event, stateName) {
+    if (_.isEmpty(event.target.value)) this.setState({ [`${stateName}State`]: 'error' });
+    else {
+      this.setState({ [`${stateName}State`]: 'success' });
+    }
+    this.setState({ [stateName]: event.target.value || event.target.checked });
+  }
+
+  handleImageChange(e) {
+    const self = this;
+    e.preventDefault();
+    const reader = new FileReader();
+    const files = e.target.files[0];
+    reader.onloadend = () => {
+      self.setState({
+        imagePreviewUrl: reader.result
+        // provider: provider
+      });
+    };
+    reader.readAsDataURL(files);
+  }
+
   handleProvider(values) {
+    console.log('handleProvider');
+    let providerInformation  = values.providerInformation;
+    let imageObject = localStorage.getItem('imageObject');
+    if (imageObject === null) {
+      imageObject = this.state.imageObject;
+    } else {
+      imageObject = JSON.parse(imageObject);
+    }
+    if (imageObject != null) {
+      providerInformation.image = imageObject;
+    }
+    if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
+      if (Object.is(values.providerInformation.image, null) || Object.is(values.providerInformation.image, undefined)) {
+        providerInformation.image = values.imagePreviewUrl;
+      }
+    }
+    values.providerInformation = providerInformation;
     this.props.editProvider(values, this.props.history);
   }
 
@@ -121,7 +178,12 @@ class ProviderEdit extends React.Component {
           userStatus: provider.data.userStatus,
           userSub: provider.data.userSub,
           userType: provider.data.userType,
+          imageShow: provider.data.providerInformation.image ? provider.data.providerInformation.image.fileUrl : defaultImage,
+          imagePreviewUrl:
+            this.props.imageObject ||
+            (provider.data.providerInformation.image ? provider.data.providerInformation.image.fileUrl : this.state.imagePreviewUrl),
           providerInformation: {
+            image: provider.data.providerInformation.image,
             description: provider.data.providerInformation.description,
             qualifications: provider.data.providerInformation.qualifications,
             tags: provider.data.providerInformation.tags,
@@ -336,6 +398,11 @@ class ProviderEdit extends React.Component {
                   />
                 </GridItem>
               </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} md={12}>
+                  <ImageUpload imagePreviewUrl={values.imageShow} />
+                </GridItem>
+              </GridContainer>
             </CardBody>
             <CardFooter className={classes.justifyContentCenter}>
               <Button color="rose" onClick={handleSubmit}>
@@ -357,6 +424,9 @@ ProviderEdit.propTypes = {
 };
 const mapStateToProps = state => {
   return {
+    imageObject: state.image.image,
+    imageError: state.image.imageError,
+    imageLoading: state.image.imageLoading,
     provider: state.provider.provider,
     timezones: state.provider.timezones,
     organizations: state.organization.organizations,

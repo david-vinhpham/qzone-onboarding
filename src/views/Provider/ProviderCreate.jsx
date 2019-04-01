@@ -6,7 +6,7 @@ import { compose } from 'redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { FormControl, FormLabel } from '@material-ui/core';
-
+import defaultImage from "../../assets/img/default-avatar.png";
 import Button from '../../components/CustomButtons/Button.jsx';
 import Card from '../../components/Card/Card.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
@@ -25,7 +25,7 @@ import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organiz
 import Select from 'react-select';
 import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';
-
+import ImageUpload from "../../components/CustomUpload/ImageUpload"
 const override = css`
   display: block;
   margin: 0 auto;
@@ -48,6 +48,8 @@ class ProviderCreate extends React.Component {
       businessAdminId: null,
       timezoneOption: null,
       organizationOption: null,
+      imagePreviewUrl: defaultImage,
+      imageChange: false,
       data: {
         email: null,
         familyName: null,
@@ -63,8 +65,9 @@ class ProviderCreate extends React.Component {
           organizationId: null,
           timeZoneId: null,
           isAdmin: false,
-          businessId: null
-        }
+          businessId: null,
+          image:null,
+        },
       }
     };
     this.change = this.change.bind(this);
@@ -88,6 +91,13 @@ class ProviderCreate extends React.Component {
     if (createProvider !== null) {
       this.setState({ data: JSON.parse(createProvider) });
     }
+    if(!nextProps.imageLoading) {
+      console.log('imageLoading finished...');
+    }
+    else {
+      console.log('imageLoading...');
+      this.setState({ imageChange: true})
+    }
   }
 
   componentDidMount() {
@@ -96,6 +106,7 @@ class ProviderCreate extends React.Component {
     const userSub = localStorage.getItem('userSub');
     this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
     this.setState({ businessAdminId: userSub });
+    localStorage.removeItem('imageObject');
   }
 
   doubleClick(fieldName) {
@@ -168,9 +179,41 @@ class ProviderCreate extends React.Component {
 
   handleProvider(values) {
     localStorage.setItem('createProvider', JSON.stringify(values));
+    let imageObject = localStorage.getItem('imageObject');
+    if(imageObject !== null) {
+      imageObject = JSON.parse(imageObject)
+    }
+    let providerInformation  = values.providerInformation;
+    providerInformation.image = imageObject;
+    values.providerInformation = providerInformation;
     this.props.createProvider(values, this.props.history);
   }
+  changeProfileImage(e) {
+    //const {file, imagePreviewUrl} = this.state.provider;
+    console.log("inside change image function", e);
+    console.log("event---", e)
+    e.preventDefault();
+    let reader = new FileReader();
+    let files = e.target.files[0];
+    console.log("file-------", files)
+    reader.onloadend = () => {
+      this.setState({
+        imagePreviewUrl: reader.result
+        //provider: provider
+      });
+    };
+    reader.readAsDataURL(files);
+  }
 
+  change(event, stateName, value) {
+    if (value !== undefined) {
+      this.setState({ [stateName]: (value) })
+    } else if (event.target.type === "number") {
+      this.setState({ [stateName]: (event.target.valueAsNumber) })
+    } else {
+      this.setState({ [stateName]: (event.target.value) })
+    }
+  }
   render() {
     const {
       classes,
@@ -217,7 +260,8 @@ class ProviderCreate extends React.Component {
             timeZoneId: timezoneOption === null ? null : timezoneOption.label,
             isAdmin: false,
             businessId: this.state.data.providerInformation.businessId
-          }
+          },
+          imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
         }}
         validationSchema={ProviderSchema}
         enableReinitialize
@@ -438,6 +482,11 @@ class ProviderCreate extends React.Component {
                   />
                 </GridItem>
               </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} md={12}>
+                  <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
+                </GridItem>
+              </GridContainer>
             </CardBody>
             <CardFooter className={classes.justifyContentCenter}>
               <Button color="rose" onClick={handleSubmit}>
@@ -459,6 +508,8 @@ ProviderCreate.propTypes = {
 };
 const mapStateToProps = state => {
   return {
+    imageError: state.image.imageError,
+    imageLoading: state.image.imageLoading,
     timezones: state.provider.timezones,
     organizations: state.organization.organizations,
     createProviderLoading: state.provider.createProviderLoading,
