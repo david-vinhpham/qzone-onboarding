@@ -205,15 +205,6 @@ class ProviderCreate extends React.Component {
     reader.readAsDataURL(files);
   }
 
-  change(event, stateName, value) {
-    if (value !== undefined) {
-      this.setState({ [stateName]: (value) })
-    } else if (event.target.type === "number") {
-      this.setState({ [stateName]: (event.target.valueAsNumber) })
-    } else {
-      this.setState({ [stateName]: (event.target.value) })
-    }
-  }
   render() {
     const {
       classes,

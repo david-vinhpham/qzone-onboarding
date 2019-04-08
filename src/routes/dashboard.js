@@ -9,7 +9,7 @@ import {
   Email
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
-import Profile from '../views/Profile/Profile';
+import Profile from '../views/Profile/profile';
 import Administration from '../views/Administration/Administration';
 import OrganizationCreate from '../views/Organization/OrganizationCreate';
 import OrganizationEdit from '../views/Organization/OrganizationEdit';

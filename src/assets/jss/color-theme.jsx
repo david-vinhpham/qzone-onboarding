@@ -1,0 +1,50 @@
+// Color themes
+// Hex color
+export const primaryColor = '#9c27b0';
+export const dangerColor = '#f44336';
+export const infoColor = '#00acc1';
+export const warningColor = '#ff9800';
+export const successColor = '#4caf50';
+export const roseColor = '#303f9f';
+export const grayColor = '#999';
+export const blackColor = '#000';
+export const whiteColor = '#fff';
+export const barleyWhiteColor = '#fff3cd';
+export const darkGrayColor = '#555';
+export const boulderColor = '#777';
+export const oxfordBlueColor = '#3c4858';
+export const pickleBluewoodColor = '#35465c';
+export const mineShaftColor = '#333';
+export const sanMarinoColor = '#4267b2';
+export const chambrayColor = '#3b5998';
+export const deepCeruleanColor = '#0976b4';
+export const pictonBlueColor = '#55acee';
+export const blueRibbonColor = '#1769ff';
+export const cardinalColor = '#cc2127';
+export const alizarinCrimsonColor = '#e52d27';
+export const frenchRoseColor = '#ea4c89';
+export const punchColor = '#dd4b39';
+export const vermilionColor = '#ff4500';
+export const altoColor = '#d2d2d2';
+export const silverChaliceColor = '#aaa';
+export const troutColor = '#495057';
+export const navyBlueColor = '#000f6d';
+export const silverColor = '#c8c8c8';
+export const pacificBlueColor = '#00acc1';
+export const alabasterColor = '#f9f9f9';
+export const whiteSandColor = '#f5f5f5';
+export const pearlLustaColor = '#fcf8e3';
+export const champagneColor = '#faf2cc';
+export const bizzareColor = '#f2dede';
+export const oysterPinkColor = '#ebcccc';
+export const peppermintColor = '#dff0d8';
+export const zanahColor = '#d0e9c6';
+export const linkWaterColor = '#d9edf7';
+export const mintTulipColor = '#c4e3f3';
+
+// Rgb
+export const blackRgb = '0,0,0';
+export const whiteRgb = '255,255,255';
+export const dustyGrayRgb = '153,153,153';
+export const seanceRgb = '156,39,176';
+export const roseRgb = '48,63,159';
