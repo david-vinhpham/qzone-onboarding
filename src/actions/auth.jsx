@@ -60,6 +60,7 @@ export function registerUserFailure(error) {
 }
 
 export function register(values) {
+  console.log('>>register');
   return dispatch => {
     dispatch(storeEmail(values.registerEmail));
     dispatch(getUser());
@@ -75,8 +76,9 @@ export function register(values) {
     })
       .then(json => {
         if (json) {
-          localStorage.setItem('username', json.username);
-          dispatch(registerUserSuccess(json));
+          localStorage.setItem('username', json.object.email);
+          localStorage.setItem('user', JSON.stringify(json.object));
+          dispatch(registerUserSuccess(json.object));
         } else {
           dispatch(registerUserFailure('Topology Error'));
         }
@@ -149,6 +151,7 @@ export const resetPassword = values => {
 };
 
 export function loginUser(values, history) {
+  console.log('>>loginUser');
   return dispatch => {
     dispatch(storeEmail(values.loginEmail));
     dispatch(getUser());
@@ -165,8 +168,8 @@ export function loginUser(values, history) {
           })
             .then(res => res.json())
             .then(user => {
-              dispatch(registerUserSuccess(user));
-              localStorage.setItem('user', JSON.stringify(user));
+              dispatch(registerUserSuccess(user.object));
+              localStorage.setItem('user', JSON.stringify(user.object));
               localStorage.removeItem('serviceProvider');
               history.push('/dashboard');
             })

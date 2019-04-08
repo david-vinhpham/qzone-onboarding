@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import validateEmail from '../../utils/validateEmail';
-//import { updateProfile } from 'services/api/profile';
-//import { resetPassword } from 'services/api/user';
 import ForceChangePassword from './force-change-password';
 import { userDetailType } from '../../types/global';
 import Account from './account';
@@ -19,47 +17,37 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: '',
-      personal: {
-        firstname: '',
-        lastname: '',
-        postCode: '',
-      },
+      user: this.props.user,
       account: {
-        email: '',
+        email: this.props.user.email,
         emailState: '',
       },
     };
   }
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps');
-  }
+
   componentDidMount() {
-   // const { user: { userStatus } } = this.props;
-  //  this.setState({
-  //    openResetPasswordStatus: userStatus === eUserStatus.changePassword,
-  //  });
+    console.log(' >> componentDidMount');
+    let userInfo = localStorage.getItem('user');
+    userInfo = JSON.parse(userInfo);
+    let  account = {
+      email: '',
+      emailState: '',
+    }
+    account.email = userInfo.email
+    this.setState({ user: userInfo });
+    this.setState({ account: account});
   }
-/*
+
   componentWillReceiveProps(nextProps) {
     const { account: { email } } = this.state;
     const { user: { userStatus } } = nextProps;
     if (email === undefined && nextProps.user.email) {
       this.setState(prevState => ({
         openResetPasswordStatus: userStatus === eUserStatus.changePassword,
-        id: nextProps.user.id,
-        personal: {
-          ...prevState.personal,
-          firstname: nextProps.user.firstname,
-          lastname: nextProps.user.lastname,
-          companyName: nextProps.user.companyName,
-          department: nextProps.user.department,
-          phoneNumber: nextProps.user.phoneNumber,
-          postCode: nextProps.user.postCode,
-        },
+        user: nextProps.user,
         account: {
           ...prevState.account,
-          email: nextProps.user.email,
+          email: this.props.user.email,
         },
       }));
     } else {
@@ -68,10 +56,28 @@ class Profile extends React.Component {
       });
     }
   }
-*/
-  change = (event, stateName, type) => {
-    const { value } = event.target;
+  saveProfile = () => {
+    console.log('saveProfile');
+  };
 
+  resetPersonalInfo = (oldPersonalInfo) => {
+    this.setState({ user: oldPersonalInfo });
+  };
+
+  resetAccount = (oldAccount) => {
+    this.setState({ account: oldAccount });
+  };
+
+  handleClose = () => {
+    this.setState({ openResetPasswordStatus: false });
+  };
+
+  change = (event, stateName, type) => {
+    if(event === undefined || event.target === undefined) {
+      console.log('undefined');
+      return;
+    }
+    const { value } = event.target;
     switch (type) {
       case 'name':
         this.setState(prevState => ({
@@ -96,42 +102,21 @@ class Profile extends React.Component {
     }
   };
 
-  saveProfile = () => {
-    const {
-      id,
-      account: { ...accountInfo },
-      personal: { ...personalInfo },
-    } = this.state;
-    const { updateProfile: updateProfileAction } = this.props;
-    updateProfileAction({ id, ...accountInfo, ...personalInfo });
-  };
-
-  resetPersonalInfo = (oldPersonalInfo) => {
-    this.setState({ personal: oldPersonalInfo });
-  };
-
-  resetAccount = (oldAccount) => {
-    this.setState({ account: oldAccount });
-  };
-
-  handleClose = () => {
-    this.setState({ openResetPasswordStatus: false });
-  };
-
   render() {
     const {
-      personal,
+      user,
       account,
       account: { email },
       openResetPasswordStatus,
       id,
     } = this.state;
+    console.log('email: ' + email);
     const { resetPassword: resetPasswordAction } = this.props;
     return (
       <React.Fragment>
-        {personal.firstname !== undefined && (
+        {user.givenName !== undefined && (
           <Personal
-            {...personal}
+            {...user}
             inputChange={this.change}
             saveProfile={this.saveProfile}
             resetPersonalInfo={this.resetPersonalInfo}
@@ -160,7 +145,7 @@ class Profile extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user.userDetail,
+  user: state.user.userDetails,
   isDefaultPwdChanged: state.user.isDefaultPwdChanged,
 });
 
