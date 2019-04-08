@@ -45,6 +45,10 @@ class ServiceProviderList extends React.Component {
   }
 
   componentDidMount() {
+    let userInfo = localStorage.getItem('user');
+    if(userInfo === null) {
+      window.location = '/login';
+    }
     let serviceProviders = localStorage.getItem('serviceProvider');
     serviceProviders = JSON.parse(serviceProviders);
     if (serviceProviders !== null && serviceProviders.length > 0) {
