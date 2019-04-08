@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { InputAdornment, Checkbox, FormControlLabel } from '@material-ui/core';
-import { Email, LockOutline, Check } from '@material-ui/icons';
+import { Email, Lock as LockOutline, Check } from '@material-ui/icons';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 

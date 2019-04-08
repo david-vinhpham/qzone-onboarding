@@ -1,7 +1,6 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
   Person,
-  ContentPaste,
   BusinessCenter,
   Report,
   BubbleChart,
@@ -10,6 +9,7 @@ import {
   Email
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
+import Profile from '../views/Profile/Profile';
 import Administration from '../views/Administration/Administration';
 import OrganizationCreate from '../views/Organization/OrganizationCreate';
 import OrganizationEdit from '../views/Organization/OrganizationEdit';
@@ -46,6 +46,12 @@ export const dashboardRoutes = [
     name: 'Dashboard',
     icon: DashboardIcon,
     component: Dashboard
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    icon: DashboardIcon,
+    component: Profile
   },
   {
     path: '/customer_flow',
@@ -127,37 +133,37 @@ export const otherRoutes = [
   {
     path: '/services/list',
     name: 'Manage Services',
-    icon: ContentPaste,
+    icon: BusinessCenter,
     component: ServicesList
   },
   {
     path: '/services/create',
     name: 'Create Services',
-    icon: ContentPaste,
+    icon: BusinessCenter,
     component: ServiceCreate
   },
   {
     path: '/service/edit/:id',
     name: 'Service Edit',
-    icon: ContentPaste,
+    icon: BusinessCenter,
     component: ServiceEdit
   },
   {
     path: '/service-provider/list',
     name: 'Assign Service Providers',
-    icon: ContentPaste,
+    icon: BusinessCenter,
     component: ServiceProviderList
   },
   {
     path: '/service-provider/create',
     name: 'Service Provider Create',
-    icon: ContentPaste,
+    icon: BusinessCenter,
     component: ServiceProviderCreate
   },
   {
     path: '/service-provider/edit/:id',
     name: 'Service Provider Edit',
-    icon: ContentPaste,
+    icon: BusinessCenter,
     component: ServiceProviderEdit
   },
   {
