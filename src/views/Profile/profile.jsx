@@ -28,6 +28,9 @@ class Profile extends React.Component {
   componentDidMount() {
     console.log(' >> componentDidMount');
     let userInfo = localStorage.getItem('user');
+    if(userInfo === null) {
+      window.location = '/login';
+    }
     userInfo = JSON.parse(userInfo);
     let  account = {
       email: '',
