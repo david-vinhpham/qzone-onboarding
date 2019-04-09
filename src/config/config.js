@@ -46,8 +46,10 @@ export const URL = {
   FIND_ORGS_BY_BUSINESS_ID: 'organizations-by-business-admin-id/',
   FIND_PROVIDER_BY_ORG_ID: 'providers-by-org-id/',
   FIND_NORMAL_EVENTS_BY_PROVIDER_ID: 'find-normal-events-by-provider-id/',
+  FIND_SPECIAL_EVENTS_BY_PROVIDER_ID: 'find-special-events-by-provider-id/',
   NEW_NORMAL_EVENT: 'normal-events',
-  NEW_SPECIAL_EVENT: 'special-events'
+  NEW_SPECIAL_EVENT: 'special-events',
+  GET_GEO_LOCATION_OPTIONS: 'geo-locations-option'
 };
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';
 

@@ -10,7 +10,6 @@ import Select from 'react-select';
 import PhoneInput from 'react-phone-number-input';
 import { css } from '@emotion/core';
 import { ClipLoader } from 'react-spinners';
-import 'react-phone-number-input/style.css';
 import Button from '../../components/CustomButtons/Button.jsx';
 import Card from '../../components/Card/Card.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
