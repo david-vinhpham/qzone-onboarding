@@ -6,10 +6,16 @@ export const FETCH_PROVIDER_BY_ORG = {
 export const FETCH_NORM_EVENTS_BY_PROVIDER = {
   SUCCESS: 'FETCH_NORM_EVENTS_BY_PROVIDER_SUCCESS'
 };
-export const CREATE_NORM_EVENT = {
-  SUCCESS: 'CREATE_NORM_EVENT_SUCCESS'
+export const CREATE_CALENDAR_EVENT = {
+  SUCCESS: 'CREATE_CALENDAR_EVENT_SUCCESS'
+};
+export const FETCH_GEO_OPTIONS = {
+  SUCCESS: 'FETCH_GEO_OPTIONS_SUCCESS'
 };
 export const CALENDAR_LOADING = 'CALENDAR_LOADING';
+export const FETCH_SERVICE_OPTIONS = {
+  SUCCESS: 'FETCH_SERVICE_OPTIONS_SUCCESS',
+};
 
 export const EVENT_TYPE = Object.freeze({
   APPOINTMENT: 'APPOINTMENT',
@@ -56,7 +62,10 @@ export const EVENT_BG_COLOR = Object.freeze({
     color: '#fff',
     backgroundColor: '#4c4c4c'
   },
-  [EVENT_TYPE.SPECIAL]: {}
+  [EVENT_TYPE.SPECIAL]: {
+    color: 'black',
+    backgroundColor: '#ffeb3b'
+  }
 });
 
 export const EVENT_LEVEL = Object.freeze({

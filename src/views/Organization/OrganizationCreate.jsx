@@ -17,7 +17,6 @@ import CardText from "components/Card/CardText.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
-import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 import { fetchBusinessCategories, createOrganization } from "../../actions/organization.jsx"

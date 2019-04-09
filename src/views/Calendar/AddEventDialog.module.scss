@@ -37,6 +37,10 @@
   border-top: #e0e0e0 1px solid;
   padding: 16px;
   margin: 0;
+
+  .prevButton {
+    margin-right: auto;
+  }
 }
 
 .repeatDayChip {
@@ -67,5 +71,41 @@
         max-width: 50px;
       }
     }
+  }
+}
+
+.specialInput {
+  * {
+    width: 100%;
+  }
+}
+
+.averageBox {
+  align-items: flex-end;
+
+  p[class*="MuiFormHelperText-error"] {
+    position: absolute;
+    bottom: -1rem;
+  }
+}
+
+.breakTime {
+  &Wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    p[class*="MuiFormHelperText-error"] {
+      display: none;
+    }
+  }
+
+  &Icon {
+    margin-left: 8px;
+  }
+
+  &Help {
+    display: flex;
+    align-items: center;
   }
 }
