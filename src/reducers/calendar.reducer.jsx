@@ -5,8 +5,10 @@ import {
   FETCH_PROVIDER_BY_ORG,
   FETCH_NORM_EVENTS_BY_PROVIDER,
   CALENDAR_LOADING,
-  CREATE_NORM_EVENT,
-  EVENT_TYPE_TITLE
+  CREATE_CALENDAR_EVENT,
+  EVENT_TYPE_TITLE,
+  FETCH_GEO_OPTIONS,
+  FETCH_SERVICE_OPTIONS
 } from 'constants/Calendar.constants';
 
 function getRRuleISO(date) {
@@ -19,13 +21,12 @@ function buildCalendarData(datum) {
   const { slot: { startTime, endTime } = {} } = datum;
   return {
     ...datum,
-    id: datum.id,
     start: moment(startTime * 1000).format(DATETIME_FORMAT),
     end: moment(endTime * 1000).format(DATETIME_FORMAT),
     resourceId: datum.providerId,
     title: EVENT_TYPE_TITLE[datum.type],
     rrule: (() => {
-      if (!datum.isAllowRepeat) return undefined;
+      if (!datum.repeatType) return undefined;
 
       const repeatType = !isEmpty(datum.repeat.repeatDaily) ? 'DAILY' : 'WEEKLY';
       const repeatEvery = get(
@@ -56,6 +57,8 @@ function buildCalendarData(datum) {
 const initialState = {
   providers: [],
   calendarData: [],
+  geoOptions: [],
+  serviceOptions: [],
   isLoading: false
 };
 
@@ -78,14 +81,22 @@ const reducer = (state = initialState, action) => {
         ...state,
         calendarData: action.calendarData.map(datum => buildCalendarData(datum))
       };
-    case CREATE_NORM_EVENT.SUCCESS: {
+    case CREATE_CALENDAR_EVENT.SUCCESS: {
       return {
         ...state,
         calendarData: [buildCalendarData(action.newEvent), ...state.calendarData]
       };
     }
+    case FETCH_GEO_OPTIONS.SUCCESS: {
+      return {
+        ...state,
+        geoOptions: action.geoOptions
+      };
+    }
     case CALENDAR_LOADING:
       return { ...state, isLoading: action.isLoading };
+    case FETCH_SERVICE_OPTIONS.SUCCESS:
+      return { ...state, serviceOptions: action.payload };
     default:
       return state;
   }

@@ -15,11 +15,9 @@ import CardBody from '../../components/Card/CardBody.jsx';
 import CardFooter from '../../components/Card/CardFooter.jsx';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
 import { createProvider, fetchTimezonesOption } from '../../actions/provider';
-import { verifyEmail, verifyLength } from '../../validation/validation.jsx';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
-import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organization';
 import Select from 'react-select';
@@ -70,9 +68,7 @@ class ProviderCreate extends React.Component {
         },
       }
     };
-    this.change = this.change.bind(this);
     this.changeCheckbox = this.changeCheckbox.bind(this);
-    this.changeProfileImage = this.changeProfileImage.bind(this);
     this.doubleClick = this.doubleClick.bind(this);
     this.handleTimeZone = this.handleTimeZone.bind(this);
     this.handleOrgChange = this.handleOrgChange.bind(this);
@@ -113,37 +109,6 @@ class ProviderCreate extends React.Component {
     this.setState({ isEditMode: fieldName });
   }
 
-  change(event, stateName, type) {
-    const { provider } = this.state;
-    provider[stateName] = event.target.value || event.target.checked;
-    this.setState({ provider });
-    switch (type) {
-      case 'first-name':
-        if (verifyLength(event.target.value, 3)) {
-          this.setState({ [`${stateName}State`]: 'success' });
-        } else {
-          this.setState({ [`${stateName}State`]: 'error' });
-        }
-        break;
-      case 'email':
-        if (verifyEmail(event.target.value)) {
-          this.setState({ [`${stateName}State`]: 'success' });
-        } else {
-          this.setState({ [`${stateName}State`]: 'error' });
-        }
-        break;
-      case 'last-name':
-        if (verifyLength(event.target.value, 3)) {
-          this.setState({ [`${stateName}State`]: 'success' });
-        } else {
-          this.setState({ [`${stateName}State`]: 'error' });
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
   changeCheckbox(event, stateName, type) {
     const { emailPreference } = this.state.provider;
     const currentIndex = emailPreference.indexOf(event.target.value);
@@ -160,23 +125,6 @@ class ProviderCreate extends React.Component {
     });
   }
 
-  changeProfileImage(e) {
-    e.preventDefault();
-    const reader = new FileReader();
-    const files = e.target.files[0];
-    const { provider } = this.state;
-    reader.onloadend = () => {
-      provider.file = files;
-      provider.imagePreviewUrl = reader.result;
-      this.setState({
-        // file: file,
-        // imagePreviewUrl: reader.result
-        provider
-      });
-    };
-    reader.readAsDataURL(files);
-  }
-
   handleProvider(values) {
     localStorage.setItem('createProvider', JSON.stringify(values));
     let imageObject = localStorage.getItem('imageObject');
@@ -188,6 +136,34 @@ class ProviderCreate extends React.Component {
     values.providerInformation = providerInformation;
     this.props.createProvider(values, this.props.history);
   }
+
+  changeProfileImage = (e) => {
+    //const {file, imagePreviewUrl} = this.state.provider;
+    console.log("inside change image function", e);
+    console.log("event---", e)
+    e.preventDefault();
+    let reader = new FileReader();
+    let files = e.target.files[0];
+    console.log("file-------", files)
+    reader.onloadend = () => {
+      this.setState({
+        imagePreviewUrl: reader.result
+        //provider: provider
+      });
+    };
+    reader.readAsDataURL(files);
+  }
+
+  change = (event, stateName, value) => {
+    if (value !== undefined) {
+      this.setState({ [stateName]: (value) })
+    } else if (event.target.type === "number") {
+      this.setState({ [stateName]: (event.target.valueAsNumber) })
+    } else {
+      this.setState({ [stateName]: (event.target.value) })
+    }
+  }
+
   changeProfileImage(e) {
     //const {file, imagePreviewUrl} = this.state.provider;
     console.log("inside change image function", e);

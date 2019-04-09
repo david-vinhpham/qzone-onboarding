@@ -11,7 +11,7 @@ import {
   EVENT_REPEAT_TYPE,
   REPEAT_END_TYPE
 } from 'constants/Calendar.constants';
-import { providerType } from 'types/global';
+import { providerType, optionType } from 'types/global';
 import Calendar from './CalendarV2';
 import AddEventDialog from './AddEventDialog';
 import CalendarLoading from './CalendarLoading';
@@ -26,7 +26,8 @@ class ManageCalendar extends React.PureComponent {
         eventType: '',
         repeat: {
           repeatEnd: {}
-        }
+        },
+        special: {}
       },
       eventLevel: EVENT_LEVEL.ORGANIZATION
     };
@@ -34,11 +35,11 @@ class ManageCalendar extends React.PureComponent {
   }
 
   componentDidMount() {
-    const userId = localStorage.getItem('userSub');
-    if (userId) {
+    this.userId = localStorage.getItem('userSub');
+    if (this.userId) {
       this.setState({ isLoading: true });
       this.props
-        .fetchNormalEventByBusinessId(userId)
+        .fetchNormalEventByBusinessId(this.userId)
         .finally(() => this.setState({ isLoading: false }));
     }
   }
@@ -53,21 +54,22 @@ class ManageCalendar extends React.PureComponent {
         repeat: {
           type: Object.values(EVENT_REPEAT_TYPE)[0],
           repeatEnd: {}
-        }
+        },
+        special: {}
       };
       addEventData = {
         ...addEventData,
         ...(providerId === undefined
           ? {
-              startTime: moment(),
-              endTime: moment().add(1, 'hour')
-            }
+            startTime: moment(),
+            endTime: moment().add(1, 'hour')
+          }
           : {
-              providerId,
-              providerName,
-              startTime,
-              endTime
-            })
+            providerId,
+            providerName,
+            startTime,
+            endTime
+          })
       };
 
       return {
@@ -107,7 +109,10 @@ class ManageCalendar extends React.PureComponent {
     }
 
     if (isEmpty(repeat.repeatEnd)) {
-      repeatPayload = { ...repeatPayload, repeatEndType: REPEAT_END_TYPE.NEVER };
+      repeatPayload = {
+        ...repeatPayload,
+        repeatEndType: REPEAT_END_TYPE.NEVER
+      };
     } else {
       if (repeat.repeatEnd.afterOccur !== undefined) {
         repeatPayload = {
@@ -135,15 +140,55 @@ class ManageCalendar extends React.PureComponent {
     return repeatPayload;
   };
 
+  generateSpecialPayload = special => {
+    const {
+      additionalInfo,
+      avgServiceTime,
+      breakTimeStart,
+      breakTimeEnd,
+      geoLocationId,
+      numberOfParallelCustomer,
+      serviceId
+    } = special;
+
+    return {
+      additionalInfo: additionalInfo.length === 0 ? undefined : additionalInfo,
+      avgServiceTime,
+      breakTime: {
+        breakStart: moment(breakTimeStart).unix(),
+        breakEnd: moment(breakTimeEnd).unix()
+      },
+      geoLocationId,
+      numberOfParallelCustomer,
+      serviceId,
+      businessAdminId: this.userId
+    };
+  };
+
   generatePayload = addEventData => {
-    const { providerId, startTime, endTime, eventType, description, repeat } = addEventData;
+    const {
+      providerId,
+      startTime,
+      endTime,
+      eventType,
+      description,
+      repeat,
+      special
+    } = addEventData;
 
     let payload = {
       description,
       providerId,
-      slot: { startTime: moment(startTime).unix(), endTime: moment(endTime).unix() },
+      slot: {
+        startTime: moment(startTime).unix(),
+        endTime: moment(endTime).unix()
+      },
       type: eventType
     };
+
+    if (eventType === EVENT_TYPE.SPECIAL) {
+      payload = { ...payload, ...this.generateSpecialPayload(special) };
+    }
 
     if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
       payload = { ...payload, ...this.generateRepeatPayload(repeat) };
@@ -167,7 +212,10 @@ class ManageCalendar extends React.PureComponent {
 
   createOrgNewEvent = addEventData => {
     const fetchMap = this.props.providers.map(provider => {
-      const payload = this.generatePayload({ ...addEventData, providerId: provider.id });
+      const payload = this.generatePayload({
+        ...addEventData,
+        providerId: provider.id
+      });
       return this.props.createNewEvent(payload);
     });
 
@@ -179,7 +227,7 @@ class ManageCalendar extends React.PureComponent {
   updateEventLevel = eventLevel => this.setState({ eventLevel });
 
   render() {
-    const { providers } = this.props;
+    const { providers, serviceOptions } = this.props;
     const { isOpenAddDialog, eventLevel, addEventData, isLoading } = this.state;
 
     return (
@@ -197,6 +245,7 @@ class ManageCalendar extends React.PureComponent {
             addEventData={addEventData}
             createNewEvent={this.createNewEvent}
             updateEventLevel={this.updateEventLevel}
+            serviceOptions={serviceOptions}
           />
         )}
       </>
@@ -207,12 +256,14 @@ class ManageCalendar extends React.PureComponent {
 ManageCalendar.propTypes = {
   providers: arrayOf(providerType).isRequired,
   fetchNormalEventByBusinessId: func.isRequired,
-  createNewEvent: func.isRequired
+  createNewEvent: func.isRequired,
+  serviceOptions: arrayOf(optionType).isRequired,
 };
 
 const mapStateToProps = state => ({
   providers: state.calendarManage.providers,
-  isLoading: state.calendarManage.isLoading
+  isLoading: state.calendarManage.isLoading,
+  serviceOptions: state.calendarManage.serviceOptions
 });
 
 const mapDispatchToProps = dispatch => ({

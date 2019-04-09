@@ -26,7 +26,6 @@ import CardBody from 'components/Card/CardBody.jsx';
 import CardFooter from 'components/Card/CardFooter.jsx';
 import Accordion from 'components/Accordion/Accordion.jsx';
 
-import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { ClipLoader } from 'react-spinners';
 import { css } from '@emotion/core';

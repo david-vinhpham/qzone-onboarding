@@ -56,7 +56,7 @@ class ManageCalendar extends React.PureComponent {
               />
             </div>
             <div>
-              <Typography variant="h7">{title}</Typography>
+              <Typography variant="subtitle2">{title}</Typography>
             </div>
           </div>
           <div>
