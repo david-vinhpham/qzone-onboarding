@@ -6,8 +6,10 @@ import {
   CALENDAR_LOADING,
   FETCH_NORM_EVENTS_BY_PROVIDER,
   FETCH_PROVIDER_BY_ORG,
-  CREATE_NORM_EVENT,
-  EVENT_TYPE
+  CREATE_CALENDAR_EVENT,
+  EVENT_TYPE,
+  FETCH_GEO_OPTIONS,
+  FETCH_SERVICE_OPTIONS
 } from 'constants/Calendar.constants';
 
 export const calendarLoading = isLoading => ({
@@ -25,45 +27,67 @@ export const fetchProvidersByOrgSuccess = providers => ({
   providers
 });
 
-export const createNormalEventSuccess = newEvent => ({
-  type: CREATE_NORM_EVENT.SUCCESS,
+export const createEventSuccess = newEvent => ({
+  type: CREATE_CALENDAR_EVENT.SUCCESS,
   newEvent
 });
+
+export const fetchGeoOptionsSuccess = geoOptions => ({
+  type: FETCH_GEO_OPTIONS.SUCCESS,
+  geoOptions
+});
+
+const fetchGeoLocationOptions = dispatch => {
+  axios
+    .get(`${API_ROOT}${URL.GET_GEO_LOCATION_OPTIONS}`)
+    .then(resp => {
+      const data = get(resp, 'data.objects', []);
+      dispatch(fetchGeoOptionsSuccess(data));
+    });
+}
+
+const fetchServiceOptions = businessAdminId => {
+  return dispatch => {
+    axios.get(`${API_ROOT}${URL.FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
+      .then(({ data }) => {
+        dispatch({
+          type: FETCH_SERVICE_OPTIONS.SUCCESS,
+          payload: data && data.objects ? data.objects : [],
+        });
+      });
+  };
+};
 
 export const fetchNormalEventByBusinessId = businessId => dispatch => {
   dispatch(calendarLoading(true));
 
-  /* Fetch orgs by business Id */
   return axios
-    .get(`${API_ROOT}${URL.FIND_ORGS_BY_BUSINESS_ID}${businessId}`)
-    .then(({ data: orgData }) => {
-      const orgIds = get(orgData, 'objects', []);
+    .get(`${API_ROOT}${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}${businessId}`)
+    .then(({ data }) => {
+      const providers = data && data.objects ? data.objects : [];
+      const providerIds = flow(
+        providerData => map(providerData, data => get(data, 'id')),
+        providerData => compact(providerData)
+      )(providers);
 
-      /* Fetch providers by Organization Ids */
-      const orgFetchMap = orgIds.map(({ id }) =>
-        axios.get(`${API_ROOT}${URL.FIND_PROVIDER_BY_ORG_ID}${id}`)
-      );
-      return Promise.all(orgFetchMap).then(responses => {
-        const providers = reduce(responses, (a, d) => a.concat(get(d, 'data.objects', [])), []);
-        const providerIds = flow(
-          providerData => map(providerData, data => get(data, 'id')),
-          providerData => compact(providerData)
-        )(providers);
+      /* Fetch events of providers */
+      const fetchEvents = [];
+      providerIds.forEach(providerId => {
+        fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
+        fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_SPECIAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
+      });
 
-        /* Fetch events of providers */
-        const providerFetchMap = providerIds.map(providerId =>
-          axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`)
-        );
-
-        return Promise.all(providerFetchMap).then(rep => {
-          const events = reduce(rep, (acc, { data }) => acc.concat(get(data, 'objects', [])), []);
-          dispatch(fetchNormalEventByProvidersSuccess(events));
-          dispatch(fetchProvidersByOrgSuccess(providers));
-        });
+      return Promise.all(fetchEvents).then(rep => {
+        const tmpEvents = reduce(rep, (acc, { data }) => acc.concat(get(data, 'objects', [])), []);
+        const events = tmpEvents.map(e => ({ ...e, type: e.type || EVENT_TYPE.SPECIAL }))
+        dispatch(fetchNormalEventByProvidersSuccess(events));
+        dispatch(fetchProvidersByOrgSuccess(providers));
       });
     })
     .finally(() => {
       dispatch(calendarLoading(false));
+      fetchGeoLocationOptions(dispatch);
+      fetchServiceOptions(businessId)(dispatch);
     });
 };
 
@@ -75,7 +99,11 @@ export const createNewEvent = newEvent => dispatch => {
     .post(`${API_ROOT}${api}`, newEvent)
     .then(response => {
       const data = get(response, 'data.object', {});
-      dispatch(createNormalEventSuccess(data));
+      const event = {
+        ...data,
+        type: data.type || newEvent.type
+      };
+      dispatch(createEventSuccess(event));
     })
     .finally(() => {
       dispatch(calendarLoading(false));
