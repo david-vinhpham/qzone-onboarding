@@ -58,7 +58,7 @@ class OrganizationList extends React.Component {
     else if (fetchOrganizationsError) {
       return <div className="alert alert-danger">Error: {organizations}</div>
     } else {
-      data = (
+       data = (
         <GridContainer>
           {this.state.data.map((organization, index) => {
             return (
@@ -148,12 +148,13 @@ class OrganizationList extends React.Component {
                     </Button>
                   </div>
                 </div>
-                <Link to={`/organization/create`}>
-                  <Button size="sm" className={classes.buttonDisplay}>
-                    New Organization
-                  </Button>
-                </Link>
-
+                {this.state.data.length > 0 ? '' :
+                  <Link to={`/organization/create`}>
+                    <Button size="sm" className={classes.buttonDisplay}>
+                      New Organization
+                    </Button>
+                  </Link>
+                }
               </CardHeader>
             </Card>
           </GridItem>
