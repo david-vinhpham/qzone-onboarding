@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { Auth } from 'aws-amplify';
-import { API_ROOT, URL } from '../config/config';
-import { auth } from '../constants/Auth.constants';
+import axios from "axios";
+import { Auth } from "aws-amplify";
+import { API_ROOT, URL } from "../config/config";
+import { auth } from "../constants/Auth.constants";
 
 const clientId = '3ov1blo2eji4acnqfcv88tcidn';
 
@@ -217,6 +217,92 @@ export const changePassword = (values, history) => {
       });
   };
 };
+
+export const editUserLoading = () => {
+  return {
+    type: auth.EDIT_USER_LOADING
+  };
+};
+
+export const editUserSuccess = data => {
+  return {
+    type: auth.EDIT_USER_SUCCESS,
+    payload: data.object
+  };
+};
+
+export const editUserFailure = error => {
+  return {
+    type: auth.EDIT_USER_FAILURE,
+    payload: error
+  };
+};
+
+export function editProfile(values) {
+  return dispatch => {
+    dispatch(editUserLoading());
+    fetch(API_ROOT + URL.AWS_USER, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 200 || data.status === 201 || data.success === true) {
+          localStorage.setItem('user', JSON.stringify(data));
+          dispatch(editUserSuccess(data));
+        } else {
+          dispatch(editUserFailure(data));
+        }
+      })
+      .catch(err => {
+        dispatch(editUserFailure(err));
+      });
+  };
+}
+export function fetchUserLoading() {
+  return {
+    type: auth.FETCH_USER_LOADING
+  };
+}
+
+export function fetchUserSuccess(data) {
+  return {
+    type: auth.FETCH_USER_SUCCESS,
+    payload: data.object
+  };
+}
+
+export function fetchUserFailure(error) {
+  return {
+    type: auth.FETCH_USER_FAILURE,
+    payload: error
+  };
+}
+export function fetchUser(id) {
+  return dispatch => {
+    dispatch(fetchUserLoading());
+    fetch(`${API_ROOT + URL.USER}/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 200 || data.status === 201 || data.success === true) {
+        dispatch(fetchUserSuccess(data));
+      } else {
+        dispatch(fetchUserFailure(data));
+      }
+    })
+    .catch(err => {
+      dispatch(fetchUserFailure(err));
+    });
+  }
+}
 
 export function verifyUser() {
   return {

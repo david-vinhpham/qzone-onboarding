@@ -28,6 +28,7 @@ export const URL = {
   FETCH_LOCATION: 'geo-locations/',
 
   USER: 'users',
+  AWS_USER: 'aws-users',
   RESET_PASSWORD: 'users/reset-password',
   CHANGE_PASSWORD: 'users/change-password/',
   TIMEZONE: 'timezones',

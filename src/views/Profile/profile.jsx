@@ -7,6 +7,7 @@ import { userDetailType } from '../../types/global';
 import Account from './account';
 import Personal from './personal';
 import { userStatus as eUserStatus } from '../../constants';
+import { editProfile, fetchUser } from "../../actions/auth";
 
 class Profile extends React.Component {
   static propTypes = {
@@ -19,6 +20,7 @@ class Profile extends React.Component {
     this.state = {
       id: props.user.id,
       personal: {
+        address: props.user.address,
         givenName: props.user.givenName,
         familyName: props.user.familyName,
         userType: props.user.userType,
@@ -35,6 +37,7 @@ class Profile extends React.Component {
         country: props.user.address ===null || props.user.address === undefined ? ''
           : props.user.address.country === null ? '' : props.user.address.country,
         userSub: props.user.userSub,
+        email: props.user.email,
         givenNameState: '',
         familyNameState: '',
       },
@@ -47,30 +50,32 @@ class Profile extends React.Component {
 
   componentDidMount() {
     console.log(' >> componentDidMount');
-    let userInfo = localStorage.getItem('user');
-    if(userInfo === null) {
+    let userSub = localStorage.getItem('userSub');
+    if(userSub === null) {
       window.location = '/login';
     }
-    userInfo = JSON.parse(userInfo);
+    this.props.fetchUser(userSub);
+
     let  account = {
       email: '',
       emailState: '',
     }
-    account.email = userInfo.email
-    this.setState({ id: userInfo.id });
-    this.setState({ personal: userInfo });
+    this.setState({ id:userSub });
     this.setState({ account: account});
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps...');
     const { account: { email } } = this.state;
     const { user: { userStatus } } = nextProps;
-    if (email === undefined && nextProps.user.email) {
+    if ( nextProps.user.email !== '') {
       this.setState(prevState => ({
         openResetPasswordStatus: userStatus === eUserStatus.changePassword,
         id: nextProps.user.id,
         personal: {
           ...prevState.personal,
+          address: nextProps.user.address,
+          email: nextProps.user.email,
           givenName: nextProps.user.givenName,
           familyName: nextProps.user.familyName,
           userType: nextProps.user.userType,
@@ -106,7 +111,15 @@ class Profile extends React.Component {
       account: { ...accountInfo },
       personal: { ...personalInfo },
     } = this.state;
-    const { updateProfile: updateProfileAction } = this.props;
+
+    let address  = personalInfo.address;
+    address.streetAddress = personalInfo.streetAddress;
+    address.city = personalInfo.city;
+    address.state = personalInfo.state;
+    address.postCode = personalInfo.postCode;
+    address.country = personalInfo.country;
+    personalInfo.address = address;
+    const { editProfile: updateProfileAction } = this.props;
     updateProfileAction({ id, ...accountInfo, ...personalInfo });
   };
 
@@ -160,10 +173,10 @@ class Profile extends React.Component {
       openResetPasswordStatus,
       id,
     } = this.state;
-    console.log('email: ' + email);
-    const { resetPassword: resetPasswordAction } = this.props;
+    const { resetPassword: resetPasswordAction , editUser} = this.props;
     return (
       <React.Fragment>
+        <label> {editUser.id !== undefined && editUser.id !== null ? "Update user successfully" : ''} </label>
         {personal.givenName !== undefined && (
           <Personal
             {...personal}
@@ -196,10 +209,18 @@ class Profile extends React.Component {
 
 const mapStateToProps = state => ({
   user: state.user.userDetails,
+  editUser:state.user.editUser,
   isDefaultPwdChanged: state.user.isDefaultPwdChanged,
 });
 
+const mapDispatchToProps = dispatch => {
+  return {
+    editProfile: (value) => dispatch(editProfile(value)),
+    fetchUser: id => dispatch(fetchUser(id))
+  };
+};
+
 export default connect(mapStateToProps, {
-  //updateProfile,
-  //resetPassword,
+  editProfile,
+  fetchUser,
 })(Profile);

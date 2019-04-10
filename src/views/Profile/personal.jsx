@@ -40,18 +40,19 @@ class Personal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      address: props.address,
       isEditMode: false,
       givenName: props.givenName,
       userType: props.userType,
       givenNameState: props.givenNameState,
-      familyName: props.familyName,
-      telephone: props.telephone,
+      familyName: props.familyName === null ? '' :  props.familyName,
+      telephone: props.telephone === null ? '' :  props.telephone,
       userStatus: props.userStatus,
-      streetAddress: props.streetAddress,
-      city: props.city,
-      state: props.state,
-      postCode: props.postCode,
-      country: props.country,
+      streetAddress: props.streetAddress === null ? '' :  props.streetAddress,
+      city: props.city === null ? '' :  props.city,
+      state: props.state === null ? '' :  props.state,
+      postCode: props.postCode === null ? '' :  props.postCode,
+      country: props.country === null ? '' :  props.country,
       userSub: props.userSub,
     };
   }
@@ -132,6 +133,7 @@ class Personal extends PureComponent {
       country,
       postCode
     } = this.props;
+
     const { isEditMode, ...oldPersonalInfo } = this.state;
     let isPersonalModified = false;
     Object.keys(oldPersonalInfo).forEach((key) => {
