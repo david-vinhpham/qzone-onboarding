@@ -137,6 +137,16 @@ class ProviderCreate extends React.Component {
     this.props.createProvider(values, this.props.history);
   }
 
+  change = (event, stateName, value) => {
+    if (value !== undefined) {
+      this.setState({ [stateName]: (value) })
+    } else if (event.target.type === "number") {
+      this.setState({ [stateName]: (event.target.valueAsNumber) })
+    } else {
+      this.setState({ [stateName]: (event.target.value) })
+    }
+  }
+
   changeProfileImage = (e) => {
     //const {file, imagePreviewUrl} = this.state.provider;
     console.log("inside change image function", e);
