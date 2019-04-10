@@ -14,8 +14,10 @@ export const historyType = PropTypes.objectOf(
 export const matchType = PropTypes.objectOf(
   PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.bool])
 );
-
 export const optionType = PropTypes.shape({
   value: PropTypes.string,
   label: PropTypes.string
 });
+export const userDetailType = PropTypes.objectOf(PropTypes.oneOfType([
+  PropTypes.object, PropTypes.string,
+]));

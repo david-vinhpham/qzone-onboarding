@@ -237,7 +237,7 @@ LoginPage.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    userDetail: state.user.userDetail,
+    userDetails: state.user.userDetails,
     userLoading: state.user.userLoading,
     userError: state.user.userError,
     verify: state.user.verify,
