@@ -17,9 +17,29 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: this.props.user,
+      id: props.user.id,
+      personal: {
+        givenName: props.user.givenName,
+        familyName: props.user.familyName,
+        userType: props.user.userType,
+        telephone: props.user.telephone,
+        userStatus: props.user.userStatus,
+        streetAddress: props.user.address ===null || props.user.address === undefined ? ''
+          : props.user.address.streetAddress === null ? '' : props.user.address.streetAddress,
+        city: props.user.address ===null || props.user.address === undefined ? ''
+          : props.user.address.city === null ? '' : props.user.address.city,
+        state: props.user.address ===null || props.user.address === undefined ? ''
+          : props.user.address.state === null ? '' : props.user.address.state,
+        postCode: props.user.address ===null || props.user.address === undefined ? ''
+          : props.user.address.postCode === null ? '' : props.user.address.postCode,
+        country: props.user.address ===null || props.user.address === undefined ? ''
+          : props.user.address.country === null ? '' : props.user.address.country,
+        userSub: props.user.userSub,
+        givenNameState: '',
+        familyNameState: '',
+      },
       account: {
-        email: this.props.user.email,
+        email: props.user.email,
         emailState: '',
       },
     };
@@ -37,7 +57,8 @@ class Profile extends React.Component {
       emailState: '',
     }
     account.email = userInfo.email
-    this.setState({ user: userInfo });
+    this.setState({ id: userInfo.id });
+    this.setState({ personal: userInfo });
     this.setState({ account: account});
   }
 
@@ -47,10 +68,29 @@ class Profile extends React.Component {
     if (email === undefined && nextProps.user.email) {
       this.setState(prevState => ({
         openResetPasswordStatus: userStatus === eUserStatus.changePassword,
-        user: nextProps.user,
+        id: nextProps.user.id,
+        personal: {
+          ...prevState.personal,
+          givenName: nextProps.user.givenName,
+          familyName: nextProps.user.familyName,
+          userType: nextProps.user.userType,
+          telephone: nextProps.user.telephone,
+          userStatus: nextProps.user.userStatus,
+          streetAddress: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+            : nextProps.user.address.streetAddress === null ? '' : nextProps.user.address.streetAddress,
+          city: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+            : nextProps.user.address.city === null ? '' : nextProps.user.address.city,
+          state: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+            : nextProps.user.address.state === null ? '' : nextProps.user.address.state,
+          postCode: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+            : nextProps.user.address.postCode === null ? '' : nextProps.user.address.postCode,
+          country: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+            : nextProps.user.address.country === null ? '' : nextProps.user.address.country,
+          userSub: nextProps.user.userSub,
+        },
         account: {
           ...prevState.account,
-          email: this.props.user.email,
+          email: nextProps.user.email,
         },
       }));
     } else {
@@ -60,11 +100,18 @@ class Profile extends React.Component {
     }
   }
   saveProfile = () => {
-    console.log('saveProfile');
+    console.log('saveProfile...');
+    const {
+      id,
+      account: { ...accountInfo },
+      personal: { ...personalInfo },
+    } = this.state;
+    const { updateProfile: updateProfileAction } = this.props;
+    updateProfileAction({ id, ...accountInfo, ...personalInfo });
   };
 
   resetPersonalInfo = (oldPersonalInfo) => {
-    this.setState({ user: oldPersonalInfo });
+    this.setState({ personal: oldPersonalInfo });
   };
 
   resetAccount = (oldAccount) => {
@@ -107,7 +154,7 @@ class Profile extends React.Component {
 
   render() {
     const {
-      user,
+      personal,
       account,
       account: { email },
       openResetPasswordStatus,
@@ -117,9 +164,9 @@ class Profile extends React.Component {
     const { resetPassword: resetPasswordAction } = this.props;
     return (
       <React.Fragment>
-        {user.givenName !== undefined && (
+        {personal.givenName !== undefined && (
           <Personal
-            {...user}
+            {...personal}
             inputChange={this.change}
             saveProfile={this.saveProfile}
             resetPersonalInfo={this.resetPersonalInfo}

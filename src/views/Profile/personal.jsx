@@ -1,137 +1,179 @@
-import React, { PureComponent } from 'react';
-import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  IconButton,
-} from '@material-ui/core';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import withStyles from '@material-ui/core/styles/withStyles';
-import EditIcon from '@material-ui/icons/Edit';
-import CancelIcon from '@material-ui/icons/CancelOutlined';
-import SaveIcon from '@material-ui/icons/CheckCircleOutlined';
-import PhoneInput from 'react-phone-number-input';
-import CustomInput from '../../components/CustomInput/CustomInput';
-import GridContainer from '../../components/Grid/GridContainer';
-import GridItem from '../../components/Grid/GridItem';
-import personalPageStyles from '../../assets/jss/material-dashboard-pro-react/modules/personalPageStyles';
-import 'react-phone-number-input/style.css';
-
-const PersonalSchema = Yup.object().shape({
-  email: Yup.string()
-    .required('This field is required')
-    .email('Please write correct format'),
-  givenName: Yup.string()
-    .required('This field is required')
-    .min(3, 'Name should be atleast 3 letters')
-    .max(40, 'Too Long')
-});
+import React, { PureComponent } from "react";
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, IconButton } from "@material-ui/core";
+import withStyles from "@material-ui/core/styles/withStyles";
+import EditIcon from "@material-ui/icons/Edit";
+import CancelIcon from "@material-ui/icons/CancelOutlined";
+import SaveIcon from "@material-ui/icons/CheckCircleOutlined";
+import PhoneInput from "react-phone-number-input";
+import CustomInput from "../../components/CustomInput/CustomInput";
+import GridContainer from "../../components/Grid/GridContainer";
+import GridItem from "../../components/Grid/GridItem";
+import personalPageStyles from "../../assets/jss/material-dashboard-pro-react/modules/personalPageStyles";
+import "react-phone-number-input/style.css";
+import PropTypes from "prop-types";
+import { classesType } from "../../types/global";
 
 class Personal extends PureComponent {
+  static propTypes = {
+    classes: classesType.isRequired,
+    givenName: PropTypes.string,
+    userType: PropTypes.string.isRequired,
+    givenNameState: PropTypes.string.isRequired,
+    familyName: PropTypes.string,
+    familyNameState: PropTypes.string.isRequired,
+    telephone: PropTypes.string.isRequired,
+    userStatus: PropTypes.string.isRequired,
+    streetAddress: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    state: PropTypes.string.isRequired,
+    postCode: PropTypes.string.isRequired,
+    country: PropTypes.string.isRequired,
+    userSub: PropTypes.string.isRequired,
+    saveProfile: PropTypes.func.isRequired,
+    resetPersonalInfo: PropTypes.func.isRequired,
+    inputChange: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    givenName: undefined,
+  };
   constructor(props) {
     super(props);
     this.state = {
       isEditMode: false,
-      user: this.props,
+      givenName: props.givenName,
+      userType: props.userType,
+      givenNameState: props.givenNameState,
+      familyName: props.familyName,
+      telephone: props.telephone,
+      userStatus: props.userStatus,
+      streetAddress: props.streetAddress,
+      city: props.city,
+      state: props.state,
+      postCode: props.postCode,
+      country: props.country,
+      userSub: props.userSub,
     };
   }
+
+  onChangeGivenName = (event) => {
+    const { inputChange: inputChangeAction } = this.props;
+    inputChangeAction(event, 'givenName', 'name');
+  };
+
+  onChangeFamilyName = (event) => {
+    const { inputChange: inputChangeAction } = this.props;
+    inputChangeAction(event, 'familyName', 'familyName');
+  };
+
+
+  onChangeStreetAddress = (event) => {
+    const { inputChange: inputChangeAction } = this.props;
+    inputChangeAction(event, 'streetAddress', 'streetAddress');
+  };
+
+  onChangeState = (event) => {
+    const { inputChange: inputChangeAction } = this.props;
+    inputChangeAction(event, 'state', 'state');
+  };
+
+  onChangePostCode = (event) => {
+    const { inputChange: inputChangeAction } = this.props;
+    inputChangeAction(event, 'postCode', 'postCode');
+  };
+
+  onChangePhoneNumber = (telephone) => {
+    if (telephone) {
+      const { inputChange: inputChangeAction } = this.props;
+      inputChangeAction({ target: { value: telephone } }, 'telephone', 'telephone');
+    }
+  };
+  onChangeCity = (event) => {
+    const { inputChange: inputChangeAction } = this.props;
+    inputChangeAction(event, 'city', 'city');
+  };
+
+  onChangeCountry = (event) => {
+    const { inputChange: inputChangeAction } = this.props;
+    inputChangeAction(event, 'country', 'country');
+  };
 
   changeEditMode = () => {
     this.setState({ isEditMode: true });
   };
 
   cancelEdit = () => {
+    console.log('cancelEdit...');
+    const { ...oldPersonalInfo } = this.state;
+    const { resetPersonalInfo: resetPersonalInfoAction } = this.props;
     this.setState(
       { isEditMode: false },
+      () => { resetPersonalInfoAction(oldPersonalInfo); },
     );
-    let userInfo = localStorage.getItem('user');
-    userInfo = JSON.parse(userInfo);
-    this.setState({ user: userInfo });
   };
 
-  saveEdit(values) {
-    console.log('saveEdit');
-    let address  = values.address;
-    values.address = address;
-    this.props.editProvider(values, this.props.history);
+  saveEdit = () => {
+    const { saveProfile: saveProfileAction } = this.props;
+    this.setState({ isEditMode: false }, saveProfileAction);
   };
 
   render() {
     const {
       classes,
+      givenName,
+      givenNameState,
+      familyName,
+      userType,
+      city,
+      telephone,
+      userStatus,
+      streetAddress,
+      state,
+      country,
+      postCode
     } = this.props;
-    const { user, isEditMode, ...oldPersonalInfo } = this.state;
-    let isPersonalModified = true;
-    console.log('user: ' + user);
+    const { isEditMode, ...oldPersonalInfo } = this.state;
+    let isPersonalModified = false;
+    Object.keys(oldPersonalInfo).forEach((key) => {
+      if (!key.includes('State')) {
+        // eslint-disable-next-line react/destructuring-assignment
+        if (oldPersonalInfo[key] !== this.props[key]) {
+          isPersonalModified = true;
+        }
+      }
+    });
+
     return (
-        <Formik
-        initialValues={{
-          id: user.id,
-          email: this.props.email,
-          givenName:this.props.givenName === null ? '' : this.props.givenName,
-          familyName: this.props.familyName === null ? '' : this.props.familyName,
-          telephone: this.props.telephone === null ? '' : this.props.telephone,
-          userStatus: this.props.userStatus === null ? '' : this.props.userStatus,
-          userType:this.props.userType === null ? '' : this.props.userType,
-          address: {
-            streetAddress: (this.props.address === null ||  this.props.address.streetAddress === undefined )? '' :
-              (this.props.address.streetAddress === null ? '' : this.props.address.streetAddress),
-            city: (user === null ||  user.address === undefined )? '' :
-              (user.address.city === null ? '' : user.address.city),
-            state: (this.props.address === null ||  this.props.address.state === undefined )? '' :
-              (this.props.address.state === null ? '' : this.props.address.state),
-            postCode: (this.props.address === null ||  this.props.address.postCode === undefined )? '' :
-              (this.props.address.postCode === null ? '' : this.props.address.postCode),
-            country: (this.props.address === null ||  this.props.address.country === undefined )? '' :
-              (this.props.address.country === null ? '' : this.props.address.country),
-          }
-        }}
-        validationSchema={PersonalSchema}
-        enableReinitialize
-        onSubmit={values => {
-          this.saveEdit(values);
-        }}
-        render={({
-                   values,
-                   errors,
-                   status,
-                   touched,
-                   handleBlur,
-                   handleChange,
-                   handleSubmit,
-                   isSubmitting,
-                   setFieldValue
-                 }) => (
       <ExpansionPanel expanded>
         <ExpansionPanelSummary classes={{ content: classes.summary }}>
           <h4>Personal information</h4>
           <div>
             {!isEditMode && <IconButton aria-label="Edit" onClick={this.changeEditMode}><EditIcon /></IconButton>}
             {isEditMode
-              && (
-                <IconButton
-                  aria-label="Cancel"
-                  color="secondary"
-                  onClick={this.cancelEdit}
-                >
-                  <CancelIcon />
-                </IconButton>
-              )
+            && (
+              <IconButton
+                aria-label="Cancel"
+                color="secondary"
+                onClick={this.cancelEdit}
+              >
+                <CancelIcon />
+              </IconButton>
+            )
             }
             {isEditMode
-              && (
-                <IconButton
-                  aria-label="Save"
-                  color="primary"
-                  onClick={handleSubmit}
-                  disabled={
-                   !isPersonalModified
-                  }
-                >
-                  <SaveIcon />
-                </IconButton>
-              )
+            && (
+              <IconButton
+                aria-label="Save"
+                color="primary"
+                onClick={this.saveEdit}
+                disabled={
+                  givenNameState === 'error'
+                  || !isPersonalModified
+                }
+              >
+                <SaveIcon />
+              </IconButton>
+            )
             }
           </div>
         </ExpansionPanelSummary>
@@ -139,19 +181,17 @@ class Personal extends PureComponent {
           <GridContainer>
             <GridItem md={6}>
               <CustomInput
-                labelText="Given name (required)"
+                labelText="First name (required)"
+                success={givenNameState === 'success' && isEditMode}
                 id="givenName"
                 formControlProps={{ fullWidth: true }}
                 inputProps={{
-                  disabled: true,
+                  disabled: !isEditMode,
                   autoFocus: isEditMode, // the focus() only works from the initial render
                 }}
-                onChange={handleChange}
-                value={isEditMode === true ? values.givenName: user.givenName === null ? '' : user.givenName}
+                onChange={this.onChangeGivenName}
+                value={givenName}
               />
-              {errors.givenName && touched.givenName ? (
-                <div style={{ color: 'red' }}>{errors.givenName}</div>
-              ) : null}
             </GridItem>
             <GridItem md={6}>
               <CustomInput
@@ -161,111 +201,104 @@ class Personal extends PureComponent {
                 inputProps={{
                   disabled: !isEditMode,
                 }}
-                onChange={handleChange}
-                value={isEditMode === true ? values.familyName: user.familyName === null ? '' : user.familyName}
-              />
-            </GridItem>
-            <GridItem md={6}>
-              <PhoneInput
-                placeholder="e.g.+61 3 xxxx xxxx"
-                country="AU"
-                name="telephone"
-                value={isEditMode === true ? values.telephone: user.telephone === null ? '' : user.telephone}
-                formControlProps={{ fullWidth: true }}
-                inputProps={{
-                  disabled: !isEditMode,
-                }}
-                onChange={e => setFieldValue('telephone', e)}
+                onChange={this.onChangeFamilyName}
+                value={familyName}
               />
             </GridItem>
             <GridItem md={6}>
               <CustomInput
-                labelText="User status"
+                labelText="UserType (required)"
+                id="userType"
+                inputProps={{
+                  disabled: true,
+                }}
+                formControlProps={{ fullWidth: true }}
+                value={userType}
+              />
+            </GridItem>
+            <GridItem md={6}>
+              <CustomInput
+                labelText="User Status"
                 id="userStatus"
                 formControlProps={{ fullWidth: true }}
                 inputProps={{
                   disabled: true,
                 }}
-                onChange={handleChange}
-                value={values.userStatus}
+                value={userStatus}
+              />
+            </GridItem>
+            <GridItem md={6}>
+              <PhoneInput
+                placeholder="Your phone number"
+                className={classes.telephone}
+                disabled={!isEditMode}
+                value={telephone}
+                onChange={this.onChangePhoneNumber}
               />
             </GridItem>
             <GridItem md={6}>
               <CustomInput
-                labelText="User Type"
-                id="userType"
+                labelText="Street address"
+                id="streetAddress"
                 formControlProps={{ fullWidth: true }}
-                inputProps={{
-                  disabled: true,
-                }}
-                onChange={handleChange}
-                value={values.userType}
-              />
-            </GridItem>
-            <GridItem md={6}>
-              <CustomInput
-                labelText="Street Address"
-                id="address.streetAddress"
                 inputProps={{
                   disabled: !isEditMode,
                 }}
-                value={isEditMode === true ? values.address.streetAddress : user.address.streetAddress === null ? '' : user.address.streetAddress}
-                onChange={handleChange}
+                onChange={this.onChangeStreetAddress}
+                value={streetAddress}
               />
             </GridItem>
             <GridItem md={6}>
               <CustomInput
                 labelText="city"
-                id="address.city"
+                id="city"
                 formControlProps={{ fullWidth: true }}
                 inputProps={{
                   disabled: !isEditMode,
                 }}
-                value={isEditMode === true ? values.address.city : user.address.city === null ? '' : user.address.city}
-                onChange={handleChange}
+                onChange={this.onChangeCity}
+                value={city}
               />
             </GridItem>
             <GridItem md={6}>
               <CustomInput
                 labelText="State"
-                id="address.state"
+                id="state"
                 formControlProps={{ fullWidth: true }}
                 inputProps={{
                   disabled: !isEditMode,
                 }}
-                value={isEditMode === true ? values.address.state : user.address.state === null ? '' : user.address.state}
-                onChange={handleChange}
+                onChange={this.onChangeState}
+                value={state}
               />
             </GridItem>
             <GridItem md={6}>
               <CustomInput
                 labelText="Your post code"
-                id="address.postCode"
+                id="postCode"
                 formControlProps={{ fullWidth: true }}
                 inputProps={{
                   disabled: !isEditMode,
                 }}
-                value={isEditMode === true ? values.address.postCode : user.address.postCode === null ? '' : user.address.postCode}
-                onChange={handleChange}
+                onChange={this.onChangePostCode}
+                value={postCode}
               />
             </GridItem>
             <GridItem md={6}>
               <CustomInput
                 labelText="Country"
-                id="address.country"
+                id="country"
                 formControlProps={{ fullWidth: true }}
                 inputProps={{
                   disabled: !isEditMode,
                 }}
-                value={isEditMode === true ? values.address.country : user.address.country === null ? '' : user.address.country}
-                onChange={handleChange}
+                onChange={this.onChangeCountry}
+                value={country}
               />
             </GridItem>
           </GridContainer>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-        )}
-        />
     );
   }
 }
