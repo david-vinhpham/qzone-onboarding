@@ -375,8 +375,8 @@ class OrganizationEdit extends React.Component {
                                     <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
                                       <FormLabel>{day}</FormLabel>
                                     </GridItem>
-                                    <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
-                                      <FormControl fullWidth style={{ margin: '-3px' }}>
+                                    <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                                      <FormControl fullWidth style={{ margin: '-1px' }}>
                                         <CustomInput
                                           id={`preferences.serviceHours[${index}].startTime`}
                                           inputProps={{
@@ -388,8 +388,8 @@ class OrganizationEdit extends React.Component {
                                         />
                                       </FormControl>
                                     </GridItem>
-                                    <GridItem xs={12} sm={3} style={{ 'max-width': '87%' }}>
-                                      <FormControl fullWidth style={{ margin: '-3px' }}>
+                                    <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                                      <FormControl fullWidth style={{ margin: '-1px' }}>
                                         <CustomInput
                                           id={`preferences.serviceHours[${index}].endTime`}
                                           value={values.preferences.serviceHours[index].endTime}
