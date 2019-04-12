@@ -17,6 +17,7 @@ import { Auth } from 'aws-amplify';
 import Button from '../CustomButtons/Button';
 import headerLinksStyle from '../../assets/jss/material-dashboard-pro-react/components/headerLinksStyle';
 import { logout } from '../../actions/auth';
+import { NavLink } from "react-router-dom";
 
 class HeaderLinks extends React.Component {
   state = {
@@ -165,12 +166,20 @@ class HeaderLinks extends React.Component {
               <Grow in={userOpen} id="menu-list" style={{ transformOrigin: '0 0 0' }}>
                 <Paper className={classes.dropdown}>
                   <MenuList role="menu">
-                    <MenuItem onClick={this.handleUserClose} className={dropdownItem}>
-                      {'Profile'}
-                    </MenuItem>
-                    <MenuItem onClick={logout} className={dropdownItem}>
-                      {'Logout'}
-                    </MenuItem>
+                    <NavLink
+                      to="/profile"
+                      className={
+                        classes.itemLink + " " + classes.userCollapseLinks
+                      }
+                    >
+                      <MenuItem> {'Profile'} </MenuItem></NavLink>
+                    <NavLink
+                      to="/login"
+                      className={
+                        classes.itemLink + " " + classes.userCollapseLinks
+                      }
+                    >
+                      <MenuItem> {'Logout'} </MenuItem></NavLink>
                   </MenuList>
                 </Paper>
               </Grow>
