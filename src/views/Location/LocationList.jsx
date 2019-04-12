@@ -41,6 +41,10 @@ class LocationList extends React.Component {
     this.props.delLocation(locationId, this.props.history);
   }
   componentDidMount() {
+    let userInfo = localStorage.getItem('user');
+    if(userInfo === null) {
+      window.location = '/login';
+    }
     this.props.fetchLocations();
   }
   render() {

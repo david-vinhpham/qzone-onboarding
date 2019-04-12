@@ -1,3 +1,32 @@
+export const eUserType = {
+  guest: 'GUEST',
+  customer: 'CUSTOMER',
+  provider: 'PROVIDER',
+  business_admin: 'BUSINESS_ADMIN',
+  admin: 'ADMIN',
+};
+
+
+export const eSurveyStatus = {
+  completed: 'COMPLETED',
+  inProgress: 'INPROGRESS',
+  pending: 'PENDING',
+  expired: 'EXPIRED',
+};
+
+export const eRegisterPage = {
+  eReceivedInfo: 'eReceivedInfo',
+  registerTermAndCondition: 'registerTermAndCondition',
+};
+
+export const userStatus = {
+  unconfirmed: 'UNCONFIRMED',
+  confirmed: 'CONFIRMED',
+  temporary: 'NEW_PASSWORD_REQUIRED',
+  changePassword: 'FORCE_CHANGE_PASSWORD',
+
+};
+
 export const restApiResponseCodes = {
   success: 200,
   unauthorized: 401,

@@ -39,6 +39,10 @@ class OrganizationList extends React.Component {
   }
 
   componentDidMount() {
+    let userInfo = localStorage.getItem('user');
+    if(userInfo === null) {
+      window.location = '/login';
+    }
     var userSub = localStorage.getItem('userSub');
     this.props.fetchOrganizationsByBusinessAdminId(userSub);
   }

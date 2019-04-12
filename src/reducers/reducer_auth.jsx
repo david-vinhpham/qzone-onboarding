@@ -11,6 +11,12 @@ const initialState = {
   verifyLoading: false,
   email: null,
 
+  fetchUserLoading: false,
+
+  editUser: [],
+  editUserError: null,
+  editUserLoading: false,
+
   resetPasswordRsp: [], // verification code
   resetPasswordError: [], // verification code
   resetPasswordLoading: false,
@@ -98,7 +104,27 @@ const reducer = (state = initialState, action) => {
         verifyError: action.payload.error,
         verifyLoading: false
       };
-
+    case auth.EDIT_USER_LOADING:
+      return { ...state, editUserLoading: true, editUser: [] };
+    case auth.EDIT_USER_SUCCESS:
+      return { ...state, userDetails: action.payload, editUser: action.payload, editUserLoading: false };
+    case auth.EDIT_USER_FAILURE:
+      return {
+        ...state,
+        editUser: [],
+        editUserError: action.payload.error,
+        editUserLoading: false
+      };
+    case auth.FETCH_USER_LOADING:
+      return { ...state, fetchUserLoading: true };
+    case auth.FETCH_USER_SUCCESS:
+      return { ...state, userDetails: action.payload, fetchUserLoading: false };
+    case auth.FETCH_USER_FAILURE:
+      return {
+        ...state,
+        userError: action.payload.error,
+        fetchProviderLoading: false
+      };
     default:
       return state;
   }
