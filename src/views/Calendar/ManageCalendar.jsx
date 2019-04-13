@@ -29,7 +29,7 @@ class ManageCalendar extends React.PureComponent {
         },
         special: {}
       },
-      eventLevel: EVENT_LEVEL.ORGANIZATION
+      eventLevel: EVENT_LEVEL.PROVIDER
     };
     this.state = { ...this.initialState, isLoading: false };
   }
@@ -48,32 +48,43 @@ class ManageCalendar extends React.PureComponent {
 
   onClickNewEvent = (schedulerData, providerId, providerName, startTime, endTime) => {
     this.setState(() => {
-      let addEventData = {
+      let timezoneId = this.props.tzOptions[0].value;
+      const defaultProvider = this.props.providers[0];
+      if (providerId) {
+        const providerTimezone = this.props.providers.find(
+          provider => provider.id === providerId
+        ).timezone;
+        timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === providerTimezone.toLowerCase()).value;
+      } else {
+        timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === defaultProvider.timezone.toLowerCase()).value;
+      }
+
+      const addEventData = {
         eventType: Object.values(EVENT_TYPE)[0],
         description: '',
         repeat: {
           type: Object.values(EVENT_REPEAT_TYPE)[0],
           repeatEnd: {}
         },
-        special: {}
-      };
-      addEventData = {
-        ...addEventData,
-        ...(providerId === undefined
-          ? {
-            startTime: moment(),
-            endTime: moment().add(1, 'hour')
-          }
-          : {
+        timezoneId,
+        serviceId: this.props.serviceOptions[0].value,
+        special: {},
+        ...(providerId ?
+          {
             providerId,
             providerName,
             startTime,
             endTime
+          } : {
+            providerId: defaultProvider.id,
+            providerName: defaultProvider.name,
+            startTime: moment(),
+            endTime: moment().add(1, 'hour')
           })
       };
 
       return {
-        eventLevel: providerId ? EVENT_LEVEL.PROVIDER : EVENT_LEVEL.ORGANIZATION,
+        eventLevel: EVENT_LEVEL.PROVIDER,
         isOpenAddDialog: true,
         addEventData
       };
@@ -173,7 +184,13 @@ class ManageCalendar extends React.PureComponent {
       eventType,
       description,
       repeat,
-      special
+      special,
+      timezoneId,
+      serviceId,
+      customerEmail,
+      customerFirstName,
+      customerLastName,
+      customerMobilePhone,
     } = addEventData;
 
     let payload = {
@@ -183,7 +200,7 @@ class ManageCalendar extends React.PureComponent {
         startTime: moment(startTime).unix(),
         endTime: moment(endTime).unix()
       },
-      type: eventType
+      type: eventType,
     };
 
     if (eventType === EVENT_TYPE.SPECIAL) {
@@ -193,11 +210,24 @@ class ManageCalendar extends React.PureComponent {
     if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
       payload = { ...payload, ...this.generateRepeatPayload(repeat) };
     }
+
+    if (eventType === EVENT_TYPE.APPOINTMENT) {
+      payload = {
+        ...payload,
+        timezoneId,
+        serviceId,
+        customerEmail,
+        customerFirstName,
+        customerLastName,
+        customerMobilePhone,
+      }
+    }
+
     return payload;
   };
 
   createNewEvent = addEventData => {
-    if (this.state.eventLevel === EVENT_LEVEL.ORGANIZATION) {
+    if (this.state.eventLevel === EVENT_LEVEL.BUSINESS) {
       this.createOrgNewEvent(addEventData);
       return;
     }
@@ -225,7 +255,7 @@ class ManageCalendar extends React.PureComponent {
   updateEventLevel = eventLevel => this.setState({ eventLevel });
 
   render() {
-    const { providers, serviceOptions } = this.props;
+    const { providers, tzOptions, serviceOptions } = this.props;
     const { isOpenAddDialog, eventLevel, addEventData, isLoading } = this.state;
 
     return (
@@ -241,6 +271,7 @@ class ManageCalendar extends React.PureComponent {
             addEventData={addEventData}
             createNewEvent={this.createNewEvent}
             updateEventLevel={this.updateEventLevel}
+            tzOptions={tzOptions}
             serviceOptions={serviceOptions}
           />
         )}
@@ -253,18 +284,20 @@ ManageCalendar.propTypes = {
   providers: arrayOf(providerType).isRequired,
   fetchNormalEventByBusinessId: func.isRequired,
   createNewEvent: func.isRequired,
-  serviceOptions: arrayOf(optionType).isRequired,
+  tzOptions: arrayOf(optionType).isRequired,
+  serviceOptions: arrayOf(optionType).isRequired
 };
 
 const mapStateToProps = state => ({
   providers: state.calendarManage.providers,
   isLoading: state.calendarManage.isLoading,
+  tzOptions: state.calendarManage.tzOptions,
   serviceOptions: state.calendarManage.serviceOptions
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchNormalEventByBusinessId: businessId => dispatch(fetchNormalEventByBusinessId(businessId)),
-  createNewEvent: newEvent => dispatch(createNewEvent(newEvent))
+  createNewEvent: newEvent => dispatch(createNewEvent(newEvent)),
 });
 
 export default connect(

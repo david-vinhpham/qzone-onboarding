@@ -13,9 +13,12 @@ export const FETCH_GEO_OPTIONS = {
   SUCCESS: 'FETCH_GEO_OPTIONS_SUCCESS'
 };
 export const CALENDAR_LOADING = 'CALENDAR_LOADING';
+export const FETCH_TIMEZONE_OPTIONS = {
+  SUCCESS: 'FETCH_TIMEZONE_OPTIONS_SUCCESS'
+};
 export const FETCH_SERVICE_OPTIONS = {
   SUCCESS: 'FETCH_SERVICE_OPTIONS_SUCCESS',
-};
+}
 
 export const EVENT_TYPE = Object.freeze({
   APPOINTMENT: 'APPOINTMENT',
@@ -69,7 +72,7 @@ export const EVENT_BG_COLOR = Object.freeze({
 });
 
 export const EVENT_LEVEL = Object.freeze({
-  ORGANIZATION: 'ORGANIZATION',
+  BUSINESS: 'BUSINESS',
   PROVIDER: 'PROVIDER'
 });
 

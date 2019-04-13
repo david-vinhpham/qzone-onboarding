@@ -9,6 +9,7 @@ import {
   CREATE_CALENDAR_EVENT,
   EVENT_TYPE,
   FETCH_GEO_OPTIONS,
+  FETCH_TIMEZONE_OPTIONS,
   FETCH_SERVICE_OPTIONS
 } from 'constants/Calendar.constants';
 
@@ -58,6 +59,16 @@ const fetchServiceOptions = businessAdminId => {
   };
 };
 
+const fetchTimezoneOptions = dispatch => {
+  axios.get(`${API_ROOT}${URL.TIMEZONE_OPTION}`)
+    .then(({ data }) => {
+      dispatch({
+        type: FETCH_TIMEZONE_OPTIONS.SUCCESS,
+        payload: data && data.objects ? data.objects : []
+      });
+    });
+};
+
 export const fetchNormalEventByBusinessId = businessId => dispatch => {
   dispatch(calendarLoading(true));
 
@@ -88,13 +99,23 @@ export const fetchNormalEventByBusinessId = businessId => dispatch => {
       dispatch(calendarLoading(false));
       fetchGeoLocationOptions(dispatch);
       fetchServiceOptions(businessId)(dispatch);
+      fetchTimezoneOptions(dispatch);
     });
 };
 
 export const createNewEvent = newEvent => dispatch => {
   dispatch(calendarLoading(true));
 
-  const api = newEvent.type === EVENT_TYPE.SPECIAL ? URL.NEW_SPECIAL_EVENT : URL.NEW_NORMAL_EVENT;
+  let api = URL.NEW_NORMAL_EVENT;
+
+  if(newEvent.type === EVENT_TYPE.SPECIAL) {
+    api = URL.NEW_SPECIAL_EVENT;
+  }
+
+  if(newEvent.type === EVENT_TYPE.APPOINTMENT) {
+    api = URL.NEW_APPOINTMENTS_CUSTOMER_EVENT;
+  }
+
   return axios
     .post(`${API_ROOT}${api}`, newEvent)
     .then(response => {
