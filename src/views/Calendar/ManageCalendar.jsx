@@ -81,7 +81,7 @@ class ManageCalendar extends React.PureComponent {
   };
 
   generateRepeatPayload = repeat => {
-    let repeatPayload = { isAllowRepeat: true };
+    let repeatPayload = {};
 
     if (repeat.type === EVENT_REPEAT_TYPE.DAILY) {
       repeatPayload = {
@@ -192,8 +192,6 @@ class ManageCalendar extends React.PureComponent {
 
     if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
       payload = { ...payload, ...this.generateRepeatPayload(repeat) };
-    } else {
-      payload = { ...payload, isAllowRepeat: false };
     }
     return payload;
   };
@@ -232,10 +230,8 @@ class ManageCalendar extends React.PureComponent {
 
     return (
       <>
-        <div>
-          <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} />
-          <CalendarLoading isLoading={isLoading} />
-        </div>
+        <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} />
+        <CalendarLoading isLoading={isLoading} />
         {isOpenAddDialog && (
           <AddEventDialog
             eventLevel={eventLevel}

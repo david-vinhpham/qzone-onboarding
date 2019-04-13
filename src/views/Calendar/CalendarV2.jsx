@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, any, func } from 'prop-types';
-import { Typography, Grid, IconButton } from '@material-ui/core';
-import { Schedule, Edit, Delete } from '@material-ui/icons';
+import {
+  Typography, Grid, IconButton, Button,
+  Select, MenuItem,
+} from '@material-ui/core';
+import { Schedule, Edit, Delete, Add } from '@material-ui/icons';
 
 import Calendar from 'components/Calendar';
 import { EVENT_BG_COLOR } from 'constants/Calendar.constants';
@@ -10,6 +13,13 @@ import { providerType } from 'types/global';
 import styles from './CalendarV2.module.scss';
 
 class ManageCalendar extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedProvider: 'all'
+    };
+  }
+
   getEventStyle = (eventType, mustBeHeight) => {
     return {
       backgroundColor: EVENT_BG_COLOR[eventType].backgroundColor,
@@ -84,16 +94,53 @@ class ManageCalendar extends React.PureComponent {
     );
   };
 
+  onSelectProvider = ({ target: { value } }) => {
+    this.setState({ selectedProvider: value });
+  }
+
+  rightCustomHeader = () => (
+    <div>
+      <Select
+        value={this.state.selectedProvider}
+        onChange={this.onSelectProvider}
+        className={styles.selectProvider}
+      >
+        <MenuItem value="all">
+          All providers
+        </MenuItem>
+        {this.props.providers.map(prov => (
+          <MenuItem value={prov.id} key={prov.id}>
+            {prov.name}
+          </MenuItem>
+        ))}
+      </Select>
+      <Button
+        variant="contained"
+        color="primary"
+        style={{ color: 'white' }}
+        onClick={this.props.onClickNewEvent}
+      >
+        <Add fontSize="small" />
+        &nbsp;New event
+      </Button>
+    </div>
+  );
+
   render() {
     const { providers, calendarData, onClickNewEvent } = this.props;
+    const { selectedProvider } = this.state;
+    const resources = selectedProvider === 'all'
+      ? providers
+      : providers.filter(prov => prov.id === selectedProvider);
+
     return (
       <Calendar
-        resources={providers}
+        resources={resources}
         events={calendarData}
         stickerTemplate={this.getStickerTemplate}
         popoverTemplate={this.getPopoverTemplate}
         onClickNewEvent={onClickNewEvent}
-        onClickNewEventButton={onClickNewEvent}
+        rightCustomHeader={this.rightCustomHeader()}
       />
     );
   }
