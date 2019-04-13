@@ -1,11 +1,9 @@
 import React from 'react';
-import { arrayOf, any, func, string, bool } from 'prop-types';
+import { arrayOf, any, func, bool, element } from 'prop-types';
 import moment from 'moment';
 import { debounce } from 'lodash';
 import Scheduler, { SchedulerData, ViewTypes, DATETIME_FORMAT } from 'react-big-scheduler';
 import ReactResizeDetector from 'react-resize-detector';
-import { Button } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
 import produce from 'immer';
 
 import withDnDContext from 'hoc/withDnDContext';
@@ -17,7 +15,7 @@ class Calendar extends React.Component {
 
     const viewModel = new SchedulerData(
       moment().format(DATETIME_FORMAT),
-      ViewTypes.Week,
+      ViewTypes.Day,
       false,
       false,
       {
@@ -95,17 +93,6 @@ class Calendar extends React.Component {
     );
   }, 150);
 
-  rightCustomHeader = () => (
-    <Button
-      variant="outlined"
-      style={{ color: 'white', backgroundColor: '#108ee9' }}
-      onClick={this.props.onClickNewEventButton}
-    >
-      <Add style={{ height: '16px', width: '16px', marginBottom: '2px' }} />
-      {this.props.newEventLabel}
-    </Button>
-  );
-
   render() {
     return (
       <div style={{ padding: '8px 16px', backgroundColor: 'white', height: 'calc(100vh - 130px)' }}>
@@ -119,7 +106,7 @@ class Calendar extends React.Component {
             newEvent={this.props.onClickNewEvent}
             eventItemTemplateResolver={this.props.stickerTemplate}
             eventItemPopoverTemplateResolver={this.props.popoverTemplate}
-            rightCustomHeader={this.rightCustomHeader()}
+            rightCustomHeader={this.props.rightCustomHeader}
           />
         </ReactResizeDetector>
       </div>
@@ -133,9 +120,8 @@ Calendar.propTypes = {
   stickerTemplate: func,
   popoverTemplate: func,
   onClickNewEvent: func,
-  onClickNewEventButton: func,
-  newEventLabel: string,
-  highlightWeekend: bool
+  highlightWeekend: bool,
+  rightCustomHeader: element,
 };
 
 Calendar.defaultProps = {
@@ -144,8 +130,6 @@ Calendar.defaultProps = {
   stickerTemplate: undefined,
   popoverTemplate: undefined,
   onClickNewEvent: () => {},
-  onClickNewEventButton: () => {},
-  newEventLabel: 'New Event',
   highlightWeekend: false
 };
 

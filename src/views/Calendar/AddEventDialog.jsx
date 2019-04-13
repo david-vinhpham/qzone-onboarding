@@ -7,7 +7,7 @@ import {
   Checkbox, ListItemText, Radio, Tooltip
 } from '@material-ui/core';
 import { LiveHelp } from '@material-ui/icons';
-import { get, debounce, map, isEmpty, isNaN } from 'lodash';
+import { get, debounce, map, isEmpty, isNaN, string } from 'lodash';
 import { DateFormatInput, TimeFormatInput } from 'material-ui-next-pickers';
 import moment from 'moment';
 import produce from 'immer';
@@ -95,7 +95,7 @@ class AddEventDialog extends PureComponent {
         addEventData: {
           ...oldState.addEventData,
           startTime: momentData.format(),
-          endTime: momentData.add(1, 'hour').format()
+          endTime: momentData.clone().add(1, 'hour').format()
         }
       }));
     }
@@ -107,7 +107,7 @@ class AddEventDialog extends PureComponent {
             ...oldState.addEventData,
             startTime: momentData.format(),
             endTime: moment(oldState.addEventData.endTime).isBefore(momentData)
-              ? momentData.add(1, 'hour').format()
+              ? momentData.clone().add(1, 'hour').format()
               : oldState.addEventData.endTime
           }
         }),
@@ -175,6 +175,7 @@ class AddEventDialog extends PureComponent {
               data = {
                 ...data,
                 onDate: moment(addEventData.startTime)
+                  .clone()
                   .add(1, 'week')
                   .toDate()
               };
@@ -288,26 +289,17 @@ class AddEventDialog extends PureComponent {
   onChangeSpecialDateTime = type => data => {
     const momentData = moment(data);
     if (type === 'fromTime') {
-      this.setState(({ addEventData, addEventData: { special } }) => ({
-        addEventData: {
-          ...addEventData,
-          special: {
-            ...special,
-            breakTimeStart: momentData.format(),
-            breakTimeEnd: moment(special.breakTimeEnd).isBefore(momentData)
-              ? momentData.add(1, 'hour').format()
-              : special.breakTimeEnd
-          }
-        }
+      this.setState((oldState) => produce(oldState, (draftState) => {
+        draftState.addEventData.special.breakTimeStart = momentData.format();
+        draftState.addEventData.special.breakTimeEnd = moment(draftState.addEventData.special.breakTimeEnd).isBefore(momentData)
+          ? momentData.clone().add(1, 'hour').format()
+          : draftState.addEventData.special.breakTimeEnd
       }));
     }
 
     if (type === 'toTime') {
-      this.setState(({ addEventData, addEventData: { special } }) => ({
-        addEventData: {
-          ...addEventData,
-          special: { ...special, breakTimeEnd: momentData.format() }
-        }
+      this.setState((oldState) => produce(oldState, (draftState) => {
+        draftState.addEventData.special.breakTimeEnd = momentData.format();
       }));
     }
   };
@@ -399,9 +391,9 @@ class AddEventDialog extends PureComponent {
 
   renderSpecialContent = () => {
     const { geoOptions, serviceOptions } = this.props;
-    const { addEventData: { special } } = this.state;
-    const startTime = moment(special.breakTimeStart).toDate();
-    const endTime = moment(special.breakTimeEnd).toDate();
+    const { addEventData: { special, startTime, endTime } } = this.state;
+    const breakStartTime = moment(special.breakTimeStart).toDate();
+    const breakEndTime = moment(special.breakTimeEnd).toDate();
 
     return (
       <Grid container spacing={8} className={styles.calendarDatetimePicker}>
@@ -471,7 +463,7 @@ class AddEventDialog extends PureComponent {
                 <Grid item md={5}>
                   <TimeFormatInput
                     name="StartBreakTimeInput"
-                    value={startTime}
+                    value={breakStartTime}
                     onChange={this.onChangeSpecialDateTime('fromTime')}
                     {...this.validateBreakTimeFrom()}
                   />
@@ -484,7 +476,7 @@ class AddEventDialog extends PureComponent {
                 <Grid item md={5}>
                   <TimeFormatInput
                     name="EndBreakTimeInput"
-                    value={endTime}
+                    value={breakEndTime}
                     onChange={this.onChangeSpecialDateTime('toTime')}
                     {...this.validateBreakTimeTo()}
                   />
@@ -892,8 +884,8 @@ AddEventDialog.propTypes = {
   closeAddDialog: PropTypes.func.isRequired,
   addEventData: PropTypes.shape({
     providerId: PropTypes.string,
-    startTime: PropTypes.instanceOf(moment),
-    endTime: PropTypes.instanceOf(moment),
+    startTime: string,
+    endTime: string,
     eventType: PropTypes.string,
     description: PropTypes.string
   }).isRequired,
