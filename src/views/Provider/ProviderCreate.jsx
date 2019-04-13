@@ -137,23 +137,6 @@ class ProviderCreate extends React.Component {
     this.props.createProvider(values, this.props.history);
   }
 
-  changeProfileImage = (e) => {
-    //const {file, imagePreviewUrl} = this.state.provider;
-    console.log("inside change image function", e);
-    console.log("event---", e)
-    e.preventDefault();
-    let reader = new FileReader();
-    let files = e.target.files[0];
-    console.log("file-------", files)
-    reader.onloadend = () => {
-      this.setState({
-        imagePreviewUrl: reader.result
-        //provider: provider
-      });
-    };
-    reader.readAsDataURL(files);
-  }
-
   change = (event, stateName, value) => {
     if (value !== undefined) {
       this.setState({ [stateName]: (value) })
@@ -164,7 +147,7 @@ class ProviderCreate extends React.Component {
     }
   }
 
-  changeProfileImage(e) {
+  changeProfileImage = (e) => {
     //const {file, imagePreviewUrl} = this.state.provider;
     console.log("inside change image function", e);
     console.log("event---", e)
