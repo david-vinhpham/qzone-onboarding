@@ -20,7 +20,10 @@ function getRRuleISO(date) {
 function buildCalendarData(datum) {
   const { slot: { startTime, endTime } = {} } = datum;
   return {
-    ...datum,
+    id: datum.id,
+    description: datum.description,
+    providerId: datum.providerId,
+    type: datum.type,
     start: moment(startTime * 1000).format(DATETIME_FORMAT),
     end: moment(endTime * 1000).format(DATETIME_FORMAT),
     resourceId: datum.providerId,
@@ -79,12 +82,18 @@ const reducer = (state = initialState, action) => {
     case FETCH_NORM_EVENTS_BY_PROVIDER.SUCCESS:
       return {
         ...state,
-        calendarData: action.calendarData.map(datum => buildCalendarData(datum))
+        calendarData: action.calendarData
+          .map(datum => buildCalendarData(datum))
+          .sort((prev, next) => {
+            return prev.start < next.start ? -1 : 1;
+          })
       };
     case CREATE_CALENDAR_EVENT.SUCCESS: {
       return {
         ...state,
-        calendarData: [buildCalendarData(action.newEvent), ...state.calendarData]
+        calendarData: [buildCalendarData(action.newEvent), ...state.calendarData].sort((prev, next) => {
+          return prev.start < next.start ? -1 : 1;
+        })
       };
     }
     case FETCH_GEO_OPTIONS.SUCCESS: {

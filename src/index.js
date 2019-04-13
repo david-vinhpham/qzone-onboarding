@@ -5,6 +5,9 @@ import { Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import Amplify from 'aws-amplify';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import blueColor from '@material-ui/core/colors/blue';
+import pinkColor from '@material-ui/core/colors/pink';
 
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
@@ -49,15 +52,27 @@ Amplify.configure({
 const hist = createBrowserHistory();
 const createStoreWithMiddleware = composeEnhancers(applyMiddleware(thunk, logger))(createStore);
 const store = createStoreWithMiddleware(reducers);
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
+  palette: {
+    primary: blueColor,
+    secondary: pinkColor,
+  }
+});
+
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={hist}>
-      <Switch>
-        {indexRoutes.map(prop => {
-          return <Route path={prop.path} component={prop.component} key={prop.path} />;
-        })}
-      </Switch>
-    </Router>
-  </Provider>,
+  <MuiThemeProvider theme={theme}>
+    <Provider store={store}>
+      <Router history={hist}>
+        <Switch>
+          {indexRoutes.map(prop => {
+            return <Route path={prop.path} component={prop.component} key={prop.path} />;
+          })}
+        </Switch>
+      </Router>
+    </Provider>
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
