@@ -5,6 +5,7 @@ import {
   FETCH_PROVIDER_BY_ORG,
   FETCH_NORM_EVENTS_BY_PROVIDER,
   CALENDAR_LOADING,
+  FETCH_TIMEZONE_OPTIONS,
   CREATE_CALENDAR_EVENT,
   EVENT_TYPE_TITLE,
   FETCH_GEO_OPTIONS,
@@ -60,6 +61,7 @@ function buildCalendarData(datum) {
 const initialState = {
   providers: [],
   calendarData: [],
+  tzOptions: [],
   geoOptions: [],
   serviceOptions: [],
   isLoading: false
@@ -74,7 +76,8 @@ const reducer = (state = initialState, action) => {
           input =>
             map(input, p => ({
               id: p.id,
-              name: p.givenName
+              name: p.givenName,
+              timezone: p.providerInformation.timeZoneId
             })),
           input => sortBy(input, 'name')
         )(action.providers)
@@ -104,6 +107,8 @@ const reducer = (state = initialState, action) => {
     }
     case CALENDAR_LOADING:
       return { ...state, isLoading: action.isLoading };
+    case FETCH_TIMEZONE_OPTIONS.SUCCESS:
+      return { ...state, tzOptions: action.payload };
     case FETCH_SERVICE_OPTIONS.SUCCESS:
       return { ...state, serviceOptions: action.payload };
     default:
