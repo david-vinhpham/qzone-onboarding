@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import {
   Typography, Grid, Button, Dialog, DialogTitle, DialogContent,
   DialogActions, Select, MenuItem, TextField, Chip,
-  Checkbox, ListItemText, Radio, Tooltip
+  Checkbox, ListItemText, Radio
 } from '@material-ui/core';
-import { LiveHelp } from '@material-ui/icons';
-import { get, debounce, map, isEmpty, isNaN, string } from 'lodash';
+import { get, debounce, map, isEmpty, isNaN } from 'lodash';
 import { DateFormatInput, TimeFormatInput } from 'material-ui-next-pickers';
 import moment from 'moment';
 import produce from 'immer';
+import PhoneInput from 'react-phone-number-input';
 import {
   EVENT_BG_COLOR,
   EVENT_TYPE,
@@ -22,6 +22,7 @@ import {
 } from 'constants/Calendar.constants';
 import { providerType, optionType } from 'types/global';
 import styles from './AddEventDialog.module.scss';
+import SpecialEventContent from './addEventDialog/SpecialEventContent';
 
 class AddEventDialog extends PureComponent {
   constructor(props) {
@@ -56,18 +57,70 @@ class AddEventDialog extends PureComponent {
   );
 
   onSelectProvider = event => {
-    const provider = this.props.providers.find(p => p.id === event.target.value);
+    const selectedProvider = this.props.providers.find(p => p.id === event.target.value);
+    const selectedProviderTz = selectedProvider.timezone;
+    const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProviderTz.toLowerCase()).value;
     this.setState(oldState => ({
       addEventData: {
         ...oldState.addEventData,
-        providerId: provider.id,
-        providerName: provider.name
+        providerId: selectedProvider.id,
+        providerName: selectedProvider.name,
+        timezoneId
       }
     }));
   };
 
+  onSelectTimezone = event => {
+    const timezoneId = event.target.value;
+    this.setState(oldState => ({
+      addEventData: {
+        ...oldState.addEventData,
+        timezoneId
+      }
+    }));
+  };
+
+  onSelectService = event => {
+    const serviceId = event.target.value;
+    this.setState(oldState => ({
+      addEventData: {
+        ...oldState.addEventData,
+        serviceId
+      }
+    }));
+  };
+
+  onChangeCustomerEmail = ({ target: { value } }) => {
+    this.setState(({ addEventData }) => ({
+      addEventData: {
+        ...addEventData,
+        customerEmail: value
+      }
+    }));
+  };
+
+  onChangeCustomerName = field => ({ target: { value } }) => {
+    this.setState(({ addEventData }) => ({
+      addEventData: {
+        ...addEventData,
+        [`customer${field}`]: value
+      }
+    }))
+  }
+
+  onChangeCustomerPhone = customerMobilePhone => {
+    this.setState(({ addEventData }) => ({
+      addEventData: {
+        ...addEventData,
+        customerMobilePhone
+      }
+    }))
+  }
+
   onChangeEventType = ({ target: { value: eventType } }) => {
     this.setState(oldState => ({
+      eventLevel: eventType === EVENT_TYPE.SPECIAL || eventType === EVENT_TYPE.APPOINTMENT
+          ? EVENT_LEVEL.PROVIDER : oldState.eventLevel,
       addEventData: {
         ...oldState.addEventData,
         eventType,
@@ -81,8 +134,7 @@ class AddEventDialog extends PureComponent {
               geoLocationId: this.props.geoOptions[0].value,
               numberOfParallelCustomer: 1,
               serviceId: this.props.serviceOptions[0].value,
-            }
-            : {}
+            } : {}
       }
     }));
   };
@@ -389,158 +441,8 @@ class AddEventDialog extends PureComponent {
     }));
   };
 
-  renderSpecialContent = () => {
-    const { geoOptions, serviceOptions } = this.props;
-    const { addEventData: { special, startTime, endTime } } = this.state;
-    const breakStartTime = moment(special.breakTimeStart).toDate();
-    const breakEndTime = moment(special.breakTimeEnd).toDate();
-
-    return (
-      <Grid container spacing={8} className={styles.calendarDatetimePicker}>
-        <Grid item md={12}>
-          <Grid container spacing={8}>
-            <Grid item md={2} className={styles.label}>
-              <Typography variant="body2" noWrap inline>
-                Service:
-              </Typography>
-            </Grid>
-            <Grid item md={10}>
-              <Select
-                value={special.serviceId}
-                onChange={this.onSelectService}
-                className={styles.eventTypeSelect}
-              >
-                {serviceOptions.map(svc => (
-                  <MenuItem value={svc.value} key={svc.value}>
-                    {svc.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item md={12}>
-          <Grid container spacing={8} className={styles.averageBox}>
-            <Grid item md={2} className={styles.label}>
-              <Typography variant="body2" noWrap inline>
-                Average Service Time:
-              </Typography>
-            </Grid>
-            <Grid item md={2}>
-              <TextField
-                value={special.avgServiceTime}
-                onChange={this.onChangeAvgServiceTime}
-                onBlur={this.onBlurServiceTime}
-                {...this.validateAvgServiceTime()}
-              />
-            </Grid>
-            <Grid item md={3}>
-              <Typography variant="body2" noWrap inline>
-                minutes
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item md={12} className={styles.breakTimeWrapper}>
-          <Grid container spacing={8}>
-            <Grid item md={2} className={styles.label}>
-              <Typography variant="body2">
-                Break time:
-              </Typography>
-              <Tooltip
-                title={`Must be between ${
-                  moment(startTime).format('LT')
-                  } and ${
-                  moment(endTime).format('LT')
-                  }`
-                }
-              >
-                <LiveHelp fontSize="small" className={styles.breakTimeIcon} />
-              </Tooltip>
-            </Grid>
-            <Grid item md={10}>
-              <Grid container>
-                <Grid item md={5}>
-                  <TimeFormatInput
-                    name="StartBreakTimeInput"
-                    value={breakStartTime}
-                    onChange={this.onChangeSpecialDateTime('fromTime')}
-                    {...this.validateBreakTimeFrom()}
-                  />
-                </Grid>
-                <Grid item md={2} className={styles.label}>
-                  <Typography variant="body2">
-                    to
-                  </Typography>
-                </Grid>
-                <Grid item md={5}>
-                  <TimeFormatInput
-                    name="EndBreakTimeInput"
-                    value={breakEndTime}
-                    onChange={this.onChangeSpecialDateTime('toTime')}
-                    {...this.validateBreakTimeTo()}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item md={12}>
-          <Grid container spacing={8}>
-            <Grid item md={2} className={styles.label}>
-              <Typography variant="body2" noWrap inline>
-                Location:
-              </Typography>
-            </Grid>
-            <Grid item md={10}>
-              <Select
-                value={special.geoLocationId}
-                onChange={this.onSelectLocation}
-                className={styles.eventTypeSelect}
-              >
-                {geoOptions.map(geoOption => (
-                  <MenuItem value={geoOption.value} key={geoOption.value}>
-                    {geoOption.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item md={12}>
-          <Grid container spacing={8} className={styles.averageBox}>
-            <Grid item md={2} className={styles.label}>
-              <Typography variant="body2" noWrap inline>
-                Parallel Customers:
-              </Typography>
-            </Grid>
-            <Grid item md={2}>
-              <TextField
-                value={special.numberOfParallelCustomer}
-                onChange={this.onChangeParallelCustomer}
-                onBlur={this.onBlurParallelCustomer}
-                {...this.validateParallelCustomer()}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item md={12}>
-          <TextField
-            className={styles.calendarDesc}
-            label="Additional Data"
-            margin="normal"
-            variant="outlined"
-            onChange={({ target: { value } }) => this.onChangeAdditionInfo(value)}
-            multiline
-            rows={3}
-          />
-        </Grid>
-      </Grid>
-    );
-  };
-
   renderContent = () => {
-    const { providers } = this.props;
+    const { providers, tzOptions, serviceOptions } = this.props;
     const { eventLevel, addEventData } = this.state;
     const startTime = moment(addEventData.startTime).toDate();
     const endTime = moment(addEventData.endTime).toDate();
@@ -583,11 +485,14 @@ class AddEventDialog extends PureComponent {
                   onChange={this.onSelectEventLevel}
                   className={styles.eventTypeSelect}
                 >
-                  {Object.values(EVENT_LEVEL).map(e => (
-                    <MenuItem value={e} key={e}>
-                      {e}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value={EVENT_LEVEL.PROVIDER}>
+                    {EVENT_LEVEL.PROVIDER}
+                  </MenuItem>
+                  {addEventData.eventType !== EVENT_TYPE.APPOINTMENT
+                    && addEventData.eventType !== EVENT_TYPE.SPECIAL &&
+                    <MenuItem value={EVENT_LEVEL.BUSINESS}>
+                      {EVENT_LEVEL.BUSINESS}
+                    </MenuItem>}
                 </Select>
               </Grid>
             </Grid>
@@ -616,6 +521,111 @@ class AddEventDialog extends PureComponent {
               </Grid>
             </Grid>
           )}
+          {addEventData.eventType === EVENT_TYPE.APPOINTMENT &&
+            <>
+              <Grid item md={12}>
+                <Grid container spacing={8}>
+                  <Grid item md={2} className={styles.label}>
+                    <Typography variant="body2" noWrap inline>
+                      Time zone:
+                    </Typography>
+                  </Grid>
+                  <Grid item md={10}>
+                    <Select
+                      value={addEventData.timezoneId}
+                      onChange={this.onSelectTimezone}
+                      className={styles.eventTypeSelect}
+                    >
+                      {tzOptions.map(tz => (
+                        <MenuItem value={tz.value} key={tz.label}>
+                          {tz.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md={12}>
+                <Grid container spacing={8}>
+                  <Grid item md={2} className={styles.label}>
+                    <Typography variant="body2" noWrap inline>
+                      Service:
+                    </Typography>
+                  </Grid>
+                  <Grid item md={10}>
+                    <Select
+                      value={addEventData.serviceId}
+                      onChange={this.onSelectService}
+                      className={styles.eventTypeSelect}
+                    >
+                      {serviceOptions.map(svc => (
+                        <MenuItem value={svc.value} key={svc.label}>
+                          {svc.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md={12}>
+                <Grid container spacing={8}>
+                  <Grid item md={2} className={styles.label}>
+                    <Typography variant="body2" noWrap inline>
+                      Customer email:
+                    </Typography>
+                  </Grid>
+                  <Grid item md={10}>
+                    <TextField
+                      fullWidth
+                      value={addEventData.customerEmail || ''}
+                      onChange={this.onChangeCustomerEmail}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md={12}>
+                <Grid container spacing={8}>
+                  <Grid item md={2} className={styles.label}>
+                    <Typography variant="body2" noWrap inline>
+                      Customer name:
+                    </Typography>
+                  </Grid>
+                  <Grid item md={5}>
+                    <TextField
+                      fullWidth
+                      label="First name"
+                      value={addEventData.customerFirstName || ''}
+                      onChange={this.onChangeCustomerName('FirstName')}
+                    />
+                  </Grid>
+                  <Grid item md={5}>
+                    <TextField
+                      fullWidth
+                      label="Last name"
+                      value={addEventData.customerLastName || ''}
+                      onChange={this.onChangeCustomerName('LastName')}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md={12}>
+                <Grid container spacing={8}>
+                  <Grid item md={2} className={styles.label}>
+                    <Typography variant="body2" noWrap inline>
+                      Customer phone:
+                    </Typography>
+                  </Grid>
+                  <Grid item md={10}>
+                    <PhoneInput
+                      country="AU"
+                      value={addEventData.customerMobilePhone || ''}
+                      onChange={this.onChangeCustomerPhone}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </>
+          }
         </>
         <Grid item md={12}>
           <Grid container spacing={8}>
@@ -827,7 +837,7 @@ class AddEventDialog extends PureComponent {
   };
 
   render() {
-    const { isOpenAddDialog, closeAddDialog } = this.props;
+    const { isOpenAddDialog, closeAddDialog, geoOptions, serviceOptions } = this.props;
     const { addEventData, specialEventStep } = this.state;
     return (
       <Dialog
@@ -855,7 +865,26 @@ class AddEventDialog extends PureComponent {
           </Typography>
         </DialogTitle>
         <DialogContent>
-          {specialEventStep === 1 ? this.renderContent() : this.renderSpecialContent()}
+          {specialEventStep === 1 ?
+            this.renderContent() :
+            <SpecialEventContent
+              geoOptions={geoOptions}
+              serviceOptions={serviceOptions}
+              addEventData={addEventData}
+              onSelectService={this.onSelectService}
+              onChangeAvgServiceTime={this.onChangeAvgServiceTime}
+              onBlurServiceTime={this.onBlurServiceTime}
+              validateAvgServiceTime={this.validateAvgServiceTime}
+              onChangeSpecialDateTime={this.onChangeSpecialDateTime}
+              validateBreakTimeFrom={this.validateBreakTimeFrom}
+              validateBreakTimeTo={this.validateBreakTimeTo}
+              onSelectLocation={this.onSelectLocation}
+              onBlurParallelCustomer={this.onBlurParallelCustomer}
+              onChangeParallelCustomer={this.onChangeParallelCustomer}
+              validateParallelCustomer={this.validateParallelCustomer}
+              onChangeAdditionInfo={this.onChangeAdditionInfo}
+            />
+          }
         </DialogContent>
         <DialogActions classes={{ root: styles.calendarDialogFooter }}>
           {specialEventStep === 2 && (
@@ -884,13 +913,14 @@ AddEventDialog.propTypes = {
   closeAddDialog: PropTypes.func.isRequired,
   addEventData: PropTypes.shape({
     providerId: PropTypes.string,
-    startTime: string,
-    endTime: string,
+    startTime: PropTypes.string,
+    endTime: PropTypes.string,
     eventType: PropTypes.string,
     description: PropTypes.string
   }).isRequired,
   createNewEvent: PropTypes.func.isRequired,
   updateEventLevel: PropTypes.func.isRequired,
+  tzOptions: PropTypes.arrayOf(optionType).isRequired,
   geoOptions: PropTypes.arrayOf(optionType).isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
 };
