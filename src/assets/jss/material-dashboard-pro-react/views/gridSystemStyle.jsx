@@ -15,19 +15,22 @@ const gridSystemStyle = {
       textAlign: "left"
     }
   },
-  customTitleHeader: {
-    fontWeight: 'bold',
-    "@media (max-width: 599px)": {
-      textAlign: "center"
-    }
-  },
   customPage: {
     padding: '32px'
   },
   headerPage: {
-    marginBottom: '40px',
+    marginBottom: '32px',
+    paddingBottom: '8px',
+    display: 'flex',
     borderBottom: '#000000 solid 1px'
   },
+  custUrl: {
+    display: 'block',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    width: '100%',
+    whiteSpace: 'nowrap',
+  }
 };
 
 export default gridSystemStyle;

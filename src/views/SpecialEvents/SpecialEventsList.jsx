@@ -32,20 +32,20 @@ class SpecialEventsList extends PureComponent {
             <TableHead>
               <TableRow>
                 <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
-                <TableCell className={classes.cellHeaderBold}>Description</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Provider</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
                 <TableCell className={classes.cellHeaderBold}>End time</TableCell>
+                <TableCell className={classes.cellHeaderBold}>Description</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {specialEvents.map((event, key) => (
                 <TableRow key={event.id} className={classes.row} onClick={() => this.handleClick(event, history)}>
                   <TableCell padding="dense">{key + 1}</TableCell>
-                  <TableCell className={classes.textLinkTruncate} title={event.description}>{event.description}</TableCell>
                   <TableCell>{event.providerName}</TableCell>
                   <TableCell>{moment(event.slot.startTime * 1000).format('L LT Z')}</TableCell>
                   <TableCell>{moment(event.slot.endTime * 1000).format('L LT Z')}</TableCell>
+                  <TableCell className={classes.textLinkTruncate} title={event.description}>{event.description}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

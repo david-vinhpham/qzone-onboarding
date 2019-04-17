@@ -204,11 +204,11 @@ class Sidebar extends React.Component {
                     }
                   >
                     <span className={collapseItemMini}>
-                      SPE
+                      {"SV"}
                     </span>
                     <ListItemText
                       primary={
-                        "Special events"
+                        "Special Events"
                       }
                       disableTypography={true}
                       className={collapseItemText}
