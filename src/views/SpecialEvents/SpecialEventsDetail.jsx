@@ -9,7 +9,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { compose } from "redux";
 import Loading from 'components/Loading/Loading';
 import moment from 'moment-timezone';
-
+import CardFooter from "../Services/ServiceEdit";
+import Button from '../../components/CustomButtons/Button.jsx';
 class SpecialEventsDetail extends PureComponent {
   componentDidMount() {
     if (!this.props.specialEventDetail.id) {
@@ -23,10 +24,14 @@ class SpecialEventsDetail extends PureComponent {
 
     return (
       <Paper>
+
         <div className={classes.customPage}>
           <div className={classes.headerPage}>
             <Typography variant="h6" gutterBottom className={classes.customTitleHeader}>Event detail</Typography>
-          </div>
+            <Button color="rose" onClick={this.props.history.goBack}>
+              Back
+            </Button>
+        </div>
           {specialEventDetail.custUrl ?
             <Grid container spacing={16}>
               <Grid item sm={3} xs={12}>
