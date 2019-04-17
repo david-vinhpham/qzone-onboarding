@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   Dialog, DialogContent, DialogTitle, DialogActions, DialogContentText,
 } from '@material-ui/core';
@@ -10,7 +9,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '../../components/CustomButtons/Button';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
-//import { completeNewPasswordChallenge, fetchUserByUserId } from 'services/api/user';
 import validatePassword from '../../utils/validatePassword';
 import verificationPageStyle from '../../assets/jss/material-dashboard-pro-react/modules/verificationPageStyle';
 import { classesType } from '../../types/global';

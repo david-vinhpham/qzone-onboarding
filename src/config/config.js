@@ -52,7 +52,10 @@ export const URL = {
   NEW_NORMAL_EVENT: 'normal-events',
   NEW_SPECIAL_EVENT: 'special-events',
   NEW_APPOINTMENTS_CUSTOMER_EVENT: 'appointment-customer-events',
-  GET_GEO_LOCATION_OPTIONS: 'geo-locations-option'
+  GET_GEO_LOCATION_OPTIONS: 'geo-locations-option',
+
+  FIND_SPECIAL_EVENTS_BY_BUSINESS_ID: 'find-special-events-by-business-admin-id/',
+  FIND_SPECIAL_EVENT_DETAIL_BY_SPECIAL_EVENT_ID: 'special-events/',
 };
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';
 

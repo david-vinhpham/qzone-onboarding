@@ -36,6 +36,7 @@
     "lodash": "^4.17.11",
     "material-ui-next-pickers": "0.0.20",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.23",
     "path": "^0.12.7",
     "perfect-scrollbar": "^1.4.0",
     "prop-types": "^15.7.2",
