@@ -2,15 +2,15 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { specialEventType, classesType } from 'types/global';
 import { connect } from 'react-redux';
-import { Typography, Paper, Grid, Link } from '@material-ui/core';
+import { Typography, Paper, Grid, Link, Button } from '@material-ui/core';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import { fetchSpecialEventDetail } from '../../actions/specialEventDetail';
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { compose } from "redux";
 import Loading from 'components/Loading/Loading';
 import moment from 'moment-timezone';
-import CardFooter from "../Services/ServiceEdit";
-import Button from '../../components/CustomButtons/Button.jsx';
+
 class SpecialEventsDetail extends PureComponent {
   componentDidMount() {
     if (!this.props.specialEventDetail.id) {
@@ -24,40 +24,45 @@ class SpecialEventsDetail extends PureComponent {
 
     return (
       <Paper>
-
         <div className={classes.customPage}>
           <div className={classes.headerPage}>
-            <Typography variant="h6" gutterBottom className={classes.customTitleHeader}>Event detail</Typography>
-            <Button color="rose" onClick={this.props.history.goBack}>
-              Back
+            <Button size="small" color="primary" onClick={this.props.history.goBack}>
+              <ArrowBack />
             </Button>
-        </div>
+            <Typography inline variant="h6">Event detail</Typography>
+          </div>
           {specialEventDetail.custUrl ?
             <Grid container spacing={16}>
               <Grid item sm={3} xs={12}>
                 <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
                   Type:
-              </Typography>
+                </Typography>
               </Grid>
               <Grid item sm={9} xs={12}>
                 <Typography variant="body2">
                   Special
-              </Typography>
+                </Typography>
               </Grid>
               <Grid item sm={3} xs={12}>
                 <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
                   Unique Link:
-              </Typography>
+                </Typography>
               </Grid>
               <Grid item sm={9} xs={12}>
-                <Link href={specialEventDetail.custUrl} target="_blank" rel="noreferrer">
+                <Link
+                  className={classes.custUrl}
+                  title={specialEventDetail.custUrl}
+                  href={specialEventDetail.custUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   {specialEventDetail.custUrl}
                 </Link>
               </Grid>
               <Grid item sm={3} xs={12}>
                 <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
                   When:
-              </Typography>
+                </Typography>
               </Grid>
               <Grid item sm={9} xs={12}>
                 <Typography variant="body2">
@@ -71,7 +76,7 @@ class SpecialEventsDetail extends PureComponent {
                   <Grid item sm={3} xs={12}>
                     <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
                       Repeat :
-                  </Typography>
+                    </Typography>
                   </Grid>
                   <Grid item sm={9} xs={12}>
                     <Typography variant="body2">
@@ -83,7 +88,7 @@ class SpecialEventsDetail extends PureComponent {
               <Grid item sm={3} xs={12}>
                 <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
                   Location:
-              </Typography>
+                </Typography>
               </Grid>
               <Grid item sm={9} xs={12}>
                 <Typography variant="body2">
@@ -114,8 +119,8 @@ class SpecialEventsDetail extends PureComponent {
                   </Grid>
                 </>
               }
-            </Grid>
-            : <Loading />
+            </Grid> :
+            <Loading />
           }
         </div>
       </Paper>
