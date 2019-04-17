@@ -65,8 +65,6 @@ class Profile extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps...');
-    const { account: { email } } = this.state;
     const { user: { userStatus } } = nextProps;
     if ( nextProps.user.email !== '') {
       this.setState(prevState => ({
@@ -212,13 +210,6 @@ const mapStateToProps = state => ({
   editUser:state.user.editUser,
   isDefaultPwdChanged: state.user.isDefaultPwdChanged,
 });
-
-const mapDispatchToProps = dispatch => {
-  return {
-    editProfile: (value) => dispatch(editProfile(value)),
-    fetchUser: id => dispatch(fetchUser(id))
-  };
-};
 
 export default connect(mapStateToProps, {
   editProfile,

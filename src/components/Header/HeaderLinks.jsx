@@ -16,7 +16,6 @@ import { Person, Notifications, Dashboard, Search } from '@material-ui/icons';
 import { Auth } from 'aws-amplify';
 import Button from '../CustomButtons/Button';
 import headerLinksStyle from '../../assets/jss/material-dashboard-pro-react/components/headerLinksStyle';
-import { logout } from '../../actions/auth';
 import { NavLink } from "react-router-dom";
 
 class HeaderLinks extends React.Component {

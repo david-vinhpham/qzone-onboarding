@@ -39,6 +39,8 @@ import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
 import ServiceProviderList from '../views/ServiceProviderAssignment/ServiceProviderList';
 import ServiceProviderEdit from '../views/ServiceProviderAssignment/ServiceProviderEdit';
 import ServiceProviderCreate from '../views/ServiceProviderAssignment/ServiceProviderCreate';
+import SpecialEventsList from 'views/SpecialEvents/SpecialEventsList';
+import SpecialEventsDetail from 'views/SpecialEvents/SpecialEventsDetail';
 
 export const dashboardRoutes = [
   {
@@ -209,5 +211,17 @@ export const otherRoutes = [
     name: 'Create Email Template',
     short: 'Create Template',
     component: CreateEmailTemplate
+  },
+  {
+    path: '/special-events',
+    name: 'List special events',
+    short: 'List special events',
+    component: SpecialEventsList
+  },
+  {
+    path: '/special-event/detail/:id',
+    name: 'Special event detail',
+    short: 'Special event detail',
+    component: SpecialEventsDetail
   }
 ];

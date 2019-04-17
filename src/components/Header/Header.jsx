@@ -3,27 +3,29 @@ import PropTypes from "prop-types";
 import cx from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { AppBar, Toolbar, Hidden } from "@material-ui/core";
-import { Menu, MoreVert,ViewList } from "@material-ui/icons";
+import { Menu, MoreVert, ViewList } from "@material-ui/icons";
 import HeaderLinks from "./HeaderLinks";
 import Button from "../CustomButtons/Button.jsx";
 import headerStyle from "../../assets/jss/material-dashboard-pro-react/components/headerStyle.jsx";
 
 function Header({ ...props }) {
   function makeBrand() {
-    var name;
-    props.routes.map((prop, key) => {
+    let name = '';
+    props.routes.find((prop, key) => {
       if (prop.collapse) {
-        prop.views.map((prop, key) => {
+        prop.views.find((prop, key) => {
           if (prop.path === props.location.pathname) {
             name = prop.name;
+            return true;
           }
-          return null;
+          return false;
         });
       }
       if (prop.path === props.location.pathname) {
         name = prop.name;
+        return true;
       }
-      return null;
+      return false;
     });
     return name;
   }
@@ -32,7 +34,7 @@ function Header({ ...props }) {
     [" " + classes[color]]: color
   });
   const sidebarMinimize =
-    classes.sidebarMinimize 
+    classes.sidebarMinimize
   return (
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
@@ -48,15 +50,15 @@ function Header({ ...props }) {
                 <ViewList className={classes.miniIcon} />
               </Button>
             ) : (
-              <Button
-                justIcon
-                round
-                color="white"
-                onClick={props.sidebarMinimize}
-              >
-                <MoreVert className={classes.miniIcon} />
-              </Button>
-            )}
+                <Button
+                  justIcon
+                  round
+                  color="white"
+                  onClick={props.sidebarMinimize}
+                >
+                  <MoreVert className={classes.miniIcon} />
+                </Button>
+              )}
           </div>
         </Hidden>
         <div className={classes.flex}>

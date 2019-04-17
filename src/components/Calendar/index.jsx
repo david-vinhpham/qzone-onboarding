@@ -5,6 +5,7 @@ import { debounce } from 'lodash';
 import Scheduler, { SchedulerData, ViewTypes, DATETIME_FORMAT } from 'react-big-scheduler';
 import ReactResizeDetector from 'react-resize-detector';
 import produce from 'immer';
+import { Paper } from '@material-ui/core';
 
 import withDnDContext from 'hoc/withDnDContext';
 import 'react-big-scheduler/lib/css/style.css';
@@ -95,7 +96,7 @@ class Calendar extends React.Component {
 
   render() {
     return (
-      <div style={{ padding: '8px 16px', backgroundColor: 'white', height: 'calc(100vh - 130px)' }}>
+      <Paper style={{ padding: '8px 16px', height: 'calc(100vh - 130px)' }}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.onCalendarResize}>
           <Scheduler
             schedulerData={this.state.viewModel}
@@ -109,7 +110,7 @@ class Calendar extends React.Component {
             rightCustomHeader={this.props.rightCustomHeader}
           />
         </ReactResizeDetector>
-      </div>
+      </Paper>
     );
   }
 }
