@@ -41,7 +41,6 @@ class SpecialEventsList extends PureComponent {
     };
   }
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps...');
     this.setState({ data: nextProps.specialEvents });
     if (nextProps.specialEvents != null && nextProps.specialEvents.length > 0 && !nextProps.delSpecialEventLoading) {
       localStorage.setItem('specialEvents', JSON.stringify(nextProps.specialEvents));

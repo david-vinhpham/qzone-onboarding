@@ -54,17 +54,14 @@ export const deleteSpecialEvent = eventId => {
   };
 };
 export const fetchSpecialEvents = businessId => dispatch => {
-  console.log('fetchSpecialEvents');
   dispatch(setSpecialEventsLoading(true));
   axios.get(`${API_ROOT}${URL.FIND_SPECIAL_EVENTS_BY_BUSINESS_ID}${businessId}`)
     .then(resp => {
-      console.log('fetchSpecialEvents resp');
       if(resp.status === 200) {
         dispatch(setSpecialEvents(resp.data.objects));
       }
     })
     .finally(() => {
-      console.log('fetchSpecialEvents resp');
       dispatch(setSpecialEventsLoading(false));
     });
 }

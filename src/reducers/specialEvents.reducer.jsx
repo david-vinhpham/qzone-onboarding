@@ -5,7 +5,6 @@ const initialState = {
   list: [],
 
   special_event: [],
-  special_events: [],
 
   editSpecialEventError: null,
   editSpecialEventLoading: false,
@@ -30,7 +29,6 @@ const reducer = (state = initialState, action) => {
       return { ...state, delSpecialEventLoading: true };
 
     case special_event.DEL_SPECIAL_EVENT_SUCCESS:
-      console.log('DEL_SPECIAL_EVENT_SUCCESS...');
       return { ...state, special_event: action.payload , delSpecialEventLoading: false };
 
     case special_event.DEL_SPECIAL_EVENT_FAILURE:
