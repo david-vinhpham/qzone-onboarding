@@ -4,7 +4,7 @@ import { classesType, historyType, specialEventType } from "types/global";
 import { connect } from "react-redux";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import moment from "moment-timezone";
 import { deleteSpecialEvent, fetchSpecialEvents } from "../../actions/specialEvents";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
@@ -118,7 +118,7 @@ class SpecialEventsList extends PureComponent {
       return <div className="alert alert-danger">Error</div>;
     }
     data = (
-      <GridContainer>
+      <Paper>
         <Table aria-labelledby="tableTitle">
           <TableHead>
             <TableRow>
@@ -132,7 +132,7 @@ class SpecialEventsList extends PureComponent {
           </TableHead>
           <TableBody>
             {this.state.data.map((event, index) => (
-              <TableRow key={event.id}>
+              <TableRow key={event.id} className={classes.row}>
                 <TableCell padding="dense">{index + 1}</TableCell>
                 <TableCell>{event.providerName}</TableCell>
                 <TableCell>{moment(event.slot.startTime * 1000).format('L LT Z')}</TableCell>
@@ -185,7 +185,7 @@ class SpecialEventsList extends PureComponent {
             ))}
           </TableBody>
         </Table>
-      </GridContainer>
+      </Paper>
     );
 
     const deletionPopup = deletedSpecialEvent.isDel ? (
