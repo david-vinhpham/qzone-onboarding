@@ -64,7 +64,7 @@ class SpecialEventsList extends PureComponent {
   }
 
   handleClick(event, history) {
-    history.push('/special-event/detail/' + event.id);
+    history.push('/tmp-service/detail/' + event.id);
   }
   cancelDelete = () => {
     const data = {
@@ -160,7 +160,7 @@ class SpecialEventsList extends PureComponent {
                     placement="bottom"
                     classes={{ tooltip: classes.tooltip }}
                   >
-                    <Link to={`/special-event/edit/${event.id}`}>
+                    <Link to={`/tmp-service/edit/${event.id}`}>
                       <Button color="success" simple justIcon>
                         <Edit className={classes.underChartIcons} />
                       </Button>

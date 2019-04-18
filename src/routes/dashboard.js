@@ -213,13 +213,13 @@ export const otherRoutes = [
     component: CreateEmailTemplate
   },
   {
-    path: '/special-events',
+    path: '/tmp-services',
     name: 'List special events',
     short: 'List special events',
     component: SpecialEventsList
   },
   {
-    path: '/special-event/detail/:id',
+    path: '/tmp-service/detail/:id',
     name: 'Special event detail',
     short: 'Special event detail',
     component: SpecialEventsDetail
