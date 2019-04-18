@@ -203,7 +203,7 @@ class SpecialEventsList extends PureComponent {
             <Card>
               <CardHeader color="primary" icon>
                 <CardText color="rose">
-                  <h4 className={classes.cardTitle}>Temp List</h4>
+                  <h4 className={classes.cardTitle}>List temporary services</h4>
                 </CardText>
                 <div className="centerDiv">
                   <div className="search" md={3}>

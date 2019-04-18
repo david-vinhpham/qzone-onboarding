@@ -40,7 +40,7 @@ class SpecialEventsDetail extends PureComponent {
               </Grid>
               <Grid item sm={9} xs={12}>
                 <Typography variant="body2">
-                  Special
+                  Temporary service
                 </Typography>
               </Grid>
               <Grid item sm={3} xs={12}>
