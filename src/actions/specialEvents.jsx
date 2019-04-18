@@ -14,7 +14,7 @@ const setSpecialEvents = payload => ({
 export const deleteSpecialEvent = eventId => {
   return dispatch => {
     dispatch({ type: special_event.DEL_SPECIAL_EVENT_LOADING });
-    fetch(`${API_ROOT + URL.NEW_SPECIAL_EVENT}/${eventId}`, {
+    fetch(`${API_ROOT + URL.NEW_TMP_SERVICE}/${eventId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ export const deleteSpecialEvent = eventId => {
 };
 export const fetchSpecialEvents = businessId => dispatch => {
   dispatch(setSpecialEventsLoading(true));
-  axios.get(`${API_ROOT}${URL.FIND_SPECIAL_EVENTS_BY_BUSINESS_ID}${businessId}`)
+  axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_BUSINESS_ID}${businessId}`)
     .then(resp => {
       if(resp.status === 200) {
         dispatch(setSpecialEvents(resp.data.objects));

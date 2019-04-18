@@ -6,8 +6,7 @@ import {
   DialogActions, Select, MenuItem, TextField, Chip,
   Checkbox, ListItemText, Radio
 } from '@material-ui/core';
-import { LiveHelp } from '@material-ui/icons';
-import { get, debounce, map, isEmpty, isNaN, string } from 'lodash';
+import { get, debounce, map, isEmpty, isNaN } from 'lodash';
 import { DateFormatInput, TimeFormatInput } from 'material-ui-next-pickers';
 import moment from 'moment';
 import produce from 'immer';

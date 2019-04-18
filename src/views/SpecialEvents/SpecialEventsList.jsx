@@ -4,7 +4,7 @@ import { classesType, historyType, specialEventType } from "types/global";
 import { connect } from "react-redux";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import moment from "moment-timezone";
 import { deleteSpecialEvent, fetchSpecialEvents } from "../../actions/specialEvents";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
@@ -49,7 +49,7 @@ class SpecialEventsList extends PureComponent {
   }
   componentDidMount() {
     let userInfo = localStorage.getItem('user');
-    if(userInfo === null) {
+    if (userInfo === null) {
       window.location = '/login';
     }
     let specialEvents = localStorage.getItem('specialEvents');
@@ -89,8 +89,7 @@ class SpecialEventsList extends PureComponent {
     this.setState({ deletedSpecialEvent: data });
   }
   render() {
-    const { specialEvents, classes, history, isLoading, delSpecialEventLoading,
-      delSpecialEventError } = this.props;
+    const { classes, history, isLoading, delSpecialEventLoading, delSpecialEventError } = this.props;
     let data = [];
     const { deletedSpecialEvent } = this.state;
     if (isLoading) {
@@ -123,12 +122,12 @@ class SpecialEventsList extends PureComponent {
         <Table aria-labelledby="tableTitle">
           <TableHead>
             <TableRow>
-                <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
-                <TableCell className={classes.cellHeaderBold}>Provider</TableCell>
-                <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
-                <TableCell className={classes.cellHeaderBold}>End time</TableCell>
-                <TableCell className={classes.cellHeaderBold}>Description</TableCell>
-                <TableCell className={classes.cellHeaderBold}>View|Edit|Delete</TableCell>
+              <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
+              <TableCell className={classes.cellHeaderBold}>Provider</TableCell>
+              <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
+              <TableCell className={classes.cellHeaderBold}>End time</TableCell>
+              <TableCell className={classes.cellHeaderBold}>Description</TableCell>
+              <TableCell className={classes.cellHeaderBold}>View|Edit|Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

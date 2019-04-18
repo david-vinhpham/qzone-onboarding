@@ -85,7 +85,7 @@ export const fetchNormalEventByBusinessId = businessId => dispatch => {
       const fetchEvents = [];
       providerIds.forEach(providerId => {
         fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
-        fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_SPECIAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
+        fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}${providerId}`));
       });
 
       return Promise.all(fetchEvents).then(rep => {
@@ -109,7 +109,7 @@ export const createNewEvent = newEvent => dispatch => {
   let api = URL.NEW_NORMAL_EVENT;
 
   if(newEvent.type === EVENT_TYPE.SPECIAL) {
-    api = URL.NEW_SPECIAL_EVENT;
+    api = URL.NEW_TMP_SERVICE;
   }
 
   if(newEvent.type === EVENT_TYPE.APPOINTMENT) {
