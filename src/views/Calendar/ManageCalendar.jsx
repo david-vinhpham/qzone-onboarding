@@ -27,7 +27,7 @@ class ManageCalendar extends React.PureComponent {
         repeat: {
           repeatEnd: {}
         },
-        special: {}
+        tmpService: {}
       },
       eventLevel: EVENT_LEVEL.PROVIDER
     };
@@ -68,7 +68,7 @@ class ManageCalendar extends React.PureComponent {
         },
         timezoneId,
         serviceId: this.props.serviceOptions[0].value,
-        special: {},
+        tmpService: {},
         ...(providerId ?
           {
             providerId,
@@ -151,7 +151,7 @@ class ManageCalendar extends React.PureComponent {
     return repeatPayload;
   };
 
-  generateSpecialPayload = special => {
+  generateTmpServicePayload = tmpService => {
     const {
       additionalInfo,
       avgServiceTime,
@@ -160,7 +160,7 @@ class ManageCalendar extends React.PureComponent {
       geoLocationId,
       numberOfParallelCustomer,
       serviceId
-    } = special;
+    } = tmpService;
 
     return {
       additionalInfo: additionalInfo.length === 0 ? undefined : additionalInfo,
@@ -184,7 +184,7 @@ class ManageCalendar extends React.PureComponent {
       eventType,
       description,
       repeat,
-      special,
+      tmpService,
       timezoneId,
       serviceId,
       customerEmail,
@@ -203,8 +203,8 @@ class ManageCalendar extends React.PureComponent {
       type: eventType,
     };
 
-    if (eventType === EVENT_TYPE.SPECIAL) {
-      payload = { ...payload, ...this.generateSpecialPayload(special) };
+    if (eventType === EVENT_TYPE.TMP_SERVICE) {
+      payload = { ...payload, ...this.generateTmpServicePayload(tmpService) };
     }
 
     if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {

@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { classesType, historyType, specialEventType } from "types/global";
+import { classesType, historyType, tmpServiceType } from "types/global";
 import { connect } from "react-redux";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import moment from "moment-timezone";
-import { deleteSpecialEvent, fetchSpecialEvents } from "../../actions/specialEvents";
+import { deleteTmpService, fetchTmpServices } from "../../actions/tmpServices";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
@@ -29,21 +29,21 @@ const override = css`
   margin: 0 auto;
   border-color: red;
 `;
-class SpecialEventsList extends PureComponent {
+class TmpServicesList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      deletedSpecialEvent: {
+      deletedTmpService: {
         id: 0,
         isDel: false
       }
     };
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.specialEvents });
-    if (nextProps.specialEvents != null && nextProps.specialEvents.length > 0 && !nextProps.delSpecialEventLoading) {
-      localStorage.setItem('specialEvents', JSON.stringify(nextProps.specialEvents));
+    this.setState({ data: nextProps.tmpServices });
+    if (nextProps.tmpServices != null && nextProps.tmpServices.length > 0 && !nextProps.delTmpServiceLoading) {
+      localStorage.setItem('tmpServices', JSON.stringify(nextProps.tmpServices));
     }
 
   }
@@ -52,13 +52,13 @@ class SpecialEventsList extends PureComponent {
     if (userInfo === null) {
       window.location = '/login';
     }
-    let specialEvents = localStorage.getItem('specialEvents');
-    specialEvents = JSON.parse(specialEvents);
-    if (specialEvents !== null && specialEvents.length > 0) {
-      this.setState({ data: specialEvents });
+    let tmpServices = localStorage.getItem('tmpServices');
+    tmpServices = JSON.parse(tmpServices);
+    if (tmpServices !== null && tmpServices.length > 0) {
+      this.setState({ data: tmpServices });
     } else {
       const userSub = localStorage.getItem('userSub');
-      this.props.fetchSpecialEvents(userSub);
+      this.props.fetchTmpServices(userSub);
     }
 
   }
@@ -70,28 +70,28 @@ class SpecialEventsList extends PureComponent {
     const data = {
       isDel: false
     };
-    this.setState({ deletedSpecialEvent: data });
+    this.setState({ deletedTmpService: data });
   };
 
   confirmDelete = eventId => {
-    this.props.deleteSpecialEvent(eventId);
+    this.props.deleteTmpService(eventId);
     const data = {
       isDel: false
     };
-    this.setState({ deletedSpecialEvent: data });
+    this.setState({ deletedTmpService: data });
   };
 
-  deleteSpecialEvent(eventId) {
+  deleteTmpService(eventId) {
     const data = {
       id: eventId,
       isDel: true
     };
-    this.setState({ deletedSpecialEvent: data });
+    this.setState({ deletedTmpService: data });
   }
   render() {
-    const { classes, history, isLoading, delSpecialEventLoading, delSpecialEventError } = this.props;
+    const { classes, history, isLoading, delTmpServiceLoading, delTmpServiceError } = this.props;
     let data = [];
-    const { deletedSpecialEvent } = this.state;
+    const { deletedTmpService } = this.state;
     if (isLoading) {
       return (
         <ClipLoader
@@ -103,18 +103,18 @@ class SpecialEventsList extends PureComponent {
         />
       );
     }
-    if (delSpecialEventLoading) {
+    if (delTmpServiceLoading) {
       return (
         <ClipLoader
           css={override}
           sizeUnit="px"
           size={100}
           color="#123abc"
-          loading={delSpecialEventLoading}
+          loading={delTmpServiceLoading}
         />
       );
     }
-    if (delSpecialEventError) {
+    if (delTmpServiceError) {
       return <div className="alert alert-danger">Error</div>;
     }
     data = (
@@ -172,7 +172,7 @@ class SpecialEventsList extends PureComponent {
                     classes={{ tooltip: classes.tooltip }}
                   >
                     <Button
-                      onClick={() => this.deleteSpecialEvent(event.id)}
+                      onClick={() => this.deleteTmpService(event.id)}
                       color="danger"
                       simple
                       justIcon
@@ -188,12 +188,12 @@ class SpecialEventsList extends PureComponent {
       </Paper>
     );
 
-    const deletionPopup = deletedSpecialEvent.isDel ? (
+    const deletionPopup = deletedTmpService.isDel ? (
       <DeletionModal
-        openDialog={deletedSpecialEvent.isDel}
+        openDialog={deletedTmpService.isDel}
         closeDialog={this.cancelDelete}
         itemDeleteHandler={this.confirmDelete}
-        itemId={deletedSpecialEvent.id}
+        itemId={deletedTmpService.id}
       />
     ) : null;
     return (
@@ -241,25 +241,25 @@ class SpecialEventsList extends PureComponent {
   }
 }
 
-SpecialEventsList.propTypes = {
-  specialEvents: PropTypes.arrayOf(specialEventType).isRequired,
-  fetchSpecialEvents: PropTypes.func.isRequired,
+TmpServicesList.propTypes = {
+  tmpServices: PropTypes.arrayOf(tmpServiceType).isRequired,
+  fetchTmpServices: PropTypes.func.isRequired,
   classes: classesType.isRequired,
   history: historyType.isRequired,
-  delSpecialEventLoading: PropTypes.bool.isRequired,
-  delSpecialEventError: PropTypes.bool.isRequired,
+  delTmpServiceLoading: PropTypes.bool.isRequired,
+  delTmpServiceError: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
-  specialEvents: state.specialEvents.list,
-  isLoading: state.specialEvents.isLoading,
-  delSpecialEventLoading: state.specialEvents.delSpecialEventLoading,
-  delSpecialEventError: state.specialEvents.delSpecialEventError,
+  tmpServices: state.tmpServices.list,
+  isLoading: state.tmpServices.isLoading,
+  delTmpServiceLoading: state.tmpServices.delTmpServiceLoading,
+  delTmpServiceError: state.tmpServices.delTmpServiceError,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSpecialEvents: businessId => dispatch(fetchSpecialEvents(businessId)),
-  deleteSpecialEvent: eventId => dispatch(deleteSpecialEvent(eventId))
+  fetchTmpServices: businessId => dispatch(fetchTmpServices(businessId)),
+  deleteTmpService: eventId => dispatch(deleteTmpService(eventId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(tableStyle)(SpecialEventsList));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(tableStyle)(TmpServicesList));

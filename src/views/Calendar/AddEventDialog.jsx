@@ -18,11 +18,12 @@ import {
   EVENT_REPEAT_TYPE,
   REPEAT_EVERY_DEF,
   REPEAT_DATE_DEF,
-  REPEAT_END_TYPE
+  REPEAT_END_TYPE,
+  EVENT_TYPE_TITLE
 } from 'constants/Calendar.constants';
 import { providerType, optionType } from 'types/global';
 import styles from './AddEventDialog.module.scss';
-import SpecialEventContent from './addEventDialog/SpecialEventContent';
+import TmpServiceContent from './addEventDialog/TmpServiceContent';
 
 class AddEventDialog extends PureComponent {
   constructor(props) {
@@ -30,7 +31,7 @@ class AddEventDialog extends PureComponent {
     this.state = {
       eventLevel: props.eventLevel,
       addEventData: props.addEventData,
-      specialEventStep: 1
+      tmpServiceStep: 1
     };
   }
 
@@ -119,13 +120,13 @@ class AddEventDialog extends PureComponent {
 
   onChangeEventType = ({ target: { value: eventType } }) => {
     this.setState(oldState => ({
-      eventLevel: eventType === EVENT_TYPE.SPECIAL || eventType === EVENT_TYPE.APPOINTMENT
+      eventLevel: eventType === EVENT_TYPE.TMP_SERVICE || eventType === EVENT_TYPE.APPOINTMENT
           ? EVENT_LEVEL.PROVIDER : oldState.eventLevel,
       addEventData: {
         ...oldState.addEventData,
         eventType,
-        special:
-          eventType === EVENT_TYPE.SPECIAL
+        tmpService:
+          eventType === EVENT_TYPE.TMP_SERVICE
             ? {
               additionalInfo: '',
               avgServiceTime: 30,
@@ -163,7 +164,7 @@ class AddEventDialog extends PureComponent {
               : oldState.addEventData.endTime
           }
         }),
-        () => this.onChangeSpecialDateTime('fromTime')(momentData.format())
+        () => this.onChangeTmpServiceDateTime('fromTime')(momentData.format())
       );
     }
 
@@ -172,7 +173,7 @@ class AddEventDialog extends PureComponent {
         oldState => ({
           addEventData: { ...oldState.addEventData, endTime: momentData.format() }
         }),
-        () => this.onChangeSpecialDateTime('toTime')(momentData.format())
+        () => this.onChangeTmpServiceDateTime('toTime')(momentData.format())
       );
     }
   };
@@ -276,25 +277,25 @@ class AddEventDialog extends PureComponent {
   };
 
   onClickNext = () => {
-    const { addEventData, specialEventStep } = this.state;
-    if (addEventData.eventType === EVENT_TYPE.SPECIAL && specialEventStep === 1) {
-      this.setState({ specialEventStep: 2 });
+    const { addEventData, tmpServiceStep } = this.state;
+    if (addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1) {
+      this.setState({ tmpServiceStep: 2 });
     } else {
       this.props.createNewEvent(this.state.addEventData);
     }
   };
 
   onClickPrevious = () => {
-    this.setState({ specialEventStep: 1 });
+    this.setState({ tmpServiceStep: 1 });
   };
 
   onChangeAvgServiceTime = ({ target: { value } }) => {
     if (isNaN(Number(value)) || value === null) return;
-    this.setState(({ addEventData, addEventData: { special } }) => ({
+    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
       addEventData: {
         ...addEventData,
-        special: {
-          ...special,
+        tmpService: {
+          ...tmpService,
           avgServiceTime: value.length === 0 ? value : Number(value)
         }
       }
@@ -302,11 +303,11 @@ class AddEventDialog extends PureComponent {
   };
 
   onBlurServiceTime = ({ target: { value } }) => {
-    this.setState(({ addEventData, addEventData: { special } }) => ({
+    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
       addEventData: {
         ...addEventData,
-        special: {
-          ...special,
+        tmpService: {
+          ...tmpService,
           avgServiceTime: value.length === 0 ? 30 : Number(value)
         }
       }
@@ -315,11 +316,11 @@ class AddEventDialog extends PureComponent {
 
   onChangeParallelCustomer = ({ target: { value } }) => {
     if (isNaN(Number(value)) || value === null) return;
-    this.setState(({ addEventData, addEventData: { special } }) => ({
+    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
       addEventData: {
         ...addEventData,
-        special: {
-          ...special,
+        tmpService: {
+          ...tmpService,
           numberOfParallelCustomer: value.length === 0 ? value : Number(value)
         }
       }
@@ -327,49 +328,49 @@ class AddEventDialog extends PureComponent {
   };
 
   onBlurParallelCustomer = ({ target: { value } }) => {
-    this.setState(({ addEventData, addEventData: { special } }) => ({
+    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
       addEventData: {
         ...addEventData,
-        special: {
-          ...special,
+        tmpService: {
+          ...tmpService,
           numberOfParallelCustomer: value.length === 0 ? 1 : Number(value)
         }
       }
     }));
   };
 
-  onChangeSpecialDateTime = type => data => {
+  onChangeTmpServiceDateTime = type => data => {
     const momentData = moment(data);
     if (type === 'fromTime') {
       this.setState((oldState) => produce(oldState, (draftState) => {
-        draftState.addEventData.special.breakTimeStart = momentData.format();
-        draftState.addEventData.special.breakTimeEnd = moment(draftState.addEventData.special.breakTimeEnd).isBefore(momentData)
+        draftState.addEventData.tmpService.breakTimeStart = momentData.format();
+        draftState.addEventData.tmpService.breakTimeEnd = moment(draftState.addEventData.tmpService.breakTimeEnd).isBefore(momentData)
           ? momentData.clone().add(1, 'hour').format()
-          : draftState.addEventData.special.breakTimeEnd
+          : draftState.addEventData.tmpService.breakTimeEnd
       }));
     }
 
     if (type === 'toTime') {
       this.setState((oldState) => produce(oldState, (draftState) => {
-        draftState.addEventData.special.breakTimeEnd = momentData.format();
+        draftState.addEventData.tmpService.breakTimeEnd = momentData.format();
       }));
     }
   };
 
   onChangeAdditionInfo = debounce(value => {
-    this.setState(({ addEventData, addEventData: { special } }) => ({
+    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
       addEventData: {
         ...addEventData,
-        special: { ...special, additionalInfo: value }
+        tmpService: { ...tmpService, additionalInfo: value }
       }
     }));
   });
 
   onSelectLocation = ({ target: { value } }) => {
-    this.setState(({ addEventData, addEventData: { special } }) => ({
+    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
       addEventData: {
         ...addEventData,
-        special: { ...special, geoLocationId: value }
+        tmpService: { ...tmpService, geoLocationId: value }
       }
     }));
   };
@@ -377,7 +378,7 @@ class AddEventDialog extends PureComponent {
   validateAvgServiceTime = () => {
     const {
       addEventData: {
-        special: { avgServiceTime }
+        tmpService: { avgServiceTime }
       }
     } = this.state;
     if (avgServiceTime < 30) {
@@ -392,7 +393,7 @@ class AddEventDialog extends PureComponent {
   validateParallelCustomer = () => {
     const {
       addEventData: {
-        special: { numberOfParallelCustomer }
+        tmpService: { numberOfParallelCustomer }
       }
     } = this.state;
     if (numberOfParallelCustomer < 1) {
@@ -409,7 +410,7 @@ class AddEventDialog extends PureComponent {
       addEventData: {
         startTime,
         endTime,
-        special: { breakTimeStart, breakTimeEnd }
+        tmpService: { breakTimeStart, breakTimeEnd }
       }
     } = this.state;
     const value = moment(breakTimeStart);
@@ -424,7 +425,7 @@ class AddEventDialog extends PureComponent {
       addEventData: {
         startTime,
         endTime,
-        special: { breakTimeStart, breakTimeEnd }
+        tmpService: { breakTimeStart, breakTimeEnd }
       }
     } = this.state;
     const value = moment(breakTimeEnd);
@@ -437,7 +438,7 @@ class AddEventDialog extends PureComponent {
   onSelectService = event => {
     const service = event.target.value;
     this.setState(oldState => produce(oldState, draftState => {
-      draftState.addEventData.special.serviceId = service;
+      draftState.addEventData.tmpService.serviceId = service;
     }));
   };
 
@@ -464,7 +465,7 @@ class AddEventDialog extends PureComponent {
               >
                 {Object.values(EVENT_TYPE).map(e => (
                   <MenuItem value={e} key={e}>
-                    {e}
+                    {EVENT_TYPE_TITLE[e]}
                   </MenuItem>
                 ))}
               </Select>
@@ -489,7 +490,7 @@ class AddEventDialog extends PureComponent {
                     {EVENT_LEVEL.PROVIDER}
                   </MenuItem>
                   {addEventData.eventType !== EVENT_TYPE.APPOINTMENT
-                    && addEventData.eventType !== EVENT_TYPE.SPECIAL &&
+                    && addEventData.eventType !== EVENT_TYPE.TMP_SERVICE &&
                     <MenuItem value={EVENT_LEVEL.BUSINESS}>
                       {EVENT_LEVEL.BUSINESS}
                     </MenuItem>}
@@ -838,7 +839,7 @@ class AddEventDialog extends PureComponent {
 
   render() {
     const { isOpenAddDialog, closeAddDialog, geoOptions, serviceOptions } = this.props;
-    const { addEventData, specialEventStep } = this.state;
+    const { addEventData, tmpServiceStep } = this.state;
     return (
       <Dialog
         open={isOpenAddDialog}
@@ -865,9 +866,9 @@ class AddEventDialog extends PureComponent {
           </Typography>
         </DialogTitle>
         <DialogContent>
-          {specialEventStep === 1 ?
+          {tmpServiceStep === 1 ?
             this.renderContent() :
-            <SpecialEventContent
+            <TmpServiceContent
               geoOptions={geoOptions}
               serviceOptions={serviceOptions}
               addEventData={addEventData}
@@ -875,7 +876,7 @@ class AddEventDialog extends PureComponent {
               onChangeAvgServiceTime={this.onChangeAvgServiceTime}
               onBlurServiceTime={this.onBlurServiceTime}
               validateAvgServiceTime={this.validateAvgServiceTime}
-              onChangeSpecialDateTime={this.onChangeSpecialDateTime}
+              onChangeTmpServiceDateTime={this.onChangeTmpServiceDateTime}
               validateBreakTimeFrom={this.validateBreakTimeFrom}
               validateBreakTimeTo={this.validateBreakTimeTo}
               onSelectLocation={this.onSelectLocation}
@@ -887,13 +888,13 @@ class AddEventDialog extends PureComponent {
           }
         </DialogContent>
         <DialogActions classes={{ root: styles.calendarDialogFooter }}>
-          {specialEventStep === 2 && (
+          {tmpServiceStep === 2 && (
             <Button variant="outlined" onClick={this.onClickPrevious} className={styles.prevButton}>
               Previous
             </Button>
           )}
           <Button variant="outlined" color="primary" onClick={this.onClickNext}>
-            {addEventData.eventType === EVENT_TYPE.SPECIAL && specialEventStep === 1
+            {addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1
               ? 'Next'
               : 'Create'}
           </Button>

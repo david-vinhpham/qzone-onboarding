@@ -1,26 +1,26 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { specialEventType, classesType } from 'types/global';
+import { tmpServiceType, classesType } from 'types/global';
 import { connect } from 'react-redux';
 import { Typography, Paper, Grid, Link, Button } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
-import { fetchSpecialEventDetail } from '../../actions/specialEventDetail';
+import { fetchTmpServiceDetail } from '../../actions/tmpServiceDetail';
 import gridSystemStyle from "assets/jss/material-dashboard-pro-react/views/gridSystemStyle";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { compose } from "redux";
 import Loading from 'components/Loading/Loading';
 import moment from 'moment-timezone';
 
-class SpecialEventsDetail extends PureComponent {
+class TmpServicesDetail extends PureComponent {
   componentDidMount() {
-    if (!this.props.specialEventDetail.id) {
+    if (!this.props.tmpServiceDetail.id) {
       const { id } = this.props.match.params;
-      this.props.fetchSpecialEventDetail(id);
+      this.props.fetchTmpServiceDetail(id);
     }
   }
 
   render() {
-    const { specialEventDetail, classes } = this.props;
+    const { tmpServiceDetail, classes } = this.props;
 
     return (
       <Paper>
@@ -31,7 +31,7 @@ class SpecialEventsDetail extends PureComponent {
             </Button>
             <Typography inline variant="h6">Event detail</Typography>
           </div>
-          {specialEventDetail.custUrl ?
+          {tmpServiceDetail.custUrl ?
             <Grid container spacing={16}>
               <Grid item sm={3} xs={12}>
                 <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
@@ -51,12 +51,12 @@ class SpecialEventsDetail extends PureComponent {
               <Grid item sm={9} xs={12}>
                 <Link
                   className={classes.custUrl}
-                  title={specialEventDetail.custUrl}
-                  href={specialEventDetail.custUrl}
+                  title={tmpServiceDetail.custUrl}
+                  href={tmpServiceDetail.custUrl}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  {specialEventDetail.custUrl}
+                  {tmpServiceDetail.custUrl}
                 </Link>
               </Grid>
               <Grid item sm={3} xs={12}>
@@ -66,12 +66,12 @@ class SpecialEventsDetail extends PureComponent {
               </Grid>
               <Grid item sm={9} xs={12}>
                 <Typography variant="body2">
-                  {moment(specialEventDetail.slot.startTime * 1000).format('L LT Z')}
+                  {moment(tmpServiceDetail.slot.startTime * 1000).format('L LT Z')}
                   &nbsp;---&nbsp;
-                  {moment(specialEventDetail.slot.endTime * 1000).format('L LT Z')}
+                  {moment(tmpServiceDetail.slot.endTime * 1000).format('L LT Z')}
                 </Typography>
               </Grid>
-              {specialEventDetail.repeatType &&
+              {tmpServiceDetail.repeatType &&
                 <>
                   <Grid item sm={3} xs={12}>
                     <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
@@ -80,7 +80,7 @@ class SpecialEventsDetail extends PureComponent {
                   </Grid>
                   <Grid item sm={9} xs={12}>
                     <Typography variant="body2">
-                      {specialEventDetail.repeatType}
+                      {tmpServiceDetail.repeatType}
                     </Typography>
                   </Grid>
                 </>
@@ -94,18 +94,18 @@ class SpecialEventsDetail extends PureComponent {
                 <Typography variant="body2">
                   {
                     [
-                      specialEventDetail.geoLocation.streetAddress,
-                      specialEventDetail.geoLocation.district,
-                      specialEventDetail.geoLocation.city,
-                      specialEventDetail.geoLocation.state,
-                      specialEventDetail.geoLocation.country
+                      tmpServiceDetail.geoLocation.streetAddress,
+                      tmpServiceDetail.geoLocation.district,
+                      tmpServiceDetail.geoLocation.city,
+                      tmpServiceDetail.geoLocation.state,
+                      tmpServiceDetail.geoLocation.country
                     ]
                       .filter(str => str)
                       .join(', ')
                   }
                 </Typography>
               </Grid>
-              {specialEventDetail.description &&
+              {tmpServiceDetail.description &&
                 <>
                   <Grid item sm={3} xs={12}>
                     <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
@@ -114,7 +114,7 @@ class SpecialEventsDetail extends PureComponent {
                   </Grid>
                   <Grid item sm={9} xs={12}>
                     <Typography variant="body2">
-                      {specialEventDetail.description}
+                      {tmpServiceDetail.description}
                     </Typography>
                   </Grid>
                 </>
@@ -128,20 +128,20 @@ class SpecialEventsDetail extends PureComponent {
   }
 }
 
-SpecialEventsDetail.propTypes = {
-  fetchSpecialEventDetail: PropTypes.func.isRequired,
-  specialEventDetail: specialEventType.isRequired,
+TmpServicesDetail.propTypes = {
+  fetchTmpServiceDetail: PropTypes.func.isRequired,
+  tmpServiceDetail: tmpServiceType.isRequired,
   classes: classesType.isRequired
 };
 
 
 const mapsStateToProp = (state, ownProps) => ({
-  specialEventDetail: state.specialEvents.list.find(event => ownProps.match.params.id === event.id)
-    || state.specialEventDetail.eventDetail
+  tmpServiceDetail: state.tmpServices.list.find(event => ownProps.match.params.id === event.id)
+    || state.tmpServiceDetail.eventDetail
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSpecialEventDetail: eventId => dispatch(fetchSpecialEventDetail(eventId)),
+  fetchTmpServiceDetail: eventId => dispatch(fetchTmpServiceDetail(eventId)),
 });
 
 export default compose(
@@ -150,4 +150,4 @@ export default compose(
     mapsStateToProp,
     mapDispatchToProps
   )
-)(SpecialEventsDetail);
+)(TmpServicesDetail);

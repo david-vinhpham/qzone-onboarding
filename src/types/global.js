@@ -24,7 +24,7 @@ export const userDetailType = PropTypes.objectOf(PropTypes.oneOfType([
   PropTypes.object, PropTypes.string,
 ]));
 
-export const specialEventType = PropTypes.shape({
+export const tmpServiceType = PropTypes.shape({
   avgServiceTime: PropTypes.number,
   breakTime: PropTypes.shape({
     breakEnd: PropTypes.number,

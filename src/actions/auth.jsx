@@ -171,7 +171,7 @@ export function loginUser(values, history) {
               dispatch(registerUserSuccess(user.object));
               localStorage.setItem('user', JSON.stringify(user.object));
               localStorage.removeItem('serviceProvider');
-              localStorage.removeItem('specialEvents');
+              localStorage.removeItem('tmpServices');
               history.push('/dashboard');
             })
             .catch(err => {

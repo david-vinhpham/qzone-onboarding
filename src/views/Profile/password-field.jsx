@@ -102,7 +102,6 @@ class PasswordField extends PureComponent {
         <small>
           Password must be from 8 to 60 characters.
           <br />
-          {/* eslint-disable-next-line max-len */}
           Password must include at least 1 lowercase character(s), 1 uppercase character(s), 1 digit(s)
           and 1 special character(s) such as #?!@$%^&*-
         </small>

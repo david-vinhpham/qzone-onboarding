@@ -9,22 +9,22 @@ import moment from 'moment';
 import { LiveHelp } from '@material-ui/icons';
 import { TimeFormatInput } from 'material-ui-next-pickers';
 import addEventDialogStyles from '../AddEventDialog.module.scss';
-import styles from './SpecialEventContent.module.scss';
+import styles from './TmpServiceContent.module.scss';
 import { optionType } from 'types/global';
 
-export default function SpecialEventContent({
+export default function TmpServiceContent({
   geoOptions,
   serviceOptions,
-  addEventData: { special, startTime, endTime },
+  addEventData: { tmpService, startTime, endTime },
   onSelectService, onChangeAvgServiceTime,
   onBlurServiceTime, validateAvgServiceTime,
-  onChangeSpecialDateTime, validateBreakTimeFrom,
+  onChangeTmpServiceDateTime, validateBreakTimeFrom,
   validateBreakTimeTo, onSelectLocation,
   onBlurParallelCustomer, onChangeParallelCustomer,
   validateParallelCustomer, onChangeAdditionInfo
 }) {
-  const breakStartTime = moment(special.breakTimeStart).toDate();
-  const breakEndTime = moment(special.breakTimeEnd).toDate();
+  const breakStartTime = moment(tmpService.breakTimeStart).toDate();
+  const breakEndTime = moment(tmpService.breakTimeEnd).toDate();
 
   return (
     <Grid container spacing={8} className={addEventDialogStyles.calendarDatetimePicker}>
@@ -37,7 +37,7 @@ export default function SpecialEventContent({
           </Grid>
           <Grid item md={10}>
             <Select
-              value={special.serviceId}
+              value={tmpService.serviceId}
               onChange={onSelectService}
               className={addEventDialogStyles.eventTypeSelect}
             >
@@ -59,7 +59,7 @@ export default function SpecialEventContent({
           </Grid>
           <Grid item md={2}>
             <TextField
-              value={special.avgServiceTime}
+              value={tmpService.avgServiceTime}
               onChange={onChangeAvgServiceTime}
               onBlur={onBlurServiceTime}
               {...validateAvgServiceTime()}
@@ -95,7 +95,7 @@ export default function SpecialEventContent({
                 <TimeFormatInput
                   name="StartBreakTimeInput"
                   value={breakStartTime}
-                  onChange={onChangeSpecialDateTime('fromTime')}
+                  onChange={onChangeTmpServiceDateTime('fromTime')}
                   {...validateBreakTimeFrom()}
                 />
               </Grid>
@@ -108,7 +108,7 @@ export default function SpecialEventContent({
                 <TimeFormatInput
                   name="EndBreakTimeInput"
                   value={breakEndTime}
-                  onChange={onChangeSpecialDateTime('toTime')}
+                  onChange={onChangeTmpServiceDateTime('toTime')}
                   {...validateBreakTimeTo()}
                 />
               </Grid>
@@ -125,7 +125,7 @@ export default function SpecialEventContent({
           </Grid>
           <Grid item md={10}>
             <Select
-              value={special.geoLocationId}
+              value={tmpService.geoLocationId}
               onChange={onSelectLocation}
               className={addEventDialogStyles.eventTypeSelect}
             >
@@ -147,7 +147,7 @@ export default function SpecialEventContent({
           </Grid>
           <Grid item md={2}>
             <TextField
-              value={special.numberOfParallelCustomer}
+              value={tmpService.numberOfParallelCustomer}
               onChange={onChangeParallelCustomer}
               onBlur={onBlurParallelCustomer}
               {...validateParallelCustomer()}
@@ -170,7 +170,7 @@ export default function SpecialEventContent({
   );
 }
 
-SpecialEventContent.propTypes = {
+TmpServiceContent.propTypes = {
   geoOptions: PropTypes.arrayOf(optionType).isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
   addEventData: PropTypes.shape({
@@ -184,7 +184,7 @@ SpecialEventContent.propTypes = {
   onChangeAvgServiceTime: PropTypes.func.isRequired,
   onBlurServiceTime: PropTypes.func.isRequired,
   validateAvgServiceTime: PropTypes.func.isRequired,
-  onChangeSpecialDateTime: PropTypes.func.isRequired,
+  onChangeTmpServiceDateTime: PropTypes.func.isRequired,
   validateBreakTimeFrom: PropTypes.func.isRequired,
   validateBreakTimeTo: PropTypes.func.isRequired,
   onSelectLocation: PropTypes.func.isRequired,

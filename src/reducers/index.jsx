@@ -10,8 +10,8 @@ import ImageUploadReducer from './imageUpload.reducer';
 import LocationReducer from './location.reducer';
 import ServiceProviderReducer from './serviceProvider.reducer';
 import calendarManage from './calendar.reducer';
-import specialEventsReducer from './specialEvents.reducer';
-import specialEventDetail from './specialEventDetail.reducer';
+import tmpServicesReducer from './tmpServices.reducer';
+import tmpServiceDetail from './tmpServiceDetail.reducer';
 
 const rootReducer = combineReducers({
   provider: ProvidersReducer,
@@ -24,8 +24,8 @@ const rootReducer = combineReducers({
   location: LocationReducer,
   serviceProvider: ServiceProviderReducer,
   calendarManage,
-  specialEvents: specialEventsReducer,
-  specialEventDetail: specialEventDetail,
+  tmpServices: tmpServicesReducer,
+  tmpServiceDetail: tmpServiceDetail,
 });
 
 export default rootReducer;

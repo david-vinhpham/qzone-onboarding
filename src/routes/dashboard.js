@@ -39,8 +39,8 @@ import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
 import ServiceProviderList from '../views/ServiceProviderAssignment/ServiceProviderList';
 import ServiceProviderEdit from '../views/ServiceProviderAssignment/ServiceProviderEdit';
 import ServiceProviderCreate from '../views/ServiceProviderAssignment/ServiceProviderCreate';
-import SpecialEventsList from 'views/SpecialEvents/SpecialEventsList';
-import SpecialEventsDetail from 'views/SpecialEvents/SpecialEventsDetail';
+import TmpServicesList from 'views/TmpServices/TmpServicesList';
+import TmpServicesDetail from 'views/TmpServices/TmpServicesDetail';
 
 export const dashboardRoutes = [
   {
@@ -214,14 +214,14 @@ export const otherRoutes = [
   },
   {
     path: '/tmp-services',
-    name: 'List special events',
-    short: 'List special events',
-    component: SpecialEventsList
+    name: 'List temporary services',
+    short: 'List temporary services',
+    component: TmpServicesList
   },
   {
     path: '/tmp-service/detail/:id',
-    name: 'Special event detail',
-    short: 'Special event detail',
-    component: SpecialEventsDetail
+    name: 'Temporary service detail',
+    short: 'Temporary service detail',
+    component: TmpServicesDetail
   }
 ];

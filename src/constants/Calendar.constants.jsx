@@ -26,7 +26,7 @@ export const EVENT_TYPE = Object.freeze({
   CLOSED: 'CLOSED',
   WEEKEND: 'WEEKEND',
   HOLIDAY: 'HOLIDAY',
-  SPECIAL: 'SPECIAL',
+  TMP_SERVICE: 'TMP_SERVICE',
   VACATION: 'VACATION'
 });
 
@@ -36,7 +36,7 @@ export const EVENT_TYPE_TITLE = Object.freeze({
   [EVENT_TYPE.CLOSED]: 'Closed',
   [EVENT_TYPE.WEEKEND]: 'Weekend',
   [EVENT_TYPE.HOLIDAY]: 'Holiday',
-  [EVENT_TYPE.SPECIAL]: 'Special',
+  [EVENT_TYPE.TMP_SERVICE]: 'Temporary service',
   [EVENT_TYPE.VACATION]: 'Vacation'
 });
 
@@ -65,7 +65,7 @@ export const EVENT_BG_COLOR = Object.freeze({
     color: '#fff',
     backgroundColor: '#4c4c4c'
   },
-  [EVENT_TYPE.SPECIAL]: {
+  [EVENT_TYPE.TMP_SERVICE]: {
     color: 'black',
     backgroundColor: '#ffeb3b'
   }

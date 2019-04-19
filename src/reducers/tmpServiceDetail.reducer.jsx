@@ -1,4 +1,4 @@
-import { specialEventDetail } from '../constants/SpecialEventDetail.constants';
+import { tmpServiceDetail } from '../constants/TmpServiceDetail.constants';
 
 const initialState = {
   isLoading: false,
@@ -8,11 +8,11 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case specialEventDetail.FETCH_SPECIAL_EVENT_DETAIL_LOADING:
+    case tmpServiceDetail.FETCH_TMP_SERVICE_DETAIL_LOADING:
       return { ...state, isLoading: true };
-    case specialEventDetail.FETCH_SPECIAL_EVENT_DETAIL_SUCCESS:
+    case tmpServiceDetail.FETCH_TMP_SERVICE_DETAIL_SUCCESS:
       return { ...state, eventDetail: action.payload, isLoading: false };
-    case specialEventDetail.FETCH_SPECIAL_EVENT_DETAIL_FAILURE:
+    case tmpServiceDetail.FETCH_TMP_SERVICE_DETAIL_FAILURE:
       return {
         ...state,
         eventDetail: {},

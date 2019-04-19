@@ -90,7 +90,7 @@ export const fetchNormalEventByBusinessId = businessId => dispatch => {
 
       return Promise.all(fetchEvents).then(rep => {
         const tmpEvents = reduce(rep, (acc, { data }) => acc.concat(get(data, 'objects', [])), []);
-        const events = tmpEvents.map(e => ({ ...e, type: e.type || EVENT_TYPE.SPECIAL }))
+        const events = tmpEvents.map(e => ({ ...e, type: e.type || EVENT_TYPE.TMP_SERVICE }))
         dispatch(fetchNormalEventByProvidersSuccess(events));
         dispatch(fetchProvidersByOrgSuccess(providers));
       });
@@ -108,7 +108,7 @@ export const createNewEvent = newEvent => dispatch => {
 
   let api = URL.NEW_NORMAL_EVENT;
 
-  if(newEvent.type === EVENT_TYPE.SPECIAL) {
+  if(newEvent.type === EVENT_TYPE.TMP_SERVICE) {
     api = URL.NEW_TMP_SERVICE;
   }
 
