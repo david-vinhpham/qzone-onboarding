@@ -16,7 +16,7 @@ class ManageCalendar extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      selectedProvider: 'all'
+      selectedProvider: 'none'
     };
   }
 
@@ -105,8 +105,8 @@ class ManageCalendar extends React.PureComponent {
         onChange={this.onSelectProvider}
         className={styles.selectProvider}
       >
-        <MenuItem value="all">
-          All providers
+        <MenuItem value="none">
+          Select provider
         </MenuItem>
         {this.props.providers.map(prov => (
           <MenuItem value={prov.id} key={prov.id}>
@@ -129,9 +129,7 @@ class ManageCalendar extends React.PureComponent {
   render() {
     const { providers, calendarData, onClickNewEvent } = this.props;
     const { selectedProvider } = this.state;
-    const resources = selectedProvider === 'all'
-      ? providers
-      : providers.filter(prov => prov.id === selectedProvider);
+    const resources = providers.filter(prov => prov.id === selectedProvider);
 
     return (
       <Calendar
