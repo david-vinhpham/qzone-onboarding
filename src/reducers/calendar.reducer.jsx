@@ -2,7 +2,7 @@ import moment from 'moment';
 import { flow, map, sortBy, isEmpty, toUpper, get } from 'lodash';
 import { DATETIME_FORMAT } from 'react-big-scheduler';
 import {
-  FETCH_PROVIDER_BY_ORG,
+  FETCH_PROVIDER_BY_BUSINESS_ID,
   FETCH_NORM_EVENTS_BY_PROVIDER,
   CALENDAR_LOADING,
   FETCH_TIMEZONE_OPTIONS,
@@ -69,7 +69,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_PROVIDER_BY_ORG.SUCCESS:
+    case FETCH_PROVIDER_BY_BUSINESS_ID.SUCCESS:
       return {
         ...state,
         providers: flow(

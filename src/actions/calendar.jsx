@@ -5,7 +5,7 @@ import { API_ROOT, URL } from 'config/config';
 import {
   CALENDAR_LOADING,
   FETCH_NORM_EVENTS_BY_PROVIDER,
-  FETCH_PROVIDER_BY_ORG,
+  FETCH_PROVIDER_BY_BUSINESS_ID,
   CREATE_CALENDAR_EVENT,
   EVENT_TYPE,
   FETCH_GEO_OPTIONS,
@@ -23,8 +23,8 @@ export const fetchNormalEventByProvidersSuccess = calendarData => ({
   calendarData
 });
 
-export const fetchProvidersByOrgSuccess = providers => ({
-  type: FETCH_PROVIDER_BY_ORG.SUCCESS,
+export const fetchProvidersByBusinessIdSuccess = providers => ({
+  type: FETCH_PROVIDER_BY_BUSINESS_ID.SUCCESS,
   providers
 });
 
@@ -92,7 +92,7 @@ export const fetchNormalEventByBusinessId = businessId => dispatch => {
         const tmpEvents = reduce(rep, (acc, { data }) => acc.concat(get(data, 'objects', [])), []);
         const events = tmpEvents.map(e => ({ ...e, type: e.type || EVENT_TYPE.TMP_SERVICE }))
         dispatch(fetchNormalEventByProvidersSuccess(events));
-        dispatch(fetchProvidersByOrgSuccess(providers));
+        dispatch(fetchProvidersByBusinessIdSuccess(providers));
       });
     })
     .finally(() => {
