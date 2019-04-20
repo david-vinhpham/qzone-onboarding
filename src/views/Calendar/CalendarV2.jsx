@@ -99,7 +99,11 @@ class ManageCalendar extends React.PureComponent {
   }
 
   rightCustomHeader = () => (
-    <div>
+    <div className={styles.calendarRightCustomHeader}>
+      {this.state.selectedProvider !== 'none' &&
+        <Typography inline classes={{ root: styles.providerTimezone }}>
+          Time zone: {(this.props.providers.find(p => p.id === this.state.selectedProvider) || {}).timezone}
+        </Typography>}
       <Select
         value={this.state.selectedProvider}
         onChange={this.onSelectProvider}
