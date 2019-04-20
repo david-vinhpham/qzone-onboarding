@@ -103,17 +103,6 @@ class TmpServicesList extends PureComponent {
         />
       );
     }
-    if (delTmpServiceLoading) {
-      return (
-        <ClipLoader
-          css={override}
-          sizeUnit="px"
-          size={100}
-          color="#123abc"
-          loading={delTmpServiceLoading}
-        />
-      );
-    }
     if (delTmpServiceError) {
       return <div className="alert alert-danger">Error</div>;
     }
@@ -159,11 +148,11 @@ class TmpServicesList extends PureComponent {
                     placement="bottom"
                     classes={{ tooltip: classes.tooltip }}
                   >
-                    <Link to={`/tmp-service/edit/${event.id}`}>
+                    {/*  <Link to={`/tmp-service/edit/${event.id}`}> */}
                       <Button color="success" simple justIcon>
                         <Edit className={classes.underChartIcons} />
                       </Button>
-                    </Link>
+                    {/* </Link> */}
                   </Tooltip>
                   <Tooltip
                     id="tooltip-top"

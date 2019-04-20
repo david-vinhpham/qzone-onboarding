@@ -27,18 +27,20 @@ export const deleteTmpService = eventId => {
           const objects = {
             data: []
           };
+          let position = -1;
           const tmpServices = localStorage.getItem('tmpServices');
           if (tmpServices !== null) {
-            const listTmpServices = JSON.parse(tmpServices);
+            let listTmpServices = JSON.parse(tmpServices);
             for (let i = 0; i < listTmpServices.length; i += 1) {
               if (listTmpServices[i].id === eventId) {
-                delete listTmpServices[i];
+                position = i;
+                listTmpServices.splice(position, 1);
                 break;
               }
             }
-            if (listTmpServices.length > 0) {
-              objects.data = listTmpServices; // json
-              localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
+            if(position !== -1 && listTmpServices.length > 0) {
+                objects.data = listTmpServices; // json
+                localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
             }
             dispatch({
               type: tmp_service.DEL_TMP_SERVICE_SUCCESS,
