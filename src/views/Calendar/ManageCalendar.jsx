@@ -67,7 +67,7 @@ class ManageCalendar extends React.PureComponent {
           repeatEnd: {}
         },
         timezoneId,
-        serviceId: this.props.serviceOptions[0].value,
+        serviceId: this.props.serviceOptions.length > 0 ? this.props.serviceOptions[0].value : 0,
         tmpService: {},
         ...(providerId ?
           {

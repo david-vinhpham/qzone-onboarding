@@ -34,7 +34,6 @@ const reducer = (state = initialState, action) => {
     case tmp_service.DEL_TMP_SERVICE_FAILURE:
       return {
         ...state,
-        list: [],
         delTmpServiceError: action.payload.error,
         isLoading: false
       };

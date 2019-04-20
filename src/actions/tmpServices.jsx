@@ -39,9 +39,9 @@ export const deleteTmpService = eventId => {
               }
             }
             if(position !== -1 && listTmpServices.length > 0) {
-                objects.data = listTmpServices; // json
                 localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
             }
+            objects.data = listTmpServices; // json
             dispatch({
               type: tmp_service.DEL_TMP_SERVICE_SUCCESS,
               payload: objects.data
