@@ -12,6 +12,7 @@ import {
   FETCH_TIMEZONE_OPTIONS,
   FETCH_SERVICE_OPTIONS
 } from 'constants/Calendar.constants';
+import { serviceProvider } from "../constants/ServiceProvider.constants";
 
 export const calendarLoading = isLoading => ({
   type: CALENDAR_LOADING,
@@ -31,6 +32,11 @@ export const fetchProvidersByOrgSuccess = providers => ({
 export const createEventSuccess = newEvent => ({
   type: CREATE_CALENDAR_EVENT.SUCCESS,
   newEvent
+});
+
+export const createEventFailure = error => ({
+  type: CREATE_CALENDAR_EVENT.FAILURE,
+  error
 });
 
 export const fetchGeoOptionsSuccess = geoOptions => ({
@@ -103,6 +109,12 @@ export const fetchNormalEventByBusinessId = businessId => dispatch => {
     });
 };
 
+export const createNewEventFailure = error => {
+  return {
+    type: serviceProvider.CREATE_SERVICE_PROVIDER_FAILURE,
+    payload: { error }
+  };
+};
 export const createNewEvent = newEvent => dispatch => {
   dispatch(calendarLoading(true));
 
@@ -133,6 +145,10 @@ export const createNewEvent = newEvent => dispatch => {
         }
       }
       dispatch(createEventSuccess(event));
+    })
+    .catch(err => {
+      alert(err.response.data.message);
+      dispatch(createEventFailure(err));
     })
     .finally(() => {
       dispatch(calendarLoading(false));

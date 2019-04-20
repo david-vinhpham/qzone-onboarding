@@ -134,7 +134,7 @@ class AddEventDialog extends PureComponent {
               breakTimeEnd: oldState.addEventData.endTime,
               geoLocationId: this.props.geoOptions[0].value,
               numberOfParallelCustomer: 1,
-              serviceId: this.props.serviceOptions[0].value,
+              serviceId: this.props.serviceOptions.length >0 ? this.props.serviceOptions[0].value : 0,
             } : {}
       }
     }));
