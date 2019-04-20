@@ -124,6 +124,14 @@ export const createNewEvent = newEvent => dispatch => {
         ...data,
         type: data.type || newEvent.type
       };
+      if(newEvent.type === EVENT_TYPE.TMP_SERVICE) {
+        const tmpServices = localStorage.getItem('tmpServices');
+        if (tmpServices !== null) {
+          const listTmpServices = JSON.parse(tmpServices);
+          listTmpServices.push(data);
+          localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
+        }
+      }
       dispatch(createEventSuccess(event));
     })
     .finally(() => {
