@@ -26,17 +26,16 @@ const reducer = (state = initialState, action) => {
       return { ...state, isLoading: action.payload };
 
     case tmp_service.DEL_TMP_SERVICE_LOADING:
-      return { ...state, delTmpServiceLoading: true };
+      return { ...state, isLoading: true };
 
     case tmp_service.DEL_TMP_SERVICE_SUCCESS:
-      return { ...state, tmp_service: action.payload , delTmpServiceLoading: false };
+      return { ...state, list: action.payload , isLoading: false };
 
     case tmp_service.DEL_TMP_SERVICE_FAILURE:
       return {
         ...state,
-        tmp_service: [],
         delTmpServiceError: action.payload.error,
-        delTmpServiceLoading: false
+        isLoading: false
       };
     default:
       return state;
