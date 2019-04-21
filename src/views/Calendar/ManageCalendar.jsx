@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { isEmpty } from 'lodash';
 
 import { fetchNormalEventByBusinessId, createNewEvent } from 'actions/calendar';
@@ -48,16 +48,10 @@ class ManageCalendar extends React.PureComponent {
 
   onClickNewEvent = (schedulerData, providerId, providerName, startTime, endTime) => {
     this.setState(() => {
-      let timezoneId = this.props.tzOptions[0].value;
       const defaultProvider = this.props.providers[0];
-      if (providerId) {
-        const providerTimezone = this.props.providers.find(
-          provider => provider.id === providerId
-        ).timezone;
-        timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === providerTimezone.toLowerCase()).value;
-      } else {
-        timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === defaultProvider.timezone.toLowerCase()).value;
-      }
+      const timezoneId = providerId
+        ? this.props.providers.find(provider => provider.id === providerId).timezone
+        : this.props.tzOptions.find(tz => tz.label.toLowerCase() === defaultProvider.timezone.toLowerCase()).label;
 
       const addEventData = {
         eventType: Object.values(EVENT_TYPE)[0],
@@ -78,8 +72,8 @@ class ManageCalendar extends React.PureComponent {
           } : {
             providerId: defaultProvider.id,
             providerName: defaultProvider.name,
-            startTime: moment(),
-            endTime: moment().add(1, 'hour')
+            startTime: moment().format(),
+            endTime: moment().add(1, 'hour').format()
           })
       };
 
@@ -91,7 +85,12 @@ class ManageCalendar extends React.PureComponent {
     });
   };
 
-  generateRepeatPayload = repeat => {
+  convertTimeToSpecificOffset = (time, offset) => {
+    const tmpTime = time.split('+');
+    return `${tmpTime[0]}${offset}`;
+  }
+
+  generateRepeatPayload = (repeat, timezoneId, providerTzOffset) => {
     let repeatPayload = {};
 
     if (repeat.type === EVENT_REPEAT_TYPE.DAILY) {
@@ -113,7 +112,7 @@ class ManageCalendar extends React.PureComponent {
         repeat: {
           repeatWeekly: {
             repeatEveryNumWeeks: repeat.every,
-            repeatOn: repeat.everyDate.join(',')
+            repeatOn: repeat.everyDate
           }
         }
       };
@@ -140,9 +139,10 @@ class ManageCalendar extends React.PureComponent {
           ...repeatPayload,
           repeatEndType: REPEAT_END_TYPE.ON_DATE,
           repeatEnd: {
-            repeatEndOn: moment(repeat.repeatEnd.onDate)
-              .startOf('day')
-              .unix()
+            repeatEndOn: moment.tz(
+              this.convertTimeToSpecificOffset(repeat.repeatEnd.onDate, providerTzOffset),
+              timezoneId
+            ).unix()
           }
         };
       }
@@ -151,7 +151,7 @@ class ManageCalendar extends React.PureComponent {
     return repeatPayload;
   };
 
-  generateTmpServicePayload = tmpService => {
+  generateTmpServicePayload = (tmpService, timezoneId, providerTzOffset) => {
     const {
       additionalInfo,
       avgServiceTime,
@@ -161,13 +161,15 @@ class ManageCalendar extends React.PureComponent {
       numberOfParallelCustomer,
       serviceId
     } = tmpService;
+    const providerBreakStartTime = this.convertTimeToSpecificOffset(breakTimeStart, providerTzOffset);
+    const providerBreakEndTime = this.convertTimeToSpecificOffset(breakTimeEnd, providerTzOffset);
 
     return {
       additionalInfo: additionalInfo.length === 0 ? undefined : additionalInfo,
       avgServiceTime,
       breakTime: {
-        breakStart: moment(breakTimeStart).unix(),
-        breakEnd: moment(breakTimeEnd).unix()
+        breakStart: moment.tz(providerBreakStartTime, timezoneId).unix(),
+        breakEnd: moment.tz(providerBreakEndTime, timezoneId).unix()
       },
       geoLocationId,
       numberOfParallelCustomer,
@@ -192,23 +194,26 @@ class ManageCalendar extends React.PureComponent {
       customerLastName,
       customerMobilePhone,
     } = addEventData;
+    const providerTzOffset = moment().tz(timezoneId).format('Z');
+    const providerStartTime = this.convertTimeToSpecificOffset(startTime, providerTzOffset);
+    const providerEndTime = this.convertTimeToSpecificOffset(endTime, providerTzOffset);
 
     let payload = {
       description,
       providerId,
       slot: {
-        startTime: moment(startTime).unix(),
-        endTime: moment(endTime).unix()
+        startTime: moment.tz(providerStartTime, timezoneId).unix(),
+        endTime: moment.tz(providerEndTime, timezoneId).unix()
       },
       type: eventType,
     };
 
     if (eventType === EVENT_TYPE.TMP_SERVICE) {
-      payload = { ...payload, ...this.generateTmpServicePayload(tmpService) };
+      payload = { ...payload, ...this.generateTmpServicePayload(tmpService, timezoneId, providerTzOffset) };
     }
 
     if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
-      payload = { ...payload, ...this.generateRepeatPayload(repeat) };
+      payload = { ...payload, ...this.generateRepeatPayload(repeat, timezoneId, providerTzOffset) };
     }
 
     if (eventType === EVENT_TYPE.APPOINTMENT) {

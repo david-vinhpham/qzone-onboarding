@@ -6,9 +6,9 @@ import {
   DialogActions, Select, MenuItem, TextField, Chip,
   Checkbox, ListItemText, Radio
 } from '@material-ui/core';
-import { get, debounce, map, isEmpty, isNaN } from 'lodash';
+import { get, map, isEmpty, isNaN } from 'lodash';
 import { DateFormatInput, TimeFormatInput } from 'material-ui-next-pickers';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import produce from 'immer';
 import PhoneInput from 'react-phone-number-input';
 import {
@@ -49,33 +49,20 @@ class AddEventDialog extends PureComponent {
     );
   };
 
-  onDescriptionChange = debounce(
-    description =>
-      this.setState(oldState => ({
-        addEventData: { ...oldState.addEventData, description }
-      })),
-    100
-  );
+  onDescriptionChange = description =>
+    this.setState(oldState => ({
+      addEventData: { ...oldState.addEventData, description }
+    }));
 
   onSelectProvider = event => {
     const selectedProvider = this.props.providers.find(p => p.id === event.target.value);
     const selectedProviderTz = selectedProvider.timezone;
-    const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProviderTz.toLowerCase()).value;
+    const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProviderTz.toLowerCase()).label;
     this.setState(oldState => ({
       addEventData: {
         ...oldState.addEventData,
         providerId: selectedProvider.id,
         providerName: selectedProvider.name,
-        timezoneId
-      }
-    }));
-  };
-
-  onSelectTimezone = event => {
-    const timezoneId = event.target.value;
-    this.setState(oldState => ({
-      addEventData: {
-        ...oldState.addEventData,
         timezoneId
       }
     }));
@@ -121,7 +108,7 @@ class AddEventDialog extends PureComponent {
   onChangeEventType = ({ target: { value: eventType } }) => {
     this.setState(oldState => ({
       eventLevel: eventType === EVENT_TYPE.TMP_SERVICE || eventType === EVENT_TYPE.APPOINTMENT
-          ? EVENT_LEVEL.PROVIDER : oldState.eventLevel,
+        ? EVENT_LEVEL.PROVIDER : oldState.eventLevel,
       addEventData: {
         ...oldState.addEventData,
         eventType,
@@ -164,7 +151,7 @@ class AddEventDialog extends PureComponent {
               : oldState.addEventData.endTime
           }
         }),
-        () => this.onChangeTmpServiceDateTime('fromTime')(momentData.format())
+        () => this.onChangeTmpServiceDateTime('fromTime')(data)
       );
     }
 
@@ -173,7 +160,7 @@ class AddEventDialog extends PureComponent {
         oldState => ({
           addEventData: { ...oldState.addEventData, endTime: momentData.format() }
         }),
-        () => this.onChangeTmpServiceDateTime('toTime')(momentData.format())
+        () => this.onChangeTmpServiceDateTime('toTime')(data)
       );
     }
   };
@@ -230,7 +217,7 @@ class AddEventDialog extends PureComponent {
                 onDate: moment(addEventData.startTime)
                   .clone()
                   .add(1, 'week')
-                  .toDate()
+                  .format()
               };
             }
             return data;
@@ -270,7 +257,7 @@ class AddEventDialog extends PureComponent {
       return {
         addEventData: {
           ...addEventData,
-          repeat: { ...repeat, repeatEnd: { onDate: moment(data).toDate() } }
+          repeat: { ...repeat, repeatEnd: { onDate: moment(data).format() } }
         }
       };
     });
@@ -357,14 +344,13 @@ class AddEventDialog extends PureComponent {
     }
   };
 
-  onChangeAdditionInfo = debounce(value => {
+  onChangeAdditionInfo = value =>
     this.setState(({ addEventData, addEventData: { tmpService } }) => ({
       addEventData: {
         ...addEventData,
         tmpService: { ...tmpService, additionalInfo: value }
       }
     }));
-  });
 
   onSelectLocation = ({ target: { value } }) => {
     this.setState(({ addEventData, addEventData: { tmpService } }) => ({
@@ -443,10 +429,13 @@ class AddEventDialog extends PureComponent {
   };
 
   renderContent = () => {
-    const { providers, tzOptions, serviceOptions } = this.props;
+    const { providers, serviceOptions } = this.props;
     const { eventLevel, addEventData } = this.state;
     const startTime = moment(addEventData.startTime).toDate();
     const endTime = moment(addEventData.endTime).toDate();
+    const repeatUntilDate = addEventData.repeat.repeatEnd.onDate
+      ? moment(addEventData.repeat.repeatEnd.onDate).toDate()
+      : undefined;
 
     return (
       <Grid container spacing={8} className={styles.calendarDatetimePicker}>
@@ -499,31 +488,29 @@ class AddEventDialog extends PureComponent {
             </Grid>
           </Grid>
           {eventLevel === EVENT_LEVEL.PROVIDER && (
-            <Grid item md={12}>
-              <Grid container spacing={8}>
-                <Grid item md={2} className={styles.label}>
-                  <Typography variant="body2" noWrap inline>
-                    Provider:
-                  </Typography>
-                </Grid>
-                <Grid item md={10}>
-                  <Select
-                    value={addEventData.providerId}
-                    onChange={this.onSelectProvider}
-                    className={styles.eventTypeSelect}
-                  >
-                    {providers.map(provider => (
-                      <MenuItem value={provider.id} key={provider.id}>
-                        {provider.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
+            <>
+              <Grid item md={12}>
+                <Grid container spacing={8}>
+                  <Grid item md={2} className={styles.label}>
+                    <Typography variant="body2" noWrap inline>
+                      Provider:
+                    </Typography>
+                  </Grid>
+                  <Grid item md={10}>
+                    <Select
+                      value={addEventData.providerId}
+                      onChange={this.onSelectProvider}
+                      className={styles.eventTypeSelect}
+                    >
+                      {providers.map(provider => (
+                        <MenuItem value={provider.id} key={provider.id}>
+                          {provider.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          )}
-          {addEventData.eventType === EVENT_TYPE.APPOINTMENT &&
-            <>
               <Grid item md={12}>
                 <Grid container spacing={8}>
                   <Grid item md={2} className={styles.label}>
@@ -532,20 +519,18 @@ class AddEventDialog extends PureComponent {
                     </Typography>
                   </Grid>
                   <Grid item md={10}>
-                    <Select
+                    <TextField
+                      fullWidth
+                      readOnly
                       value={addEventData.timezoneId}
-                      onChange={this.onSelectTimezone}
-                      className={styles.eventTypeSelect}
-                    >
-                      {tzOptions.map(tz => (
-                        <MenuItem value={tz.value} key={tz.label}>
-                          {tz.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    />
                   </Grid>
                 </Grid>
               </Grid>
+            </>
+          )}
+          {addEventData.eventType === EVENT_TYPE.APPOINTMENT &&
+            <>
               <Grid item md={12}>
                 <Grid container spacing={8}>
                   <Grid item md={2} className={styles.label}>
@@ -674,6 +659,7 @@ class AddEventDialog extends PureComponent {
         </Grid>
         <Grid item md={12}>
           <TextField
+            value={addEventData.description}
             className={styles.calendarDesc}
             label="Description"
             placeholder="Type a meaningful description about the event"
@@ -744,18 +730,15 @@ class AddEventDialog extends PureComponent {
                       </Grid>
                       <Grid item md={10}>
                         <Select
-                          multiple
                           value={addEventData.repeat.everyDate}
                           onChange={this.onSelectRepeatDay}
                           renderValue={selected => (
                             <div className={styles.repeatDayChip}>
-                              {selected.map(value => (
-                                <Chip
-                                  key={`REPEAT_DATE_DEF-${value}-Chip`}
-                                  label={value}
-                                  className={styles.repeatDayChip}
-                                />
-                              ))}
+                              <Chip
+                                key={`REPEAT_DATE_DEF-${selected}-Chip`}
+                                label={selected}
+                                className={styles.repeatDayChip}
+                              />
                             </div>
                           )}
                           className={styles.eventTypeSelect}
@@ -821,8 +804,13 @@ class AddEventDialog extends PureComponent {
                           On:
                         </Typography>
                         <DateFormatInput
-                          name="EndDateInput"
-                          value={addEventData.repeat.repeatEnd.onDate}
+                          name="RepeatUntilDateInput"
+                          value={repeatUntilDate}
+                          onChange={this.onChangeRepeatEndDate}
+                        />
+                        <TimeFormatInput
+                          name="RepeatUntilTimeInput"
+                          value={repeatUntilDate}
                           onChange={this.onChangeRepeatEndDate}
                         />
                       </div>

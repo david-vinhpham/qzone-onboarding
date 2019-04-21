@@ -5,7 +5,7 @@ import {
   Select, MenuItem,
   TextField, Tooltip
 } from '@material-ui/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { LiveHelp } from '@material-ui/icons';
 import { TimeFormatInput } from 'material-ui-next-pickers';
 import addEventDialogStyles from '../AddEventDialog.module.scss';
@@ -15,7 +15,7 @@ import { optionType } from 'types/global';
 export default function TmpServiceContent({
   geoOptions,
   serviceOptions,
-  addEventData: { tmpService, startTime, endTime },
+  addEventData: { tmpService, startTime, endTime, timezoneId },
   onSelectService, onChangeAvgServiceTime,
   onBlurServiceTime, validateAvgServiceTime,
   onChangeTmpServiceDateTime, validateBreakTimeFrom,
@@ -23,8 +23,8 @@ export default function TmpServiceContent({
   onBlurParallelCustomer, onChangeParallelCustomer,
   validateParallelCustomer, onChangeAdditionInfo
 }) {
-  const breakStartTime = moment(tmpService.breakTimeStart).toDate();
-  const breakEndTime = moment(tmpService.breakTimeEnd).toDate();
+  const breakStartTime = moment.tz(tmpService.breakTimeStart, timezoneId).toDate();
+  const breakEndTime = moment.tz(tmpService.breakTimeEnd, timezoneId).toDate();
 
   return (
     <Grid container spacing={8} className={addEventDialogStyles.calendarDatetimePicker}>
@@ -80,9 +80,9 @@ export default function TmpServiceContent({
               </Typography>
             <Tooltip
               title={`Must be between ${
-                moment(startTime).format('LT')
+                moment.tz(startTime, timezoneId).format('LT')
                 } and ${
-                moment(endTime).format('LT')
+                moment.tz(endTime, timezoneId).format('LT')
                 }`
               }
             >

@@ -89,7 +89,7 @@ class TmpServicesList extends PureComponent {
     this.setState({ deletedTmpService: data });
   }
   render() {
-    const { classes, history, isLoading, delTmpServiceLoading, delTmpServiceError } = this.props;
+    const { classes, history, isLoading, delTmpServiceError } = this.props;
     let data = [];
     const { deletedTmpService } = this.state;
     if (isLoading) {

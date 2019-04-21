@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { flow, map, sortBy, isEmpty, toUpper, get } from 'lodash';
 import { DATETIME_FORMAT } from 'react-big-scheduler';
 import {
@@ -13,20 +13,23 @@ import {
 } from 'constants/Calendar.constants';
 
 function getRRuleISO(date) {
-  return moment(date)
+  return date
     .toISOString()
     .replace(/([^a-zA-Z\d\\.])|(\.([^\\.]+)[^Z])/g, '');
 }
 
 function buildCalendarData(datum) {
   const { slot: { startTime, endTime } = {} } = datum;
+  const startDate = moment.tz(startTime * 1000, datum.timezone);
+  const endDate = moment.tz(endTime * 1000, datum.timezone);
+
   return {
     id: datum.id,
     description: datum.description,
     providerId: datum.providerId,
     type: datum.type,
-    start: moment(startTime * 1000).format(DATETIME_FORMAT),
-    end: moment(endTime * 1000).format(DATETIME_FORMAT),
+    start: startDate.format(DATETIME_FORMAT),
+    end: endDate.format(DATETIME_FORMAT),
     resourceId: datum.providerId,
     title: EVENT_TYPE_TITLE[datum.type],
     rrule: (() => {
@@ -38,7 +41,6 @@ function buildCalendarData(datum) {
         'repeat.repeatDaily.repeatEvery',
         get(datum, 'repeat.repeatWeekly.repeatEveryNumWeeks', 1)
       );
-      const startDate = moment(startTime * 1000);
       const startDateISO = getRRuleISO(startDate);
       const dateInWeek = !isEmpty(datum.repeat.repeatWeekly)
         ? toUpper(datum.repeat.repeatWeekly.repeatOn).substring(0, 2)
@@ -52,7 +54,7 @@ function buildCalendarData(datum) {
         `;INTERVAL=${repeatEvery}` +
         `${dateInWeek ? `;BYDAY=${dateInWeek}` : ''}` +
         `${occurrences ? `;COUNT=${occurrences}` : ''}` +
-        `${endOnDate ? `;UNTIL=${getRRuleISO(endOnDate * 1000)}` : ''}`
+        `${endOnDate ? `;UNTIL=${getRRuleISO(moment.tz(endOnDate * 1000, datum.timezone))}` : ''}`
       );
     })()
   };
@@ -86,7 +88,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         calendarData: action.calendarData
-          .map(datum => buildCalendarData(datum))
+          .map(buildCalendarData)
           .sort((prev, next) => {
             return prev.start < next.start ? -1 : 1;
           })
@@ -99,12 +101,8 @@ const reducer = (state = initialState, action) => {
         })
       };
     }
-    case FETCH_GEO_OPTIONS.SUCCESS: {
-      return {
-        ...state,
-        geoOptions: action.geoOptions
-      };
-    }
+    case FETCH_GEO_OPTIONS.SUCCESS:
+      return { ...state, geoOptions: action.geoOptions };
     case CALENDAR_LOADING:
       return { ...state, isLoading: action.isLoading };
     case FETCH_TIMEZONE_OPTIONS.SUCCESS:
