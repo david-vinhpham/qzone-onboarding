@@ -90,7 +90,11 @@ export const fetchNormalEventByBusinessId = businessId => dispatch => {
 
       return Promise.all(fetchEvents).then(rep => {
         const tmpEvents = reduce(rep, (acc, { data }) => acc.concat(get(data, 'objects', [])), []);
-        const events = tmpEvents.map(e => ({ ...e, type: e.type || EVENT_TYPE.TMP_SERVICE }))
+        const events = tmpEvents.map(e => ({
+          ...e,
+          type: e.type || EVENT_TYPE.TMP_SERVICE,
+          timezone: providers.find(p => p.id === e.providerId).providerInformation.timeZoneId,
+        }));
         dispatch(fetchNormalEventByProvidersSuccess(events));
         dispatch(fetchProvidersByBusinessIdSuccess(providers));
       });
@@ -108,11 +112,11 @@ export const createNewEvent = newEvent => dispatch => {
 
   let api = URL.NEW_NORMAL_EVENT;
 
-  if(newEvent.type === EVENT_TYPE.TMP_SERVICE) {
+  if (newEvent.type === EVENT_TYPE.TMP_SERVICE) {
     api = URL.NEW_TMP_SERVICE;
   }
 
-  if(newEvent.type === EVENT_TYPE.APPOINTMENT) {
+  if (newEvent.type === EVENT_TYPE.APPOINTMENT) {
     api = URL.NEW_APPOINTMENTS_CUSTOMER_EVENT;
   }
 
