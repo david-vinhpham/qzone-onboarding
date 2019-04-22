@@ -3,7 +3,7 @@ import { flow, map, sortBy, isEmpty, toUpper, get } from 'lodash';
 import { DATETIME_FORMAT } from 'react-big-scheduler';
 import {
   FETCH_PROVIDER_BY_BUSINESS_ID,
-  FETCH_NORM_EVENTS_BY_PROVIDER,
+  FETCH_EVENTS_BY_PROVIDERS,
   CALENDAR_LOADING,
   FETCH_TIMEZONE_OPTIONS,
   CREATE_CALENDAR_EVENT,
@@ -84,7 +84,7 @@ const reducer = (state = initialState, action) => {
           input => sortBy(input, 'name')
         )(action.providers)
       };
-    case FETCH_NORM_EVENTS_BY_PROVIDER.SUCCESS:
+    case FETCH_EVENTS_BY_PROVIDERS.SUCCESS:
       return {
         ...state,
         calendarData: action.calendarData

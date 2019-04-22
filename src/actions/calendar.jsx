@@ -4,7 +4,7 @@ import { get, reduce, flow, compact, map } from 'lodash';
 import { API_ROOT, URL } from 'config/config';
 import {
   CALENDAR_LOADING,
-  FETCH_NORM_EVENTS_BY_PROVIDER,
+  FETCH_EVENTS_BY_PROVIDERS,
   FETCH_PROVIDER_BY_BUSINESS_ID,
   CREATE_CALENDAR_EVENT,
   EVENT_TYPE,
@@ -18,8 +18,8 @@ export const calendarLoading = isLoading => ({
   isLoading
 });
 
-export const fetchNormalEventByProvidersSuccess = calendarData => ({
-  type: FETCH_NORM_EVENTS_BY_PROVIDER.SUCCESS,
+export const fetchEventsByProvidersSuccess = calendarData => ({
+  type: FETCH_EVENTS_BY_PROVIDERS.SUCCESS,
   calendarData
 });
 
@@ -86,6 +86,7 @@ export const fetchNormalEventByBusinessId = businessId => dispatch => {
       providerIds.forEach(providerId => {
         fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
         fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}${providerId}`));
+        fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID}${providerId}`));
       });
 
       return Promise.all(fetchEvents).then(rep => {
@@ -95,7 +96,7 @@ export const fetchNormalEventByBusinessId = businessId => dispatch => {
           type: e.type || EVENT_TYPE.TMP_SERVICE,
           timezone: providers.find(p => p.id === e.providerId).providerInformation.timeZoneId,
         }));
-        dispatch(fetchNormalEventByProvidersSuccess(events));
+        dispatch(fetchEventsByProvidersSuccess(events));
         dispatch(fetchProvidersByBusinessIdSuccess(providers));
       });
     })
