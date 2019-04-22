@@ -66,9 +66,9 @@ class TmpServicesDetail extends PureComponent {
               </Grid>
               <Grid item sm={9} xs={12}>
                 <Typography variant="body2">
-                  {moment(tmpServiceDetail.slot.startTime * 1000).format('L LT Z')}
+                  {moment.tz(tmpServiceDetail.slot.startTime * 1000, tmpServiceDetail.timezoneId).format('L LT Z')}
                   &nbsp;---&nbsp;
-                  {moment(tmpServiceDetail.slot.endTime * 1000).format('L LT Z')}
+                  {moment.tz(tmpServiceDetail.slot.endTime * 1000, tmpServiceDetail.timezoneId).format('L LT Z')}
                 </Typography>
               </Grid>
               {tmpServiceDetail.repeatType &&

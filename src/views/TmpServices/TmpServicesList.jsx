@@ -124,12 +124,10 @@ class TmpServicesList extends PureComponent {
               <TableRow key={event.id} className={classes.row}>
                 <TableCell padding="dense">{index + 1}</TableCell>
                 <TableCell>{event.providerName}</TableCell>
-                <TableCell>{moment(event.slot.startTime * 1000).format('L LT Z')}</TableCell>
-                <TableCell>{moment(event.slot.endTime * 1000).format('L LT Z')}</TableCell>
+                <TableCell>{moment.tz(event.slot.startTime * 1000, event.timezoneId).format('L LT Z')}</TableCell>
+                <TableCell>{moment.tz(event.slot.endTime * 1000, event.timezoneId).format('L LT Z')}</TableCell>
                 <TableCell>
-                  {event.description !== null
-                    ? event.description.substring(0, 150)
-                    : ''}
+                  {event.description ? event.description.substring(0, 150) : ''}
                 </TableCell>
                 <TableCell>
                   <Tooltip onClick={() => this.handleClick(event, history)}
@@ -149,9 +147,9 @@ class TmpServicesList extends PureComponent {
                     classes={{ tooltip: classes.tooltip }}
                   >
                     {/*  <Link to={`/tmp-service/edit/${event.id}`}> */}
-                      <Button color="success" simple justIcon>
-                        <Edit className={classes.underChartIcons} />
-                      </Button>
+                    <Button color="success" simple justIcon>
+                      <Edit className={classes.underChartIcons} />
+                    </Button>
                     {/* </Link> */}
                   </Tooltip>
                   <Tooltip
