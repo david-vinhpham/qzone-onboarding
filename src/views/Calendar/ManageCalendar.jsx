@@ -187,14 +187,14 @@ class ManageCalendar extends React.PureComponent {
       description,
       repeat,
       tmpService,
-      timezoneId,
       serviceId,
       customerEmail,
       customerFirstName,
       customerLastName,
       customerMobilePhone,
     } = addEventData;
-    const providerTzOffset = moment().tz(timezoneId).format('Z');
+    const providerTz = this.props.providers.find(p => p.id === providerId).timezone;
+    const providerTzOffset = moment().tz(providerTz).format('Z');
     const providerStartTime = this.convertTimeToSpecificOffset(startTime, providerTzOffset);
     const providerEndTime = this.convertTimeToSpecificOffset(endTime, providerTzOffset);
 
@@ -202,24 +202,24 @@ class ManageCalendar extends React.PureComponent {
       description,
       providerId,
       slot: {
-        startTime: moment.tz(providerStartTime, timezoneId).unix(),
-        endTime: moment.tz(providerEndTime, timezoneId).unix()
+        startTime: moment.tz(providerStartTime, providerTz).unix(),
+        endTime: moment.tz(providerEndTime, providerTz).unix()
       },
       type: eventType,
     };
 
     if (eventType === EVENT_TYPE.TMP_SERVICE) {
-      payload = { ...payload, ...this.generateTmpServicePayload(tmpService, timezoneId, providerTzOffset) };
+      payload = { ...payload, ...this.generateTmpServicePayload(tmpService, providerTz, providerTzOffset) };
     }
 
     if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
-      payload = { ...payload, ...this.generateRepeatPayload(repeat, timezoneId, providerTzOffset) };
+      payload = { ...payload, ...this.generateRepeatPayload(repeat, providerTz, providerTzOffset) };
     }
 
     if (eventType === EVENT_TYPE.APPOINTMENT) {
       payload = {
         ...payload,
-        timezoneId,
+        timezoneId: providerTz,
         serviceId,
         customerEmail,
         customerFirstName,
@@ -232,15 +232,15 @@ class ManageCalendar extends React.PureComponent {
   };
 
   createNewEvent = addEventData => {
-    if (this.state.eventLevel === EVENT_LEVEL.BUSINESS) {
-      this.createOrgNewEvent(addEventData);
-      return;
-    }
-
     this.closeAddDialog();
     this.setState({ isLoading: true });
-    const payload = this.generatePayload(addEventData);
-    this.props.createNewEvent(payload).finally(() => this.setState({ isLoading: false }));
+
+    if (this.state.eventLevel === EVENT_LEVEL.BUSINESS) {
+      this.createOrgNewEvent(addEventData);
+    } else {
+      this.props.createNewEvent(this.generatePayload(addEventData))
+        .finally(() => this.setState({ isLoading: false }));
+    }
   };
 
   createOrgNewEvent = addEventData => {
@@ -252,8 +252,6 @@ class ManageCalendar extends React.PureComponent {
       return this.props.createNewEvent(payload);
     });
 
-    this.closeAddDialog();
-    this.setState({ isLoading: true });
     Promise.all(fetchMap).finally(() => this.setState({ isLoading: false }));
   };
 
