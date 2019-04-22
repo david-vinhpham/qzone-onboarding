@@ -19,9 +19,9 @@ function getRRuleISO(date) {
 }
 
 function buildCalendarData(datum) {
-  const { slot: { startTime, endTime } = {} } = datum;
-  const startDate = moment.tz(startTime * 1000, datum.timezone);
-  const endDate = moment.tz(endTime * 1000, datum.timezone);
+  const { slot: { startTime, endTime } = {}, timezoneId } = datum;
+  const startDate = moment.tz(startTime * 1000, timezoneId);
+  const endDate = moment.tz(endTime * 1000, timezoneId);
 
   return {
     id: datum.id,
@@ -54,7 +54,7 @@ function buildCalendarData(datum) {
         `;INTERVAL=${repeatEvery}` +
         `${dateInWeek ? `;BYDAY=${dateInWeek}` : ''}` +
         `${occurrences ? `;COUNT=${occurrences}` : ''}` +
-        `${endOnDate ? `;UNTIL=${getRRuleISO(moment.tz(endOnDate * 1000, datum.timezone))}` : ''}`
+        `${endOnDate ? `;UNTIL=${getRRuleISO(moment.tz(endOnDate * 1000, timezoneId))}` : ''}`
       );
     })()
   };

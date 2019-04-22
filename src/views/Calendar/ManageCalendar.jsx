@@ -4,7 +4,7 @@ import { arrayOf, func } from 'prop-types';
 import moment from 'moment-timezone';
 import { isEmpty } from 'lodash';
 
-import { fetchNormalEventByBusinessId, createNewEvent } from 'actions/calendar';
+import { fetchEventsByBusinessId, createNewEvent } from 'actions/calendar';
 import {
   EVENT_LEVEL,
   EVENT_TYPE,
@@ -39,7 +39,7 @@ class ManageCalendar extends React.PureComponent {
     if (this.userId) {
       this.setState({ isLoading: true });
       this.props
-        .fetchNormalEventByBusinessId(this.userId)
+        .fetchEventsByBusinessId(this.userId)
         .finally(() => this.setState({ isLoading: false }));
     }
   }
@@ -285,7 +285,7 @@ class ManageCalendar extends React.PureComponent {
 
 ManageCalendar.propTypes = {
   providers: arrayOf(providerType).isRequired,
-  fetchNormalEventByBusinessId: func.isRequired,
+  fetchEventsByBusinessId: func.isRequired,
   createNewEvent: func.isRequired,
   tzOptions: arrayOf(optionType).isRequired,
   serviceOptions: arrayOf(optionType).isRequired
@@ -299,7 +299,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchNormalEventByBusinessId: businessId => dispatch(fetchNormalEventByBusinessId(businessId)),
+  fetchEventsByBusinessId: businessId => dispatch(fetchEventsByBusinessId(businessId)),
   createNewEvent: newEvent => dispatch(createNewEvent(newEvent)),
 });
 

@@ -13,27 +13,27 @@ import {
   FETCH_SERVICE_OPTIONS
 } from 'constants/Calendar.constants';
 
-export const calendarLoading = isLoading => ({
+const calendarLoading = isLoading => ({
   type: CALENDAR_LOADING,
   isLoading
 });
 
-export const fetchEventsByProvidersSuccess = calendarData => ({
+const fetchEventsByProvidersSuccess = calendarData => ({
   type: FETCH_EVENTS_BY_PROVIDERS.SUCCESS,
   calendarData
 });
 
-export const fetchProvidersByBusinessIdSuccess = providers => ({
+const fetchProvidersByBusinessIdSuccess = providers => ({
   type: FETCH_PROVIDER_BY_BUSINESS_ID.SUCCESS,
   providers
 });
 
-export const createEventSuccess = newEvent => ({
+const createEventSuccess = newEvent => ({
   type: CREATE_CALENDAR_EVENT.SUCCESS,
   newEvent
 });
 
-export const fetchGeoOptionsSuccess = geoOptions => ({
+const fetchGeoOptionsSuccess = geoOptions => ({
   type: FETCH_GEO_OPTIONS.SUCCESS,
   geoOptions
 });
@@ -69,7 +69,7 @@ const fetchTimezoneOptions = dispatch => {
     });
 };
 
-export const fetchNormalEventByBusinessId = businessId => dispatch => {
+export const fetchEventsByBusinessId = businessId => dispatch => {
   dispatch(calendarLoading(true));
 
   return axios
