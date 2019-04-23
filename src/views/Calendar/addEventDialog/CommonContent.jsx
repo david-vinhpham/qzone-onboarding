@@ -14,8 +14,9 @@ import {
   EVENT_REPEAT_TYPE, REPEAT_END_TYPE,
   REPEAT_EVERY_DEF, REPEAT_DATE_DEF
 } from 'constants/Calendar.constants';
-import styles from './CommonContent.module.scss';
 import { providerType, optionType } from 'types/global';
+import styles from './CommonContent.module.scss';
+import addEventDialogStyles from '../AddEventDialog.module.scss';
 
 export default function CommonContent({
   values, providers, serviceOptions, errors, handleChange,
@@ -30,10 +31,10 @@ export default function CommonContent({
     : undefined;
 
   return (
-    <Grid container spacing={8} className={styles.calendarDatetimePicker}>
+    <Grid container spacing={8} className={addEventDialogStyles.calendarDatetimePicker}>
       <Grid item md={12}>
         <Grid container spacing={8}>
-          <Grid item md={2} className={styles.label}>
+          <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               Event type:
             </Typography>
@@ -43,7 +44,7 @@ export default function CommonContent({
               name="addEventData.eventType"
               value={values.addEventData.eventType}
               onChange={onChangeEventType}
-              className={styles.eventTypeSelect}
+              className={addEventDialogStyles.eventTypeSelect}
             >
               {Object.values(EVENT_TYPE).map(e => (
                 <MenuItem value={e} key={e}>
@@ -57,7 +58,7 @@ export default function CommonContent({
       <>
         <Grid item md={12}>
           <Grid container spacing={8}>
-            <Grid item md={2} className={styles.label}>
+            <Grid item md={2} className={addEventDialogStyles.label}>
               <Typography variant="body2" noWrap inline>
                 Level:
               </Typography>
@@ -67,7 +68,7 @@ export default function CommonContent({
                 name="eventLevel"
                 value={values.eventLevel}
                 onChange={onSelectEventLevel}
-                className={styles.eventTypeSelect}
+                className={addEventDialogStyles.eventTypeSelect}
               >
                 <MenuItem value={EVENT_LEVEL.PROVIDER}>
                   {EVENT_LEVEL.PROVIDER}
@@ -85,7 +86,7 @@ export default function CommonContent({
           <>
             <Grid item md={12}>
               <Grid container spacing={8}>
-                <Grid item md={2} className={styles.label}>
+                <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Provider:
                   </Typography>
@@ -95,7 +96,7 @@ export default function CommonContent({
                     name="addEventData.providerId"
                     value={values.addEventData.providerId}
                     onChange={onSelectProvider}
-                    className={styles.eventTypeSelect}
+                    className={addEventDialogStyles.eventTypeSelect}
                   >
                     {providers.map(provider => (
                       <MenuItem value={provider.id} key={provider.id}>
@@ -108,7 +109,7 @@ export default function CommonContent({
             </Grid>
             <Grid item md={12}>
               <Grid container spacing={8}>
-                <Grid item md={2} className={styles.label}>
+                <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Time zone:
                   </Typography>
@@ -128,7 +129,7 @@ export default function CommonContent({
           <>
             <Grid item md={12}>
               <Grid container spacing={8}>
-                <Grid item md={2} className={styles.label}>
+                <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Service:
                   </Typography>
@@ -138,7 +139,7 @@ export default function CommonContent({
                     name="addEventData.serviceId"
                     value={values.addEventData.serviceId}
                     onChange={handleChange}
-                    className={styles.eventTypeSelect}
+                    className={addEventDialogStyles.eventTypeSelect}
                   >
                     {serviceOptions.map(svc => (
                       <MenuItem value={svc.value} key={svc.label}>
@@ -151,7 +152,7 @@ export default function CommonContent({
             </Grid>
             <Grid item md={12}>
               <Grid container spacing={8}>
-                <Grid item md={2} className={styles.label}>
+                <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Customer email:
                   </Typography>
@@ -168,7 +169,7 @@ export default function CommonContent({
             </Grid>
             <Grid item md={12}>
               <Grid container spacing={8}>
-                <Grid item md={2} className={styles.label}>
+                <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Customer name:
                   </Typography>
@@ -195,7 +196,7 @@ export default function CommonContent({
             </Grid>
             <Grid item md={12}>
               <Grid container spacing={8}>
-                <Grid item md={2} className={styles.label}>
+                <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Customer phone:
                   </Typography>
@@ -215,7 +216,7 @@ export default function CommonContent({
       </>
       <Grid item md={12}>
         <Grid container spacing={8}>
-          <Grid item md={2} className={styles.label}>
+          <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               Event date:
             </Typography>
@@ -231,7 +232,7 @@ export default function CommonContent({
       </Grid>
       <Grid item md={12}>
         <Grid container spacing={8}>
-          <Grid item md={1} className={styles.label}>
+          <Grid item md={1} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               From
             </Typography>
@@ -243,7 +244,7 @@ export default function CommonContent({
               onChange={onChangeNewEventDateTime('fromTime')}
             />
           </Grid>
-          <Grid item md={1} className={styles.label}>
+          <Grid item md={1} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               To
             </Typography>
@@ -260,7 +261,7 @@ export default function CommonContent({
       <Grid item md={12}>
         <TextField
           value={values.addEventData.description}
-          className={styles.calendarDesc}
+          className={addEventDialogStyles.calendarDesc}
           label="Description"
           name="addEventData.description"
           placeholder="Type a meaningful description about the event"
@@ -273,7 +274,7 @@ export default function CommonContent({
       </Grid>
       <Grid item md={12}>
         <Grid container spacing={8}>
-          <Grid item md={2} className={styles.label}>
+          <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               Repeat:
             </Typography>
@@ -283,7 +284,7 @@ export default function CommonContent({
               name="addEventData.repeat.type"
               value={values.addEventData.repeat.type}
               onChange={onSelectRepeatType}
-              className={styles.eventTypeSelect}
+              className={addEventDialogStyles.eventTypeSelect}
             >
               {map(EVENT_REPEAT_TYPE, value => (
                 <MenuItem value={value} key={`EVENT_REPEAT_TYPE-${value}`}>
@@ -294,7 +295,7 @@ export default function CommonContent({
           </Grid>
           {values.addEventData.repeat.type !== EVENT_REPEAT_TYPE.NEVER && (
             <>
-              <Grid item md={2} className={styles.label}>
+              <Grid item md={2} className={addEventDialogStyles.label}>
                 <Typography variant="body2" noWrap inline>
                   on every
                 </Typography>
@@ -304,7 +305,7 @@ export default function CommonContent({
                   name="addEventData.repeat.every"
                   value={values.addEventData.repeat.every}
                   onChange={handleChange}
-                  className={styles.eventTypeSelect}
+                  className={addEventDialogStyles.eventTypeSelect}
                 >
                   {map(REPEAT_EVERY_DEF[values.addEventData.repeat.type], value => (
                     <MenuItem value={value} key={`REPEAT_EVERY_DEF-${value}`}>
@@ -313,7 +314,7 @@ export default function CommonContent({
                   ))}
                 </Select>
               </Grid>
-              <Grid item md={1} className={styles.label}>
+              <Grid item md={1} className={addEventDialogStyles.label}>
                 <Typography variant="body2" noWrap inline>
                   {(() => {
                     if (values.addEventData.repeat.type === EVENT_REPEAT_TYPE.DAILY) {
@@ -326,7 +327,7 @@ export default function CommonContent({
               {values.addEventData.repeat.type === EVENT_REPEAT_TYPE.WEEKLY && (
                 <Grid item md={12}>
                   <Grid container spacing={8}>
-                    <Grid item md={2} className={styles.label}>
+                    <Grid item md={2} className={addEventDialogStyles.label}>
                       <Typography variant="body2" noWrap inline>
                         Repeat on:
                       </Typography>
@@ -345,7 +346,7 @@ export default function CommonContent({
                             />
                           </div>
                         )}
-                        className={styles.eventTypeSelect}
+                        className={addEventDialogStyles.eventTypeSelect}
                       >
                         {REPEAT_DATE_DEF.map(dateDef => (
                           <MenuItem key={`REPEAT_DATE_DEF-${dateDef}-Menu`} value={dateDef}>
@@ -386,7 +387,7 @@ export default function CommonContent({
                         name="addEventData.repeat.repeatEnd.afterOccur"
                         value={REPEAT_END_TYPE.AFTER_NUM_OCCUR}
                         onChange={onRepeatEndSelect}
-                        checked={values.addEventData.repeat.repeatEnd.afterOccur}
+                        checked={!!values.addEventData.repeat.repeatEnd.afterOccur}
                       />
                       <Typography variant="body2" inline>
                         After
@@ -407,7 +408,7 @@ export default function CommonContent({
                         name="addEventData.repeat.repeatEnd.onDate"
                         value={REPEAT_END_TYPE.ON_DATE}
                         onChange={onRepeatEndSelect}
-                        checked={values.addEventData.repeat.repeatEnd.onDate}
+                        checked={!!values.addEventData.repeat.repeatEnd.onDate}
                       />
                       <Typography variant="body2" noWrap inline>
                         On:
