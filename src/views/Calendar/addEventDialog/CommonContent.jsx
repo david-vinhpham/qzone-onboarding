@@ -22,7 +22,7 @@ export default function CommonContent({
   values, providers, serviceOptions, errors, handleChange,
   onChangeEventType, onSelectEventLevel, onSelectProvider,
   onChangeNewEventDateTime, onSelectRepeatType, onRepeatEndSelect,
-  onBlurOccurence, onChangeRepeatEndDate
+  onBlurOccurence, onChangeRepeatEndDate, onChangeCustomerMobilePhone
 }) {
   const startTime = moment(values.addEventData.startTime).toDate();
   const endTime = moment(values.addEventData.endTime).toDate();
@@ -206,7 +206,7 @@ export default function CommonContent({
                     country="AU"
                     name="addEventData.customerMobilePhone"
                     value={values.addEventData.customerMobilePhone || ''}
-                    onChange={handleChange}
+                    onChange={onChangeCustomerMobilePhone}
                   />
                 </Grid>
               </Grid>
@@ -452,4 +452,5 @@ CommonContent.propTypes = {
   onRepeatEndSelect: PropTypes.func.isRequired,
   onBlurOccurence: PropTypes.func.isRequired,
   onChangeRepeatEndDate: PropTypes.func.isRequired,
+  onChangeCustomerMobilePhone: PropTypes.func.isRequired,
 }

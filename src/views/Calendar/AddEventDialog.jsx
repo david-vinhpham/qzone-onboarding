@@ -122,12 +122,16 @@ class AddEventDialog extends PureComponent {
     }
   };
 
+  onChangeCustomerMobilePhone = setFieldValue => data => {
+    setFieldValue('addEventData.customerMobilePhone', data);
+  }
+
   onClickNext = values => () => {
     const { tmpServiceStep } = this.state;
     if (values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1) {
       this.setState({ tmpServiceStep: 2 });
     } else {
-      this.props.createNewEvent(values.addEventData);
+      this.props.createNewEvent(values);
     }
   };
 
@@ -274,6 +278,7 @@ class AddEventDialog extends PureComponent {
                       onRepeatEndSelect={this.onRepeatEndSelect(setFieldValue, values)}
                       onBlurOccurence={this.onBlurOccurence(setFieldValue, values)}
                       onChangeRepeatEndDate={this.onChangeRepeatEndDate(setFieldValue, values)}
+                      onChangeCustomerMobilePhone={this.onChangeCustomerMobilePhone(setFieldValue)}
                     /> :
                     <TmpServiceContent
                       geoOptions={geoOptions}

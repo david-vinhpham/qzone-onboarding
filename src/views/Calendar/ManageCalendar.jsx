@@ -228,7 +228,7 @@ class ManageCalendar extends React.PureComponent {
     return payload;
   };
 
-  createNewEvent = (addEventData, eventLevel) => {
+  createNewEvent = ({ addEventData, eventLevel }) => {
     this.closeAddDialog();
 
     if (eventLevel === EVENT_LEVEL.BUSINESS) {
