@@ -31,16 +31,13 @@ class ManageCalendar extends React.PureComponent {
       },
       eventLevel: EVENT_LEVEL.PROVIDER
     };
-    this.state = { ...this.initialState, isLoading: false };
+    this.state = { ...this.initialState };
   }
 
   componentDidMount() {
     this.userId = localStorage.getItem('userSub');
     if (this.userId) {
-      this.setState({ isLoading: true });
-      this.props
-        .fetchEventsByBusinessId(this.userId)
-        .finally(() => this.setState({ isLoading: false }));
+      this.props.fetchEventsByBusinessId(this.userId);
     }
   }
 
@@ -231,15 +228,13 @@ class ManageCalendar extends React.PureComponent {
     return payload;
   };
 
-  createNewEvent = addEventData => {
+  createNewEvent = (addEventData, eventLevel) => {
     this.closeAddDialog();
-    this.setState({ isLoading: true });
 
-    if (this.state.eventLevel === EVENT_LEVEL.BUSINESS) {
+    if (eventLevel === EVENT_LEVEL.BUSINESS) {
       this.createOrgNewEvent(addEventData);
     } else {
-      this.props.createNewEvent(this.generatePayload(addEventData))
-        .finally(() => this.setState({ isLoading: false }));
+      this.props.createNewEvent(this.generatePayload(addEventData));
     }
   };
 
@@ -252,14 +247,12 @@ class ManageCalendar extends React.PureComponent {
       return this.props.createNewEvent(payload);
     });
 
-    Promise.all(fetchMap).finally(() => this.setState({ isLoading: false }));
+    Promise.all(fetchMap);
   };
 
-  updateEventLevel = eventLevel => this.setState({ eventLevel });
-
   render() {
-    const { providers, tzOptions, serviceOptions } = this.props;
-    const { isOpenAddDialog, eventLevel, addEventData, isLoading } = this.state;
+    const { providers, tzOptions, serviceOptions, isLoading } = this.props;
+    const { isOpenAddDialog, eventLevel, addEventData } = this.state;
 
     return (
       <>
@@ -273,7 +266,6 @@ class ManageCalendar extends React.PureComponent {
             closeAddDialog={this.closeAddDialog}
             addEventData={addEventData}
             createNewEvent={this.createNewEvent}
-            updateEventLevel={this.updateEventLevel}
             tzOptions={tzOptions}
             serviceOptions={serviceOptions}
           />

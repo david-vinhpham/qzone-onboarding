@@ -10,7 +10,6 @@ import { deleteTmpService, fetchTmpServices } from "../../actions/tmpServices";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
-import { Link } from "react-router-dom";
 import DeletionModal from "../../shared/deletion-modal";
 import { ClipLoader } from "react-spinners";
 import ArtTrack from "@material-ui/icons/ArtTrack";
@@ -146,11 +145,9 @@ class TmpServicesList extends PureComponent {
                     placement="bottom"
                     classes={{ tooltip: classes.tooltip }}
                   >
-                    {/*  <Link to={`/tmp-service/edit/${event.id}`}> */}
                     <Button color="success" simple justIcon>
                       <Edit className={classes.underChartIcons} />
                     </Button>
-                    {/* </Link> */}
                   </Tooltip>
                   <Tooltip
                     id="tooltip-top"
