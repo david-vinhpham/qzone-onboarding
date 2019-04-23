@@ -29,7 +29,7 @@
     "classnames": "^2.2.6",
     "contentful": "^6.1.1",
     "e": "0.0.4",
-    "formik": "^1.4.2",
+    "formik": "^1.5.2",
     "fullcalendar-reactwrapper": "^1.0.7",
     "history": "^4.7.2",
     "immer": "^2.1.5",

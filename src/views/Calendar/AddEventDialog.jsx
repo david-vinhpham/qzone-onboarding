@@ -6,7 +6,6 @@ import {
 } from '@material-ui/core';
 import { get } from 'lodash';
 import moment from 'moment-timezone';
-import produce from 'immer';
 import { Formik } from 'formik';
 import {
   EVENT_BG_COLOR,
@@ -27,129 +26,88 @@ class AddEventDialog extends PureComponent {
     this.state = { tmpServiceStep: 1 };
   }
 
-  onSelectEventLevel = (setValues, values) => ({ target: { value: level } }) => {
-    setValues(produce(values, draftState => {
-      draftState.eventLevel = level;
+  onSelectEventLevel = (setFieldValue, values) => ({ target: { value: level } }) => {
+    setFieldValue('eventLevel', level);
+    if (!values.addEventData.providerId && level === EVENT_LEVEL.PROVIDER) {
+      setFieldValue('addEventData.providerId', this.props.providers[0].id);
+      setFieldValue('addEventData.providerName', this.props.providers[0].name);
+    }
+  };
 
-      if (!draftState.addEventData.providerId && level === EVENT_LEVEL.PROVIDER) {
-        draftState.addEventData.providerId = this.props.providers[0].id;
-        draftState.addEventData.providerName = this.props.providers[0].name;
-      }
-    })
+  onSelectProvider = (setFieldValue, values) => event => {
+    const selectedProvider = this.props.providers.find(p => p.id === event.target.value);
+    const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProvider.timezone.toLowerCase()).label;
+    setFieldValue('addEventData.providerId', selectedProvider.id);
+    setFieldValue('addEventData.providerName', selectedProvider.name);
+    setFieldValue('addEventData.timezoneId', timezoneId);
+  };
+
+  onChangeEventType = (setFieldValue, values) => ({ target: { value: eventType } }) => {
+    setFieldValue('eventLevel', eventType === EVENT_TYPE.TMP_SERVICE
+      || eventType === EVENT_TYPE.APPOINTMENT ? EVENT_LEVEL.PROVIDER : values.eventLevel);
+    setFieldValue('addEventData.eventType', eventType);
+    setFieldValue(
+      'addEventData.tmpService',
+      eventType === EVENT_TYPE.TMP_SERVICE
+        ? {
+          additionalInfo: '',
+          avgServiceTime: 30,
+          breakTimeStart: values.addEventData.startTime,
+          breakTimeEnd: values.addEventData.endTime,
+          geoLocationId: this.props.geoOptions[0].value,
+          numberOfParallelCustomer: 1,
+          serviceId: this.props.serviceOptions[0].value,
+        } : {}
     );
   };
 
-  onSelectProvider = (setValues, values) => event => {
-    const selectedProvider = this.props.providers.find(p => p.id === event.target.value);
-    const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProvider.timezone.toLowerCase()).label;
-    setValues({
-      addEventData: {
-        ...values.addEventData,
-        providerId: selectedProvider.id,
-        providerName: selectedProvider.name,
-        timezoneId
-      }
-    });
-  };
-
-  onChangeEventType = (setValues, values) => ({ target: { value: eventType } }) => {
-    setValues({
-      eventLevel: eventType === EVENT_TYPE.TMP_SERVICE || eventType === EVENT_TYPE.APPOINTMENT
-        ? EVENT_LEVEL.PROVIDER : values.eventLevel,
-      addEventData: {
-        ...values.addEventData,
-        eventType,
-        tmpService:
-          eventType === EVENT_TYPE.TMP_SERVICE
-            ? {
-              additionalInfo: '',
-              avgServiceTime: 30,
-              breakTimeStart: values.addEventData.startTime,
-              breakTimeEnd: values.addEventData.endTime,
-              geoLocationId: this.props.geoOptions[0].value,
-              numberOfParallelCustomer: 1,
-              serviceId: this.props.serviceOptions[0].value,
-            } : {}
-      }
-    });
-  };
-
-  onChangeNewEventDateTime = (setValues, values) => type => data => {
+  onChangeNewEventDateTime = (setFieldValue, values) => type => data => {
     const momentData = moment(data);
 
     if (type === 'date') {
-      setValues({
-        addEventData: {
-          ...values.addEventData,
-          startTime: momentData.format(),
-          endTime: momentData.clone().add(1, 'hour').format()
-        }
-      });
+      setFieldValue('addEventData.startTime', momentData.format());
+      setFieldValue('addEventData.endTime', momentData.clone().add(1, 'hour').format());
     }
 
     if (type === 'fromTime') {
-      setValues({
-        addEventData: {
-          ...values.addEventData,
-          startTime: momentData.format(),
-          endTime: moment(values.addEventData.endTime).isBefore(momentData)
-            ? momentData.clone().add(1, 'hour').format()
-            : values.addEventData.endTime
-        }
-      });
-      this.onChangeTmpServiceDateTime('fromTime')(data);
+      setFieldValue('addEventData.startTime', momentData.format());
+      setFieldValue('addEventData.endTime', moment(values.addEventData.endTime).isBefore(momentData)
+        ? momentData.clone().add(1, 'hour').format() : values.addEventData.endTime);
+      this.onChangeTmpServiceDateTime(setFieldValue, values)('fromTime')(data);
     }
 
     if (type === 'toTime') {
-      setValues({
-        addEventData: { ...values.addEventData, endTime: momentData.format() }
-      });
-      this.onChangeTmpServiceDateTime('toTime')(data);
+      setFieldValue('addEventData.endTime', momentData.format());
+      this.onChangeTmpServiceDateTime(setFieldValue, values)('toTime')(data);
     }
   };
 
-  onSelectRepeatType = (setValues, values) => ({ target: { value: repeatType } }) =>
-    setValues({
-      addEventData: {
-        ...values.addEventData,
-        repeat: {
-          ...values.addEventData.repeat,
-          type: repeatType,
-          every: repeatType === EVENT_REPEAT_TYPE.NEVER ? 0 : REPEAT_EVERY_DEF[repeatType][0],
-          everyDate:
-            repeatType === EVENT_REPEAT_TYPE.WEEKLY
-              ? [moment(values.addEventData.startTime).format('dddd')]
-              : [],
-          repeatEnd: {}
-        }
-      }
-    });
+  onSelectRepeatType = (setFieldValue, values) => ({ target: { value: repeatType } }) => {
+    setFieldValue('addEventData.repeat.type', repeatType);
+    setFieldValue('addEventData.repeat.every', repeatType === EVENT_REPEAT_TYPE.NEVER ? 0 : REPEAT_EVERY_DEF[repeatType][0]);
+    setFieldValue('addEventData.repeat.everyDate', repeatType === EVENT_REPEAT_TYPE.WEEKLY
+      ? [moment(values.addEventData.startTime).format('dddd')]
+      : []);
+    setFieldValue('addEventData.repeat.repeatEnd', {});
+  }
 
-  onRepeatEndSelect = (setValues, values) => ({ target: { value } }) => {
-    setValues({
-      addEventData: {
-        ...values.addEventData,
-        repeat: {
-          ...values.addEventData.repeat,
-          repeatEnd: (type => {
-            let data = {};
-            if (type === REPEAT_END_TYPE.AFTER_NUM_OCCUR) {
-              data = { ...data, afterOccur: 10 };
-            }
-            if (type === REPEAT_END_TYPE.ON_DATE) {
-              data = {
-                ...data,
-                onDate: moment(values.addEventData.startTime)
-                  .clone()
-                  .add(1, 'week')
-                  .format()
-              };
-            }
-            return data;
-          })(value)
-        }
+  onRepeatEndSelect = (setFieldValue, values) => ({ target: { value } }) => {
+    setFieldValue('addEventData.repeat.repeatEnd', (type => {
+      let data = {};
+      if (type === REPEAT_END_TYPE.AFTER_NUM_OCCUR) {
+        data = { ...data, afterOccur: 10 };
       }
-    });
+      if (type === REPEAT_END_TYPE.ON_DATE) {
+        data = {
+          ...data,
+          onDate: moment(values.addEventData.startTime)
+            .clone()
+            .add(1, 'week')
+            .format()
+        };
+      }
+      return data;
+    })(value));
   };
 
   onBlurOccurence = (setFieldValue, values) => ({ target: { value } }) => {
@@ -164,12 +122,12 @@ class AddEventDialog extends PureComponent {
     }
   };
 
-  onClickNext = () => {
-    const { addEventData, tmpServiceStep } = this.state;
-    if (addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1) {
+  onClickNext = values => () => {
+    const { tmpServiceStep } = this.state;
+    if (values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1) {
       this.setState({ tmpServiceStep: 2 });
     } else {
-      this.props.createNewEvent(this.state.addEventData);
+      this.props.createNewEvent(values.addEventData);
     }
   };
 
@@ -177,89 +135,27 @@ class AddEventDialog extends PureComponent {
     this.setState({ tmpServiceStep: 1 });
   };
 
-  onChangeAvgServiceTime = ({ target: { value } }) => {
-    if (isNaN(Number(value)) || value === null) return;
-    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
-      addEventData: {
-        ...addEventData,
-        tmpService: {
-          ...tmpService,
-          avgServiceTime: value.length === 0 ? value : Number(value)
-        }
-      }
-    }));
+  onBlurServiceTime = (setFieldValue, values) => ({ target: { value } }) => {
+    setFieldValue('addEventData.tmpService.avgServiceTime', value.length === 0 ? 30 : Number(value));
   };
 
-  onBlurServiceTime = ({ target: { value } }) => {
-    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
-      addEventData: {
-        ...addEventData,
-        tmpService: {
-          ...tmpService,
-          avgServiceTime: value.length === 0 ? 30 : Number(value)
-        }
-      }
-    }));
+  onBlurParallelCustomer = setFieldValue => ({ target: { value } }) => {
+    setFieldValue('addEventData.tmpService.numberOfParallelCustomer', value.length === 0 ? 1 : Number(value));
   };
 
-  onChangeParallelCustomer = ({ target: { value } }) => {
-    if (isNaN(Number(value)) || value === null) return;
-    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
-      addEventData: {
-        ...addEventData,
-        tmpService: {
-          ...tmpService,
-          numberOfParallelCustomer: value.length === 0 ? value : Number(value)
-        }
-      }
-    }));
-  };
-
-  onBlurParallelCustomer = ({ target: { value } }) => {
-    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
-      addEventData: {
-        ...addEventData,
-        tmpService: {
-          ...tmpService,
-          numberOfParallelCustomer: value.length === 0 ? 1 : Number(value)
-        }
-      }
-    }));
-  };
-
-  onChangeTmpServiceDateTime = type => data => {
+  onChangeTmpServiceDateTime = (setFieldValue, values) => type => data => {
     const momentData = moment(data);
     if (type === 'fromTime') {
-      this.setState((oldState) => produce(oldState, (draftState) => {
-        draftState.addEventData.tmpService.breakTimeStart = momentData.format();
-        draftState.addEventData.tmpService.breakTimeEnd = moment(draftState.addEventData.tmpService.breakTimeEnd).isBefore(momentData)
-          ? momentData.clone().add(1, 'hour').format()
-          : draftState.addEventData.tmpService.breakTimeEnd
-      }));
+      setFieldValue('addEventData.tmpService.breakTimeStart', momentData.format());
+      setFieldValue('addEventData.tmpService.breakTimeEnd', moment(values.addEventData.tmpService.breakTimeEnd).isBefore(momentData)
+        ? momentData.clone().add(1, 'hour').format()
+        : values.addEventData.tmpService.breakTimeEnd
+      );
     }
 
     if (type === 'toTime') {
-      this.setState((oldState) => produce(oldState, (draftState) => {
-        draftState.addEventData.tmpService.breakTimeEnd = momentData.format();
-      }));
+      setFieldValue('addEventData.tmpService.breakTimeEnd', momentData.format());
     }
-  };
-
-  onChangeAdditionInfo = value =>
-    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
-      addEventData: {
-        ...addEventData,
-        tmpService: { ...tmpService, additionalInfo: value }
-      }
-    }));
-
-  onSelectLocation = ({ target: { value } }) => {
-    this.setState(({ addEventData, addEventData: { tmpService } }) => ({
-      addEventData: {
-        ...addEventData,
-        tmpService: { ...tmpService, geoLocationId: value }
-      }
-    }));
   };
 
   validateAvgServiceTime = () => {
@@ -322,13 +218,6 @@ class AddEventDialog extends PureComponent {
     return {};
   };
 
-  onSelectService = event => {
-    const service = event.target.value;
-    this.setState(oldState => produce(oldState, draftState => {
-      draftState.addEventData.tmpService.serviceId = service;
-    }));
-  };
-
   render() {
     const {
       isOpenAddDialog, closeAddDialog, geoOptions,
@@ -346,11 +235,10 @@ class AddEventDialog extends PureComponent {
       >
         <Formik
           initialValues={{ eventLevel, addEventData }}
-        >
-          {({
+          render={({
             values, errors, handleChange,
             handleBlur, handleSubmit, isSubmitting,
-            setValues, setFieldValue
+            setFieldValue
           }) => (
               <>
                 <DialogTitle
@@ -378,12 +266,12 @@ class AddEventDialog extends PureComponent {
                       serviceOptions={serviceOptions}
                       errors={errors}
                       handleChange={handleChange}
-                      onChangeEventType={this.onChangeEventType(setValues, values)}
-                      onSelectEventLevel={this.onSelectEventLevel(setValues, values)}
-                      onSelectProvider={this.onSelectProvider(setValues, values)}
-                      onChangeNewEventDateTime={this.onChangeNewEventDateTime(setValues, values)}
-                      onSelectRepeatType={this.onSelectRepeatType(setValues, values)}
-                      onRepeatEndSelect={this.onRepeatEndSelect(setValues, values)}
+                      onChangeEventType={this.onChangeEventType(setFieldValue, values)}
+                      onSelectEventLevel={this.onSelectEventLevel(setFieldValue, values)}
+                      onSelectProvider={this.onSelectProvider(setFieldValue, values)}
+                      onChangeNewEventDateTime={this.onChangeNewEventDateTime(setFieldValue, values)}
+                      onSelectRepeatType={this.onSelectRepeatType(setFieldValue, values)}
+                      onRepeatEndSelect={this.onRepeatEndSelect(setFieldValue, values)}
                       onBlurOccurence={this.onBlurOccurence(setFieldValue, values)}
                       onChangeRepeatEndDate={this.onChangeRepeatEndDate(setFieldValue, values)}
                     /> :
@@ -391,20 +279,11 @@ class AddEventDialog extends PureComponent {
                       geoOptions={geoOptions}
                       serviceOptions={serviceOptions}
                       addEventData={values.addEventData}
-                      onSelectService={this.onSelectService}
-                      onChangeAvgServiceTime={this.onChangeAvgServiceTime}
-                      onBlurServiceTime={this.onBlurServiceTime}
-                      validateAvgServiceTime={this.validateAvgServiceTime}
-                      onChangeTmpServiceDateTime={this.onChangeTmpServiceDateTime}
-                      validateBreakTimeFrom={this.validateBreakTimeFrom}
-                      validateBreakTimeTo={this.validateBreakTimeTo}
-                      onSelectLocation={this.onSelectLocation}
-                      onBlurParallelCustomer={this.onBlurParallelCustomer}
-                      onChangeParallelCustomer={this.onChangeParallelCustomer}
-                      validateParallelCustomer={this.validateParallelCustomer}
-                      onChangeAdditionInfo={this.onChangeAdditionInfo}
-                      errors={errors}
                       handleChange={handleChange}
+                      onBlurServiceTime={this.onBlurServiceTime(setFieldValue, values)}
+                      onChangeTmpServiceDateTime={this.onChangeTmpServiceDateTime(setFieldValue, values)}
+                      onBlurParallelCustomer={this.onBlurParallelCustomer(setFieldValue)}
+                      errors={errors}
                     />
                   }
                 </DialogContent>
@@ -414,7 +293,7 @@ class AddEventDialog extends PureComponent {
                       Previous
                     </Button>
                   )}
-                  <Button variant="outlined" color="primary" onClick={this.onClickNext} disabled={isSubmitting}>
+                  <Button variant="outlined" color="primary" onClick={this.onClickNext(values)} disabled={isSubmitting}>
                     {values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1
                       ? 'Next'
                       : 'Create'}
@@ -425,7 +304,7 @@ class AddEventDialog extends PureComponent {
                 </DialogActions>
               </>
             )}
-        </Formik>
+        />
       </Dialog>
     );
   }
