@@ -1,0 +1,30 @@
+.repeatDayChip {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.repeatEnd {
+  &Wrapper {
+    display: flex;
+    align-items: baseline;
+
+    > fieldset {
+      padding-left: 16px;
+    }
+  }
+
+  &Radio {
+    display: flex;
+    align-items: center;
+
+    > * {
+      padding-right: 8px;
+    }
+
+    &:nth-child(2) {
+      > div {
+        max-width: 50px;
+      }
+    }
+  }
+}

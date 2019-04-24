@@ -1,6 +1,6 @@
 import React from 'react';
 import { arrayOf, any, func, bool, element } from 'prop-types';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { debounce } from 'lodash';
 import Scheduler, { SchedulerData, ViewTypes, DATETIME_FORMAT } from 'react-big-scheduler';
 import ReactResizeDetector from 'react-resize-detector';

@@ -59,4 +59,5 @@ export const tmpServiceType = PropTypes.shape({
     endTime: PropTypes.number,
     startTime: PropTypes.number
   }),
+  timezoneId: PropTypes.string,
 });

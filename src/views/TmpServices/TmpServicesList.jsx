@@ -10,7 +10,6 @@ import { deleteTmpService, fetchTmpServices } from "../../actions/tmpServices";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
-import { Link } from "react-router-dom";
 import DeletionModal from "../../shared/deletion-modal";
 import { ClipLoader } from "react-spinners";
 import ArtTrack from "@material-ui/icons/ArtTrack";
@@ -89,7 +88,7 @@ class TmpServicesList extends PureComponent {
     this.setState({ deletedTmpService: data });
   }
   render() {
-    const { classes, history, isLoading, delTmpServiceLoading, delTmpServiceError } = this.props;
+    const { classes, history, isLoading, delTmpServiceError } = this.props;
     let data = [];
     const { deletedTmpService } = this.state;
     if (isLoading) {
@@ -124,12 +123,10 @@ class TmpServicesList extends PureComponent {
               <TableRow key={event.id} className={classes.row}>
                 <TableCell padding="dense">{index + 1}</TableCell>
                 <TableCell>{event.providerName}</TableCell>
-                <TableCell>{moment(event.slot.startTime * 1000).format('L LT Z')}</TableCell>
-                <TableCell>{moment(event.slot.endTime * 1000).format('L LT Z')}</TableCell>
+                <TableCell>{moment.tz(event.slot.startTime * 1000, event.timezoneId).format('L LT Z')}</TableCell>
+                <TableCell>{moment.tz(event.slot.endTime * 1000, event.timezoneId).format('L LT Z')}</TableCell>
                 <TableCell>
-                  {event.description !== null
-                    ? event.description.substring(0, 150)
-                    : ''}
+                  {event.description ? event.description.substring(0, 150) : ''}
                 </TableCell>
                 <TableCell>
                   <Tooltip onClick={() => this.handleClick(event, history)}
@@ -148,11 +145,9 @@ class TmpServicesList extends PureComponent {
                     placement="bottom"
                     classes={{ tooltip: classes.tooltip }}
                   >
-                    {/*  <Link to={`/tmp-service/edit/${event.id}`}> */}
-                      <Button color="success" simple justIcon>
-                        <Edit className={classes.underChartIcons} />
-                      </Button>
-                    {/* </Link> */}
+                    <Button color="success" simple justIcon>
+                      <Edit className={classes.underChartIcons} />
+                    </Button>
                   </Tooltip>
                   <Tooltip
                     id="tooltip-top"

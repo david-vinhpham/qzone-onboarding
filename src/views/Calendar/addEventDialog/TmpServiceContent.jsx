@@ -5,7 +5,7 @@ import {
   Select, MenuItem,
   TextField, Tooltip
 } from '@material-ui/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { LiveHelp } from '@material-ui/icons';
 import { TimeFormatInput } from 'material-ui-next-pickers';
 import addEventDialogStyles from '../AddEventDialog.module.scss';
@@ -15,16 +15,14 @@ import { optionType } from 'types/global';
 export default function TmpServiceContent({
   geoOptions,
   serviceOptions,
-  addEventData: { tmpService, startTime, endTime },
-  onSelectService, onChangeAvgServiceTime,
-  onBlurServiceTime, validateAvgServiceTime,
-  onChangeTmpServiceDateTime, validateBreakTimeFrom,
-  validateBreakTimeTo, onSelectLocation,
-  onBlurParallelCustomer, onChangeParallelCustomer,
-  validateParallelCustomer, onChangeAdditionInfo
+  addEventData: { tmpService, startTime, endTime, timezoneId },
+  handleChange,
+  onBlurServiceTime,
+  onChangeTmpServiceDateTime,
+  onBlurParallelCustomer,
 }) {
-  const breakStartTime = moment(tmpService.breakTimeStart).toDate();
-  const breakEndTime = moment(tmpService.breakTimeEnd).toDate();
+  const breakStartTime = moment.tz(tmpService.breakTimeStart, timezoneId).toDate();
+  const breakEndTime = moment.tz(tmpService.breakTimeEnd, timezoneId).toDate();
 
   return (
     <Grid container spacing={8} className={addEventDialogStyles.calendarDatetimePicker}>
@@ -37,8 +35,9 @@ export default function TmpServiceContent({
           </Grid>
           <Grid item md={10}>
             <Select
+              name="addEventData.tmpService.serviceId"
               value={tmpService.serviceId}
-              onChange={onSelectService}
+              onChange={handleChange}
               className={addEventDialogStyles.eventTypeSelect}
             >
               {serviceOptions.map(svc => (
@@ -59,10 +58,11 @@ export default function TmpServiceContent({
           </Grid>
           <Grid item md={2}>
             <TextField
+              type="number"
+              name="addEventData.tmpService.avgServiceTime"
               value={tmpService.avgServiceTime}
-              onChange={onChangeAvgServiceTime}
+              onChange={handleChange}
               onBlur={onBlurServiceTime}
-              {...validateAvgServiceTime()}
             />
           </Grid>
           <Grid item md={3}>
@@ -80,9 +80,9 @@ export default function TmpServiceContent({
               </Typography>
             <Tooltip
               title={`Must be between ${
-                moment(startTime).format('LT')
+                moment.tz(startTime, timezoneId).format('LT')
                 } and ${
-                moment(endTime).format('LT')
+                moment.tz(endTime, timezoneId).format('LT')
                 }`
               }
             >
@@ -93,23 +93,21 @@ export default function TmpServiceContent({
             <Grid container>
               <Grid item md={5}>
                 <TimeFormatInput
-                  name="StartBreakTimeInput"
+                  name="addEventData.tmpService.breakTimeStart"
                   value={breakStartTime}
                   onChange={onChangeTmpServiceDateTime('fromTime')}
-                  {...validateBreakTimeFrom()}
                 />
               </Grid>
               <Grid item md={2} className={addEventDialogStyles.label}>
                 <Typography variant="body2">
                   to
-                  </Typography>
+                </Typography>
               </Grid>
               <Grid item md={5}>
                 <TimeFormatInput
-                  name="EndBreakTimeInput"
+                  name="addEventData.tmpService.breakTimeEnd"
                   value={breakEndTime}
                   onChange={onChangeTmpServiceDateTime('toTime')}
-                  {...validateBreakTimeTo()}
                 />
               </Grid>
             </Grid>
@@ -121,12 +119,13 @@ export default function TmpServiceContent({
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               Location:
-              </Typography>
+            </Typography>
           </Grid>
           <Grid item md={10}>
             <Select
+              name="addEventData.tmpService.geoLocationId"
               value={tmpService.geoLocationId}
-              onChange={onSelectLocation}
+              onChange={handleChange}
               className={addEventDialogStyles.eventTypeSelect}
             >
               {geoOptions.map(geoOption => (
@@ -143,25 +142,27 @@ export default function TmpServiceContent({
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               Parallel Customers:
-              </Typography>
+            </Typography>
           </Grid>
           <Grid item md={2}>
             <TextField
+              type="number"
+              name="addEventData.tmpService.numberOfParallelCustomer"
               value={tmpService.numberOfParallelCustomer}
-              onChange={onChangeParallelCustomer}
+              onChange={handleChange}
               onBlur={onBlurParallelCustomer}
-              {...validateParallelCustomer()}
             />
           </Grid>
         </Grid>
       </Grid>
       <Grid item md={12}>
         <TextField
+          name="addEventData.tmpService.additionalInfo"
           className={addEventDialogStyles.calendarDesc}
           label="Additional Data"
           margin="normal"
           variant="outlined"
-          onChange={({ target: { value } }) => onChangeAdditionInfo(value)}
+          onChange={handleChange}
           multiline
           rows={3}
         />
@@ -180,16 +181,7 @@ TmpServiceContent.propTypes = {
     eventType: PropTypes.string,
     description: PropTypes.string
   }).isRequired,
-  onSelectService: PropTypes.func.isRequired,
-  onChangeAvgServiceTime: PropTypes.func.isRequired,
   onBlurServiceTime: PropTypes.func.isRequired,
-  validateAvgServiceTime: PropTypes.func.isRequired,
   onChangeTmpServiceDateTime: PropTypes.func.isRequired,
-  validateBreakTimeFrom: PropTypes.func.isRequired,
-  validateBreakTimeTo: PropTypes.func.isRequired,
-  onSelectLocation: PropTypes.func.isRequired,
   onBlurParallelCustomer: PropTypes.func.isRequired,
-  onChangeParallelCustomer: PropTypes.func.isRequired,
-  validateParallelCustomer: PropTypes.func.isRequired,
-  onChangeAdditionInfo: PropTypes.func.isRequired,
 }

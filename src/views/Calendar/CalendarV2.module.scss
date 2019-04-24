@@ -34,6 +34,9 @@
   }
 }
 
-.selectProvider {
-  margin-right: 32px;
+.calendarRightCustomHeader {
+  .selectProvider,
+  .providerTimezone {
+    margin-right: 32px;
+  }
 }
