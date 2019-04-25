@@ -47,25 +47,32 @@ const fetchGeoLocationOptions = dispatch => {
     });
 }
 
-const fetchServiceOptions = businessAdminId => {
-  return dispatch => {
-    axios.get(`${API_ROOT}${URL.FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
-      .then(({ data }) => {
-        dispatch({
-          type: FETCH_SERVICE_OPTIONS.SUCCESS,
-          payload: data && data.objects ? data.objects : [],
-        });
+export const fetchServiceOptions = businessAdminId => dispatch => {
+  axios.get(`${API_ROOT}${URL.FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
+    .then(({ data }) => {
+      dispatch({
+        type: FETCH_SERVICE_OPTIONS.SUCCESS,
+        payload: data && data.objects ? data.objects : [],
       });
-  };
+    });
 };
 
-const fetchTimezoneOptions = dispatch => {
+export const fetchTimezoneOptions = () => dispatch => {
   axios.get(`${API_ROOT}${URL.TIMEZONE_OPTION}`)
     .then(({ data }) => {
       dispatch({
         type: FETCH_TIMEZONE_OPTIONS.SUCCESS,
         payload: data && data.objects ? data.objects : []
       });
+    });
+};
+
+export const fetchProvidersByBusinessId = businessId => dispatch => {
+  return axios
+    .get(`${API_ROOT}${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}${businessId}`)
+    .then(({ data }) => {
+      const providers = data && data.objects ? data.objects : [];
+      dispatch(fetchProvidersByBusinessIdSuccess(providers));
     });
 };
 
@@ -104,7 +111,7 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
       dispatch(calendarLoading(false));
       fetchGeoLocationOptions(dispatch);
       fetchServiceOptions(businessId)(dispatch);
-      fetchTimezoneOptions(dispatch);
+      fetchTimezoneOptions()(dispatch);
     });
 };
 
@@ -129,7 +136,7 @@ export const createNewEvent = newEvent => dispatch => {
         ...data,
         type: data.type || newEvent.type
       };
-      if(newEvent.type === EVENT_TYPE.TMP_SERVICE) {
+      if (newEvent.type === EVENT_TYPE.TMP_SERVICE) {
         const tmpServices = localStorage.getItem('tmpServices');
         if (tmpServices !== null) {
           const listTmpServices = JSON.parse(tmpServices);

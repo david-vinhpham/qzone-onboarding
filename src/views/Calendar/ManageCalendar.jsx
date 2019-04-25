@@ -2,19 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 import moment from 'moment-timezone';
-import { isEmpty } from 'lodash';
 
 import { fetchEventsByBusinessId, createNewEvent } from 'actions/calendar';
 import {
   EVENT_LEVEL,
   EVENT_TYPE,
-  EVENT_REPEAT_TYPE,
-  REPEAT_END_TYPE
+  EVENT_REPEAT_TYPE
 } from 'constants/Calendar.constants';
 import { providerType, optionType } from 'types/global';
 import Calendar from './CalendarV2';
 import AddEventDialog from './AddEventDialog';
 import CalendarLoading from './CalendarLoading';
+import { generateTmpServicePayload, generateRepeatPayload } from 'utils/mappingHelpers';
 
 class ManageCalendar extends React.PureComponent {
   constructor(props) {
@@ -82,99 +81,6 @@ class ManageCalendar extends React.PureComponent {
     });
   };
 
-  convertTimeToSpecificOffset = (time, offset) => {
-    const tmpTime = time.split('+');
-    return `${tmpTime[0]}${offset}`;
-  }
-
-  generateRepeatPayload = (repeat, timezoneId, providerTzOffset) => {
-    let repeatPayload = {};
-
-    if (repeat.type === EVENT_REPEAT_TYPE.DAILY) {
-      repeatPayload = {
-        ...repeatPayload,
-        repeatType: EVENT_REPEAT_TYPE.DAILY,
-        repeat: {
-          repeatDaily: {
-            repeatEvery: repeat.every
-          }
-        }
-      };
-    }
-
-    if (repeat.type === EVENT_REPEAT_TYPE.WEEKLY) {
-      repeatPayload = {
-        ...repeatPayload,
-        repeatType: EVENT_REPEAT_TYPE.WEEKLY,
-        repeat: {
-          repeatWeekly: {
-            repeatEveryNumWeeks: repeat.every,
-            repeatOn: repeat.everyDate
-          }
-        }
-      };
-    }
-
-    if (isEmpty(repeat.repeatEnd)) {
-      repeatPayload = {
-        ...repeatPayload,
-        repeatEndType: REPEAT_END_TYPE.NEVER
-      };
-    } else {
-      if (repeat.repeatEnd.afterOccur !== undefined) {
-        repeatPayload = {
-          ...repeatPayload,
-          repeatEndType: REPEAT_END_TYPE.AFTER_NUM_OCCUR,
-          repeatEnd: {
-            afterNumOccurrences: repeat.repeatEnd.afterOccur
-          }
-        };
-      }
-
-      if (repeat.repeatEnd.onDate !== undefined) {
-        repeatPayload = {
-          ...repeatPayload,
-          repeatEndType: REPEAT_END_TYPE.ON_DATE,
-          repeatEnd: {
-            repeatEndOn: moment.tz(
-              this.convertTimeToSpecificOffset(repeat.repeatEnd.onDate, providerTzOffset),
-              timezoneId
-            ).unix()
-          }
-        };
-      }
-    }
-
-    return repeatPayload;
-  };
-
-  generateTmpServicePayload = (tmpService, timezoneId, providerTzOffset) => {
-    const {
-      additionalInfo,
-      avgServiceTime,
-      breakTimeStart,
-      breakTimeEnd,
-      geoLocationId,
-      numberOfParallelCustomer,
-      serviceId
-    } = tmpService;
-    const providerBreakStartTime = this.convertTimeToSpecificOffset(breakTimeStart, providerTzOffset);
-    const providerBreakEndTime = this.convertTimeToSpecificOffset(breakTimeEnd, providerTzOffset);
-
-    return {
-      additionalInfo: additionalInfo.length === 0 ? undefined : additionalInfo,
-      avgServiceTime,
-      breakTime: {
-        breakStart: moment.tz(providerBreakStartTime, timezoneId).unix(),
-        breakEnd: moment.tz(providerBreakEndTime, timezoneId).unix()
-      },
-      geoLocationId,
-      numberOfParallelCustomer,
-      serviceId,
-      businessAdminId: this.userId
-    };
-  };
-
   generatePayload = addEventData => {
     const {
       providerId,
@@ -192,25 +98,23 @@ class ManageCalendar extends React.PureComponent {
     } = addEventData;
     const providerTz = this.props.providers.find(p => p.id === providerId).timezone;
     const providerTzOffset = moment().tz(providerTz).format('Z');
-    const providerStartTime = this.convertTimeToSpecificOffset(startTime, providerTzOffset);
-    const providerEndTime = this.convertTimeToSpecificOffset(endTime, providerTzOffset);
 
     let payload = {
       description,
       providerId,
       slot: {
-        startTime: moment.tz(providerStartTime, providerTz).unix(),
-        endTime: moment.tz(providerEndTime, providerTz).unix()
+        startTime: moment(startTime).utcOffset(providerTzOffset, true).unix(),
+        endTime: moment(endTime).utcOffset(providerTzOffset, true).unix()
       },
       type: eventType,
     };
 
     if (eventType === EVENT_TYPE.TMP_SERVICE) {
-      payload = { ...payload, ...this.generateTmpServicePayload(tmpService, providerTz, providerTzOffset) };
+      payload = { ...payload, ...generateTmpServicePayload(tmpService, providerTzOffset, this.userId) };
     }
 
     if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
-      payload = { ...payload, ...this.generateRepeatPayload(repeat, providerTz, providerTzOffset) };
+      payload = { ...payload, ...generateRepeatPayload(repeat, providerTzOffset) };
     }
 
     if (eventType === EVENT_TYPE.APPOINTMENT) {

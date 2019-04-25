@@ -226,7 +226,7 @@ class AddEventDialog extends PureComponent {
     const {
       isOpenAddDialog, closeAddDialog, geoOptions,
       serviceOptions, providers,
-      eventLevel, addEventData
+      eventLevel, addEventData, isEditMode
     } = this.props;
     const { tmpServiceStep } = this.state;
     return (
@@ -259,7 +259,7 @@ class AddEventDialog extends PureComponent {
                       color: get(EVENT_BG_COLOR[values.addEventData.eventType], 'color', '')
                     }}
                   >
-                    Create event
+                    {`${isEditMode ? 'Edit' : 'Create'}`} event
                   </Typography>
                 </DialogTitle>
                 <DialogContent>
@@ -279,6 +279,7 @@ class AddEventDialog extends PureComponent {
                       onBlurOccurence={this.onBlurOccurence(setFieldValue, values)}
                       onChangeRepeatEndDate={this.onChangeRepeatEndDate(setFieldValue, values)}
                       onChangeCustomerMobilePhone={this.onChangeCustomerMobilePhone(setFieldValue)}
+                      isEditMode={isEditMode}
                     /> :
                     <TmpServiceContent
                       geoOptions={geoOptions}
@@ -301,7 +302,7 @@ class AddEventDialog extends PureComponent {
                   <Button variant="outlined" color="primary" onClick={this.onClickNext(values)} disabled={isSubmitting}>
                     {values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1
                       ? 'Next'
-                      : 'Create'}
+                      : isEditMode ? 'Edit' : 'Create'}
                   </Button>
                   <Button variant="outlined" onClick={closeAddDialog}>
                     Cancel
@@ -331,6 +332,11 @@ AddEventDialog.propTypes = {
   tzOptions: PropTypes.arrayOf(optionType).isRequired,
   geoOptions: PropTypes.arrayOf(optionType).isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
+  isEditMode: PropTypes.bool,
+};
+
+AddEventDialog.defaultProps = {
+  isEditMode: false
 };
 
 export default connect(state => ({ geoOptions: state.calendarManage.geoOptions }))(AddEventDialog);

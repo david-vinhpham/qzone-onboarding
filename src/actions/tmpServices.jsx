@@ -12,6 +12,11 @@ const setTmpServices = payload => ({
   payload
 });
 
+const setTmpService = payload => ({
+  type: tmp_service.SET_TMP_SERVICE,
+  payload
+})
+
 export const deleteTmpService = eventId => {
   return dispatch => {
     dispatch({ type: tmp_service.DEL_TMP_SERVICE_LOADING });
@@ -68,4 +73,17 @@ export const fetchTmpServices = businessId => dispatch => {
     .finally(() => {
       dispatch(setTmpServicesLoading(false));
     });
+}
+
+export const editTmpService = payload => dispatch => {
+  dispatch(setTmpServicesLoading(true));
+  axios.put(`${API_ROOT}${URL.NEW_TMP_SERVICE}`, payload)
+  .then(resp => {
+    if(resp.status === 200) {
+      dispatch(setTmpService(resp.data.object));
+    }
+  })
+  .finally(() => {
+    dispatch(setTmpServicesLoading(false));
+  });
 }

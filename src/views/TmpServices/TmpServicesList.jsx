@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { classesType, historyType, tmpServiceType } from "types/global";
+import { classesType, historyType, tmpServiceType, optionType, providerType } from "types/global";
 import { connect } from "react-redux";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import moment from "moment-timezone";
-import { deleteTmpService, fetchTmpServices } from "../../actions/tmpServices";
+import { deleteTmpService, fetchTmpServices, editTmpService } from "../../actions/tmpServices";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
@@ -22,6 +22,10 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Search from "@material-ui/icons/Search";
+import AddEventDialog from "views/Calendar/AddEventDialog";
+import { fetchProvidersByBusinessId, fetchTimezoneOptions, fetchServiceOptions } from "actions/calendar";
+import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
+import { generateTmpServicePayload, generateRepeatPayload } from "utils/mappingHelpers";
 
 const override = css`
   display: block;
@@ -36,35 +40,49 @@ class TmpServicesList extends PureComponent {
       deletedTmpService: {
         id: 0,
         isDel: false
-      }
+      },
+      isOpenEditDialog: false,
+      eventLevel: EVENT_LEVEL.PROVIDER,
+      addEventData: {}
     };
   }
+
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.tmpServices });
     if (nextProps.tmpServices != null && nextProps.tmpServices.length > 0 && !nextProps.delTmpServiceLoading) {
+      this.setState({ data: nextProps.tmpServices });
       localStorage.setItem('tmpServices', JSON.stringify(nextProps.tmpServices));
     }
-
   }
+
   componentDidMount() {
-    let userInfo = localStorage.getItem('user');
+    const userInfo = localStorage.getItem('user');
     if (userInfo === null) {
-      window.location = '/login';
+      this.props.history.push('/login');
     }
-    let tmpServices = localStorage.getItem('tmpServices');
-    tmpServices = JSON.parse(tmpServices);
+
+    const tmpServices = JSON.parse(localStorage.getItem('tmpServices'));
+    this.businessId = localStorage.getItem('userSub');
     if (tmpServices !== null && tmpServices.length > 0) {
       this.setState({ data: tmpServices });
     } else {
-      const userSub = localStorage.getItem('userSub');
-      this.props.fetchTmpServices(userSub);
+      this.props.fetchTmpServices(this.businessId);
     }
 
+    if (this.props.providers.length === 0) {
+      this.props.fetchProvidersByBusinessId(this.businessId);
+    }
+    if (this.props.tzOptions.length === 0) {
+      this.props.fetchTimezoneOptions();
+    }
+    if (this.props.serviceOptions.length === 0) {
+      this.props.fetchServiceOptions(this.businessId);
+    }
   }
 
   handleClick(event, history) {
     history.push('/tmp-service/detail/' + event.id);
   }
+
   cancelDelete = () => {
     const data = {
       isDel: false
@@ -87,10 +105,108 @@ class TmpServicesList extends PureComponent {
     };
     this.setState({ deletedTmpService: data });
   }
+
+  openEditDialog = event => {
+    const localTz = moment().format('Z');
+    let repeat = {
+      type: EVENT_REPEAT_TYPE.NEVER,
+      repeatEnd: {}
+    };
+
+    if (event.repeatType) {
+      repeat = {
+        type: event.repeatType,
+        every: event.repeatType === EVENT_REPEAT_TYPE.DAILY
+          ? event.repeat.repeatDaily.repeatEvery
+          : event.repeat.repeatWeekly.repeatEveryNumWeeks,
+        everyDate: event.repeatType === EVENT_REPEAT_TYPE.WEEKLY
+          ? [event.repeat.repeatWeekly.repeatOn]
+          : [],
+        repeatEnd: {
+          afterOccur: event.repeatEnd.afterNumOccurrences,
+          onDate: moment.tz(event.repeatEnd.repeatEndOn * 1000, event.timezoneId)
+            .utcOffset(localTz, true)
+            .format()
+        },
+      }
+    }
+
+    this.setState({
+      isOpenEditDialog: true,
+      addEventData: {
+        id: event.id,
+        eventType: EVENT_TYPE.TMP_SERVICE,
+        description: event.description,
+        repeat,
+        timezoneId: event.timezoneId,
+        serviceId: event.serviceId,
+        providerId: event.providerId,
+        providerName: event.providerName,
+        startTime: moment.tz(event.slot.startTime * 1000, event.timezoneId)
+          .utcOffset(localTz, true)
+          .format(),
+        endTime: moment.tz(event.slot.endTime * 1000, event.timezoneId)
+          .utcOffset(localTz, true)
+          .format(),
+        tmpService: {
+          additionalInfo: event.additionalInfo || '',
+          avgServiceTime: event.avgServiceTime,
+          breakTimeStart: moment.tz(event.breakTime.breakStart * 1000, event.timezoneId)
+            .utcOffset(localTz, true)
+            .format(),
+          breakTimeEnd: moment.tz(event.breakTime.breakEnd * 1000, event.timezoneId)
+            .utcOffset(localTz, true)
+            .format(),
+          geoLocationId: event.geoLocation.id,
+          numberOfParallelCustomer: event.numberOfParallelCustomer,
+          serviceId: event.serviceId,
+        }
+      }
+    })
+  }
+
+  closeEditDialog = () => this.setState({ isOpenEditDialog: false })
+
+  editTmpService = ({ addEventData }) => {
+    const {
+      id,
+      providerId,
+      startTime,
+      endTime,
+      eventType,
+      description,
+      repeat,
+      tmpService
+    } = addEventData;
+    const providerTzOffset = moment().tz(addEventData.timezoneId).format('Z');
+
+    let payload = {
+      id,
+      description,
+      providerId,
+      slot: {
+        startTime: moment(startTime).utcOffset(providerTzOffset, true).unix(),
+        endTime: moment(endTime).utcOffset(providerTzOffset, true).unix()
+      },
+      type: eventType,
+      ...generateTmpServicePayload(tmpService, providerTzOffset, this.businessId)
+    };
+
+    if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
+      payload = { ...payload, ...generateRepeatPayload(repeat, providerTzOffset) };
+    }
+
+    this.props.editTmpService(payload);
+  }
+
   render() {
-    const { classes, history, isLoading, delTmpServiceError } = this.props;
+    const {
+      classes, history, isLoading, delTmpServiceError,
+      providers, tzOptions, serviceOptions
+    } = this.props;
     let data = [];
-    const { deletedTmpService } = this.state;
+    const { deletedTmpService, isOpenEditDialog, eventLevel, addEventData } = this.state;
+
     if (isLoading) {
       return (
         <ClipLoader
@@ -102,9 +218,11 @@ class TmpServicesList extends PureComponent {
         />
       );
     }
+
     if (delTmpServiceError) {
       return <div className="alert alert-danger">Error</div>;
     }
+
     data = (
       <Paper>
         <Table aria-labelledby="tableTitle">
@@ -115,7 +233,7 @@ class TmpServicesList extends PureComponent {
               <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
               <TableCell className={classes.cellHeaderBold}>End time</TableCell>
               <TableCell className={classes.cellHeaderBold}>Description</TableCell>
-              <TableCell className={classes.cellHeaderBold}>View|Edit|Delete</TableCell>
+              <TableCell className={classes.cellHeaderBold}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -144,6 +262,7 @@ class TmpServicesList extends PureComponent {
                     title="Edit"
                     placement="bottom"
                     classes={{ tooltip: classes.tooltip }}
+                    onClick={() => this.openEditDialog(event)}
                   >
                     <Button color="success" simple justIcon>
                       <Edit className={classes.underChartIcons} />
@@ -180,6 +299,7 @@ class TmpServicesList extends PureComponent {
         itemId={deletedTmpService.id}
       />
     ) : null;
+
     return (
       <div>
         <GridContainer>
@@ -220,6 +340,19 @@ class TmpServicesList extends PureComponent {
         </GridContainer>
         {data}
         {deletionPopup}
+        {isOpenEditDialog && (
+          <AddEventDialog
+            isEditMode
+            eventLevel={eventLevel}
+            providers={providers}
+            isOpenAddDialog={isOpenEditDialog}
+            closeAddDialog={this.closeEditDialog}
+            addEventData={addEventData}
+            createNewEvent={this.editTmpService}
+            tzOptions={tzOptions}
+            serviceOptions={serviceOptions}
+          />
+        )}
       </div>
     );
   }
@@ -231,19 +364,37 @@ TmpServicesList.propTypes = {
   classes: classesType.isRequired,
   history: historyType.isRequired,
   delTmpServiceLoading: PropTypes.bool.isRequired,
-  delTmpServiceError: PropTypes.bool.isRequired,
+  delTmpServiceError: PropTypes.bool,
+  tzOptions: PropTypes.arrayOf(optionType).isRequired,
+  serviceOptions: PropTypes.arrayOf(optionType).isRequired,
+  providers: PropTypes.arrayOf(providerType).isRequired,
+  fetchProvidersByBusinessId: PropTypes.func.isRequired,
+  fetchTimezoneOptions: PropTypes.func.isRequired,
+  fetchServiceOptions: PropTypes.func.isRequired,
 };
+
+TmpServicesList.defaultProps = {
+  delTmpServiceError: null,
+}
 
 const mapStateToProps = state => ({
   tmpServices: state.tmpServices.list,
   isLoading: state.tmpServices.isLoading,
   delTmpServiceLoading: state.tmpServices.delTmpServiceLoading,
   delTmpServiceError: state.tmpServices.delTmpServiceError,
+  providers: state.calendarManage.providers,
+  tzOptions: state.calendarManage.tzOptions,
+  serviceOptions: state.calendarManage.serviceOptions,
+  editTmpService: PropTypes.func.isRequired,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchTmpServices: businessId => dispatch(fetchTmpServices(businessId)),
-  deleteTmpService: eventId => dispatch(deleteTmpService(eventId))
+  deleteTmpService: eventId => dispatch(deleteTmpService(eventId)),
+  fetchProvidersByBusinessId: businessId => dispatch(fetchProvidersByBusinessId(businessId)),
+  fetchTimezoneOptions: () => dispatch(fetchTimezoneOptions()),
+  fetchServiceOptions: businessId => dispatch(fetchServiceOptions(businessId)),
+  editTmpService: payload => dispatch(editTmpService(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(tableStyle)(TmpServicesList));

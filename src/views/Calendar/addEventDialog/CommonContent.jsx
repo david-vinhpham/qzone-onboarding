@@ -22,7 +22,8 @@ export default function CommonContent({
   values, providers, serviceOptions, errors, handleChange,
   onChangeEventType, onSelectEventLevel, onSelectProvider,
   onChangeNewEventDateTime, onSelectRepeatType, onRepeatEndSelect,
-  onBlurOccurence, onChangeRepeatEndDate, onChangeCustomerMobilePhone
+  onBlurOccurence, onChangeRepeatEndDate, onChangeCustomerMobilePhone,
+  isEditMode
 }) {
   const startTime = moment(values.addEventData.startTime).toDate();
   const endTime = moment(values.addEventData.endTime).toDate();
@@ -45,6 +46,7 @@ export default function CommonContent({
               value={values.addEventData.eventType}
               onChange={onChangeEventType}
               className={addEventDialogStyles.eventTypeSelect}
+              readOnly={isEditMode}
             >
               {Object.values(EVENT_TYPE).map(e => (
                 <MenuItem value={e} key={e}>
@@ -69,6 +71,7 @@ export default function CommonContent({
                 value={values.eventLevel}
                 onChange={onSelectEventLevel}
                 className={addEventDialogStyles.eventTypeSelect}
+                readOnly={isEditMode}
               >
                 <MenuItem value={EVENT_LEVEL.PROVIDER}>
                   {EVENT_LEVEL.PROVIDER}
@@ -97,6 +100,7 @@ export default function CommonContent({
                     value={values.addEventData.providerId}
                     onChange={onSelectProvider}
                     className={addEventDialogStyles.eventTypeSelect}
+                    readOnly={isEditMode}
                   >
                     {providers.map(provider => (
                       <MenuItem value={provider.id} key={provider.id}>
@@ -453,4 +457,5 @@ CommonContent.propTypes = {
   onBlurOccurence: PropTypes.func.isRequired,
   onChangeRepeatEndDate: PropTypes.func.isRequired,
   onChangeCustomerMobilePhone: PropTypes.func.isRequired,
+  isEditMode: PropTypes.bool.isRequired,
 }
