@@ -7,7 +7,7 @@ const setTmpServicesLoading = payload => ({
   payload
 });
 
-const setTmpServices = payload => ({
+export const setTmpServices = payload => ({
   type: tmp_service.FETCH_TMP_SERVICES_SUCCESS,
   payload
 });

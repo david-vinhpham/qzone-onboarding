@@ -38,7 +38,7 @@ const fetchGeoOptionsSuccess = geoOptions => ({
   geoOptions
 });
 
-const fetchGeoLocationOptions = dispatch => {
+export const fetchGeoLocationOptions = () => dispatch => {
   axios
     .get(`${API_ROOT}${URL.GET_GEO_LOCATION_OPTIONS}`)
     .then(resp => {
@@ -109,7 +109,7 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
     })
     .finally(() => {
       dispatch(calendarLoading(false));
-      fetchGeoLocationOptions(dispatch);
+      fetchGeoLocationOptions()(dispatch);
       fetchServiceOptions(businessId)(dispatch);
       fetchTimezoneOptions()(dispatch);
     });

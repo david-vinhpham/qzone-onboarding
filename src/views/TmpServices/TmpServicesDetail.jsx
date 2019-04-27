@@ -31,7 +31,7 @@ class TmpServicesDetail extends PureComponent {
             </Button>
             <Typography inline variant="h6">Event detail</Typography>
           </div>
-          {tmpServiceDetail.custUrl ?
+          {tmpServiceDetail.id ?
             <Grid container spacing={16}>
               <Grid item sm={3} xs={12}>
                 <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
@@ -56,7 +56,7 @@ class TmpServicesDetail extends PureComponent {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  {tmpServiceDetail.custUrl}
+                  {tmpServiceDetail.custUrl || ''}
                 </Link>
               </Grid>
               <Grid item sm={3} xs={12}>

@@ -6,7 +6,7 @@ import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import moment from "moment-timezone";
-import { deleteTmpService, fetchTmpServices, editTmpService } from "../../actions/tmpServices";
+import { deleteTmpService, fetchTmpServices, editTmpService, setTmpServices } from "../../actions/tmpServices";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
@@ -23,7 +23,7 @@ import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Search from "@material-ui/icons/Search";
 import AddEventDialog from "views/Calendar/AddEventDialog";
-import { fetchProvidersByBusinessId, fetchTimezoneOptions, fetchServiceOptions } from "actions/calendar";
+import { fetchProvidersByBusinessId, fetchTimezoneOptions, fetchServiceOptions, fetchGeoLocationOptions } from "actions/calendar";
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload } from "utils/mappingHelpers";
 
@@ -64,6 +64,7 @@ class TmpServicesList extends PureComponent {
     this.businessId = localStorage.getItem('userSub');
     if (tmpServices !== null && tmpServices.length > 0) {
       this.setState({ data: tmpServices });
+      this.props.setTmpServices(tmpServices);
     } else {
       this.props.fetchTmpServices(this.businessId);
     }
@@ -76,6 +77,9 @@ class TmpServicesList extends PureComponent {
     }
     if (this.props.serviceOptions.length === 0) {
       this.props.fetchServiceOptions(this.businessId);
+    }
+    if(this.props.geoOptions.length === 0) {
+      this.props.fetchGeoLocationOptions();
     }
   }
 
@@ -124,9 +128,10 @@ class TmpServicesList extends PureComponent {
           : [],
         repeatEnd: {
           afterOccur: event.repeatEnd.afterNumOccurrences,
-          onDate: moment.tz(event.repeatEnd.repeatEndOn * 1000, event.timezoneId)
+          onDate: event.repeatEnd.repeatEndOn ? moment.tz(event.repeatEnd.repeatEndOn * 1000, event.timezoneId)
             .utcOffset(localTz, true)
             .format()
+            : undefined
         },
       }
     }
@@ -197,6 +202,7 @@ class TmpServicesList extends PureComponent {
     }
 
     this.props.editTmpService(payload);
+    this.setState({ isOpenEditDialog: false });
   }
 
   render() {
@@ -367,10 +373,14 @@ TmpServicesList.propTypes = {
   delTmpServiceError: PropTypes.bool,
   tzOptions: PropTypes.arrayOf(optionType).isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
+  geoOptions: PropTypes.arrayOf(optionType).isRequired,
   providers: PropTypes.arrayOf(providerType).isRequired,
   fetchProvidersByBusinessId: PropTypes.func.isRequired,
   fetchTimezoneOptions: PropTypes.func.isRequired,
   fetchServiceOptions: PropTypes.func.isRequired,
+  editTmpService: PropTypes.func.isRequired,
+  fetchGeoLocationOptions: PropTypes.func.isRequired,
+  setTmpServices: PropTypes.func.isRequired,
 };
 
 TmpServicesList.defaultProps = {
@@ -385,7 +395,7 @@ const mapStateToProps = state => ({
   providers: state.calendarManage.providers,
   tzOptions: state.calendarManage.tzOptions,
   serviceOptions: state.calendarManage.serviceOptions,
-  editTmpService: PropTypes.func.isRequired,
+  geoOptions: state.calendarManage.geoOptions
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -394,7 +404,9 @@ const mapDispatchToProps = dispatch => ({
   fetchProvidersByBusinessId: businessId => dispatch(fetchProvidersByBusinessId(businessId)),
   fetchTimezoneOptions: () => dispatch(fetchTimezoneOptions()),
   fetchServiceOptions: businessId => dispatch(fetchServiceOptions(businessId)),
-  editTmpService: payload => dispatch(editTmpService(payload))
+  editTmpService: payload => dispatch(editTmpService(payload)),
+  fetchGeoLocationOptions: () => dispatch(fetchGeoLocationOptions()),
+  setTmpServices: tmpServices =>  dispatch(setTmpServices(tmpServices))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(tableStyle)(TmpServicesList));
