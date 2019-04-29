@@ -135,6 +135,24 @@ export default function CommonContent({
               <Grid container spacing={8}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
+                    Location:
+                  </Typography>
+                </Grid>
+                <Grid item md={10}>
+                  <TextField
+                    fullWidth
+                    name="addEventData.location"
+                    label="Location"
+                    value={values.addEventData.location || ''}
+                    onChange={handleChange}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item md={12}>
+              <Grid container spacing={8}>
+                <Grid item md={2} className={addEventDialogStyles.label}>
+                  <Typography variant="body2" noWrap inline>
                     Service:
                   </Typography>
                 </Grid>
