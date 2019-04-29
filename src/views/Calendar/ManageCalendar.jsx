@@ -90,6 +90,7 @@ class ManageCalendar extends React.PureComponent {
       description,
       repeat,
       tmpService,
+      location,
       serviceId,
       customerEmail,
       customerFirstName,
@@ -121,6 +122,7 @@ class ManageCalendar extends React.PureComponent {
       payload = {
         ...payload,
         timezoneId: providerTz,
+        location,
         serviceId,
         customerEmail,
         customerFirstName,
