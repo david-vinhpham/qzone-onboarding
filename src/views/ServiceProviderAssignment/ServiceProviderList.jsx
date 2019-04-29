@@ -32,6 +32,7 @@ const override = css`
   margin: 0 auto;
   border-color: red;
 `;
+
 class ServiceProviderList extends React.Component {
   constructor(props) {
     super(props);
@@ -46,7 +47,7 @@ class ServiceProviderList extends React.Component {
 
   componentDidMount() {
     let userInfo = localStorage.getItem('user');
-    if(userInfo === null) {
+    if (userInfo === null) {
       window.location = '/login';
     }
     let serviceProviders = localStorage.getItem('serviceProvider');
@@ -210,31 +211,25 @@ class ServiceProviderList extends React.Component {
                 <CardText color="rose">
                   <h4 className={classes.cardTitle}>Service Provider List</h4>
                 </CardText>
-                <div className="centerDiv">
-                  <div className="search" md={3}>
-                    <CustomInput
-                      formControlProps={{
-                        className: `${classes.top} ${classes.search}`
-                      }}
-                      inputProps={{
-                        placeholder: 'Search',
-                        inputProps: {
-                          'aria-label': 'Search',
-                          className: classes.searchInput
-                        }
-                      }}
-                    />
-                    <Button
-                      color="white"
-                      aria-label="edit"
-                      justIcon
-                      round
-                      className={`${classes.top} ${classes.searchButton}`}
-                    >
-                      <Search className={`${classes.headerLinksSvg} ${classes.searchIcon}`} />
-                    </Button>
-                  </div>
-                </div>
+                <CustomInput
+                  formControlProps={{
+                    className: `${classes.top} ${classes.search}`
+                  }}
+                  inputProps={{
+                    placeholder: 'Search',
+                    inputProps: {
+                      'aria-label': 'Search',
+                      className: classes.searchInput
+                    }
+                  }}
+                />
+                <Button
+                  color="white"
+                  aria-label="edit"
+                  justIcon
+                  round>
+                  <Search />
+                </Button>
                 <Link to="/service-provider/create">
                   <Button size="sm" className={classes.buttonDisplay}>
                     New Service Provider

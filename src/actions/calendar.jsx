@@ -70,9 +70,11 @@ export const fetchTimezoneOptions = () => dispatch => {
 export const fetchProvidersByBusinessId = businessId => dispatch => {
   return axios
     .get(`${API_ROOT}${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}${businessId}`)
-    .then(({ data }) => {
-      const providers = data && data.objects ? data.objects : [];
-      dispatch(fetchProvidersByBusinessIdSuccess(providers));
+    .then((response) => {
+      if(response) {
+        const providers = get(response, 'data.objects', []);
+        dispatch(fetchProvidersByBusinessIdSuccess(providers));
+      }
     });
 };
 
@@ -81,31 +83,34 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
 
   return axios
     .get(`${API_ROOT}${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}${businessId}`)
-    .then(({ data }) => {
-      const providers = data && data.objects ? data.objects : [];
-      const providerIds = flow(
-        providerData => map(providerData, data => get(data, 'id')),
-        providerData => compact(providerData)
-      )(providers);
+    .then((response) => {
+      if (response) {
+        const data = response.data;
+        const providers = data && data.objects ? data.objects : [];
+        const providerIds = flow(
+          providerData => map(providerData, pData => get(pData, 'id')),
+          providerData => compact(providerData)
+        )(providers);
 
-      /* Fetch events of providers */
-      const fetchEvents = [];
-      providerIds.forEach(providerId => {
-        fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
-        fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}${providerId}`));
-        fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID}${providerId}`));
-      });
+        /* Fetch events of providers */
+        const fetchEvents = [];
+        providerIds.forEach(providerId => {
+          fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
+          fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}${providerId}`));
+          fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID}${providerId}`));
+        });
 
-      return Promise.all(fetchEvents).then(rep => {
-        const tmpEvents = reduce(rep, (acc, { data }) => acc.concat(get(data, 'objects', [])), []);
-        const events = tmpEvents.map(e => ({
-          ...e,
-          type: e.type || EVENT_TYPE.TMP_SERVICE,
-          timezone: providers.find(p => p.id === e.providerId).providerInformation.timeZoneId,
-        }));
-        dispatch(fetchEventsByProvidersSuccess(events));
-        dispatch(fetchProvidersByBusinessIdSuccess(providers));
-      });
+        return Promise.all(fetchEvents).then(rep => {
+          const tmpEvents = reduce(rep, (acc, { d }) => acc.concat(get(d, 'objects', [])), []);
+          const events = tmpEvents.map(e => ({
+            ...e,
+            type: e.type || EVENT_TYPE.TMP_SERVICE,
+            timezone: providers.find(p => p.id === e.providerId).providerInformation.timeZoneId,
+          }));
+          dispatch(fetchEventsByProvidersSuccess(events));
+          dispatch(fetchProvidersByBusinessIdSuccess(providers));
+        });
+      }
     })
     .finally(() => {
       dispatch(calendarLoading(false));
@@ -131,20 +136,22 @@ export const createNewEvent = newEvent => dispatch => {
   return axios
     .post(`${API_ROOT}${api}`, newEvent)
     .then(response => {
-      const data = get(response, 'data.object', {});
-      const event = {
-        ...data,
-        type: data.type || newEvent.type
-      };
-      if (newEvent.type === EVENT_TYPE.TMP_SERVICE) {
-        const tmpServices = localStorage.getItem('tmpServices');
-        if (tmpServices !== null) {
-          const listTmpServices = JSON.parse(tmpServices);
-          listTmpServices.push(data);
-          localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
+      if (response) {
+        const data = get(response, 'data.object', {});
+        const event = {
+          ...data,
+          type: data.type || newEvent.type
+        };
+        if (newEvent.type === EVENT_TYPE.TMP_SERVICE) {
+          const tmpServices = localStorage.getItem('tmpServices');
+          if (tmpServices !== null) {
+            const listTmpServices = JSON.parse(tmpServices);
+            listTmpServices.push(data);
+            localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
+          }
         }
+        dispatch(createEventSuccess(event));
       }
-      dispatch(createEventSuccess(event));
     })
     .finally(() => {
       dispatch(calendarLoading(false));

@@ -8,6 +8,7 @@ import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@materi
 import moment from "moment-timezone";
 import { deleteTmpService, fetchTmpServices, editTmpService, setTmpServices } from "../../actions/tmpServices";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
+import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
 import DeletionModal from "../../shared/deletion-modal";
@@ -78,7 +79,7 @@ class TmpServicesList extends PureComponent {
     if (this.props.serviceOptions.length === 0) {
       this.props.fetchServiceOptions(this.businessId);
     }
-    if(this.props.geoOptions.length === 0) {
+    if (this.props.geoOptions.length === 0) {
       this.props.fetchGeoLocationOptions();
     }
   }
@@ -315,30 +316,26 @@ class TmpServicesList extends PureComponent {
                 <CardText color="rose">
                   <h4 className={classes.cardTitle}>List temporary services</h4>
                 </CardText>
-                <div className="centerDiv">
-                  <div className="search" md={3}>
-                    <CustomInput
-                      formControlProps={{
-                        className: `${classes.top} ${classes.search}`
-                      }}
-                      inputProps={{
-                        placeholder: 'Search',
-                        inputProps: {
-                          'aria-label': 'Search',
-                          className: classes.searchInput
-                        }
-                      }}
-                    />
-                    <Button
-                      color="white"
-                      aria-label="edit"
-                      justIcon
-                      round
-                      className={`${classes.top} ${classes.searchButton}`}
-                    >
-                      <Search className={`${classes.headerLinksSvg} ${classes.searchIcon}`} />
-                    </Button>
-                  </div>
+                <div>
+                  <CustomInput
+                    formControlProps={{
+                      className: `${classes.top} ${classes.search}`
+                    }}
+                    inputProps={{
+                      placeholder: 'Search',
+                      inputProps: {
+                        'aria-label': 'Search',
+                        className: classes.searchInput
+                      }
+                    }}
+                  />
+                  <Button
+                    color="white"
+                    aria-label="edit"
+                    justIcon
+                    round>
+                    <Search />
+                  </Button>
                 </div>
               </CardHeader>
             </Card>
@@ -406,7 +403,7 @@ const mapDispatchToProps = dispatch => ({
   fetchServiceOptions: businessId => dispatch(fetchServiceOptions(businessId)),
   editTmpService: payload => dispatch(editTmpService(payload)),
   fetchGeoLocationOptions: () => dispatch(fetchGeoLocationOptions()),
-  setTmpServices: tmpServices =>  dispatch(setTmpServices(tmpServices))
+  setTmpServices: tmpServices => dispatch(setTmpServices(tmpServices))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(tableStyle)(TmpServicesList));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles({ ...tableStyle, ...listPageStyle })(TmpServicesList));
