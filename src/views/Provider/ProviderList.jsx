@@ -29,6 +29,7 @@ const override = css`
   margin: 0 auto;
   border-color: red;
 `;
+
 class ProviderList extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +44,7 @@ class ProviderList extends React.Component {
 
   componentDidMount() {
     let userInfo = localStorage.getItem('user');
-    if(userInfo === null) {
+    if (userInfo === null) {
       window.location = '/login';
     }
     const sub = localStorage.getItem('userSub');
@@ -204,30 +205,26 @@ class ProviderList extends React.Component {
                 <CardText color="rose">
                   <h4 className={classes.cardTitle}>Provider List</h4>
                 </CardText>
-                <div className="centerDiv">
-                  <div className="search" md={3}>
-                    <CustomInput
-                      formControlProps={{
-                        className: `${classes.top} ${classes.search}`
-                      }}
-                      inputProps={{
-                        placeholder: 'Search',
-                        inputProps: {
-                          'aria-label': 'Search',
-                          className: classes.searchInput
-                        }
-                      }}
-                    />
-                    <Button
-                      color="white"
-                      aria-label="edit"
-                      justIcon
-                      round
-                      className={`${classes.top} ${classes.searchButton}`}
-                    >
-                      <Search className={`${classes.headerLinksSvg} ${classes.searchIcon}`} />
-                    </Button>
-                  </div>
+                <div>
+                  <CustomInput
+                    formControlProps={{
+                      className: `${classes.top} ${classes.search}`
+                    }}
+                    inputProps={{
+                      placeholder: 'Search',
+                      inputProps: {
+                        'aria-label': 'Search',
+                        className: classes.searchInput
+                      }
+                    }}
+                  />
+                  <Button
+                    color="white"
+                    aria-label="edit"
+                    justIcon
+                    round>
+                    <Search />
+                  </Button>
                 </div>
                 <Link to="/provider/create">
                   <Button size="sm" className={classes.buttonDisplay}>

@@ -40,18 +40,20 @@ class LocationList extends React.Component {
   deleteLocation(locationId) {
     this.props.delLocation(locationId, this.props.history);
   }
+
   componentDidMount() {
     let userInfo = localStorage.getItem('user');
-    if(userInfo === null) {
+    if (userInfo === null) {
       window.location = '/login';
     }
     this.props.fetchLocations();
   }
+
   render() {
     const { classes } = this.props;
     if (!this.state.data) return null;
     return (
-      <div id="geo-location-id">
+      <div>
         <GridContainer>
           <GridItem xs={12}>
             <Card>
@@ -59,30 +61,26 @@ class LocationList extends React.Component {
                 <CardText color="rose" md={3}>
                   <h4 className={classes.cardTitle}>Location List</h4>
                 </CardText>
-                <div className="centerDiv" md={3}>
-                  <div className="search">
-                    <CustomInput
-                      formControlProps={{
-                        className: `${classes.top} ${classes.search}`
-                      }}
-                      inputProps={{
-                        placeholder: 'Search',
-                        inputProps: {
-                          'aria-label': 'Search',
-                          className: classes.searchInput
-                        }
-                      }}
-                    />
-                    <Button
-                      color="white"
-                      aria-label="edit"
-                      justIcon
-                      round
-                      className={`${classes.top} ${classes.searchButton}`}
-                    >
-                      <Search className={`${classes.headerLinksSvg} ${classes.searchIcon}`} />
-                    </Button>
-                  </div>
+                <div>
+                  <CustomInput
+                    formControlProps={{
+                      className: `${classes.top} ${classes.search}`
+                    }}
+                    inputProps={{
+                      placeholder: 'Search',
+                      inputProps: {
+                        'aria-label': 'Search',
+                        className: classes.searchInput
+                      }
+                    }}
+                  />
+                  <Button
+                    color="white"
+                    aria-label="edit"
+                    justIcon
+                    round>
+                    <Search />
+                  </Button>
                 </div>
                 <Link to="/location/create">
                   <Button size="sm" className={classes.buttonDisplay} md={3}>

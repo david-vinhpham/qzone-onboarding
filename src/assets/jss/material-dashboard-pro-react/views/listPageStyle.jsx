@@ -17,10 +17,10 @@ const listPageStyle = {
     marginTop: "15px",
     marginBottom: "0px"
   },
-  centerDiv : {
-    margin : "auto !important"
+  centerDiv: {
+    margin: "auto !important"
   },
-  buttonDisplay:{
+  buttonDisplay: {
     position: "absolute",
     right: 0,
     top: 10,

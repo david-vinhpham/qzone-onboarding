@@ -111,12 +111,18 @@ const cardHeaderStyle = {
       lineHeight: "33px"
     },
     "& svg": {
-      width: "24px",
-      height: "24px",
+      width: "18px",
+      height: "18px",
       textAlign: "center",
-      lineHeight: "33px",
-      margin: "5px 4px 0px"
-    }
+      lineHeight: "0",
+      margin: "0",
+      position: 'absolute',
+      top: '30%',
+      left: '30%'
+    },
+    "& button": {
+      margin: "27px 0 17px 0"
+    },
   },
   cardHeaderText: {},
   warningCardHeader: {
