@@ -8,14 +8,18 @@ import Amplify from 'aws-amplify';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blueColor from '@material-ui/core/colors/blue';
 import pinkColor from '@material-ui/core/colors/pink';
+import Alert from 'react-s-alert';
 
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
 import indexRoutes from './routes/index';
 import reducers from './reducers';
+import './utils/errorsHandler';
 import './assets/scss/material-dashboard-pro-react.css';
 import 'react-phone-number-input/style.css';
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -73,6 +77,7 @@ ReactDOM.render(
         </Switch>
       </Router>
     </Provider>
+    <Alert stack={{limit: 3}} position="bottom-right" />
   </MuiThemeProvider>,
   document.getElementById('root')
 );

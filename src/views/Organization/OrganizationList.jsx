@@ -26,6 +26,7 @@ const override = css`
     margin: 0 auto;
     border-color: red;
 `;
+
 class OrganizationList extends React.Component {
   constructor(props) {
     super(props)
@@ -40,7 +41,7 @@ class OrganizationList extends React.Component {
 
   componentDidMount() {
     let userInfo = localStorage.getItem('user');
-    if(userInfo === null) {
+    if (userInfo === null) {
       window.location = '/login';
     }
     var userSub = localStorage.getItem('userSub');
@@ -62,12 +63,12 @@ class OrganizationList extends React.Component {
     else if (fetchOrganizationsError) {
       return <div className="alert alert-danger">Error: {organizations}</div>
     } else {
-       data = (
+      data = (
         <GridContainer>
           {this.state.data.map((organization, index) => {
             return (
               <GridItem xs={12} sm={12} md={3}>
-                <Card product className={classes.cardHover} >
+                <Card product className={classes.cardHover}>
                   {/* <CardHeader image className={classes.cardHeaderHover}>
                     <a href="#pablo" onClick={e => e.preventDefault()}>
                       <img src={priceImage1} alt="..." />
@@ -95,7 +96,7 @@ class OrganizationList extends React.Component {
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <Link to={`/organization/edit/${organization.id}`}>
-                          <Button color="success" simple justIcon >
+                          <Button color="success" simple justIcon>
                             <Edit className={classes.underChartIcons} />
                           </Button>
                         </Link>
@@ -126,31 +127,26 @@ class OrganizationList extends React.Component {
                 <CardText color="rose">
                   <h4 className={classes.cardTitle}>Organization List</h4>
                 </CardText>
-                <div className="centerDiv">
-                  <div className="search" md={3}>
-                    <CustomInput
-                      formControlProps={{
-                        className: classes.top + " " + classes.search
-                      }}
-                      inputProps={{
-                        placeholder: "Search",
-                        inputProps: {
-                          "aria-label": "Search",
-                          className: classes.searchInput
-                        }
-                      }}
-                    />
-                    <Button
-                      color="white"
-                      aria-label="edit"
-                      justIcon
-                      round
-                      className={classes.top + " " + classes.searchButton} >
-                      <Search
-                        className={classes.headerLinksSvg + " " + classes.searchIcon}
-                      />
-                    </Button>
-                  </div>
+                <div>
+                  <CustomInput
+                    formControlProps={{
+                      className: classes.top + " " + classes.search
+                    }}
+                    inputProps={{
+                      placeholder: "Search",
+                      inputProps: {
+                        "aria-label": "Search",
+                        className: classes.searchInput
+                      }
+                    }}
+                  />
+                  <Button
+                    color="white"
+                    aria-label="edit"
+                    justIcon
+                    round>
+                    <Search />
+                  </Button>
                 </div>
                 {this.state.data.length > 0 ? '' :
                   <Link to={`/organization/create`}>
