@@ -101,7 +101,7 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
         });
 
         return Promise.all(fetchEvents).then(rep => {
-          const tmpEvents = reduce(rep, (acc, { d }) => acc.concat(get(d, 'objects', [])), []);
+          const tmpEvents = reduce(rep, (acc, event) => acc.concat(get(event, 'data.objects', [])), []);
           const events = tmpEvents.map(e => ({
             ...e,
             type: e.type || EVENT_TYPE.TMP_SERVICE,
