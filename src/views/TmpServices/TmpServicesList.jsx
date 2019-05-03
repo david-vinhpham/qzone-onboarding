@@ -237,6 +237,7 @@ class TmpServicesList extends PureComponent {
             <TableRow>
               <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
               <TableCell className={classes.cellHeaderBold}>Provider</TableCell>
+              <TableCell className={classes.cellHeaderBold}>Service</TableCell>
               <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
               <TableCell className={classes.cellHeaderBold}>End time</TableCell>
               <TableCell className={classes.cellHeaderBold}>Description</TableCell>
@@ -248,6 +249,7 @@ class TmpServicesList extends PureComponent {
               <TableRow key={event.id} className={classes.row}>
                 <TableCell padding="dense">{index + 1}</TableCell>
                 <TableCell>{event.providerName}</TableCell>
+                <TableCell>{event.serviceName}</TableCell>
                 <TableCell>{moment.tz(event.slot.startTime * 1000, event.timezoneId).format('L LT Z')}</TableCell>
                 <TableCell>{moment.tz(event.slot.endTime * 1000, event.timezoneId).format('L LT Z')}</TableCell>
                 <TableCell>
