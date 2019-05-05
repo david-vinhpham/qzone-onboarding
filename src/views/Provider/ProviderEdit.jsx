@@ -118,7 +118,6 @@ class ProviderEdit extends React.Component {
   }
 
   handleProvider(values) {
-    console.log('handleProvider');
     let providerInformation  = values.providerInformation;
     let imageObject = localStorage.getItem('imageObject');
     if (imageObject === null) {

@@ -4,7 +4,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Drawer, List, ListItem, ListItemIcon, ListItemText,Hidden, Collapse } from "@material-ui/core";
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Hidden, Collapse } from "@material-ui/core";
 import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
 import sidebarStyle from "../../assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
 import avatar from "../../assets/img/faces/avatar.jpg";
@@ -97,9 +97,9 @@ class Sidebar extends React.Component {
         <List className={classes.list}>
           <ListItem className={classes.item + " " + classes.userItem}>
             <NavLink
-              to={"#"}
+              to="#"
               className={classes.itemLink + " " + classes.userCollapseButton}
-              onClick={() => this.openCollapse("openAvatar")}
+              onClick={(e) => { e.preventDefault(); this.openCollapse("openAvatar"); }}
             >
               <ListItemText
                 primary={"Tania Andrew"}

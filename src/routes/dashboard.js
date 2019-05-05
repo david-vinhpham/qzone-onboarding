@@ -41,6 +41,7 @@ import ServiceProviderEdit from '../views/ServiceProviderAssignment/ServiceProvi
 import ServiceProviderCreate from '../views/ServiceProviderAssignment/ServiceProviderCreate';
 import TmpServicesList from 'views/TmpServices/TmpServicesList';
 import TmpServicesDetail from 'views/TmpServices/TmpServicesDetail';
+import AvailabilitySlotsList from 'views/AvailabilitySlots/AvailabilitySlotsList';
 
 export const dashboardRoutes = [
   {
@@ -223,5 +224,11 @@ export const otherRoutes = [
     name: 'Temporary service detail',
     short: 'Temporary service detail',
     component: TmpServicesDetail
+  },
+  {
+    path: '/availability',
+    name: 'Availability',
+    short: 'Availability',
+    component: AvailabilitySlotsList
   }
 ];

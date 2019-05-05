@@ -7,8 +7,8 @@ import Edit from "@material-ui/icons/Edit";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import moment from "moment-timezone";
 import { deleteTmpService, fetchTmpServices, editTmpService, setTmpServices } from "../../actions/tmpServices";
-import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
-import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
+import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle";
+import listPageStyle from 'assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
 import DeletionModal from "../../shared/deletion-modal";
@@ -27,6 +27,7 @@ import AddEventDialog from "views/Calendar/AddEventDialog";
 import { fetchProvidersByBusinessId, fetchTimezoneOptions, fetchServiceOptions, fetchGeoLocationOptions } from "actions/calendar";
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload } from "utils/mappingHelpers";
+import { defaultDateTimeFormat } from "constants.js";
 
 const override = css`
   display: block;
@@ -232,7 +233,7 @@ class TmpServicesList extends PureComponent {
 
     data = (
       <Paper>
-        <Table aria-labelledby="tableTitle">
+        <Table aria-labelledby="tmpServicesList">
           <TableHead>
             <TableRow>
               <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
@@ -246,12 +247,12 @@ class TmpServicesList extends PureComponent {
           </TableHead>
           <TableBody>
             {this.state.data.map((event, index) => (
-              <TableRow key={event.id} className={classes.row}>
+              <TableRow key={event.id} classes={{ root: classes.row }}>
                 <TableCell padding="dense">{index + 1}</TableCell>
                 <TableCell>{event.providerName}</TableCell>
                 <TableCell>{event.serviceName}</TableCell>
-                <TableCell>{moment.tz(event.slot.startTime * 1000, event.timezoneId).format('L LT Z')}</TableCell>
-                <TableCell>{moment.tz(event.slot.endTime * 1000, event.timezoneId).format('L LT Z')}</TableCell>
+                <TableCell>{moment.tz(event.slot.startTime * 1000, event.timezoneId).format(defaultDateTimeFormat)}</TableCell>
+                <TableCell>{moment.tz(event.slot.endTime * 1000, event.timezoneId).format(defaultDateTimeFormat)}</TableCell>
                 <TableCell>
                   {event.description ? event.description.substring(0, 150) : ''}
                 </TableCell>
@@ -397,15 +398,15 @@ const mapStateToProps = state => ({
   geoOptions: state.calendarManage.geoOptions
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchTmpServices: businessId => dispatch(fetchTmpServices(businessId)),
-  deleteTmpService: eventId => dispatch(deleteTmpService(eventId)),
-  fetchProvidersByBusinessId: businessId => dispatch(fetchProvidersByBusinessId(businessId)),
-  fetchTimezoneOptions: () => dispatch(fetchTimezoneOptions()),
-  fetchServiceOptions: businessId => dispatch(fetchServiceOptions(businessId)),
-  editTmpService: payload => dispatch(editTmpService(payload)),
-  fetchGeoLocationOptions: () => dispatch(fetchGeoLocationOptions()),
-  setTmpServices: tmpServices => dispatch(setTmpServices(tmpServices))
-});
+const mapDispatchToProps = {
+  fetchTmpServices,
+  deleteTmpService,
+  fetchProvidersByBusinessId,
+  fetchTimezoneOptions,
+  fetchServiceOptions,
+  editTmpService,
+  fetchGeoLocationOptions,
+  setTmpServices
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles({ ...tableStyle, ...listPageStyle })(TmpServicesList));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(tableStyle, listPageStyle)(TmpServicesList));

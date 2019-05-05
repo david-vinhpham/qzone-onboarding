@@ -78,7 +78,7 @@ const reducer = (state = initialState, action) => {
           input =>
             map(input, p => ({
               id: p.id,
-              name: p.givenName,
+              name: `${p.familyName} ${p.givenName}`,
               timezone: p.providerInformation.timeZoneId
             })),
           input => sortBy(input, 'name')

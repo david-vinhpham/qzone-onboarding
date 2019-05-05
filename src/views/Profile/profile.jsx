@@ -49,7 +49,6 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    console.log(' >> componentDidMount');
     let userSub = localStorage.getItem('userSub');
     if(userSub === null) {
       window.location = '/login';
@@ -103,7 +102,6 @@ class Profile extends React.Component {
     }
   }
   saveProfile = () => {
-    console.log('saveProfile...');
     const {
       id,
       account: { ...accountInfo },
@@ -135,7 +133,6 @@ class Profile extends React.Component {
 
   change = (event, stateName, type) => {
     if(event === undefined || event.target === undefined) {
-      console.log('undefined');
       return;
     }
     const { value } = event.target;

@@ -76,7 +76,6 @@ class ServiceCreate extends React.Component {
       console.log('imageLoading finished...');
     }
     else {
-      console.log('imageLoading...');
       this.setState({ imageChange: true})
     }
 
@@ -85,7 +84,6 @@ class ServiceCreate extends React.Component {
 	componentDidMount() {
 		this.props.fetchServiceCategories();
     let userSub = localStorage.getItem('userSub');
-    console.log('userSub: ' + userSub);
     this.props.fetchOrganizationsByBusinessAdminId(userSub);
     localStorage.removeItem('imageObject');
 
@@ -103,13 +101,9 @@ class ServiceCreate extends React.Component {
 	}
 
 	changeProfileImage(e) {
-		//const {file, imagePreviewUrl} = this.state.provider;
-		console.log("inside change image function", e);
-		console.log("event---", e)
 		e.preventDefault();
 		let reader = new FileReader();
 		let files = e.target.files[0];
-		console.log("file-------", files)
 		reader.onloadend = () => {
 			this.setState({
 				imagePreviewUrl: reader.result

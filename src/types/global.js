@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 
 export const providerType = PropTypes.shape({
   id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired
+  givenName: PropTypes.string,
+  familyName: PropTypes.string
 });
 
 export const classesType = PropTypes.objectOf(PropTypes.string);
@@ -63,4 +64,17 @@ export const tmpServiceType = PropTypes.shape({
   geoLocation: PropTypes.shape({
     id: PropTypes.string,
   }),
+});
+
+export const availabilitySlotType = PropTypes.shape({
+  customerStartSec: PropTypes.string,
+  durationSec: PropTypes.number,
+  id: PropTypes.string,
+  providerId: PropTypes.string,
+  providerStartSec: PropTypes.string,
+  serviceId: PropTypes.string,
+  specialServiceId: PropTypes.string,
+  spotsOpen: PropTypes.number,
+  spotsTotal: PropTypes.number,
+  startSec: PropTypes.number,
 });

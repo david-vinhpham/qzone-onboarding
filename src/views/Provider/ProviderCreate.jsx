@@ -91,7 +91,6 @@ class ProviderCreate extends React.Component {
       console.log('imageLoading finished...');
     }
     else {
-      console.log('imageLoading...');
       this.setState({ imageChange: true})
     }
   }
@@ -148,13 +147,9 @@ class ProviderCreate extends React.Component {
   }
 
   changeProfileImage = (e) => {
-    //const {file, imagePreviewUrl} = this.state.provider;
-    console.log("inside change image function", e);
-    console.log("event---", e)
     e.preventDefault();
     let reader = new FileReader();
     let files = e.target.files[0];
-    console.log("file-------", files)
     reader.onloadend = () => {
       this.setState({
         imagePreviewUrl: reader.result
