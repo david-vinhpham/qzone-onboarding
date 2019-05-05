@@ -57,7 +57,7 @@ export const URL = {
   FIND_TMP_SERVICES_BY_BUSINESS_ID: 'find-temporary-services-by-business-admin-id/',
   FIND_TMP_SERVICE_DETAIL_BY_TMP_SERVICE_ID: 'temporary-services/',
 
-  FIND_AVAILABILITY_BY_TMP_SERVICE: 'availabilities-by-special-event-id',
+  FIND_AVAILABILITY_BY_TMP_SERVICE: 'availabilities/temporary/service',
 };
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';
 
