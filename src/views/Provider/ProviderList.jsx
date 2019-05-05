@@ -21,7 +21,8 @@ import CardText from '../../components/Card/CardText.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
 import { deleteProvider, fetchProvidersByBusinessAdminId } from '../../actions/provider';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
-import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
+import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle";
+import listPageStyle from 'assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
 import DeletionModal from '../../shared/deletion-modal';
 
 const override = css`
@@ -119,7 +120,7 @@ class ProviderList extends React.Component {
 
     data = (
       <GridContainer>
-        <Table aria-labelledby="tableTitle">
+        <Table aria-labelledby="providerList">
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>
@@ -132,7 +133,7 @@ class ProviderList extends React.Component {
           </TableHead>
           <TableBody>
             {this.state.data.map((provider, index) => (
-              <TableRow key={provider.id}>
+              <TableRow key={provider.id} classes={{ root: classes.row }}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{provider.givenName}</TableCell>
                 <TableCell>{provider.telephone}</TableCell>
@@ -271,7 +272,7 @@ ProviderList.propTypes = {
 };
 
 export default compose(
-  withStyles(listPageStyle),
+  withStyles(tableStyle, listPageStyle),
   connect(
     mapStateToProps,
     mapDispatchToProps
