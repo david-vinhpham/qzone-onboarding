@@ -42,3 +42,5 @@ export const eTemplateUrl = '/email-templates';
 export const eTemplateNameMax = 250;
 export const eTemplateContentMax = 15000;
 export const eTemplateApi = `${emailTemplate}${eTemplateUrl}`;
+
+export const defaultDateTimeFormat = 'DD/MM/YYY LT Z';

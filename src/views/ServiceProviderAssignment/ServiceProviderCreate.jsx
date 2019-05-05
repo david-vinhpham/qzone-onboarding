@@ -79,7 +79,6 @@ class ServiceProviderCreate extends React.Component {
     ) {
       this.setState({ organizationOption: nextProps.organizations[0] });
       this.props.fetchServicesOptionByOrgId(nextProps.organizations[0].value);
-      console.log('componentWillReceiveProps');
     }
   }
 

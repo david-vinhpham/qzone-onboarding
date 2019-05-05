@@ -26,7 +26,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case provider.FETCH_PROVIDERS_LOADING:
-      return { ...state, providers: null, fetchProvidersLoading: true };
+      return { ...state, providers: [], fetchProvidersLoading: true };
     case provider.FETCH_PROVIDERS_SUCCESS:
       return { ...state, providers: action.payload.providers, fetchProvidersLoading: false };
     case provider.FETCH_PROVIDERS_FAILURE:

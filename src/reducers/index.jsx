@@ -12,6 +12,7 @@ import ServiceProviderReducer from './serviceProvider.reducer';
 import calendarManage from './calendar.reducer';
 import tmpServicesReducer from './tmpServices.reducer';
 import tmpServiceDetail from './tmpServiceDetail.reducer';
+import availabilitySlots from './availabilitySlots.reducer';
 
 const rootReducer = combineReducers({
   provider: ProvidersReducer,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
   serviceProvider: ServiceProviderReducer,
   calendarManage,
   tmpServices: tmpServicesReducer,
-  tmpServiceDetail: tmpServiceDetail,
+  tmpServiceDetail,
+  availabilitySlots,
 });
 
 export default rootReducer;

@@ -10,6 +10,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { compose } from "redux";
 import Loading from 'components/Loading/Loading';
 import moment from 'moment-timezone';
+import { defaultDateTimeFormat } from 'constants.js';
 
 class TmpServicesDetail extends PureComponent {
   componentDidMount() {
@@ -19,6 +20,15 @@ class TmpServicesDetail extends PureComponent {
     }
   }
 
+  navigateToAvailability = (event) => {
+    event.preventDefault();
+    this.props.history.push('/availability', {
+      specialEventId: this.props.tmpServiceDetail.id,
+      customerTimezoneId: this.props.tmpServiceDetail.timezoneId,
+      serviceName: this.props.tmpServiceDetail.serviceName
+    });
+  }
+
   render() {
     const { tmpServiceDetail, classes } = this.props;
 
@@ -26,10 +36,22 @@ class TmpServicesDetail extends PureComponent {
       <Paper>
         <div className={classes.customPage}>
           <div className={classes.headerPage}>
-            <Button size="small" color="primary" onClick={this.props.history.goBack}>
-              <ArrowBack />
-            </Button>
-            <Typography inline variant="h6">Event detail</Typography>
+            <div style={{ flexGrow: 1, display: 'flex' }}>
+              <Button size="small" color="primary" onClick={this.props.history.goBack}>
+                <ArrowBack />
+              </Button>
+              <Typography inline variant="h6">Event detail</Typography>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Link
+                href="/availability"
+                target="_blank"
+                rel="noreferrer"
+                onClick={this.navigateToAvailability}
+              >
+                Check availability
+            </Link>
+            </div>
           </div>
           {tmpServiceDetail.id ?
             <Grid container spacing={16}>
@@ -66,9 +88,9 @@ class TmpServicesDetail extends PureComponent {
               </Grid>
               <Grid item sm={9} xs={12}>
                 <Typography variant="body2">
-                  {moment.tz(tmpServiceDetail.slot.startTime * 1000, tmpServiceDetail.timezoneId).format('L LT Z')}
+                  {moment.tz(tmpServiceDetail.slot.startTime * 1000, tmpServiceDetail.timezoneId).format(defaultDateTimeFormat)}
                   &nbsp;---&nbsp;
-                  {moment.tz(tmpServiceDetail.slot.endTime * 1000, tmpServiceDetail.timezoneId).format('L LT Z')}
+                  {moment.tz(tmpServiceDetail.slot.endTime * 1000, tmpServiceDetail.timezoneId).format(defaultDateTimeFormat)}
                 </Typography>
               </Grid>
               {tmpServiceDetail.repeatType &&
