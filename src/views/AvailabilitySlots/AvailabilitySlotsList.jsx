@@ -2,12 +2,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment-timezone';
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Button } from '@material-ui/core';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import Card from 'components/Card/Card';
 import CardText from 'components/Card/CardText';
 import CardHeader from 'components/Card/CardHeader';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Button from 'components/CustomButtons/Button';
+import CustomButton from 'components/CustomButtons/Button';
 import Search from '@material-ui/icons/Search';
 import CustomInput from 'components/CustomInput/CustomInput';
 import headerLinksStyle from 'assets/jss/material-dashboard-pro-react/components/headerLinksStyle';
@@ -34,12 +35,20 @@ class AvailabilitySlotsList extends PureComponent {
   }
 
   render() {
-    const { classes, availabilitySlots, history: { location: { state = {} } } } = this.props;
+    const { classes, availabilitySlots, history: { goBack, location: { state = {} } } } = this.props;
 
     return (
       <div>
         <Card>
           <CardHeader color="primary" icon>
+            <Button
+              size="small"
+              color="primary"
+              style={{ display: 'inline-block', margin: 0 }}
+              onClick={goBack}
+            >
+              <ArrowBack />
+            </Button>
             <CardText color="rose">
               <h4>Check availability</h4>
             </CardText>
@@ -56,13 +65,13 @@ class AvailabilitySlotsList extends PureComponent {
                   }
                 }}
               />
-              <Button
+              <CustomButton
                 color="white"
                 aria-label="edit"
                 justIcon
                 round>
                 <Search />
-              </Button>
+              </CustomButton>
             </div>
           </CardHeader>
         </Card>
