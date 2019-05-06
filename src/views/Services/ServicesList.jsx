@@ -20,7 +20,8 @@ import Card from '../../components/Card/Card.jsx';
 import CardText from '../../components/Card/CardText.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
-import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
+import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle";
+import listPageStyle from 'assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
 import { deleteService, fetchServicesByBusinessAdminId } from '../../actions/service';
 import DeletionModal from '../../shared/deletion-modal';
 
@@ -105,7 +106,7 @@ class ServicesList extends React.Component {
 
     data = (
       <GridContainer>
-        <Table aria-labelledby="tableTitle">
+        <Table aria-labelledby="servicesList">
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>
@@ -118,7 +119,7 @@ class ServicesList extends React.Component {
           </TableHead>
           <TableBody>
             {this.state.data.map((service, index) => (
-              <TableRow key={service.id}>
+              <TableRow key={service.id} classes={{ root: classes.row }}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{service.name}</TableCell>
                 <TableCell>{service.mode}</TableCell>
@@ -251,7 +252,7 @@ ServicesList.propTypes = {
 };
 
 export default compose(
-  withStyles(listPageStyle),
+  withStyles(tableStyle, listPageStyle),
   connect(
     mapStateToProps,
     mapDispatchToProps
