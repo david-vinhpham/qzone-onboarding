@@ -133,6 +133,10 @@ class ProviderEdit extends React.Component {
         providerInformation.image = values.imagePreviewUrl;
       }
     }
+    if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
+      alert('You have not selected an image');
+      return;
+    }
     values.providerInformation = providerInformation;
     this.props.editProvider(values, this.props.history);
   }
