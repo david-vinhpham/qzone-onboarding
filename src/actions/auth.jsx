@@ -172,6 +172,8 @@ export function loginUser(values, history) {
               localStorage.setItem('user', JSON.stringify(user.object));
               localStorage.removeItem('serviceProvider');
               localStorage.removeItem('tmpServices');
+              localStorage.removeItem('serviceCached');
+              localStorage.removeItem('specialEvents');
               history.push('/dashboard');
             })
             .catch(err => {
