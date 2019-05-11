@@ -38,11 +38,7 @@ export const URL = {
   FETCH_PROVIDERS_OPTION_BY_SERVICE_ID: 'providers-option-by-service-id/',
   FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID: 'providers-option-by-service-provider-id/',
   FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID: 'providers-by-business-admin-id/',
-  FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID: 'providers-option-by-business-admin-id/',
   ADMIN_CREATE_AWS_USER: 'users/admin-create-new-users',
-
-  FETCH_EVENTS_CALENDAR_BY_CUSTOMER_ID: 'find-events-calendar-by-customer-id/',
-  FETCH_EVENTS_CALENDAR_BY_PROVIDER_ID: 'find-events-calendar-by-provider-id/',
 
   FIND_ORGS_BY_BUSINESS_ID: 'organizations-by-business-admin-id/',
   FIND_PROVIDER_BY_ORG_ID: 'providers-by-org-id/',
