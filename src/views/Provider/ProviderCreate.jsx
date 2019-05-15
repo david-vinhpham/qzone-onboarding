@@ -87,11 +87,8 @@ class ProviderCreate extends React.Component {
     if (createProvider !== null) {
       this.setState({ data: JSON.parse(createProvider) });
     }
-    if(!nextProps.imageLoading) {
-      console.log('imageLoading finished...');
-    }
-    else {
-      this.setState({ imageChange: true})
+    if(nextProps.imageLoading) {
+      this.setState({ imageChange: true});
     }
   }
 

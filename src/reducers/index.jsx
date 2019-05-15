@@ -10,6 +10,8 @@ import LocationReducer from './location.reducer';
 import ServiceProviderReducer from './serviceProvider.reducer';
 import calendarManage from './calendar.reducer';
 import tmpServicesReducer from './tmpServices.reducer';
+import serviceCategoryReducer from './serviceCategory.reducer';
+import businessCategoryReducer from './businessCategory.reducer';
 import tmpServiceDetail from './tmpServiceDetail.reducer';
 import availabilitySlots from './availabilitySlots.reducer';
 
@@ -24,6 +26,8 @@ const rootReducer = combineReducers({
   serviceProvider: ServiceProviderReducer,
   calendarManage,
   tmpServices: tmpServicesReducer,
+  serviceCategory: serviceCategoryReducer,
+  businessCategory: businessCategoryReducer,
   tmpServiceDetail,
   availabilitySlots,
 });

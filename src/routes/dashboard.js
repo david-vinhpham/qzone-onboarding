@@ -1,13 +1,5 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import {
-  Person,
-  BusinessCenter,
-  Report,
-  BubbleChart,
-  LocationOn,
-  PersonAdd,
-  Email
-} from '@material-ui/icons';
+import { BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd, Report } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Profile from '../views/Profile/profile';
 import Administration from '../views/Administration/Administration';
@@ -39,9 +31,11 @@ import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
 import ServiceProviderList from '../views/ServiceProviderAssignment/ServiceProviderList';
 import ServiceProviderEdit from '../views/ServiceProviderAssignment/ServiceProviderEdit';
 import ServiceProviderCreate from '../views/ServiceProviderAssignment/ServiceProviderCreate';
-import TmpServicesList from 'views/TmpServices/TmpServicesList';
-import TmpServicesDetail from 'views/TmpServices/TmpServicesDetail';
-import AvailabilitySlotsList from 'views/AvailabilitySlots/AvailabilitySlotsList';
+import TmpServicesList from '../views/TmpServices/TmpServicesList';
+import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesList';
+import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
+import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';
+import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
 
 export const dashboardRoutes = [
   {
@@ -218,6 +212,18 @@ export const otherRoutes = [
     name: 'List temporary services',
     short: 'List temporary services',
     component: TmpServicesList
+  },
+  {
+    path: '/service-categories',
+    name: 'List service categories',
+    short: 'List service categories',
+    component: ServiceCategoriesList
+  },
+  {
+    path: '/business-categories',
+    name: 'List business categories',
+    short: 'List business categories',
+    component: BusinessCategoriesList
   },
   {
     path: '/tmp-service/detail/:id',

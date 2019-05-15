@@ -4,7 +4,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Hidden, Collapse } from "@material-ui/core";
+import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
 import sidebarStyle from "../../assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
 import avatar from "../../assets/img/faces/avatar.jpg";
@@ -209,6 +209,44 @@ class Sidebar extends React.Component {
                     <ListItemText
                       primary={
                         "Temporary services"
+                      }
+                      disableTypography={true}
+                      className={collapseItemText}
+                    />
+                  </NavLink>
+                </ListItem>
+                <ListItem className={classes.collapseItem}>
+                  <NavLink
+                    to="/service-categories"
+                    className={
+                      classes.itemLink + " " + classes.userCollapseLinks
+                    }
+                  >
+                    <span className={collapseItemMini}>
+                      {"SC"}
+                    </span>
+                    <ListItemText
+                      primary={
+                        "Service Categories"
+                      }
+                      disableTypography={true}
+                      className={collapseItemText}
+                    />
+                  </NavLink>
+                </ListItem>
+                <ListItem className={classes.collapseItem}>
+                  <NavLink
+                    to="/business-categories"
+                    className={
+                      classes.itemLink + " " + classes.userCollapseLinks
+                    }
+                  >
+                    <span className={collapseItemMini}>
+                      {"BC"}
+                    </span>
+                    <ListItemText
+                      primary={
+                        "Business Categories"
                       }
                       disableTypography={true}
                       className={collapseItemText}
