@@ -104,7 +104,6 @@ class Personal extends PureComponent {
   };
 
   cancelEdit = () => {
-    console.log('cancelEdit...');
     const { ...oldPersonalInfo } = this.state;
     const { resetPersonalInfo: resetPersonalInfoAction } = this.props;
     this.setState(

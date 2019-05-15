@@ -35,7 +35,7 @@ class DeletionModal extends Component {
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
-  deleteSurveyHandler = () => {
+  deleteItemHandler = () => {
     const { itemId, itemDeleteHandler } = this.props;
     itemDeleteHandler(itemId);
   };
@@ -71,7 +71,7 @@ class DeletionModal extends Component {
     const isDeleteButtonVisible = cancelButtonLabel === 'Cancel';
     const deleteButton = isDeleteButtonVisible ? (
       <div>
-        <Button onClick={this.deleteSurveyHandler} color="rose">Delete</Button>
+        <Button onClick={this.deleteItemHandler} color="rose">Delete</Button>
       </div>
     ) : null;
     return (

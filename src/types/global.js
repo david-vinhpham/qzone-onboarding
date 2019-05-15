@@ -25,6 +25,17 @@ export const userDetailType = PropTypes.objectOf(PropTypes.oneOfType([
   PropTypes.object, PropTypes.string,
 ]));
 
+export const serviceCategoryType = PropTypes.shape({
+  name: PropTypes.string,
+  id: PropTypes.string,
+  parentCategoryId: PropTypes.string
+});
+
+export const businessCategoryType = PropTypes.shape({
+  name: PropTypes.string,
+  id: PropTypes.string
+});
+
 export const tmpServiceType = PropTypes.shape({
   avgServiceTime: PropTypes.number,
   breakTime: PropTypes.shape({

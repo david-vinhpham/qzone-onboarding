@@ -72,11 +72,8 @@ class ServiceCreate extends React.Component {
 	}
 
   componentWillReceiveProps(nextProps) {
-    if(!nextProps.imageLoading) {
-      console.log('imageLoading finished...');
-    }
-    else {
-      this.setState({ imageChange: true})
+    if(nextProps.imageLoading) {
+        this.setState({ imageChange: true});
     }
 
   }
