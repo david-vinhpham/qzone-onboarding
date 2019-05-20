@@ -31,7 +31,6 @@ async function getAWSCredentials(googleUser, history) {
   };
 
   const credentials = await Auth.federatedSignIn('google', { token: id_token, expires_at }, user);
-  console.log('credentials', credentials);
   if (credentials) history.push('dashboard');
 }
 
@@ -39,7 +38,6 @@ export const signIn = history => {
   const ga = window.gapi.auth2.getAuthInstance();
   ga.signIn().then(
     googleUser => {
-      console.log('google user---', googleUser);
       getAWSCredentials(googleUser, history);
     },
     error => {

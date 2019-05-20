@@ -5,7 +5,6 @@ import { compose } from "redux";
 import { css } from '@emotion/core';
 import { ClipLoader } from 'react-spinners';
 import Button from "../../components/CustomButtons/Button.jsx";
-//import defaultImage from "../../assets/img/image_placeholder.jpg";
 import { uploadImage } from '../../actions/imageUpload';
 
 const override = css`
@@ -23,29 +22,25 @@ class ImageUpload extends React.Component {
       imagePreviewUrl: this.props.imagePreviewUrl,
       isUploadImage: 0
     };
-    this.handleImageChange = this.handleImageChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleRemove = this.handleRemove.bind(this);
   }
+
   componentWillReceiveProps(nextProps) {
-        if(!nextProps.imageLoading) {
-          this.setState({imagePreviewUrlOrg: nextProps.imagePreviewUrl});
-          this.setState({imagePreviewUrl: nextProps.imagePreviewUrl});
-          if (nextProps.imageObject != null && this.state.isUploadImage === 1) {
-            this.setState({imagePreviewUrl: nextProps.imageObject.fileUrl});
-            localStorage.setItem('imageObject', JSON.stringify(nextProps.imageObject));
-          }
+    if (!nextProps.imageLoading) {
+      this.setState({ imagePreviewUrlOrg: nextProps.imagePreviewUrl });
+      this.setState({ imagePreviewUrl: nextProps.imagePreviewUrl });
+      if (nextProps.imageObject != null && this.state.isUploadImage === 1) {
+        this.setState({ imagePreviewUrl: nextProps.imageObject.fileUrl });
+        localStorage.setItem('imageObject', JSON.stringify(nextProps.imageObject));
       }
-    else {
-      console.log('Uploading...');
     }
   }
+
   componentDidMount() {
-    this.setState({imageObject: ''});
+    this.setState({ imageObject: '' });
     localStorage.removeItem('imageObject');
   }
-  handleImageChange(e) {
+
+  handleImageChange = (e) => {
     e.preventDefault();
     let reader = new FileReader();
     let file = e.target.files[0];
@@ -57,26 +52,30 @@ class ImageUpload extends React.Component {
     };
     reader.readAsDataURL(file);
   }
-  handleSubmit(e) {
+
+  handleSubmit = (e) => {
     e.preventDefault();
     // this.state.file is the file/image uploaded
     // in this function you can save the image (this.state.file) on form submit
     // you have to call it yourself
   }
-  handleClick() {
+
+  handleClick = () => {
     this.refs.fileInput.click();
   }
-  handleRemove() {
+
+  handleRemove = () => {
     this.setState({
       file: null,
-      imagePreviewUrl:  this.state.imagePreviewUrlOrg,
+      imagePreviewUrl: this.state.imagePreviewUrlOrg,
     });
     this.refs.fileInput.value = null;
     localStorage.removeItem('imageObject');
   }
+
   uploadImage = () => {
     this.setState({
-      isUploadImage:1,
+      isUploadImage: 1,
     });
     var data = new FormData();
     data.append("file", this.state.file);
@@ -106,22 +105,22 @@ class ImageUpload extends React.Component {
         </div>
         <div>
           {this.state.file === null ? (
-            <Button {...addButtonProps} onClick={() => this.handleClick()}>
+            <Button {...addButtonProps} onClick={this.handleClick}>
               {imageLoading ? "Add Photo" : "Select image"}
             </Button>
           ) : (
-            <span>
-              <Button onClick={() => this.uploadImage()}>
-                Upload
+              <span>
+                <Button onClick={this.uploadImage}>
+                  Upload
               </Button>
-              <Button
-                {...removeButtonProps}
-                onClick={() => this.handleRemove()}
-              >
-                <i className="fas fa-times" /> Remove
+                <Button
+                  {...removeButtonProps}
+                  onClick={this.handleRemove}
+                >
+                  <i className="fas fa-times" /> Remove
               </Button>
-            </span>
-          )}
+              </span>
+            )}
         </div>
       </div>
     );

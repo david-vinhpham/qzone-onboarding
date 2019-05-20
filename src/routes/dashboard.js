@@ -7,7 +7,7 @@ import OrganizationCreate from '../views/Organization/OrganizationCreate';
 import OrganizationEdit from '../views/Organization/OrganizationEdit';
 import OrganizationList from '../views/Organization/OrganizationList';
 import ManageCalendar from '../views/Calendar/ManageCalendar';
-import CustomerFlow from '../views/CustomerFlow/CustomerFlow';
+import CustomerService from '../views/CustomerService/CustomerService';
 
 import ProviderList from '../views/Provider/ProviderList';
 import ProviderCreate from '../views/Provider/ProviderCreate';
@@ -51,10 +51,10 @@ export const dashboardRoutes = [
     component: Profile
   },
   {
-    path: '/customer_flow',
-    name: 'Manage Customer Flow',
+    path: '/customer-service',
+    name: 'Customer service',
     icon: DashboardIcon,
-    component: CustomerFlow
+    component: CustomerService
   },
   {
     path: '/reports',

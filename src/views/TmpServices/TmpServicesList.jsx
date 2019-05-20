@@ -24,9 +24,9 @@ import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Search from "@material-ui/icons/Search";
 import AddEventDialog from "views/Calendar/AddEventDialog";
-import { fetchProvidersByBusinessId, fetchTimezoneOptions, fetchServiceOptions, fetchGeoLocationOptions } from "actions/calendar";
+import { fetchProvidersByBusinessId, fetchTimezoneOptions, fetchServiceOptions, fetchGeoLocationOptions, createNewEvent } from "actions/calendar";
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
-import { generateTmpServicePayload, generateRepeatPayload } from "utils/mappingHelpers";
+import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
 import { defaultDateTimeFormat } from "constants.js";
 
 const override = css`
@@ -43,7 +43,8 @@ class TmpServicesList extends PureComponent {
         id: 0,
         isDel: false
       },
-      isOpenEditDialog: false,
+      isOpenAddEventDialog: false,
+      isEditMode: false,
       eventLevel: EVENT_LEVEL.PROVIDER,
       addEventData: {}
     };
@@ -128,18 +129,20 @@ class TmpServicesList extends PureComponent {
         everyDate: event.repeatType === EVENT_REPEAT_TYPE.WEEKLY
           ? [event.repeat.repeatWeekly.repeatOn]
           : [],
-        repeatEnd: {
+        repeatEnd: event.repeatEnd ? {
           afterOccur: event.repeatEnd.afterNumOccurrences,
-          onDate: event.repeatEnd.repeatEndOn ? moment.tz(event.repeatEnd.repeatEndOn * 1000, event.timezoneId)
-            .utcOffset(localTz, true)
-            .format()
+          onDate: event.repeatEnd.repeatEndOn
+            ? moment.tz(event.repeatEnd.repeatEndOn * 1000, event.timezoneId)
+              .utcOffset(localTz, true)
+              .format()
             : undefined
-        },
+        } : {},
       }
     }
 
     this.setState({
-      isOpenEditDialog: true,
+      isEditMode: true,
+      isOpenAddEventDialog: true,
       addEventData: {
         id: event.id,
         eventType: EVENT_TYPE.TMP_SERVICE,
@@ -172,7 +175,7 @@ class TmpServicesList extends PureComponent {
     })
   }
 
-  closeEditDialog = () => this.setState({ isOpenEditDialog: false })
+  closeAddEventDialog = () => this.setState({ isOpenAddEventDialog: false })
 
   editTmpService = ({ addEventData }) => {
     const {
@@ -204,8 +207,54 @@ class TmpServicesList extends PureComponent {
     }
 
     this.props.editTmpService(payload);
-    this.setState({ isOpenEditDialog: false });
+    this.closeAddEventDialog();
   }
+
+  openAddDialog = () => {
+    this.setState(() => {
+      const defaultProvider = this.props.providers[0];
+      const timezoneId = this.props.tzOptions.find(
+        tz => tz.label.toLowerCase() === defaultProvider.timezone.toLowerCase()
+      ).label;
+      const startTime = moment().format();
+      const endTime = moment().add(1, 'hour').format();
+
+      const addEventData = {
+        eventType: EVENT_TYPE.TMP_SERVICE,
+        description: '',
+        repeat: {
+          type: Object.values(EVENT_REPEAT_TYPE)[0],
+          repeatEnd: {}
+        },
+        timezoneId,
+        serviceId: this.props.serviceOptions.length > 0 ? this.props.serviceOptions[0].value : 0,
+        providerId: defaultProvider.id,
+        providerName: defaultProvider.name,
+        startTime,
+        endTime,
+        tmpService: {
+          additionalInfo: '',
+          avgServiceTime: 30,
+          breakTimeStart: startTime,
+          breakTimeEnd: endTime,
+          geoLocationId: this.props.geoOptions[0].value,
+          numberOfParallelCustomer: 1,
+          serviceId: this.props.serviceOptions[0].value,
+        }
+      };
+
+      return {
+        addEventData,
+        isEditMode: false,
+        isOpenAddEventDialog: true,
+      };
+    });
+  }
+
+  onCreateNewEvent = (payload) => {
+    this.closeAddEventDialog();
+    createNewEventHelper(payload, this.props.providers, this.props.createNewEvent);
+  };
 
   render() {
     const {
@@ -213,7 +262,7 @@ class TmpServicesList extends PureComponent {
       providers, tzOptions, serviceOptions
     } = this.props;
     let data = [];
-    const { deletedTmpService, isOpenEditDialog, eventLevel, addEventData } = this.state;
+    const { deletedTmpService, isOpenAddEventDialog, eventLevel, addEventData, isEditMode } = this.state;
 
     if (isLoading) {
       return (
@@ -340,21 +389,31 @@ class TmpServicesList extends PureComponent {
                     <Search />
                   </Button>
                 </div>
+                <Button
+                  size="sm"
+                  className={classes.buttonDisplay}
+                  onClick={this.openAddDialog}
+                >
+                  New temporary service
+                </Button>
               </CardHeader>
             </Card>
           </GridItem>
         </GridContainer>
         {data}
         {deletionPopup}
-        {isOpenEditDialog && (
+        {isOpenAddEventDialog && (
           <AddEventDialog
-            isEditMode
+            isEventTypeReadOnly
+            isEventLevelReadOnly
+            isProviderReadOnly={isEditMode}
+            isEditMode={isEditMode}
             eventLevel={eventLevel}
             providers={providers}
-            isOpenAddDialog={isOpenEditDialog}
-            closeAddDialog={this.closeEditDialog}
+            isOpenAddDialog={isOpenAddEventDialog}
+            closeAddDialog={this.closeAddEventDialog}
             addEventData={addEventData}
-            createNewEvent={this.editTmpService}
+            createNewEvent={isEditMode ? this.editTmpService : this.onCreateNewEvent}
             tzOptions={tzOptions}
             serviceOptions={serviceOptions}
           />
@@ -381,6 +440,7 @@ TmpServicesList.propTypes = {
   editTmpService: PropTypes.func.isRequired,
   fetchGeoLocationOptions: PropTypes.func.isRequired,
   setTmpServices: PropTypes.func.isRequired,
+  createNewEvent: PropTypes.func.isRequired,
 };
 
 TmpServicesList.defaultProps = {
@@ -406,7 +466,16 @@ const mapDispatchToProps = {
   fetchServiceOptions,
   editTmpService,
   fetchGeoLocationOptions,
-  setTmpServices
+  setTmpServices,
+  createNewEvent,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(tableStyle, listPageStyle)(TmpServicesList));
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(
+    theme => ({
+      ...tableStyle(theme),
+      ...listPageStyle
+    }),
+    { withTheme: true }
+  )(TmpServicesList)
+);

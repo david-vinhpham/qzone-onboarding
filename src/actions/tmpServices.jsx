@@ -66,7 +66,7 @@ export const fetchTmpServices = businessId => dispatch => {
   dispatch(setTmpServicesLoading(true));
   axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_BUSINESS_ID}${businessId}`)
     .then(resp => {
-      if(resp.status === 200) {
+      if(resp && resp.status === 200) {
         dispatch(setTmpServices(resp.data.objects));
       }
     })
@@ -79,7 +79,7 @@ export const editTmpService = payload => dispatch => {
   dispatch(setTmpServicesLoading(true));
   axios.put(`${API_ROOT}${URL.NEW_TMP_SERVICE}`, payload)
   .then(resp => {
-    if(resp.status === 200) {
+    if(resp && resp.status === 200) {
       dispatch(setTmpService(resp.data.object));
     }
   })

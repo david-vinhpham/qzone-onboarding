@@ -24,12 +24,11 @@ export const authGetToken = () => {
 
 export function logout() {
   Auth.signOut({ global: true })
-    .then(data => {
-      console.log(data);
+    .then(() => {
       localStorage.clear();
       window.location = '/login';
     })
-    .catch(err => console.log(err));
+    .catch(console.log);
 }
 
 export const storeEmail = email => {
@@ -60,7 +59,6 @@ export function registerUserFailure(error) {
 }
 
 export function register(values) {
-  console.log('>>register');
   return dispatch => {
     dispatch(storeEmail(values.registerEmail));
     dispatch(getUser());
@@ -89,7 +87,6 @@ export function register(values) {
 }
 
 export function registerUser(values) {
-  console.log('registerUser');
   return dispatch => {
     dispatch(register(values));
     // if (values.registrationType === 'Organization') {
@@ -103,7 +100,6 @@ export function registerUser(values) {
     //  })
     // .then(res => res.json())
     // .then(json => {
-    //   console.log("json-------", json)
     //    if (json.object === 'VALID') {
     //      dispatch(register(values));
     //   } else {
@@ -151,7 +147,6 @@ export const resetPassword = values => {
 };
 
 export function loginUser(values, history) {
-  console.log('>>loginUser');
   return dispatch => {
     dispatch(storeEmail(values.loginEmail));
     dispatch(getUser());
@@ -370,8 +365,6 @@ export function facebookSignIn() {
           window.FB.api('/me', user => {
             console.log(`Good to see you, ${user.name}.`);
           });
-        } else {
-          console.log('User cancelled login or did not fully authorize.');
         }
       },
       { scope: 'email,user_likes' }

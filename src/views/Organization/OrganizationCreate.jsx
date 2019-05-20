@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -22,8 +22,8 @@ import ImageUpload from "../../components/CustomUpload/ImageUpload"
 import { fetchBusinessCategories, createOrganization } from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import {ClipLoader} from "react-spinners";
-import {css} from "@emotion/core";
+import { ClipLoader } from "react-spinners";
+import { css } from "@emotion/core";
 import defaultImage from "../../assets/img/default-avatar.png";
 
 const override = css`
@@ -34,7 +34,7 @@ const override = css`
 
 const OrganizationCreateSchema = Yup.object().shape({
   name: Yup.string()
-          .required("This is required Field"),
+    .required("This is required Field"),
   businessCategoryId: Yup.string().required("Please select category"),
   telephone: Yup.string().required("Please enter a valid phone Number"),
 })
@@ -46,7 +46,7 @@ class OrganizationCreate extends React.Component {
     this.state = {
       businessAdmin: {
         cognitoToken: localStorage.getItem('CognitoIdentityServiceProvider.3ov1blo2eji4acnqfcv88tcidn.' + (localStorage.getItem('username')) + '.idToken'),
-        email: this.props.email ? this.props.email : '',
+        email: this.props.email || '',
         userSub: localStorage.getItem('userSub'),
       },
       businessAdminEmail: localStorage.getItem('loginEmail'),
@@ -54,37 +54,30 @@ class OrganizationCreate extends React.Component {
       imageChange: false,
     };
   }
-  componentWillReceiveProps(nextProps) {
-    if(!nextProps.imageLoading) {
-      console.log('imageLoading finished...');
-    }
-    else {
-      console.log('imageLoading...');
-      this.setState({ imageChange: true})
-    }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.imageLoading) {
+      this.setState({ imageChange: true })
+    }
   }
+
   componentDidMount() {
     this.props.fetchBusinessCategories()
   }
-  changeProfileImage(e) {
-    console.log("inside change image function", e);
-    console.log("event---", e)
+
+  changeProfileImage = (e) => {
     e.preventDefault();
     let reader = new FileReader();
     let files = e.target.files[0];
-    console.log("file-------", files)
     reader.onloadend = () => {
       this.setState({
         imagePreviewUrl: reader.result
-        //provider: provider
       });
     };
     reader.readAsDataURL(files);
   }
 
-
-  change(event, stateName, value) {
+  change = (event, stateName, value) => {
     if (value !== undefined) {
       this.setState({ [stateName]: (value) })
     } else if (event.target.type === "number") {
@@ -92,11 +85,11 @@ class OrganizationCreate extends React.Component {
     } else {
       this.setState({ [stateName]: (event.target.value) })
     }
-    console.log("state---", this.state)
   }
+
   submit = (values) => {
     let imageObject = localStorage.getItem('imageObject');
-    if(imageObject !== null) {
+    if (imageObject !== null) {
       imageObject = JSON.parse(imageObject)
     }
     values.logo = imageObject;
@@ -104,6 +97,7 @@ class OrganizationCreate extends React.Component {
     values.userSub = localStorage.getItem('userSub');
     this.props.createOrganization(values, this.props.history);
   }
+
   render() {
     const { classes, businessCategories, createOrganizationError, createOrganizationLoading } = this.props;
     let categoryOptions = [];
@@ -118,7 +112,8 @@ class OrganizationCreate extends React.Component {
         size={100}
         color={'#123abc'}
         loading={createOrganizationLoading}
-      />; }
+      />;
+    }
     return (
       <GridItem xs={12} sm={12} md={12}>
         <Formik
@@ -174,7 +169,7 @@ class OrganizationCreate extends React.Component {
                 }
               ],
             },
-            telephone:'',
+            telephone: '',
             website: '',
             queueModel: '',
             businessAdminEmail: '',
@@ -183,7 +178,7 @@ class OrganizationCreate extends React.Component {
           }}
           validationSchema={OrganizationCreateSchema}
           enableReinitialize={true}
-          onSubmit={(values) => this.submit(values)}
+          onSubmit={this.submit}
           render={({
             values,
             errors,
@@ -200,10 +195,10 @@ class OrganizationCreate extends React.Component {
                   </CardText>
                 </CardHeader>
                 {createOrganizationError !== null ? (<CardFooter className={classes.justifyContentCenter}>
-                    <div  style={{ color: "red" }} > {createOrganizationError.message} </div>
-                  </CardFooter>)
+                  <div style={{ color: "red" }} > {createOrganizationError.message} </div>
+                </CardFooter>)
                   :
-                  ( <CardFooter className={classes.justifyContentCenter}>
+                  (<CardFooter className={classes.justifyContentCenter}>
                   </CardFooter>)}
                 <CardBody>
                   <Accordion
@@ -571,44 +566,44 @@ class OrganizationCreate extends React.Component {
                       {
                         title: "Personal Information",
                         content:
-                            <GridContainer>
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                  Phone Number
+                          <GridContainer>
+                            <GridItem>
+                              <FormLabel className={classes.labelHorizontal}>
+                                Phone Number
                                             </FormLabel>
-                              </GridItem>
-                              <GridItem >
-                                <PhoneInput
-                                  id="telephone"
-                                  placeholder="e.g.+61 3 xxxx xxxx"
-                                  country="AU"
-                                  name={'telephone'}
-                                  value={values['telephone']}
-                                  onChange={e => setFieldValue('telephone', e)}
-                                />
-                                {errors.telephone && touched.telephone ? (
-                                  <div style={{ color: "red" }}>{errors.telephone}</div>
-                                ) : null}
-                              </GridItem>
+                            </GridItem>
+                            <GridItem >
+                              <PhoneInput
+                                id="telephone"
+                                placeholder="e.g.+61 3 xxxx xxxx"
+                                country="AU"
+                                name={'telephone'}
+                                value={values['telephone']}
+                                onChange={e => setFieldValue('telephone', e)}
+                              />
+                              {errors.telephone && touched.telephone ? (
+                                <div style={{ color: "red" }}>{errors.telephone}</div>
+                              ) : null}
+                            </GridItem>
 
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                  Website
+                            <GridItem>
+                              <FormLabel className={classes.labelHorizontal}>
+                                Website
                                             </FormLabel>
-                              </GridItem>
-                              <GridItem >
-                                <CustomInput
-                                  id="website"
-                                  inputProps={{
-                                    placeholder: "Website",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.website}
-                                />
-                              </GridItem>
+                            </GridItem>
+                            <GridItem >
+                              <CustomInput
+                                id="website"
+                                inputProps={{
+                                  placeholder: "Website",
+                                  type: "text"
+                                }}
+                                onChange={handleChange}
+                                value={values.website}
+                              />
+                            </GridItem>
 
-                              {/* <GridItem>
+                            {/* <GridItem>
                                 <FormLabel className={classes.labelHorizontal}>
                                   Queue Model
                                             </FormLabel>
@@ -624,10 +619,10 @@ class OrganizationCreate extends React.Component {
                                   value={values.queueModel}
                                 />
                               </GridItem>*/}
-                              <GridItem xs={12} md={12}>
-                                <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
-                              </GridItem>
-                            </GridContainer>
+                            <GridItem xs={12} md={12}>
+                              <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
+                            </GridItem>
+                          </GridContainer>
 
 
 
@@ -649,7 +644,7 @@ class OrganizationCreate extends React.Component {
             )}
         />
 
-                    </GridItem>
+      </GridItem>
 
 
     )
@@ -667,7 +662,7 @@ const mapsStateToProp = (state) => ({
   businessCategories: state.organization.businessCategories,
   fetchBusinessCategoriesLoading: state.organization.fetchBusinessCategoriesLoading,
   fetchBusinessCategoriesError: state.organization.fetchBusinessCategoriesError,
-  createOrganizationError:state.organization.createOrganizationError,
+  createOrganizationError: state.organization.createOrganizationError,
   organization: state.organization.organization,
   imageError: state.image.imageError,
   imageLoading: state.image.imageLoading,

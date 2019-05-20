@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import { isEmpty } from 'lodash';
-import { EVENT_REPEAT_TYPE, REPEAT_END_TYPE } from 'constants/Calendar.constants';
+import { EVENT_REPEAT_TYPE, REPEAT_END_TYPE, EVENT_LEVEL, EVENT_TYPE } from 'constants/Calendar.constants';
 
 export const generateTmpServicePayload = (tmpService, providerTzOffset, businessAdminId) => {
   const {
@@ -82,4 +82,81 @@ export const generateRepeatPayload = (repeat, providerTzOffset) => {
   }
 
   return repeatPayload;
+};
+
+const generatePayload = (addEventData, providers) => {
+  const {
+    providerId,
+    startTime,
+    endTime,
+    eventType,
+    description,
+    repeat,
+    tmpService,
+    location,
+    serviceId,
+    customerEmail,
+    customerFirstName,
+    customerLastName,
+    customerMobilePhone,
+  } = addEventData;
+  const providerTz = providers.find(p => p.id === providerId).timezone;
+  const providerTzOffset = moment().tz(providerTz).format('Z');
+
+  let payload = {
+    description,
+    providerId,
+    slot: {
+      startTime: moment(startTime).utcOffset(providerTzOffset, true).unix(),
+      endTime: moment(endTime).utcOffset(providerTzOffset, true).unix()
+    },
+    type: eventType,
+  };
+
+  if (eventType === EVENT_TYPE.TMP_SERVICE) {
+    payload = { ...payload, ...generateTmpServicePayload(tmpService, providerTzOffset, localStorage.getItem('userSub')) };
+  }
+
+  if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
+    payload = { ...payload, ...generateRepeatPayload(repeat, providerTzOffset) };
+  }
+
+  if (eventType === EVENT_TYPE.APPOINTMENT) {
+    payload = {
+      ...payload,
+      timezoneId: providerTz,
+      location,
+      serviceId,
+      customerEmail,
+      customerFirstName,
+      customerLastName,
+      customerMobilePhone,
+    }
+  }
+
+  return payload;
+};
+
+const createOrgNewEvent = (addEventData, providers, createNewEventAction) => {
+  const fetchMap = providers.map(provider => {
+    const payload = generatePayload(
+      { ...addEventData, providerId: provider.id },
+      providers
+    );
+    return createNewEventAction(payload);
+  });
+
+  Promise.all(fetchMap);
+};
+
+export const createNewEventHelper = (
+  { addEventData, eventLevel },
+  providers,
+  createNewEventAction
+) => {
+  if (eventLevel === EVENT_LEVEL.BUSINESS) {
+    createOrgNewEvent(addEventData, providers, createNewEventAction);
+  } else {
+    createNewEventAction(generatePayload(addEventData, providers));
+  }
 };

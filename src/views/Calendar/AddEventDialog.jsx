@@ -226,7 +226,10 @@ class AddEventDialog extends PureComponent {
     const {
       isOpenAddDialog, closeAddDialog, geoOptions,
       serviceOptions, providers,
-      eventLevel, addEventData, isEditMode
+      eventLevel, addEventData, isEditMode,
+      isEventTypeReadOnly,
+      isEventLevelReadOnly,
+      isProviderReadOnly
     } = this.props;
     const { tmpServiceStep } = this.state;
     return (
@@ -279,7 +282,9 @@ class AddEventDialog extends PureComponent {
                       onBlurOccurence={this.onBlurOccurence(setFieldValue, values)}
                       onChangeRepeatEndDate={this.onChangeRepeatEndDate(setFieldValue, values)}
                       onChangeCustomerMobilePhone={this.onChangeCustomerMobilePhone(setFieldValue)}
-                      isEditMode={isEditMode}
+                      isEventTypeReadOnly={isEventTypeReadOnly}
+                      isEventLevelReadOnly={isEventLevelReadOnly}
+                      isProviderReadOnly={isProviderReadOnly}
                     /> :
                     <TmpServiceContent
                       geoOptions={geoOptions}
@@ -333,10 +338,16 @@ AddEventDialog.propTypes = {
   geoOptions: PropTypes.arrayOf(optionType).isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
   isEditMode: PropTypes.bool,
+  isEventTypeReadOnly: PropTypes.bool,
+  isEventLevelReadOnly: PropTypes.bool,
+  isProviderReadOnly: PropTypes.bool
 };
 
 AddEventDialog.defaultProps = {
-  isEditMode: false
+  isEditMode: false,
+  isEventTypeReadOnly: false,
+  isEventLevelReadOnly: false,
+  isProviderReadOnly: false
 };
 
 export default connect(state => ({ geoOptions: state.calendarManage.geoOptions }))(AddEventDialog);
