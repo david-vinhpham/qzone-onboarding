@@ -158,6 +158,7 @@ export default function TmpServiceContent({
       <Grid item md={12}>
         <TextField
           name="addEventData.tmpService.additionalInfo"
+          value={tmpService.additionalInfo}
           className={addEventDialogStyles.calendarDesc}
           label="Additional Data"
           margin="normal"
