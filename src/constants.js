@@ -27,6 +27,18 @@ export const userStatus = {
 
 };
 
+export const eventStatus = {
+  unspecified: 'UNSPECIFIED',
+  checkedIn: 'CHECKED_IN',
+  started: 'STARTED',
+  completed: 'COMPLETED',
+
+};
+
+export const boardMode = {
+  queue: 'QUEUE'
+};
+
 export const restApiResponseCodes = {
   success: 200,
   unauthorized: 401,
@@ -43,4 +55,4 @@ export const eTemplateNameMax = 250;
 export const eTemplateContentMax = 15000;
 export const eTemplateApi = `${emailTemplate}${eTemplateUrl}`;
 
-export const defaultDateTimeFormat = 'DD/MM/YYY LT Z';
+export const defaultDateTimeFormat = 'DD/MM/YYYY LT Z';
