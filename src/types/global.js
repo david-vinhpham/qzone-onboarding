@@ -25,6 +25,51 @@ export const userDetailType = PropTypes.objectOf(PropTypes.oneOfType([
   PropTypes.object, PropTypes.string,
 ]));
 
+export const customerFlowBoardType = PropTypes.shape({
+  eventId: PropTypes.string,
+  mode: PropTypes.string,
+  providerId: PropTypes.string,
+  providerName: PropTypes.string,
+  serviceId: PropTypes.string,
+  serviceName: PropTypes.string,
+  customerFlowDetailList: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    bookingCode: PropTypes.string,
+    bookingTime: PropTypes.number,
+    position: PropTypes.number,
+    isConfirmed: PropTypes.bool,
+    checkingTime: PropTypes.number,
+    serviceTime: PropTypes.number,
+    completedTime: PropTypes.number,
+    cancelledTime: PropTypes.number,
+    timezoneId: PropTypes.string,
+    status: PropTypes.string,
+    mode: PropTypes.string,
+    sbookingTime: PropTypes.string,
+    scheckingTime: PropTypes.string,
+    scompletedTime: PropTypes.string,
+    scancelledTime: PropTypes.string,
+    sserviceTime: PropTypes.string
+  }))
+});
+
+export const verifyBookingCodeType = PropTypes.shape({
+  bookingCode: PropTypes.string,
+  eventId: PropTypes.string,
+  email: PropTypes.string,
+  firstName: PropTypes.string,
+  mode: PropTypes.string,
+  phoneNumber: PropTypes.string,
+  serviceName: PropTypes.string,
+  serviceId: PropTypes.string,
+  providerId: PropTypes.string,
+  providerName: PropTypes.string,
+  position: PropTypes.number,
+  startTime: PropTypes.string,
+  timezoneId: PropTypes.string,
+  status: PropTypes.string
+});
+
 export const serviceCategoryType = PropTypes.shape({
   name: PropTypes.string,
   id: PropTypes.string,

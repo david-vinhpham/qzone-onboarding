@@ -37,6 +37,7 @@ export const URL = {
   FETCH_PROVIDERS_BY_ORG_ID: 'providers-option-by-org-id/',
   FETCH_PROVIDERS_OPTION_BY_SERVICE_ID: 'providers-option-by-service-id/',
   FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID: 'providers-option-by-service-provider-id/',
+  FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID: 'providers-option-by-business-admin-id/',
   FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID: 'providers-by-business-admin-id/',
   ADMIN_CREATE_AWS_USER: 'users/admin-create-new-users',
 
@@ -54,6 +55,10 @@ export const URL = {
   FIND_TMP_SERVICE_DETAIL_BY_TMP_SERVICE_ID: 'temporary-services/',
 
   FIND_AVAILABILITY_BY_TMP_SERVICE: 'availabilities/temporary/service',
+
+  VERIFY_BOOKING_CODE: 'customer/booking/code/verify',
+  UPDATE_CUSTOMER_FLOW_STATUS: 'customer/flow/status',
+  FETCH_CUSTOMER_FLOW_BOARD: 'customer/flow/board'
 };
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';
 
