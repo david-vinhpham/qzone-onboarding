@@ -57,6 +57,11 @@ const listPageStyle = {
   },
   buttonCard: {
     marginTop: '18px'
+  },
+  modeMargin: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: 20
   }
 };
 export default listPageStyle;

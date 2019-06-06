@@ -17,7 +17,7 @@ import {
   Table, TableBody, TableCell,
   TableHead, TableRow,
   FormControlLabel,
-  Checkbox
+  Checkbox, Typography
 } from "@material-ui/core";
 import {
   fetchFlowBoard,
@@ -202,6 +202,7 @@ class CustomerService extends PureComponent {
         </Dialog>}
         <div className={classes.cardTitleMargin + " " + classes.flexItem}>
           <h4 className={classes.boardHeader}>Customer Flow Board</h4>
+          {boardData && boardData.mode && <Typography variant="subtitle2" className={classes.modeMargin}>Mode: {boardData.mode}</Typography>}
           {isFetchServiceOptionsByBusinessAdminIdSuccess && <Select
             className={classes.cardTitleMargin}
             value={defaultService}
