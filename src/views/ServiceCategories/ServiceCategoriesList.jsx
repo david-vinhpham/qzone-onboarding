@@ -16,7 +16,7 @@ import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/l
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
 import DeletionModal from "../../shared/deletion-modal";
-import { ClipLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
@@ -126,11 +126,11 @@ class ServiceCategoriesList extends PureComponent {
 
     if (isLoading) {
       return (
-        <ClipLoader
+        <BeatLoader
           className={override}
           sizeUnit="px"
-          size={100}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={isLoading}
         />
       );

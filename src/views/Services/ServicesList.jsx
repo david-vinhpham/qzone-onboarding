@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import Search from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { classesType } from 'types/global.js';
@@ -91,11 +91,11 @@ class ServicesList extends React.Component {
     let data = [];
     if (fetchServicesLoading) {
       return (
-        <ClipLoader
+        <BeatLoader
           css={override}
           sizeUnit="px"
-          size={70}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={fetchServicesLoading}
         />
       );

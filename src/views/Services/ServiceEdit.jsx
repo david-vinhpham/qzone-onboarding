@@ -17,7 +17,7 @@ import {
   Switch
 } from '@material-ui/core';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { historyType, classesType, matchType } from 'types/global.js';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -158,11 +158,11 @@ class ServiceEdit extends React.Component {
     }
     if (fetchServiceLoading || !this.state.data || this.state.data.length === 0) {
       return (
-        <ClipLoader
+        <BeatLoader
           className={override}
           sizeUnit="px"
-          size={100}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={fetchServiceLoading}
         />
       );

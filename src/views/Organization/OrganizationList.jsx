@@ -7,7 +7,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
@@ -29,7 +29,7 @@ const override = css`
 
 class OrganizationList extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       data: [],
     }
@@ -44,15 +44,15 @@ class OrganizationList extends React.Component {
     if (userInfo === null) {
       window.location = '/login';
     }
-    var userSub = localStorage.getItem('userSub');
+    let userSub = localStorage.getItem('userSub');
     this.props.fetchOrganizationsByBusinessAdminId(userSub);
   }
 
   render() {
     const { classes, fetchOrganizationsLoading, fetchOrganizationsError, organizations } = this.props;
-    let data = []
+    let data = [];
     if (fetchOrganizationsLoading) {
-      return < ClipLoader
+      return < BeatLoader
         css={override}
         sizeUnit={"px"}
         size={100}
@@ -177,7 +177,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchOrganizationsByBusinessAdminId: (id) => dispatch(fetchOrganizationsByBusinessAdminId(id)),
   }
-}
+};
 
 export default compose(
   withStyles(listPageStyle),

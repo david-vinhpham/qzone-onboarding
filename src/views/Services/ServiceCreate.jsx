@@ -23,7 +23,7 @@ import SlotCustomInput from "../../components/CustomInput/SlotCustomInput.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
-import {ClipLoader} from "react-spinners";
+import {BeatLoader} from "react-spinners";
 import {css} from "@emotion/core";
 const override = css`
     display: block;
@@ -132,7 +132,7 @@ class ServiceCreate extends React.Component {
       organizationOptions = organizations;
     }
     if (createServiceLoading) {
-      return < ClipLoader
+      return < BeatLoader
         className={override}
         sizeUnit={"px"}
         size={100}
