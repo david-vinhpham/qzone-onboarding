@@ -389,6 +389,17 @@ class CustomerService extends PureComponent {
                     value={verifyData.serviceName}
                   />
                 </GridItem>
+                <GridItem md={6}>
+                  <CustomInput
+                    labelText="Status"
+                    id="status"
+                    formControlProps={{ fullWidth: true }}
+                    inputProps={{
+                      disabled: true,
+                    }}
+                    value={verifyData.status}
+                  />
+                </GridItem>
                 {(isVerifyBookingCodeSuccess && (verifyData.status.toUpperCase() === eventStatus.unspecified)) && <GridItem md={6}>
                   <Button className={classes.buttonCard}
                     onClick={() => this.updateStatus(verifyData, eventStatus.checkedIn, true)}>
