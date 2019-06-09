@@ -12,6 +12,10 @@ import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/l
 import Card from "../../components/Card/Card.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";import { setSurveysAction } from '../../actions/surveys';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
+import Edit from "@material-ui/icons/Edit";
+import Delete from "@material-ui/icons/Delete";
 
 class Survey extends Component {
   static getDerivedStateFromProps(props, state) {
@@ -60,6 +64,14 @@ class Survey extends Component {
     console.log('new Survey');
   };
 
+  handleEditSurvey = id => () => {
+    console.log('Edit Survey', id);
+  };
+
+  handleDeleteSurvey = id => () => {
+    console.log('handle delete Survey', id);
+  };
+
   render() {
     const { classes } = this.props;
     const { surveys, isLoading } = this.state;
@@ -106,6 +118,58 @@ class Survey extends Component {
             </Card>
           </GridItem>
         </GridContainer>
+        { surveys && (
+          <Paper>
+            <Table aria-labelledby="businessCategories">
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
+                  <TableCell className={classes.cellHeaderBold}>Name</TableCell>
+                  <TableCell className={classes.cellHeaderBold} align="center">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {surveys.map((survey, index) => (
+                  <TableRow key={survey.id} classes={{ root: classes.row }}>
+                    <TableCell padding="dense">{index + 1}</TableCell>
+                    <TableCell>{survey.title}</TableCell>
+                    <TableCell align="center">
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Edit"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button
+                          color="success"
+                          simple justIcon
+                          onClick={this.handleEditSurvey(survey.id)}
+                        >
+                          <Edit className={classes.underChartIcons} />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Remove"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button
+                          onClick={this.handleDeleteSurvey(survey.id)}
+                          color="danger"
+                          simple
+                          justIcon
+                        >
+                          <Delete className={classes.underChartIcons} />
+                        </Button>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        )}
       </div>
     )
   }
