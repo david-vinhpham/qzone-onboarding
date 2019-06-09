@@ -1,5 +1,8 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import { BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd, Report } from '@material-ui/icons';
+import {
+  BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd, Report,
+  Assignment,
+} from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Profile from '../views/Profile/profile';
 import Administration from '../views/Administration/Administration';
@@ -36,6 +39,7 @@ import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesL
 import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
 import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
+import Assessments from '../views/Surveys/Assessments';
 
 export const dashboardRoutes = [
   {
@@ -168,6 +172,12 @@ export const otherRoutes = [
     name: 'Administration',
     icon: LocationOn,
     component: Administration
+  },
+  {
+    path: '/assessments',
+    name: 'Assessments',
+    icon: Assignment,
+    component: Assessments,
   },
   {
     path: '/provider/list',
