@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+import commonReducer from './common';
 import ProvidersReducer from './provider.reducer';
 import UserReducer from './reducer_auth';
 import TemplateReducer from './email_templates';
@@ -15,8 +16,10 @@ import serviceCategoryReducer from './serviceCategory.reducer';
 import businessCategoryReducer from './businessCategory.reducer';
 import tmpServiceDetail from './tmpServiceDetail.reducer';
 import availabilitySlots from './availabilitySlots.reducer';
+import surveysReducer from './surveys';
 
 const rootReducer = combineReducers({
+  common: commonReducer,
   provider: ProvidersReducer,
   user: UserReducer,
   email: TemplateReducer,
@@ -31,7 +34,8 @@ const rootReducer = combineReducers({
   businessCategory: businessCategoryReducer,
   tmpServiceDetail,
   availabilitySlots,
-  customerService: customerServiceReducer
+  customerService: customerServiceReducer,
+  surveys: surveysReducer,
 });
 
 export default rootReducer;
