@@ -4,14 +4,14 @@ import Loading from 'components/Loading/Loading';
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
-import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import withStyles from "@material-ui/core/styles/withStyles";
 import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
-import Search from "@material-ui/icons/Search";
 import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle";
 import Card from "../../components/Card/Card.jsx";
 import CardText from "../../components/Card/CardText.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";import { setSurveysAction } from '../../actions/surveys';
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardBody from '../../components/Card/CardBody';
+import { setSurveysAction } from '../../actions/surveys';
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
 import Edit from "@material-ui/icons/Edit";
@@ -86,27 +86,6 @@ class Survey extends Component {
                 <CardText color="rose">
                   <h4 className={classes.cardTitle}>Assessments</h4>
                 </CardText>
-                <div>
-                  <CustomInput
-                    formControlProps={{
-                      className: classes.top + " " + classes.search
-                    }}
-                    inputProps={{
-                      placeholder: "Search",
-                      inputProps: {
-                        "aria-label": "Search",
-                        className: classes.searchInput
-                      }
-                    }}
-                  />
-                  <Button
-                    color="white"
-                    aria-label="edit"
-                    justIcon
-                    round>
-                    <Search />
-                  </Button>
-                </div>
                 <Button
                   size="sm"
                   className={classes.buttonDisplay}
@@ -115,61 +94,63 @@ class Survey extends Component {
                   New Assessment
                 </Button>
               </CardHeader>
+              <CardBody>
+                { surveys && (
+                  <Paper>
+                    <Table aria-labelledby="businessCategories">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
+                          <TableCell className={classes.cellHeaderBold}>Name</TableCell>
+                          <TableCell className={classes.cellHeaderBold} align="center">Actions</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {surveys.map((survey, index) => (
+                          <TableRow key={survey.id} classes={{ root: classes.row }}>
+                            <TableCell padding="dense">{index + 1}</TableCell>
+                            <TableCell>{survey.title}</TableCell>
+                            <TableCell align="center">
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Edit"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button
+                                  color="success"
+                                  simple justIcon
+                                  onClick={this.handleEditSurvey(survey.id)}
+                                >
+                                  <Edit className={classes.underChartIcons} />
+                                </Button>
+                              </Tooltip>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Remove"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button
+                                  onClick={this.handleDeleteSurvey(survey.id)}
+                                  color="danger"
+                                  simple
+                                  justIcon
+                                >
+                                  <Delete className={classes.underChartIcons} />
+                                </Button>
+                              </Tooltip>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Paper>
+                )}
+              </CardBody>
             </Card>
           </GridItem>
         </GridContainer>
-        { surveys && (
-          <Paper>
-            <Table aria-labelledby="businessCategories">
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
-                  <TableCell className={classes.cellHeaderBold}>Name</TableCell>
-                  <TableCell className={classes.cellHeaderBold} align="center">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {surveys.map((survey, index) => (
-                  <TableRow key={survey.id} classes={{ root: classes.row }}>
-                    <TableCell padding="dense">{index + 1}</TableCell>
-                    <TableCell>{survey.title}</TableCell>
-                    <TableCell align="center">
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Edit"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button
-                          color="success"
-                          simple justIcon
-                          onClick={this.handleEditSurvey(survey.id)}
-                        >
-                          <Edit className={classes.underChartIcons} />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Remove"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button
-                          onClick={this.handleDeleteSurvey(survey.id)}
-                          color="danger"
-                          simple
-                          justIcon
-                        >
-                          <Delete className={classes.underChartIcons} />
-                        </Button>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        )}
       </div>
     )
   }
@@ -192,5 +173,4 @@ export default connect(
     ...tableStyle(theme),
     ...listPageStyle,
   }), {withTheme: true}
-)
-(Survey));
+)(Survey));

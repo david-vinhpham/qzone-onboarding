@@ -136,7 +136,8 @@ const tableStyle = theme => ({
       backgroundColor: theme.palette.background.default,
     },
     "&:hover": {
-      backgroundColor: infoColor,
+      backgroundColor: 'rgba(0, 172, 193, 0.1)',
+      cursor: 'pointer',
     }
   },
 });

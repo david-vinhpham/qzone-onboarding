@@ -24,16 +24,9 @@ import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Search from "@material-ui/icons/Search";
 import BusinessCategoryDialog from './BusinessCategoryDialog';
-
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-`;
 
 class BusinessCategoriesList extends PureComponent {
   constructor(props) {
