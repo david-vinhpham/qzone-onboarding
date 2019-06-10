@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { objectOf, any, func, arrayOf, object } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -12,20 +11,18 @@ import CustomInput from 'components/CustomInput/CustomInput';
 import CustomCheckbox from 'components/CustomCheckbox/CustomCheckbox';
 import validationFormStyle from 'assets/jss/material-dashboard-pro-react/modules/validationFormStyle';
 import SurveyEditor from './SurveyEditor';
-// import { fetchUserTypeList } from 'services/api/autsh';
 import Assessor from './Assessor';
-import { sessionService } from 'redux-react-session';
-import { classesType } from 'types/global';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 let editor = false;
 class SurveyForm extends React.Component {
   static propTypes = {
-    fetchUserTypeList: PropTypes.func.isRequired,
-    AssessorList: PropTypes.arrayOf(PropTypes.object).isRequired,
-    classes: classesType.isRequired,
-    survey: PropTypes.objectOf(PropTypes.object).isRequired,
-    change: PropTypes.func.isRequired,
-    changeQuestions: PropTypes.func.isRequired,
+    fetchUserTypeList: func.isRequired,
+    AssessorList: arrayOf(object).isRequired,
+    classes: objectOf(any).isRequired,
+    survey: objectOf(object).isRequired,
+    change: func.isRequired,
+    changeQuestions: func.isRequired,
   };
 
   constructor(props) {
@@ -35,15 +32,6 @@ class SurveyForm extends React.Component {
       token: '',
       assessorList: '',
     };
-  }
-
-  componentWillMount() {
-    sessionService.loadSession().then((currentSession) => {
-      this.setState({ token: currentSession.token }, () => {
-        const { fetchUserTypeList: fetchUserTypeListAction } = this.props;
-        fetchUserTypeListAction(this.state);
-      });
-    });
   }
 
   componentWillReceiveProps(nextProps) {
