@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'components/Loading/Loading';
-import GridContainer from "../../components/Grid/GridContainer.jsx";
-import GridItem from "../../components/Grid/GridItem.jsx";
-import Button from "../../components/CustomButtons/Button.jsx";
-import withStyles from "@material-ui/core/styles/withStyles";
-import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle";
-import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/listPageStyle";
-import Card from "../../components/Card/Card.jsx";
-import CardText from "../../components/Card/CardText.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";
+import GridContainer from '../../components/Grid/GridContainer.jsx';
+import GridItem from '../../components/Grid/GridItem.jsx';
+import Button from '../../components/CustomButtons/Button.jsx';
+import withStyles from '@material-ui/core/styles/withStyles';
+import { Link } from 'react-router-dom';
+import tableStyle from '../../assets/jss/material-dashboard-pro-react/components/tableStyle';
+import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle';
+import Card from '../../components/Card/Card.jsx';
+import CardText from '../../components/Card/CardText.jsx';
+import CardHeader from '../../components/Card/CardHeader.jsx';
 import CardBody from '../../components/Card/CardBody';
 import { setSurveysAction } from '../../actions/surveys';
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import Tooltip from "@material-ui/core/Tooltip";
-import Edit from "@material-ui/icons/Edit";
-import Delete from "@material-ui/icons/Delete";
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
+import Edit from '@material-ui/icons/Edit';
+import Delete from '@material-ui/icons/Delete';
 
 class Survey extends Component {
   static getDerivedStateFromProps(props, state) {
@@ -86,13 +87,15 @@ class Survey extends Component {
                 <CardText color="rose">
                   <h4 className={classes.cardTitle}>Assessments</h4>
                 </CardText>
-                <Button
-                  size="sm"
-                  className={classes.buttonDisplay}
-                  onClick={this.handleNewSurvey}
-                >
-                  New Assessment
-                </Button>
+                <Link to="/assessments/new">
+                  <Button
+                    size="sm"
+                    className={classes.buttonDisplay}
+                    // onClick={this.handleNewSurvey}
+                  >
+                    New Assessment
+                  </Button>
+                </Link>
               </CardHeader>
               <CardBody>
                 { surveys && (

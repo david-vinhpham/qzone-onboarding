@@ -40,6 +40,7 @@ import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategori
 import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
 import Assessments from '../views/Surveys/Assessments';
+import CreateAssessment from '../views/Surveys/CreateAssessment';
 
 export const dashboardRoutes = [
   {
@@ -172,6 +173,12 @@ export const otherRoutes = [
     name: 'Administration',
     icon: LocationOn,
     component: Administration
+  },
+  {
+    path: '/assessments/new',
+    name: 'Create New Assessment',
+    icon: Assignment,
+    component: CreateAssessment,
   },
   {
     path: '/assessments',
