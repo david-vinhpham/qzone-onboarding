@@ -12,36 +12,32 @@ import CardHeader from '../../components/Card/CardHeader';
 import CardIcon from '../../components/Card/CardIcon';
 import CardBody from '../../components/Card/CardBody';
 import SurveyForm from './SurveyForm';
-import Loading from '../../components/Loading/Loading';
-// import { createSurvey } from 'services/api/assessment';
 
 class CreateAssessment extends React.Component {
   static propTypes = {
     classes: objectOf(any).isRequired,
-    createSurvey: func.isRequired,
     history: objectOf(any).isRequired,
+    createSurvey: func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       surveyInfo: {
+        userId: '',
         title: '',
         description: '',
         logo: '',
         privacy: false,
         survey: '',
-        userId: '',
       },
       titleState: '',
-      loading: true,
       descriptionState: '',
       mode: 'create',
-      token: '',
     };
   }
 
-  change = (event, stateName) => {
+  handleChangeField = (event, stateName) => {
     if (isEmpty(event.target.value)) {
       this.setState({ [`${stateName}State`]: 'error' });
     } else {
@@ -54,14 +50,14 @@ class CreateAssessment extends React.Component {
 
   changeQuestions = (newSurvey) => {
     const { createSurvey: createSurveyAction, history } = this.props;
-    const { surveyInfo, token } = this.state;
+    const { surveyInfo } = this.state;
     const { title, description } = surveyInfo;
 
     if (!isEmpty(title) && !isEmpty(description)) {
       createSurveyAction({
         ...surveyInfo,
         survey: JSON.stringify(newSurvey),
-      }, token, () => { history.push('/admin/assessment/list'); });
+      });
     } else {
       this.setState(oldState => ({
         titleState: isEmpty(title) ? 'error' : 'success',
@@ -79,23 +75,23 @@ class CreateAssessment extends React.Component {
     const survey = {
       surveyInfo, titleState, descriptionState, mode,
     };
+
     return (
       <>
-        {/*<Loading />*/}
         <Card>
           <CardHeader color="rose" text>
             <CardIcon color="rose">
               <Poll />
             </CardIcon>
-            <h3 className={classes.cardIconTitle}>Add Assessment</h3>
+            <h3 className={classes.cardIconTitle}>New Assessment</h3>
             <Link to="/assessments" className={classes.linkDisplay}>
-              <u>Back</u>
+              <u>Cancel</u>
             </Link>
           </CardHeader>
           <CardBody>
             <SurveyForm
               survey={survey}
-              change={this.change}
+              change={this.handleChangeField}
               classes={classes}
               changeQuestions={this.changeQuestions}
             />
@@ -108,5 +104,5 @@ class CreateAssessment extends React.Component {
 
 export default compose(
   withStyles(validationFormStyle),
-  connect(null, { createSurvey: () => {} }),
+  connect(null, { createSurvey: () => {console.log('create survey')} }),
 )(CreateAssessment);
