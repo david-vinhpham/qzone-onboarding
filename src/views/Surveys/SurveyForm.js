@@ -1,42 +1,33 @@
 import React, { Component } from 'react';
-import { objectOf, any, func, arrayOf, object } from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { objectOf, any, func, arrayOf } from 'prop-types';
 import {
-  FormLabel, Select, MenuItem, FormControl,
+  FormLabel,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
 import CustomInput from '../../components/CustomInput/CustomInput';
-import CustomCheckbox from '../../components/CustomCheckbox/CustomCheckbox';
 import validationFormStyle from 'assets/jss/material-dashboard-pro-react/modules/validationFormStyle';
 import SurveyEditor from './SurveyEditor';
 
 let editor = false;
 class SurveyForm extends Component {
   static propTypes = {
-    fetchUserTypeList: func.isRequired,
-    // AssessorList: arrayOf(object).isRequired,
     classes: objectOf(any).isRequired,
     survey: objectOf(any).isRequired,
     change: func.isRequired,
-    changeQuestions: func.isRequired,
+    onSave: func.isRequired,
+    services: arrayOf(any).isRequired,
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      userType: 'ASSESSOR',
-    };
-  }
 
   render() {
     const {
-      classes, survey, change, changeQuestions,
+      classes, survey, change, onSave, services,
     } = this.props;
     const {
-      surveyInfo, titleState, descriptionState, mode,
+      surveyInfo, titleState, descriptionState, mode, tempServiceIdState,
     } = survey;
     if (mode === 'create' || surveyInfo.survey) { editor = true; }
     return (
@@ -88,7 +79,7 @@ class SurveyForm extends Component {
         <GridContainer>
           <GridItem xs={12} sm={3}>
             <FormLabel className={classes.labelHorizontal}>
-              Logo*
+              Logo
             </FormLabel>
           </GridItem>
           <GridItem xs={12} sm={7}>
@@ -108,41 +99,33 @@ class SurveyForm extends Component {
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={3}>
-            <FormLabel
-              className={
-                `${classes.labelHorizontal
-                } ${
-                  classes.labelHorizontalRadioCheckbox}`
-              }
-            >
-              Privacy*
+            <FormLabel className={classes.labelHorizontal}>
+              Temporary Service*
             </FormLabel>
           </GridItem>
           <GridItem xs={12} sm={7}>
-            <CustomCheckbox
-              value=""
-              checked={surveyInfo.privacy || false}
-              label=""
-              onClick={event => change(event, 'privacy')}
-              classes={classes}
-            />
+            <Select
+              value={surveyInfo.tempServiceId}
+              onChange={event => change(event, 'tempServiceId')}
+              fullWidth
+              error={tempServiceIdState === 'error'}
+              style={{
+                paddingTop: '22px',
+              }}
+            >
+              {services.map(item => (
+                <MenuItem value={item.id}>{item.serviceName} - {item.description}</MenuItem>
+              ))}
+            </Select>
           </GridItem>
         </GridContainer>
-
         <hr />
         <GridContainer>
-          {editor && <SurveyEditor change={changeQuestions} data={surveyInfo.survey} />}
+          {editor && <SurveyEditor onSave={onSave} data={surveyInfo.survey} />}
         </GridContainer>
       </form>
     );
   }
 }
 
-function mapStateToProps(state) {
-  return { AssessorList: state.user.userTypeList };
-}
-
-export default compose(
-  withStyles(validationFormStyle),
-  connect(mapStateToProps, { fetchUserTypeList: () => {} }),
-)(SurveyForm);
+export default withStyles(validationFormStyle)(SurveyForm);

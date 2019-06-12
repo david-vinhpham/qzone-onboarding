@@ -1,10 +1,12 @@
 import React from 'react';
-import { func, objectOf, any } from 'prop-types';
+import { func, objectOf, any, arrayOf } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { Poll } from '@material-ui/icons';
+import { saveSurveyAction } from '../../actions/surveys';
+import { fetchTmpServices } from '../../actions/tmpServices';
 import withStyles from '@material-ui/core/styles/withStyles';
 import validationFormStyle from 'assets/jss/material-dashboard-pro-react/modules/validationFormStyle';
 import Card from '../../components/Card/Card';
@@ -17,7 +19,10 @@ class CreateAssessment extends React.Component {
   static propTypes = {
     classes: objectOf(any).isRequired,
     history: objectOf(any).isRequired,
-    createSurvey: func.isRequired,
+    saveSurveyAction: func.isRequired,
+    fetchTmpServices: func.isRequired,
+    user: objectOf(any).isRequired,
+    temporaryServices: arrayOf(any).isRequired,
   };
 
   constructor(props) {
@@ -28,8 +33,9 @@ class CreateAssessment extends React.Component {
         title: '',
         description: '',
         logo: '',
-        privacy: false,
+        privacy: true,
         survey: '',
+        tempServiceId: '',
       },
       titleState: '',
       descriptionState: '',
@@ -37,45 +43,62 @@ class CreateAssessment extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { user, fetchTmpServices: fetchTmpServicesAction, history } = this.props;
+    const businessId = get(user, 'userDetails.userSub') || localStorage.getItem('userSub');
+    if (!businessId) {
+      history.push('/assessments');
+    } else {
+      fetchTmpServicesAction(businessId);
+    }
+  }
+
   handleChangeField = (event, stateName) => {
+    const { surveyInfo } = this.state;
+    if (event) event.preventDefault();
     if (isEmpty(event.target.value)) {
       this.setState({ [`${stateName}State`]: 'error' });
     } else {
       this.setState({ [`${stateName}State`]: 'success' });
     }
-    const { surveyInfo } = this.state;
     surveyInfo[stateName] = (event.target.value || event.target.checked);
     this.setState({ surveyInfo });
   };
 
-  changeQuestions = (newSurvey) => {
-    const { createSurvey: createSurveyAction, history } = this.props;
+  handleSaveSurvey = (newSurvey) => {
+    const { saveSurveyAction: saveSurvey, user, history } = this.props;
     const { surveyInfo } = this.state;
-    const { title, description } = surveyInfo;
-
-    if (!isEmpty(title) && !isEmpty(description)) {
-      createSurveyAction({
+    const { title, description, tempServiceId } = surveyInfo;
+    const userId = get(user, 'userDetails.userSub') || localStorage.getItem('userSub');
+    if (!isEmpty(title) && !isEmpty(description) && !isEmpty(tempServiceId) && !isEmpty(userId)) {
+      saveSurvey({
         ...surveyInfo,
         survey: JSON.stringify(newSurvey),
+        userId,
+        tempServiceId,
+        url: '',
       });
     } else {
       this.setState(oldState => ({
         titleState: isEmpty(title) ? 'error' : 'success',
         descriptionState: isEmpty(description) ? 'error' : 'success',
+        tempServiceIdState: isEmpty(tempServiceId) ? 'error' : 'success',
         surveyInfo: { ...oldState.surveyInfo, survey: newSurvey },
       }));
     }
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, user, temporaryServices } = this.props;
     const {
-      surveyInfo, titleState, descriptionState, mode,
+      surveyInfo, titleState, descriptionState, mode, tempServiceIdState,
     } = this.state;
     const survey = {
-      surveyInfo, titleState, descriptionState, mode,
+      surveyInfo, titleState, descriptionState, mode, tempServiceIdState,
     };
 
+    console.log('userInfo ', user);
+    console.log('temporaryServices, ', temporaryServices);
     return (
       <>
         <Card>
@@ -93,7 +116,8 @@ class CreateAssessment extends React.Component {
               survey={survey}
               change={this.handleChangeField}
               classes={classes}
-              changeQuestions={this.changeQuestions}
+              onSave={this.handleSaveSurvey}
+              services={temporaryServices}
             />
           </CardBody>
         </Card>
@@ -102,7 +126,12 @@ class CreateAssessment extends React.Component {
   }
 }
 
+const mapStateToProps = ({ user, tmpServices }) => ({
+  user,
+  temporaryServices: tmpServices.list,
+});
+
 export default compose(
   withStyles(validationFormStyle),
-  connect(null, { createSurvey: () => {console.log('create survey')} }),
+  connect(mapStateToProps, { saveSurveyAction, fetchTmpServices }),
 )(CreateAssessment);

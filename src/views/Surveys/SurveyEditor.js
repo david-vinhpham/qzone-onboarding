@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class SurveyEditor extends Component {
   static propTypes = {
     data: any.isRequired,
-    change: func.isRequired,
+    onSave: func.isRequired,
   };
 
   editor = null;
@@ -26,8 +26,9 @@ class SurveyEditor extends Component {
   }
 
   handleSave = () => {
-    const { change } = this.props;
-    change(JSON.parse(this.editor.text));
+    const { onSave } = this.props;
+    console.log('editor text', this.editor.text);
+    onSave(JSON.parse(this.editor.text));
   };
 
   render() {

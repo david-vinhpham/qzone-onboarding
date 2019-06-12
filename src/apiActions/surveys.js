@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { API_ROOT } from '../config/config';
+import { API_SURVEY } from '../config/config';
 
 // survey-controller
 
 export const findSurveyByAssessorId = id => axios.get(`/find-assessor-by-id/${id}`);
-export const getSurveys = () => axios.get(`${API_ROOT}surveys`);
-export const postSurvey = data => axios.post('/surveys', data);
-export const editSurvey = data => axios.put('/surveys', data);
-export const delSurveys = () => axios.delete('/surveys');
-export const getSurveyById = id => axios.get(`/surveys/${id}`);
-export const delSurveyById = id => axios.delete('/surveys', id);
+export const getSurveys = () => axios.get(API_SURVEY);
+export const postSurvey = data => axios.post(API_SURVEY, data);
+export const editSurvey = data => axios.put(API_SURVEY, data);
+export const delSurveys = () => axios.delete(API_SURVEY);
+export const getSurveyById = id => axios.get(`${API_SURVEY}/${id}`);
+  export const delSurveyById = id => axios.delete(API_SURVEY, id);
