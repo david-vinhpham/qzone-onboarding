@@ -12,26 +12,6 @@ const listPageStyle = {
     textAlign: 'center',
     color: '#999999'
   },
-  borderLeft: {
-    borderLeft: '#999999 solid 1px'
-  },
-  gridContainerPadding: {
-    padding: '10px'
-  },
-  cardTitleMargin: {
-    marginLeft: '20px',
-    marginRight: '20px'
-  },
-  flexItem: {
-    display: 'flex'
-  },
-  boardHeader: {
-    flexGrow: 1
-  },
-  gridItemPadding: {
-    paddingLeft: '20px',
-    paddingRight: '20px'
-  },
   cardIconTitle: {
     ...cardTitle,
     marginTop: '15px',
@@ -39,13 +19,6 @@ const listPageStyle = {
   },
   centerDiv: {
     margin: 'auto !important'
-  },
-  buttonMarginTop: {
-    marginTop: '20px',
-    background: 'green',
-    '&:hover,&:focus': {
-      backgroundColor: 'green'
-    }
   },
   buttonDisplay: {
     position: 'absolute',
@@ -59,27 +32,5 @@ const listPageStyle = {
   cardPadding: {
     padding: '10px'
   },
-  buttonCard: {
-    marginTop: '18px'
-  },
-  modeMargin: {
-    display: 'flex',
-    alignItems: 'center',
-    marginRight: 20
-  },
-  loadingCenter: {
-    position: 'absolute',
-    top: '45%',
-    left: '45%'
-  },
-  spaceLoading: {
-    height: '100px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  loadingEffect: {
-    opacity: '0.5'
-  }
 };
 export default listPageStyle;

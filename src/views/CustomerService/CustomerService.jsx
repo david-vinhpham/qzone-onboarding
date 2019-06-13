@@ -33,6 +33,7 @@ import CustomInput from "../../components/CustomInput/CustomInput";
 import { defaultDateTimeFormat, eventStatus, boardMode } from "constants.js";
 import moment from "moment-timezone";
 import { verifyBookingCodeType, customerFlowBoardType, optionType } from "types/global";
+import customerServiceStyle from 'assets/jss/material-dashboard-pro-react/views/customerService';
 
 class CustomerService extends PureComponent {
   constructor(props) {
@@ -189,7 +190,7 @@ class CustomerService extends PureComponent {
             </Button>
             <Button
               onClick={() => this.updateStatus(customerFlowDetailItem, toStatus)}
-              color="rose">
+              color="success">
               Confirm
             </Button>
           </DialogActions>
@@ -301,7 +302,8 @@ class CustomerService extends PureComponent {
                   onChange={this.onBookingCodeChange}
                 />
                 <Button
-                  className={classes.buttonMarginTop}
+                  color="success"
+                  className={classes.verifyButton}
                   disabled={!bookingCode}
                   onClick={this.verifyCode}>
                   Verify
@@ -393,7 +395,9 @@ class CustomerService extends PureComponent {
                 {(isVerifyBookingCodeSuccess &&
                   ([eventStatus.unspecified, eventStatus.confirmed].includes(verifyData.status.toUpperCase())))
                   ? <GridItem md={6}>
-                    <Button className={classes.buttonCard}
+                    <Button
+                      color="success"
+                      className={classes.checkInButton}
                       onClick={() => this.updateStatus(verifyData, eventStatus.checkedIn, true)}>
                       Check In
                   </Button>
@@ -463,7 +467,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(
     theme => ({
       ...tableStyle(theme),
-      ...listPageStyle
+      ...listPageStyle,
+      ...customerServiceStyle
     }),
     { withTheme: true }
   )(CustomerService)
