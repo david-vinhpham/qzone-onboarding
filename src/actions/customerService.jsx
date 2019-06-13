@@ -65,6 +65,8 @@ export const setFetchFlowBoardSuccess = payload => ({
 
 export const fetchFlowBoard = (data) => dispatch => {
   dispatch(setFetchFlowBoardLoading(true));
+  dispatch(setFetchFlowBoardSuccess({}));
+
   return axios.post(`${API_ROOT}${URL.FETCH_CUSTOMER_FLOW_BOARD}`, data)
     .then(res => {
       if (res && (res.status === 200 || res.data.success === true)) {

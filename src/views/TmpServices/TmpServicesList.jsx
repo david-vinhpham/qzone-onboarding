@@ -285,7 +285,7 @@ class TmpServicesList extends PureComponent {
         <Table aria-labelledby="tmpServicesList">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
+              <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
               <TableCell className={classes.cellHeaderBold}>Provider</TableCell>
               <TableCell className={classes.cellHeaderBold}>Service</TableCell>
               <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
@@ -297,7 +297,7 @@ class TmpServicesList extends PureComponent {
           <TableBody>
             {this.state.data.map((event, index) => (
               <TableRow key={event.id} classes={{ root: classes.row }}>
-                <TableCell padding="dense">{index + 1}</TableCell>
+                <TableCell size="small">{index + 1}</TableCell>
                 <TableCell>{event.providerName}</TableCell>
                 <TableCell>{event.serviceName}</TableCell>
                 <TableCell>{moment.tz(event.slot.startTime * 1000, event.timezoneId).format(defaultDateTimeFormat)}</TableCell>

@@ -57,9 +57,7 @@ const hist = createBrowserHistory();
 const createStoreWithMiddleware = composeEnhancers(applyMiddleware(thunk, logger))(createStore);
 const store = createStoreWithMiddleware(reducers);
 const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true,
-  },
+  typography: {},
   palette: {
     primary: blueColor,
     secondary: pinkColor,
@@ -77,7 +75,7 @@ ReactDOM.render(
         </Switch>
       </Router>
     </Provider>
-    <Alert stack={{limit: 3}} position="bottom-right" />
+    <Alert stack={{ limit: 3 }} position="bottom-right" />
   </MuiThemeProvider>,
   document.getElementById('root')
 );
