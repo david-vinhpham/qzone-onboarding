@@ -56,7 +56,7 @@ class ManageCalendar extends React.PureComponent {
 
   getPopoverTemplate = (schedulerData, event, title, start, end) => {
     return (
-      <Grid container spacing={16}>
+      <Grid container spacing={2}>
         <Grid item md={12} className={styles.eventActions}>
           <div className={styles.eventTitle}>
             <div className={styles.eventMarkerWrapper}>
@@ -101,7 +101,7 @@ class ManageCalendar extends React.PureComponent {
   rightCustomHeader = () => (
     <div className={styles.calendarRightCustomHeader}>
       {this.state.selectedProvider !== 'none' &&
-        <Typography inline classes={{ root: styles.providerTimezone }}>
+        <Typography display="inline" classes={{ root: styles.providerTimezone }}>
           Time zone: {(this.props.providers.find(p => p.id === this.state.selectedProvider) || {}).timezone}
         </Typography>}
       <Select

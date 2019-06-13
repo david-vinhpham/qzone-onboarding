@@ -32,9 +32,9 @@ export default function CommonContent({
     : undefined;
 
   return (
-    <Grid container spacing={8} className={addEventDialogStyles.calendarDatetimePicker}>
+    <Grid container spacing={1} className={addEventDialogStyles.calendarDatetimePicker}>
       <Grid item md={12}>
-        <Grid container spacing={8}>
+        <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               Event type:
@@ -59,7 +59,7 @@ export default function CommonContent({
       </Grid>
       <>
         <Grid item md={12}>
-          <Grid container spacing={8}>
+          <Grid container spacing={1}>
             <Grid item md={2} className={addEventDialogStyles.label}>
               <Typography variant="body2" noWrap inline>
                 Level:
@@ -88,7 +88,7 @@ export default function CommonContent({
         {values.eventLevel === EVENT_LEVEL.PROVIDER && (
           <>
             <Grid item md={12}>
-              <Grid container spacing={8}>
+              <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Provider:
@@ -112,7 +112,7 @@ export default function CommonContent({
               </Grid>
             </Grid>
             <Grid item md={12}>
-              <Grid container spacing={8}>
+              <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Time zone:
@@ -132,7 +132,7 @@ export default function CommonContent({
         {values.addEventData.eventType === EVENT_TYPE.APPOINTMENT &&
           <>
             <Grid item md={12}>
-              <Grid container spacing={8}>
+              <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Location:
@@ -150,7 +150,7 @@ export default function CommonContent({
               </Grid>
             </Grid>
             <Grid item md={12}>
-              <Grid container spacing={8}>
+              <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Service:
@@ -173,7 +173,7 @@ export default function CommonContent({
               </Grid>
             </Grid>
             <Grid item md={12}>
-              <Grid container spacing={8}>
+              <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Customer email:
@@ -190,7 +190,7 @@ export default function CommonContent({
               </Grid>
             </Grid>
             <Grid item md={12}>
-              <Grid container spacing={8}>
+              <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Customer name:
@@ -217,7 +217,7 @@ export default function CommonContent({
               </Grid>
             </Grid>
             <Grid item md={12}>
-              <Grid container spacing={8}>
+              <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
                   <Typography variant="body2" noWrap inline>
                     Customer phone:
@@ -237,7 +237,7 @@ export default function CommonContent({
         }
       </>
       <Grid item md={12}>
-        <Grid container spacing={8}>
+        <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               Event date:
@@ -253,7 +253,7 @@ export default function CommonContent({
         </Grid>
       </Grid>
       <Grid item md={12}>
-        <Grid container spacing={8}>
+        <Grid container spacing={1}>
           <Grid item md={1} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               From
@@ -295,7 +295,7 @@ export default function CommonContent({
         />
       </Grid>
       <Grid item md={12}>
-        <Grid container spacing={8}>
+        <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" noWrap inline>
               Repeat:
@@ -348,7 +348,7 @@ export default function CommonContent({
               </Grid>
               {values.addEventData.repeat.type === EVENT_REPEAT_TYPE.WEEKLY && (
                 <Grid item md={12}>
-                  <Grid container spacing={8}>
+                  <Grid container spacing={1}>
                     <Grid item md={2} className={addEventDialogStyles.label}>
                       <Typography variant="body2" noWrap inline>
                         Repeat on:

@@ -25,13 +25,13 @@ export default function TmpServiceContent({
   const breakEndTime = moment.tz(tmpService.breakTimeEnd, timezoneId).toDate();
 
   return (
-    <Grid container spacing={8} className={addEventDialogStyles.calendarDatetimePicker}>
+    <Grid container spacing={1} className={addEventDialogStyles.calendarDatetimePicker}>
       <Grid item md={12}>
-        <Grid container spacing={8}>
+        <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" display="inline" noWrap>
               Service:
-              </Typography>
+            </Typography>
           </Grid>
           <Grid item md={10}>
             <Select
@@ -50,9 +50,9 @@ export default function TmpServiceContent({
         </Grid>
       </Grid>
       <Grid item md={12}>
-        <Grid container spacing={8} className={styles.averageBox}>
+        <Grid container spacing={1} className={styles.averageBox}>
           <Grid item md={2} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" display="inline" noWrap>
               Average Service Time:
               </Typography>
           </Grid>
@@ -66,14 +66,14 @@ export default function TmpServiceContent({
             />
           </Grid>
           <Grid item md={3}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" display="inline" noWrap>
               minutes
               </Typography>
           </Grid>
         </Grid>
       </Grid>
       <Grid item md={12} className={styles.breakTimeWrapper}>
-        <Grid container spacing={8}>
+        <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2">
               Break time:
@@ -115,9 +115,9 @@ export default function TmpServiceContent({
         </Grid>
       </Grid>
       <Grid item md={12}>
-        <Grid container spacing={8}>
+        <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" display="inline" noWrap>
               Location:
             </Typography>
           </Grid>
@@ -138,9 +138,9 @@ export default function TmpServiceContent({
         </Grid>
       </Grid>
       <Grid item md={12}>
-        <Grid container spacing={8} className={styles.averageBox}>
+        <Grid container spacing={1} className={styles.averageBox}>
           <Grid item md={2} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" display="inline" noWrap>
               Parallel Customers:
             </Typography>
           </Grid>

@@ -79,7 +79,7 @@ class AvailabilitySlotsList extends PureComponent {
           <Table aria-labelledby="availabilityTable">
             <TableHead>
               <TableRow>
-                <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
+                <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Provider</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Service</TableCell>
                 <TableCell className={classes.cellHeaderBold}>

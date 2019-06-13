@@ -192,8 +192,15 @@ class CustomerService extends PureComponent {
           </DialogTitle>
           <DialogContent>
             Do you intent to update
-            booking code {customerFlowDetailItem.bookingCode} of {customerFlowDetailItem.name} from
-            {this.getDisplayStatus(customerFlowDetailItem.status)} to {this.getDisplayStatus(toStatus)}?
+            booking code {
+              customerFlowDetailItem.bookingCode
+            } of {
+              customerFlowDetailItem.name
+            } from {
+              this.getDisplayStatus(customerFlowDetailItem.status)
+            } to {
+              this.getDisplayStatus(toStatus)
+            }?
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleConfirmChangeStatusDialogClose}>
@@ -291,9 +298,12 @@ class CustomerService extends PureComponent {
           {isBoardLoading && <div className={classes.spaceLoading}>
             <CircularProgress />
           </div>}
-          {!isBoardLoading && boardData.customerFlowDetailList && boardData.customerFlowDetailList.length === 0 && <div className={classes.spaceLoading}>
-            <Typography variant="body1">There is no record</Typography>
-          </div>}
+          {!isBoardLoading && 
+          (!boardData.customerFlowDetailList || boardData.customerFlowDetailList.length === 0) &&
+            <div className={classes.spaceLoading}>
+              <Typography variant="body1">There is no record</Typography>
+            </div>
+          }
         </Paper>
       </Card>
     );

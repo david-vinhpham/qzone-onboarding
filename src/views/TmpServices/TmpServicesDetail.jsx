@@ -40,7 +40,7 @@ class TmpServicesDetail extends PureComponent {
               <Button size="small" color="primary" onClick={this.props.history.goBack}>
                 <ArrowBack />
               </Button>
-              <Typography inline variant="h6">Event detail</Typography>
+              <Typography display="inline" variant="h6">Event detail</Typography>
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Link
@@ -54,7 +54,7 @@ class TmpServicesDetail extends PureComponent {
             </div>
           </div>
           {tmpServiceDetail.id ?
-            <Grid container spacing={16}>
+            <Grid container spacing={2}>
               <Grid item sm={3} xs={12}>
                 <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
                   Type:

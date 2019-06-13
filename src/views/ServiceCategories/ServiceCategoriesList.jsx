@@ -141,7 +141,7 @@ class ServiceCategoriesList extends PureComponent {
         <Table aria-labelledby="serviceCategories">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
+              <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
               <TableCell className={classes.cellHeaderBold}>Name</TableCell>
               <TableCell className={classes.cellHeaderBold} align="center">Actions</TableCell>
             </TableRow>
@@ -149,7 +149,7 @@ class ServiceCategoriesList extends PureComponent {
           <TableBody>
             {serviceCategory.map((svc, index) => (
               <TableRow key={svc.id} classes={{ root: classes.row }}>
-                <TableCell padding="dense">{index + 1}</TableCell>
+                <TableCell size="small">{index + 1}</TableCell>
                 <TableCell>{svc.name}</TableCell>
                 <TableCell align="center">
                   <Tooltip
