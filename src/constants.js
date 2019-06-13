@@ -32,7 +32,7 @@ export const eventStatus = {
   checkedIn: 'CHECKED_IN',
   started: 'STARTED',
   completed: 'COMPLETED',
-
+  confirmed: 'CONFIRMED'
 };
 
 export const boardMode = {

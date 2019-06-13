@@ -169,7 +169,7 @@ class CustomerService extends PureComponent {
     } = this.state;
 
     let data = (
-      <Card className={isBoardLoading? `${classes.loadingEffect}`: ''}>
+      <Card className={isBoardLoading ? `${classes.loadingEffect}` : ''}>
         {!confirmChangeStatusDialogOpen || <Dialog
           open
           onClose={this.handleConfirmChangeStatusDialogClose}
@@ -268,9 +268,9 @@ class CustomerService extends PureComponent {
             </TableBody>
           </Table>
           {isBoardLoading && <div className={classes.spaceLoading}>
-            <CircularProgress/>
+            <CircularProgress />
           </div>}
-          {!isBoardLoading && boardData.customerFlowDetailList && boardData.customerFlowDetailList.length ===0 && <div className={classes.spaceLoading}>
+          {!isBoardLoading && boardData.customerFlowDetailList && boardData.customerFlowDetailList.length === 0 && <div className={classes.spaceLoading}>
             <Typography variant="body1">There is no record</Typography>
           </div>}
         </Paper>
@@ -278,7 +278,7 @@ class CustomerService extends PureComponent {
     );
     return (
       <div>
-        <Card className={isLoading? `${classes.loadingEffect}`: ''}>
+        <Card className={isLoading ? `${classes.loadingEffect}` : ''}>
           <GridContainer className={classes.gridContainerPadding}>
             {isLoading && <CircularProgress className={classes.loadingCenter} />}
             <GridItem xs={4} className={classes.gridItemPadding}>
@@ -354,7 +354,7 @@ class CustomerService extends PureComponent {
                     inputProps={{
                       disabled: true,
                     }}
-                    value={(verifyData.position === undefined)? "" : verifyData.position}
+                    value={(verifyData.position === undefined) ? "" : verifyData.position}
                   />
                 </GridItem>
                 <GridItem md={6}>
@@ -390,12 +390,14 @@ class CustomerService extends PureComponent {
                     value={verifyData.serviceName || ""}
                   />
                 </GridItem>
-                {(isVerifyBookingCodeSuccess && (verifyData.status.toUpperCase() === eventStatus.unspecified))? <GridItem md={6}>
-                  <Button className={classes.buttonCard}
-                    onClick={() => this.updateStatus(verifyData, eventStatus.checkedIn, true)}>
-                    Check In
+                {(isVerifyBookingCodeSuccess &&
+                  ([eventStatus.unspecified, eventStatus.confirmed].includes(verifyData.status.toUpperCase())))
+                  ? <GridItem md={6}>
+                    <Button className={classes.buttonCard}
+                      onClick={() => this.updateStatus(verifyData, eventStatus.checkedIn, true)}>
+                      Check In
                   </Button>
-                </GridItem>:
+                  </GridItem> :
                   <GridItem md={6}>
                     <CustomInput
                       labelText="Status"
