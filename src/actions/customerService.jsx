@@ -31,16 +31,21 @@ export const setUpdateStatusSuccess = payload => ({
   payload
 });
 
-export const updateCustomerStatus = (data) => (dispatch) => {
+export const updateCustomerStatus = (data, cb) => (dispatch) => {
   dispatch(setVerifyBookingCodeLoading(true));
 
   const isFromBookingData = data.isFromBookingData;
+  const providerId = data.providerId;
+  const serviceId = data.serviceId;
   delete data.isFromBookingData;
+  delete data.providerId;
+  delete data.serviceId;
 
   return axios.put(API_ROOT + URL.UPDATE_CUSTOMER_FLOW_STATUS, data)
     .then(res => {
       if (res && (res.status === 200 || res.data.success === true)) {
         dispatch(setUpdateStatusSuccess({ ...res.data, isFromBookingData }));
+        cb(providerId, serviceId);
       }
     })
     .finally(() => {

@@ -91,20 +91,31 @@ class CustomerService extends PureComponent {
     })
   };
 
-  updateStatus = (data, status, isFromBookingData = false) => {
-    this.props.updateCustomerStatus({
-      eventId: data.eventId,
-      status,
-      timezoneId: data.timezoneId,
-      isFromBookingData
-    }).then(() => {
-      this.getFlowBoardData({
-        providerId: this.state.defaultProvider,
-        serviceId: this.state.defaultService
-      });
+  onUpdateStatusSuccess = (providerId, serviceId) => {
+    this.setState(
+      { defaultProvider: providerId, defaultService: serviceId },
+      () => {
+        this.getFlowBoardData({
+          providerId: this.state.defaultProvider,
+          serviceId: this.state.defaultService
+        });
+      }
+    );
+  }
 
-      if (this.state.confirmChangeStatusDialogOpen) this.handleConfirmChangeStatusDialogClose();
-    })
+  updateStatus = (data, status, isFromBookingData = false) => {
+    this.props.updateCustomerStatus(
+      {
+        eventId: data.eventId,
+        status,
+        timezoneId: data.timezoneId,
+        isFromBookingData,
+        providerId: data.providerId,
+        serviceId: data.serviceId
+      },
+      this.onUpdateStatusSuccess
+    );
+    this.handleConfirmChangeStatusDialogClose();
   };
 
   getFlowBoardData = ({ providerId, serviceId }) => {
@@ -247,21 +258,30 @@ class CustomerService extends PureComponent {
                     <FormControlLabel
                       control={<Checkbox color="primary"
                         checked={false}
-                        onClick={() => this.handleConfirmChangeStatus(svc, eventStatus.checkedIn)}
+                        onClick={() => this.handleConfirmChangeStatus(
+                          { ...svc, providerId: boardData.providerId, serviceId: boardData.serviceId },
+                          eventStatus.checkedIn
+                        )}
                         disabled={!!svc.sserviceTime} />}
                     />}</TableCell>
                   <TableCell>{svc.sserviceTime ? moment.tz(svc.sserviceTime, svc.timezoneId).format(defaultDateTimeFormat) :
                     <FormControlLabel
                       control={<Checkbox color="primary"
                         checked={false}
-                        onClick={() => this.handleConfirmChangeStatus(svc, eventStatus.started)}
+                        onClick={() => this.handleConfirmChangeStatus(
+                          { ...svc, providerId: boardData.providerId, serviceId: boardData.serviceId },
+                          eventStatus.started
+                        )}
                         disabled={!svc.scheckingTime || !!svc.scompletedTime} />}
                     />}</TableCell>
                   <TableCell>{svc.scompletedTime ? moment.tz(svc.scompletedTime, svc.timezoneId).format(defaultDateTimeFormat) :
                     <FormControlLabel
                       control={<Checkbox color="primary"
                         checked={false}
-                        onClick={() => this.handleConfirmChangeStatus(svc, eventStatus.completed)}
+                        onClick={() => this.handleConfirmChangeStatus(
+                          { ...svc, providerId: boardData.providerId, serviceId: boardData.serviceId },
+                          eventStatus.completed
+                        )}
                         disabled={!svc.sserviceTime} />}
                     />}</TableCell>
                 </TableRow>
