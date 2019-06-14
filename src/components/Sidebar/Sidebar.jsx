@@ -145,7 +145,7 @@ class Sidebar extends React.Component {
                     }
                   >
                     <span className={collapseItemMini}>
-                      {"UOD"}
+                      {"OL"}
                     </span>
                     <ListItemText
                       primary={
