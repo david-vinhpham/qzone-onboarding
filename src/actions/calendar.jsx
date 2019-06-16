@@ -71,7 +71,7 @@ export const fetchProvidersByBusinessId = businessId => dispatch => {
   return axios
     .get(`${API_ROOT}${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}${businessId}`)
     .then((response) => {
-      if(response) {
+      if (response) {
         const providers = get(response, 'data.objects', []);
         dispatch(fetchProvidersByBusinessIdSuccess(providers));
       }
@@ -102,11 +102,26 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
 
         return Promise.all(fetchEvents).then(rep => {
           const tmpEvents = reduce(rep, (acc, event) => acc.concat(get(event, 'data.objects', [])), []);
-          const events = tmpEvents.map(e => ({
-            ...e,
-            type: e.type || EVENT_TYPE.TMP_SERVICE,
-            timezone: providers.find(p => p.id === e.providerId).providerInformation.timeZoneId,
-          }));
+          const events = [];
+          tmpEvents.forEach(e => {
+            let slots = [];
+            if (e.slots && e.slots.length > 0) {
+              slots = e.slots.slice();
+              delete e.slots;
+            } else {
+              slots = [{ ...e.slot }];
+            }
+
+            slots.forEach((slot, index) => {
+              events.push({
+                ...e,
+                id: `${e.id}-repeat-${index}`,
+                slot,
+                type: e.type || EVENT_TYPE.TMP_SERVICE,
+                timezone: providers.find(p => p.id === e.providerId).providerInformation.timeZoneId,
+              })
+            });
+          });
           dispatch(fetchEventsByProvidersSuccess(events));
           dispatch(fetchProvidersByBusinessIdSuccess(providers));
         });

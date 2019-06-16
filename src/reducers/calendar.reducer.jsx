@@ -20,10 +20,10 @@ const buildCalendarData = ({
   providerId,
   type
 }) => ({
-  id: id,
-  description: description,
-  providerId: providerId,
-  type: type,
+  id,
+  description,
+  providerId,
+  type,
   start: moment.tz(startTime * 1000, timezoneId).format(DATETIME_FORMAT),
   end: moment.tz(endTime * 1000, timezoneId).format(DATETIME_FORMAT),
   resourceId: providerId,
