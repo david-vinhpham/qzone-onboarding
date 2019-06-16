@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, any, func } from 'prop-types';
 import {
-  Typography, Grid, IconButton, Button,
+  Typography, Grid, Button,
   Select, MenuItem,
 } from '@material-ui/core';
-import { Schedule, Edit, Delete, Add } from '@material-ui/icons';
+import { Schedule, Add } from '@material-ui/icons';
 
 import Calendar from 'components/Calendar';
 import { EVENT_BG_COLOR } from 'constants/Calendar.constants';
@@ -69,23 +69,15 @@ class ManageCalendar extends React.PureComponent {
               <Typography variant="subtitle2">{title}</Typography>
             </div>
           </div>
-          <div>
-            <IconButton size="small" onClick={this.toggleDetailDialog}>
-              <Edit fontSize="small" />
-            </IconButton>
-            <IconButton size="small" onClick={this.toggleDetailDialog}>
-              <Delete fontSize="small" />
-            </IconButton>
-          </div>
         </Grid>
-        <Grid item md={12} className={styles.eventPopoverContent}>
-          <p>{event.description}</p>
+        <Grid item md={12}>
+          {event.description && <p>{event.description}</p>}
           <div className={styles.eventPopoverTime}>
             <Schedule fontSize="small" />
             <div>
-              <Typography variant="caption">{start.format('l')}</Typography>
+              <Typography variant="caption">{start.format('L')} </Typography>
               <Typography variant="caption">
-                {`From ${start.format('LT')} to ${end.format('LT')}`}
+                {`from ${start.format('LT')} to ${end.format('LT')}`}
               </Typography>
             </div>
           </div>
