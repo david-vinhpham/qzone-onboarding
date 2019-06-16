@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import moment from 'moment-timezone';
 import { LiveHelp } from '@material-ui/icons';
-import { TimeFormatInput } from 'material-ui-next-pickers';
+import { TimePicker } from '@material-ui/pickers'
 import addEventDialogStyles from '../AddEventDialog.module.scss';
 import styles from './TmpServiceContent.module.scss';
 import { optionType } from 'types/global';
@@ -89,28 +89,24 @@ export default function TmpServiceContent({
               <LiveHelp fontSize="small" className={styles.breakTimeIcon} />
             </Tooltip>
           </Grid>
-          <Grid item md={10}>
-            <Grid container>
-              <Grid item md={5}>
-                <TimeFormatInput
-                  name="addEventData.tmpService.breakTimeStart"
-                  value={breakStartTime}
-                  onChange={onChangeTmpServiceDateTime('fromTime')}
-                />
-              </Grid>
-              <Grid item md={2} className={addEventDialogStyles.label}>
-                <Typography variant="body2">
-                  to
-                </Typography>
-              </Grid>
-              <Grid item md={5}>
-                <TimeFormatInput
-                  name="addEventData.tmpService.breakTimeEnd"
-                  value={breakEndTime}
-                  onChange={onChangeTmpServiceDateTime('toTime')}
-                />
-              </Grid>
-            </Grid>
+          <Grid item md={2}>
+            <TimePicker
+              name="addEventData.tmpService.breakTimeStart"
+              value={breakStartTime}
+              onChange={onChangeTmpServiceDateTime('fromTime')}
+            />
+          </Grid>
+          <Grid item md={1} className={addEventDialogStyles.label}>
+            <Typography variant="body2">
+              To
+            </Typography>
+          </Grid>
+          <Grid item md={2}>
+            <TimePicker
+              name="addEventData.tmpService.breakTimeEnd"
+              value={breakEndTime}
+              onChange={onChangeTmpServiceDateTime('toTime')}
+            />
           </Grid>
         </Grid>
       </Grid>

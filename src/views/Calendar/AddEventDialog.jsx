@@ -73,12 +73,10 @@ class AddEventDialog extends PureComponent {
       setFieldValue('addEventData.startTime', momentData.format());
       setFieldValue('addEventData.endTime', moment(values.addEventData.endTime).isBefore(momentData)
         ? momentData.clone().add(1, 'hour').format() : values.addEventData.endTime);
-      this.onChangeTmpServiceDateTime(setFieldValue, values)('fromTime')(data);
     }
 
     if (type === 'toTime') {
       setFieldValue('addEventData.endTime', momentData.format());
-      this.onChangeTmpServiceDateTime(setFieldValue, values)('toTime')(data);
     }
   };
 
@@ -126,10 +124,12 @@ class AddEventDialog extends PureComponent {
     setFieldValue('addEventData.customerMobilePhone', data);
   }
 
-  onClickNext = values => () => {
+  onClickNext = (setFieldValue, values) => () => {
     const { tmpServiceStep } = this.state;
     if (values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1) {
       this.setState({ tmpServiceStep: 2 });
+      this.onChangeTmpServiceDateTime(setFieldValue, values)('fromTime')(values.addEventData.startTime);
+      this.onChangeTmpServiceDateTime(setFieldValue, values)('toTime')(values.addEventData.endTime);      
     } else {
       this.props.createNewEvent(values);
     }
@@ -304,7 +304,7 @@ class AddEventDialog extends PureComponent {
                       Previous
                     </Button>
                   )}
-                  <Button variant="outlined" color="primary" onClick={this.onClickNext(values)} disabled={isSubmitting}>
+                  <Button variant="outlined" color="primary" onClick={this.onClickNext(setFieldValue, values)} disabled={isSubmitting}>
                     {values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1
                       ? 'Next'
                       : isEditMode ? 'Edit' : 'Create'}

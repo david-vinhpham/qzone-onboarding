@@ -9,6 +9,8 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blueColor from '@material-ui/core/colors/blue';
 import pinkColor from '@material-ui/core/colors/pink';
 import Alert from 'react-s-alert';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
@@ -66,15 +68,17 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
-    <Provider store={store}>
-      <Router history={hist}>
-        <Switch>
-          {indexRoutes.map(prop => {
-            return <Route path={prop.path} component={prop.component} key={prop.path} />;
-          })}
-        </Switch>
-      </Router>
-    </Provider>
+    <MuiPickersUtilsProvider utils={MomentUtils}>
+      <Provider store={store}>
+        <Router history={hist}>
+          <Switch>
+            {indexRoutes.map(prop => {
+              return <Route path={prop.path} component={prop.component} key={prop.path} />;
+            })}
+          </Switch>
+        </Router>
+      </Provider>
+    </MuiPickersUtilsProvider>
     <Alert stack={{ limit: 3 }} position="bottom-right" />
   </MuiThemeProvider>,
   document.getElementById('root')

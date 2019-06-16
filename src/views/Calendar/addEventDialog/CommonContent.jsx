@@ -8,7 +8,7 @@ import {
 import moment from 'moment-timezone';
 import PhoneInput from 'react-phone-number-input';
 import { map, isEmpty } from 'lodash';
-import { DateFormatInput, TimeFormatInput } from 'material-ui-next-pickers';
+import { DatePicker, TimePicker } from '@material-ui/pickers'
 import {
   EVENT_LEVEL, EVENT_TYPE, EVENT_TYPE_TITLE,
   EVENT_REPEAT_TYPE, REPEAT_END_TYPE,
@@ -36,7 +36,7 @@ export default function CommonContent({
       <Grid item md={12}>
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" noWrap display="inline">
               Event type:
             </Typography>
           </Grid>
@@ -61,7 +61,7 @@ export default function CommonContent({
         <Grid item md={12}>
           <Grid container spacing={1}>
             <Grid item md={2} className={addEventDialogStyles.label}>
-              <Typography variant="body2" noWrap inline>
+              <Typography variant="body2" noWrap display="inline">
                 Level:
               </Typography>
             </Grid>
@@ -90,7 +90,7 @@ export default function CommonContent({
             <Grid item md={12}>
               <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
-                  <Typography variant="body2" noWrap inline>
+                  <Typography variant="body2" noWrap display="inline">
                     Provider:
                   </Typography>
                 </Grid>
@@ -114,7 +114,7 @@ export default function CommonContent({
             <Grid item md={12}>
               <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
-                  <Typography variant="body2" noWrap inline>
+                  <Typography variant="body2" noWrap display="inline">
                     Time zone:
                   </Typography>
                 </Grid>
@@ -134,7 +134,7 @@ export default function CommonContent({
             <Grid item md={12}>
               <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
-                  <Typography variant="body2" noWrap inline>
+                  <Typography variant="body2" noWrap display="inline">
                     Location:
                   </Typography>
                 </Grid>
@@ -152,7 +152,7 @@ export default function CommonContent({
             <Grid item md={12}>
               <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
-                  <Typography variant="body2" noWrap inline>
+                  <Typography variant="body2" noWrap display="inline">
                     Service:
                   </Typography>
                 </Grid>
@@ -175,7 +175,7 @@ export default function CommonContent({
             <Grid item md={12}>
               <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
-                  <Typography variant="body2" noWrap inline>
+                  <Typography variant="body2" noWrap display="inline">
                     Customer email:
                   </Typography>
                 </Grid>
@@ -192,7 +192,7 @@ export default function CommonContent({
             <Grid item md={12}>
               <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
-                  <Typography variant="body2" noWrap inline>
+                  <Typography variant="body2" noWrap display="inline">
                     Customer name:
                   </Typography>
                 </Grid>
@@ -219,7 +219,7 @@ export default function CommonContent({
             <Grid item md={12}>
               <Grid container spacing={1}>
                 <Grid item md={2} className={addEventDialogStyles.label}>
-                  <Typography variant="body2" noWrap inline>
+                  <Typography variant="body2" noWrap display="inline">
                     Customer phone:
                   </Typography>
                 </Grid>
@@ -239,12 +239,13 @@ export default function CommonContent({
       <Grid item md={12}>
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" noWrap display="inline">
               Event date:
             </Typography>
           </Grid>
-          <Grid item md={10}>
-            <DateFormatInput
+          <Grid item md={2}>
+            <DatePicker
+              disablePast
               name="addEventData.startTime"
               value={startTime}
               onChange={onChangeNewEventDateTime('date')}
@@ -254,25 +255,25 @@ export default function CommonContent({
       </Grid>
       <Grid item md={12}>
         <Grid container spacing={1}>
-          <Grid item md={1} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
-              From
+          <Grid item md={2} className={addEventDialogStyles.label}>
+            <Typography variant="body2" noWrap display="inline">
+              From:
             </Typography>
           </Grid>
-          <Grid item md={5}>
-            <TimeFormatInput
+          <Grid item md={2}>
+            <TimePicker
               name="addEventData.startTime"
               value={startTime}
               onChange={onChangeNewEventDateTime('fromTime')}
             />
           </Grid>
           <Grid item md={1} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" noWrap display="inline">
               To
             </Typography>
           </Grid>
-          <Grid item md={5}>
-            <TimeFormatInput
+          <Grid item md={2}>
+            <TimePicker
               name="addEventData.endTime"
               value={endTime}
               onChange={onChangeNewEventDateTime('toTime')}
@@ -297,7 +298,7 @@ export default function CommonContent({
       <Grid item md={12}>
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
-            <Typography variant="body2" noWrap inline>
+            <Typography variant="body2" noWrap display="inline">
               Repeat:
             </Typography>
           </Grid>
@@ -318,7 +319,7 @@ export default function CommonContent({
           {values.addEventData.repeat.type !== EVENT_REPEAT_TYPE.NEVER && (
             <>
               <Grid item md={2} className={addEventDialogStyles.label}>
-                <Typography variant="body2" noWrap inline>
+                <Typography variant="body2" noWrap display="inline">
                   on every
                 </Typography>
               </Grid>
@@ -337,7 +338,7 @@ export default function CommonContent({
                 </Select>
               </Grid>
               <Grid item md={1} className={addEventDialogStyles.label}>
-                <Typography variant="body2" noWrap inline>
+                <Typography variant="body2" noWrap display="inline">
                   {(() => {
                     if (values.addEventData.repeat.type === EVENT_REPEAT_TYPE.DAILY) {
                       return values.addEventData.repeat.every === 1 ? 'day' : 'days';
@@ -350,7 +351,7 @@ export default function CommonContent({
                 <Grid item md={12}>
                   <Grid container spacing={1}>
                     <Grid item md={2} className={addEventDialogStyles.label}>
-                      <Typography variant="body2" noWrap inline>
+                      <Typography variant="body2" noWrap display="inline">
                         Repeat on:
                       </Typography>
                     </Grid>
@@ -389,7 +390,7 @@ export default function CommonContent({
               )}
               <Grid item md={12}>
                 <div className={styles.repeatEndWrapper}>
-                  <Typography variant="body2" noWrap inline>
+                  <Typography variant="body2" noWrap display="inline">
                     Repeat ends:
                   </Typography>
                   <div>
@@ -400,7 +401,7 @@ export default function CommonContent({
                         onChange={onRepeatEndSelect}
                         checked={isEmpty(values.addEventData.repeat.repeatEnd)}
                       />
-                      <Typography variant="body2" noWrap inline>
+                      <Typography variant="body2" noWrap display="inline">
                         Never
                       </Typography>
                     </div>
@@ -411,7 +412,7 @@ export default function CommonContent({
                         onChange={onRepeatEndSelect}
                         checked={!!values.addEventData.repeat.repeatEnd.afterOccur}
                       />
-                      <Typography variant="body2" inline>
+                      <Typography variant="body2" display="inline">
                         After
                       </Typography>
                       <TextField
@@ -421,7 +422,7 @@ export default function CommonContent({
                         onChange={handleChange}
                         onBlur={onBlurOccurence}
                       />
-                      <Typography variant="body2" inline>
+                      <Typography variant="body2" display="inline">
                         occurrences
                       </Typography>
                     </div>
@@ -432,15 +433,16 @@ export default function CommonContent({
                         onChange={onRepeatEndSelect}
                         checked={!!values.addEventData.repeat.repeatEnd.onDate}
                       />
-                      <Typography variant="body2" noWrap inline>
+                      <Typography variant="body2" noWrap display="inline">
                         On:
                       </Typography>
-                      <DateFormatInput
+                      <DatePicker
+                        disablePast
                         name="addEventData.repeat.repeatEnd.onDate"
                         value={repeatUntilDate}
                         onChange={onChangeRepeatEndDate}
                       />
-                      <TimeFormatInput
+                      <TimePicker
                         name="addEventData.repeat.repeatEnd.onDate"
                         value={repeatUntilDate}
                         onChange={onChangeRepeatEndDate}
