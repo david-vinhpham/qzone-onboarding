@@ -245,7 +245,6 @@ export default function CommonContent({
           </Grid>
           <Grid item md={2}>
             <DatePicker
-              disablePast
               name="addEventData.startTime"
               value={startTime}
               onChange={onChangeNewEventDateTime('date')}
@@ -437,7 +436,6 @@ export default function CommonContent({
                         On:
                       </Typography>
                       <DatePicker
-                        disablePast
                         name="addEventData.repeat.repeatEnd.onDate"
                         value={repeatUntilDate}
                         onChange={onChangeRepeatEndDate}
