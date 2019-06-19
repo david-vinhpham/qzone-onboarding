@@ -9,4 +9,4 @@ export const postSurvey = data => axios.post(API_SURVEY, data);
 export const editSurvey = data => axios.put(API_SURVEY, data);
 export const delSurveys = () => axios.delete(API_SURVEY);
 export const getSurveyById = id => axios.get(`${API_SURVEY}/${id}`);
-  export const delSurveyById = id => axios.delete(API_SURVEY, id);
+export const delSurveyById = id => axios.delete(API_SURVEY, id);

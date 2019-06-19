@@ -2,6 +2,7 @@ import { cardTitle } from '../../material-dashboard-pro-react';
 import hoverCardStyle from '../hoverCardStyle';
 const listPageStyle = {
   ...hoverCardStyle,
+  cardTitle,
   cardProductTitle: {
     ...cardTitle,
     marginTop: '0px',

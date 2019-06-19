@@ -252,7 +252,7 @@ ServicesList.propTypes = {
 };
 
 export default compose(
-  withStyles(tableStyle, listPageStyle),
+  withStyles({...tableStyle, ...listPageStyle}),
   connect(
     mapStateToProps,
     mapDispatchToProps
