@@ -59,7 +59,6 @@ const customCheckboxRadioSwitch = {
   },
   labelHorizontal: {
     color: "rgba(37, 35, 35, 0.85)",
-    cursor: "pointer",
     display: "inline-flex",
     fontSize: "14px",
     lineHeight: "1.428571429",

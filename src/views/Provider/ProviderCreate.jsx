@@ -21,7 +21,7 @@ import GridItem from '../../components/Grid/GridItem.jsx';
 import PhoneInput from 'react-phone-number-input';
 import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organization';
 import Select from 'react-select';
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 const override = css`
@@ -175,11 +175,11 @@ class ProviderCreate extends React.Component {
     }
     if (createProviderLoading) {
       return (
-        <ClipLoader
+        <BeatLoader
           className={override}
           sizeUnit="px"
-          size={100}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={createProviderLoading}
         />
       );

@@ -8,7 +8,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import ArtTrack from '@material-ui/icons/ArtTrack';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
@@ -102,11 +102,11 @@ class ServiceProviderList extends React.Component {
     let data = [];
     if (fetchServiceProvidersLoading) {
       return (
-        <ClipLoader
+        <BeatLoader
           className={override}
           sizeUnit="px"
-          size={100}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={fetchServiceProvidersLoading}
         />
       );
@@ -116,11 +116,11 @@ class ServiceProviderList extends React.Component {
     }
     if (delServiceProviderLoading) {
       return (
-        <ClipLoader
+        <BeatLoader
           className={override}
           sizeUnit="px"
-          size={100}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={delServiceProviderLoading}
         />
       );

@@ -8,7 +8,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { FormControl, FormLabel } from '@material-ui/core';
 import Select from 'react-select';
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { classesType, historyType } from 'types/global.js';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -178,22 +178,22 @@ class ServiceProviderCreate extends React.Component {
     }
     if (createServiceProviderLoading && isSaved) {
       return (
-        <ClipLoader
+        <BeatLoader
           className={override}
           sizeUnit="px"
-          size={100}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={createServiceProviderLoading}
         />
       );
     }
     if (fetchProviderLoading) {
       return (
-        <ClipLoader
+        <BeatLoader
           className={override}
           sizeUnit="px"
-          size={100}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={fetchProviderLoading}
         />
       );

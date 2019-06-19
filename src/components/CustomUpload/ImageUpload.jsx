@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { css } from '@emotion/core';
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import Button from "../../components/CustomButtons/Button.jsx";
 import { uploadImage } from '../../actions/imageUpload';
 
@@ -95,11 +95,11 @@ class ImageUpload extends React.Component {
           <img src={this.state.imagePreviewUrl} alt="..." />
         </div>
         <div className='sweet-loading'>
-          <ClipLoader
+          <BeatLoader
             css={override}
             sizeUnit={"px"}
-            size={50}
-            color={'#123abc'}
+            size={22}
+            color="#e91e63"
             loading={imageLoading}
           />
         </div>

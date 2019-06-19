@@ -27,7 +27,7 @@ import CardFooter from 'components/Card/CardFooter.jsx';
 import Accordion from 'components/Accordion/Accordion.jsx';
 
 import PhoneInput from 'react-phone-number-input';
-import { ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import _ from 'lodash';
 import { classesType, historyType, matchType } from 'types/global.js';
@@ -138,11 +138,11 @@ class OrganizationEdit extends React.Component {
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     if (fetchOrganizationLoading || !this.state.data || this.state.data.length === 0) {
       return (
-        <ClipLoader
+        <BeatLoader
           className={override}
           sizeUnit="px"
-          size={100}
-          color="#123abc"
+          size={22}
+          color="#e91e63"
           loading={fetchOrganizationLoading}
         />
       );

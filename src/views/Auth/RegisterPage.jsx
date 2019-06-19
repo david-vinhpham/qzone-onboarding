@@ -22,7 +22,7 @@ class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cardAnimaton: 'cardHidden',
+      cardAnimation: 'cardHidden',
       registerOrganizationName: '',
       registerOrganizationNameState: '',
       registerGivenName: '',
@@ -45,7 +45,7 @@ class RegisterPage extends React.Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({ cardAnimaton: '' });
+      this.setState({ cardAnimation: '' });
     }, 200);
   }
 
@@ -178,7 +178,7 @@ class RegisterPage extends React.Component {
           <GridContainer justify="center">
             <GridItem xs={12} sm={6} md={4}>
               <form>
-                <Card className={classes[this.state.cardAnimaton]}>
+                <Card className={classes[this.state.cardAnimation]}>
                   <CardHeader
                     className={`${classes.cardHeader} ${classes.textCenter}`}
                     color="rose"
