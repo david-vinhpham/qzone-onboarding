@@ -114,7 +114,7 @@ class SurveyForm extends Component {
               }}
             >
               {services.map(item => (
-                <MenuItem value={item.id}>{item.serviceName} - {item.description}</MenuItem>
+                <MenuItem key={item.id} value={item.id}>{item.serviceName} - {item.description}</MenuItem>
               ))}
             </Select>
           </GridItem>

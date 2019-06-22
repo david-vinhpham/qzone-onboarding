@@ -61,9 +61,6 @@ class Survey extends Component {
     setSurveys();
   }
 
-  handleNewSurvey = () => {
-    console.log('new Survey');
-  };
 
   handleEditSurvey = id => () => {
     console.log('Edit Survey', id);
@@ -91,7 +88,6 @@ class Survey extends Component {
                   <Button
                     size="sm"
                     className={classes.buttonDisplay}
-                    // onClick={this.handleNewSurvey}
                   >
                     New Assessment
                   </Button>
