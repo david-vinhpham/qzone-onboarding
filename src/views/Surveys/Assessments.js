@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'components/Loading/Loading';
+import Alert from 'react-s-alert';
+import { InsertLink } from '@material-ui/icons';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
@@ -91,6 +94,11 @@ class Survey extends Component {
     this.setState({ surveys: newSurveys }, () => deleteSurveyById(id));
   };
 
+  handleCopyLink = event => {
+    event.preventDefault();
+    Alert.success('Survey link is copied to clipboard!')
+  };
+
   render() {
     const { classes } = this.props;
     const { surveys, isLoading } = this.state;
@@ -133,18 +141,34 @@ class Survey extends Component {
                             <TableCell align="center">
                               <Tooltip
                                 id="tooltip-top"
-                                title="Edit"
+                                title="Copy Link"
                                 placement="bottom"
                                 classes={{ tooltip: classes.tooltip }}
                               >
-                                <Button
-                                  color="success"
-                                  simple justIcon
-                                  onClick={this.handleEditSurvey(survey.id)}
-                                >
-                                  <Edit className={classes.underChartIcons} />
-                                </Button>
+                                <CopyToClipboard text={survey.url}>
+                                  <Button
+                                    color="success"
+                                    simple justIcon
+                                    onClick={this.handleCopyLink}
+                                  >
+                                    <InsertLink />
+                                  </Button>
+                                </CopyToClipboard>
                               </Tooltip>
+                              {/*<Tooltip*/}
+                              {/*  id="tooltip-top"*/}
+                              {/*  title="Edit"*/}
+                              {/*  placement="bottom"*/}
+                              {/*  classes={{ tooltip: classes.tooltip }}*/}
+                              {/*>*/}
+                              {/*  <Button*/}
+                              {/*    color="success"*/}
+                              {/*    simple justIcon*/}
+                              {/*    onClick={this.handleEditSurvey(survey.id)}*/}
+                              {/*  >*/}
+                              {/*    <Edit className={classes.underChartIcons} />*/}
+                              {/*  </Button>*/}
+                              {/*</Tooltip>*/}
                               <Tooltip
                                 id="tooltip-top"
                                 title="Remove"
