@@ -1,13 +1,12 @@
 import React from 'react';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel, InputLabel, MenuItem, FormControl, Select } from "@material-ui/core";
+import {FormControl, FormLabel, InputLabel, MenuItem, Select} from "@material-ui/core";
 
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import CustomRadio from "../../components/CustomRadio/CustomRadio.jsx";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import PictureUpload from "../../components/CustomUpload/PictureUpload";
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 
 class ServiceForm extends React.Component {

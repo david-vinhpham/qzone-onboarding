@@ -415,9 +415,9 @@ class ServiceEdit extends React.Component {
                             <FormControlLabel
                               control={
                                 <Radio
-                                  checked={values.mode === 'APPOINTMENT'}
+                                  checked={values.mode === 'SCHEDULE'}
                                   onChange={handleChange}
-                                  value="APPOINTMENT"
+                                  value="SCHEDULE"
                                   name="mode"
                                   aria-label="Appointment"
                                   icon={<FiberManualRecord className={classes.radioUnchecked} />}

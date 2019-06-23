@@ -61,7 +61,7 @@ class ServiceCreate extends React.Component {
 			description: "",
 			duration: 60,
 			gapBetweenBookings: 1,
-			mode: "APPOINTMENT",
+			mode: "SCHEDULE",
 			numberOfParallelCustomer: 1,
 			serviceCategoryId: null,
       organizationId: null,
@@ -392,9 +392,9 @@ class ServiceCreate extends React.Component {
                                                     <FormControlLabel
                                                         control={
                                                             <Radio
-                                                                checked={values.mode === "APPOINTMENT"}
+                                                                checked={values.mode === "SCHEDULE"}
                                                                 onChange={handleChange}
-                                                                value="APPOINTMENT"
+                                                                value="SCHEDULE"
                                                                 name="mode"
                                                                 aria-label="Appointment"
                                                                 icon={<FiberManualRecord className={classes.radioUnchecked} />}
