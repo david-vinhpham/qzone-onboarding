@@ -8,10 +8,13 @@ import {
 import {
   getSurveys,
   postSurvey,
+  deleteSurveyById,
 } from '../apiActions/surveys';
 
 export const SET_SURVEYS = 'SURVEY.SET_SURVEYS';
 export const SAVE_SURVEY = 'SURVEY.SAVE_SURVEY';
+export const DELETE_SURVEY_BY_ID = 'SURVEY.DELETE_SURVEY_BY_ID';
+export const RESET_SURVEY_STATUS = 'SURVEY.RESET_SURVEY_STATUS';
 
 const setSurveys = payload => ({
   type: SET_SURVEYS,
@@ -20,6 +23,13 @@ const setSurveys = payload => ({
 const saveSurvey = payload => ({
   type: SAVE_SURVEY,
   payload,
+});
+const deleteSurvey = payload => ({
+  type: DELETE_SURVEY_BY_ID,
+  payload,
+});
+export const resetSurveyStatus = () => ({
+  type: RESET_SURVEY_STATUS,
 });
 
 export const setSurveysAction = () => async dispatch => {
@@ -35,13 +45,21 @@ export const setSurveysAction = () => async dispatch => {
 export const saveSurveyAction = data => async dispatch => {
   dispatch(setLoading(true));
   const [result, error] = await handleRequest(postSurvey, [data]);
-  console.log('saving survey data---> ', data);
-  console.log('saving survey result---> ', result);
-  console.log('saving survey error---> ', error);
   if (error) {
     dispatch(setError(error));
   } else {
     dispatch(saveSurvey(result));
+  }
+  dispatch(setLoading(false));
+};
+
+export const deleteSurveyByIdAction = data => async dispatch => {
+  dispatch(setLoading(true));
+  const [result, error] = await handleRequest(deleteSurveyById, [data]);
+  if (error) {
+    dispatch(setError(error));
+  } else {
+    dispatch(deleteSurvey(result || true));
   }
   dispatch(setLoading(false));
 };

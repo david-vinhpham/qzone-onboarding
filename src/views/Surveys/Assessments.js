@@ -12,7 +12,7 @@ import Card from '../../components/Card/Card.jsx';
 import CardText from '../../components/Card/CardText.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
 import CardBody from '../../components/Card/CardBody';
-import { setSurveysAction } from '../../actions/surveys';
+import { setSurveysAction, deleteSurveyByIdAction, resetSurveyStatus } from '../../actions/surveys';
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import Edit from '@material-ui/icons/Edit';
@@ -25,24 +25,29 @@ class Survey extends Component {
       isError,
       errorMessage,
       surveys,
+      isDeletedSurveyById,
     } = props;
     const {
       isLoading: cachedLoading,
       isError: cachedError,
       errorMessage: cachedErrorMessage,
       surveys: cachedSurveys,
+      isDeletedSurveyById: cachedIsDeletedSurveyById,
     } = state;
+
     if (
       isLoading !== cachedLoading
       || isError !== cachedError
       || errorMessage !== cachedErrorMessage
       || surveys !== cachedSurveys
+      || isDeletedSurveyById !== cachedIsDeletedSurveyById
     ) {
       return {
         isLoading,
         isError,
         errorMessage,
         surveys,
+        isDeletedSurveyById,
       };
     }
 
@@ -54,6 +59,7 @@ class Survey extends Component {
     isError: false,
     errorMessage: '',
     surveys: null,
+    isDeletedSurveyById: null,
   };
 
   componentDidMount() {
@@ -61,19 +67,34 @@ class Survey extends Component {
     setSurveys();
   }
 
+  componentDidUpdate(prevProps) {
+    const {
+      setSurveysAction: setSurveys,
+      resetSurveyStatus: resetSurveyStatusAction,
+    } = this.props;
+    const { isDeletedSurveyById } = prevProps;
+    const { isDeletedSurveyById: cachedIsDeletedSurveyById } = this.state;
+    if (cachedIsDeletedSurveyById && cachedIsDeletedSurveyById !== isDeletedSurveyById) {
+      resetSurveyStatusAction();
+      setSurveys();
+    }
+  }
 
   handleEditSurvey = id => () => {
     console.log('Edit Survey', id);
   };
 
   handleDeleteSurvey = id => () => {
-    console.log('handle delete Survey', id);
+    const { deleteSurveyByIdAction: deleteSurveyById } = this.props;
+    const { surveys } = this.state;
+    const newSurveys = surveys.filter(survey => survey.id !== id);
+    this.setState({ surveys: newSurveys }, () => deleteSurveyById(id));
   };
 
   render() {
     const { classes } = this.props;
     const { surveys, isLoading } = this.state;
-    console.log('surveys in the render surveys: ', surveys);
+
     return (
       <div>
         {isLoading && <Loading />}
@@ -94,7 +115,7 @@ class Survey extends Component {
                 </Link>
               </CardHeader>
               <CardBody>
-                { surveys && (
+                { surveys && surveys.length > 0 && (
                   <Paper>
                     <Table aria-labelledby="businessCategories">
                       <TableHead>
@@ -160,12 +181,15 @@ const mapStateToProps = ({ common, surveys }) => ({
   isError: common.isError,
   errorMessage: common.errorMessage,
   surveys: surveys.surveys,
+  isDeletedSurveyById: surveys.isDeletedSurveyById,
 });
 
 export default connect(
   mapStateToProps,
   {
     setSurveysAction,
+    deleteSurveyByIdAction,
+    resetSurveyStatus,
   },
 )(withStyles(
   theme => ({
