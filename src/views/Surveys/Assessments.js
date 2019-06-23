@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'components/Loading/Loading';
+import Alert from 'react-s-alert';
+import { InsertLink } from '@material-ui/icons';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
@@ -12,7 +15,7 @@ import Card from '../../components/Card/Card.jsx';
 import CardText from '../../components/Card/CardText.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
 import CardBody from '../../components/Card/CardBody';
-import { setSurveysAction } from '../../actions/surveys';
+import { setSurveysAction, deleteSurveyByIdAction, resetSurveyStatus } from '../../actions/surveys';
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import Edit from '@material-ui/icons/Edit';
@@ -25,24 +28,29 @@ class Survey extends Component {
       isError,
       errorMessage,
       surveys,
+      isDeletedSurveyById,
     } = props;
     const {
       isLoading: cachedLoading,
       isError: cachedError,
       errorMessage: cachedErrorMessage,
       surveys: cachedSurveys,
+      isDeletedSurveyById: cachedIsDeletedSurveyById,
     } = state;
+
     if (
       isLoading !== cachedLoading
       || isError !== cachedError
       || errorMessage !== cachedErrorMessage
       || surveys !== cachedSurveys
+      || isDeletedSurveyById !== cachedIsDeletedSurveyById
     ) {
       return {
         isLoading,
         isError,
         errorMessage,
         surveys,
+        isDeletedSurveyById,
       };
     }
 
@@ -54,6 +62,7 @@ class Survey extends Component {
     isError: false,
     errorMessage: '',
     surveys: null,
+    isDeletedSurveyById: null,
   };
 
   componentDidMount() {
@@ -61,22 +70,39 @@ class Survey extends Component {
     setSurveys();
   }
 
-  handleNewSurvey = () => {
-    console.log('new Survey');
-  };
+  componentDidUpdate(prevProps) {
+    const {
+      setSurveysAction: setSurveys,
+      resetSurveyStatus: resetSurveyStatusAction,
+    } = this.props;
+    const { isDeletedSurveyById } = prevProps;
+    const { isDeletedSurveyById: cachedIsDeletedSurveyById } = this.state;
+    if (cachedIsDeletedSurveyById && cachedIsDeletedSurveyById !== isDeletedSurveyById) {
+      resetSurveyStatusAction();
+      setSurveys();
+    }
+  }
 
   handleEditSurvey = id => () => {
     console.log('Edit Survey', id);
   };
 
   handleDeleteSurvey = id => () => {
-    console.log('handle delete Survey', id);
+    const { deleteSurveyByIdAction: deleteSurveyById } = this.props;
+    const { surveys } = this.state;
+    const newSurveys = surveys.filter(survey => survey.id !== id);
+    this.setState({ surveys: newSurveys }, () => deleteSurveyById(id));
+  };
+
+  handleCopyLink = event => {
+    event.preventDefault();
+    Alert.success('Survey link is copied to clipboard!')
   };
 
   render() {
     const { classes } = this.props;
     const { surveys, isLoading } = this.state;
-    console.log('surveys in the render surveys: ', surveys);
+
     return (
       <div>
         {isLoading && <Loading />}
@@ -91,14 +117,13 @@ class Survey extends Component {
                   <Button
                     size="sm"
                     className={classes.buttonDisplay}
-                    // onClick={this.handleNewSurvey}
                   >
                     New Assessment
                   </Button>
                 </Link>
               </CardHeader>
               <CardBody>
-                { surveys && (
+                { surveys && surveys.length > 0 && (
                   <Paper>
                     <Table aria-labelledby="businessCategories">
                       <TableHead>
@@ -116,18 +141,34 @@ class Survey extends Component {
                             <TableCell align="center">
                               <Tooltip
                                 id="tooltip-top"
-                                title="Edit"
+                                title="Copy Link"
                                 placement="bottom"
                                 classes={{ tooltip: classes.tooltip }}
                               >
-                                <Button
-                                  color="success"
-                                  simple justIcon
-                                  onClick={this.handleEditSurvey(survey.id)}
-                                >
-                                  <Edit className={classes.underChartIcons} />
-                                </Button>
+                                <CopyToClipboard text={survey.url}>
+                                  <Button
+                                    color="success"
+                                    simple justIcon
+                                    onClick={this.handleCopyLink}
+                                  >
+                                    <InsertLink />
+                                  </Button>
+                                </CopyToClipboard>
                               </Tooltip>
+                              {/*<Tooltip*/}
+                              {/*  id="tooltip-top"*/}
+                              {/*  title="Edit"*/}
+                              {/*  placement="bottom"*/}
+                              {/*  classes={{ tooltip: classes.tooltip }}*/}
+                              {/*>*/}
+                              {/*  <Button*/}
+                              {/*    color="success"*/}
+                              {/*    simple justIcon*/}
+                              {/*    onClick={this.handleEditSurvey(survey.id)}*/}
+                              {/*  >*/}
+                              {/*    <Edit className={classes.underChartIcons} />*/}
+                              {/*  </Button>*/}
+                              {/*</Tooltip>*/}
                               <Tooltip
                                 id="tooltip-top"
                                 title="Remove"
@@ -164,12 +205,15 @@ const mapStateToProps = ({ common, surveys }) => ({
   isError: common.isError,
   errorMessage: common.errorMessage,
   surveys: surveys.surveys,
+  isDeletedSurveyById: surveys.isDeletedSurveyById,
 });
 
 export default connect(
   mapStateToProps,
   {
     setSurveysAction,
+    deleteSurveyByIdAction,
+    resetSurveyStatus,
   },
 )(withStyles(
   theme => ({

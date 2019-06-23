@@ -1,5 +1,5 @@
 export const handleResponse = (response, defaultResponse) => {
-  if (response && response.status === 200) {
+  if (response) {
     return response.data.objects || response.data.object || response.data;
   }
   return defaultResponse;

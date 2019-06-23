@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { isEmpty, get } from 'lodash';
 import { Poll } from '@material-ui/icons';
-import { saveSurveyAction } from '../../actions/surveys';
+import { saveSurveyAction, resetSurveyStatus } from '../../actions/surveys';
 import { fetchTmpServices } from '../../actions/tmpServices';
 import withStyles from '@material-ui/core/styles/withStyles';
 import validationFormStyle from 'assets/jss/material-dashboard-pro-react/modules/validationFormStyle';
@@ -21,9 +21,31 @@ class CreateAssessment extends React.Component {
     history: objectOf(any).isRequired,
     saveSurveyAction: func.isRequired,
     fetchTmpServices: func.isRequired,
+    resetSurveyStatus: func.isRequired,
     user: objectOf(any).isRequired,
+    isSavedSurvey: objectOf(any),
     temporaryServices: arrayOf(any).isRequired,
   };
+
+  static defaultProps = {
+    isSavedSurvey: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    const {
+      isSavedSurvey,
+    } = props;
+    const {
+      isSavedSurvey: cachedIsSavedSurvey,
+    } = state;
+    if (isSavedSurvey !== cachedIsSavedSurvey) {
+      return {
+        isSavedSurvey,
+      };
+    }
+
+    return null;
+  }
 
   constructor(props) {
     super(props);
@@ -40,6 +62,7 @@ class CreateAssessment extends React.Component {
       titleState: '',
       descriptionState: '',
       mode: 'create',
+      isSavedSurvey: null,
     };
   }
 
@@ -50,6 +73,15 @@ class CreateAssessment extends React.Component {
       history.push('/assessments');
     } else {
       fetchTmpServicesAction(businessId);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { history, resetSurveyStatus: resetSurveyStatusAction } = prevProps;
+    const { isSavedSurvey } = this.state;
+    if (isSavedSurvey && isSavedSurvey.url !== '') {
+      history.push('/assessments');
+      resetSurveyStatusAction();
     }
   }
 
@@ -66,7 +98,7 @@ class CreateAssessment extends React.Component {
   };
 
   handleSaveSurvey = (newSurvey) => {
-    const { saveSurveyAction: saveSurvey, user, history } = this.props;
+    const { saveSurveyAction: saveSurvey, user } = this.props;
     const { surveyInfo } = this.state;
     const { title, description, tempServiceId } = surveyInfo;
     const userId = get(user, 'userDetails.userSub') || localStorage.getItem('userSub');
@@ -99,6 +131,7 @@ class CreateAssessment extends React.Component {
 
     console.log('userInfo ', user);
     console.log('temporaryServices, ', temporaryServices);
+    console.log('after saving survey', this.state);
     return (
       <>
         <Card>
@@ -126,12 +159,13 @@ class CreateAssessment extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user, tmpServices }) => ({
+const mapStateToProps = ({ user, tmpServices, surveys }) => ({
   user,
   temporaryServices: tmpServices.list,
+  isSavedSurvey: surveys.isSavedSurvey,
 });
 
 export default compose(
   withStyles(validationFormStyle),
-  connect(mapStateToProps, { saveSurveyAction, fetchTmpServices }),
+  connect(mapStateToProps, { saveSurveyAction, fetchTmpServices, resetSurveyStatus }),
 )(CreateAssessment);
