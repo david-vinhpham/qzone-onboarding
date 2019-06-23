@@ -22,7 +22,7 @@ import ImageUpload from "../../components/CustomUpload/ImageUpload"
 import { fetchBusinessCategories, createOrganization } from "../../actions/organization.jsx"
 
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
-import { ClipLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import defaultImage from "../../assets/img/default-avatar.png";
 
@@ -106,7 +106,7 @@ class OrganizationCreate extends React.Component {
     }
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     if (createOrganizationLoading) {
-      return < ClipLoader
+      return < BeatLoader
         className={override}
         sizeUnit={"px"}
         size={100}

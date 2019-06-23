@@ -280,11 +280,30 @@ class Sidebar extends React.Component {
                     }
                   >
                     <span className={collapseItemMini}>
-                      {"A"}
+                      {"AD"}
                     </span>
                     <ListItemText
                       primary={
-                        "Administartion"
+                        "Administration"
+                      }
+                      disableTypography={true}
+                      className={collapseItemText}
+                    />
+                  </NavLink>
+                </ListItem>
+                <ListItem className={classes.collapseItem}>
+                  <NavLink
+                    to="/assessments"
+                    className={
+                      classes.itemLink + " " + classes.userCollapseLinks
+                    }
+                  >
+                    <span className={collapseItemMini}>
+                      {"SV"}
+                    </span>
+                    <ListItemText
+                      primary={
+                        "Assessments"
                       }
                       disableTypography={true}
                       className={collapseItemText}

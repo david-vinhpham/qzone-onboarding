@@ -9,7 +9,7 @@ export default function CustomCheckbox({...props}) {
     value,
     classes,
     checked,
-    onClick
+    onChange,
   } = props;
   return (
     <div
@@ -24,7 +24,7 @@ export default function CustomCheckbox({...props}) {
           <Checkbox
             tabIndex={-1}
             value={value}
-            onClick={onClick}
+            onChange={onChange}
             checked={checked}
             checkedIcon={
               <Check className={classes.checkedIcon} />
@@ -50,5 +50,5 @@ CustomCheckbox.propTypes = {
   value: PropTypes.string,
   onClick: PropTypes.func,
   checked: PropTypes.bool
-  
-};  
+
+};

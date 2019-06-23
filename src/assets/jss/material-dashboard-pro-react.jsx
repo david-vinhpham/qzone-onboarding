@@ -92,6 +92,7 @@ const successColor = "#4caf50";
 const infoColor = "#00acc1";
 const roseColor = "#e91e63";
 const grayColor = "#999999";
+const textWhite = "#fff";
 
 const primaryBoxShadow = {
   boxShadow:
@@ -216,7 +217,7 @@ const tooltip = {
 };
 
 const title = {
-  color: "#3C4858",
+  color: textWhite,
   textDecoration: "none",
   fontWeight: "300",
   marginTop: "30px",

@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Email, Lock as LockOutline } from '@material-ui/icons';
+import Loading from '../../components/Loading/Loading';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { ClipLoader } from 'react-spinners';
-import { css } from '@emotion/core';
 import { Tooltip, Typography } from '@material-ui/core';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -20,17 +19,11 @@ import loginPageStyle from '../../assets/jss/material-dashboard-pro-react/views/
 import { loginUser, resetPassword } from '../../actions/auth';
 import ForgotPasswordPage from './ForgotPasswordPage';
 
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-`;
-
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cardAnimaton: 'cardHidden',
+      cardAnimation: 'cardHidden',
       loginEmail: '',
       loginEmailState: '',
       loginPassword: '',
@@ -41,7 +34,7 @@ class LoginPage extends React.Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({ cardAnimaton: '' });
+      this.setState({ cardAnimation: '' });
     }, 700);
     // const ga = window.gapi && window.gapi.auth2 ? window.gapi.auth2.getAuthInstance() : null;
     // if (!ga) createScript();
@@ -57,20 +50,9 @@ class LoginPage extends React.Component {
     this.props.resetPassword(data);
   };
 
-  verifyEmail = value => {
-    const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (emailRex.test(value)) {
-      return true;
-    }
-    return false;
-  };
+  verifyEmail = value => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
 
-  verifyLength = (value, length) => {
-    if (value.length >= length) {
-      return true;
-    }
-    return false;
-  };
+  verifyLength = (value, length) => value.length >= length;
 
   loginClick = () => {
     if (this.state.loginEmailState === '') {
@@ -84,7 +66,7 @@ class LoginPage extends React.Component {
     }
   };
 
-  change(event, stateName, type, stateNameEqualTo, maxValue) {
+  change(event, stateName, type) {
     switch (type) {
       case 'email':
         if (this.verifyEmail(event.target.value)) {
@@ -116,18 +98,12 @@ class LoginPage extends React.Component {
       <div className={classes.content}>
         <div className={classes.container}>
           <GridContainer justify="center">
-            <GridItem xs={12} sm={6} md={4}>
+            <GridItem xs={12} sm={6} md={4} className={classes.justifyContentCenter}>
               {userLoading === true ? (
-                <ClipLoader
-                  css={override}
-                  sizeUnit="px"
-                  size={150}
-                  color="#123abc"
-                  loading={userLoading}
-                />
+                <Loading />
               ) : (
                 <form>
-                  <Card login className={classes[this.state.cardAnimaton]}>
+                  <Card login className={classes[this.state.cardAnimation]}>
                     <CardHeader
                       className={`${classes.cardHeader} ${classes.textCenter}`}
                       color="rose"
