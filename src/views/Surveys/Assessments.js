@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import Loading from 'components/Loading/Loading';
 import Alert from 'react-s-alert';
-import { InsertLink } from '@material-ui/icons';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {InsertLink} from '@material-ui/icons';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import tableStyle from '../../assets/jss/material-dashboard-pro-react/components/tableStyle';
 import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle';
 import Card from '../../components/Card/Card.jsx';
 import CardText from '../../components/Card/CardText.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
 import CardBody from '../../components/Card/CardBody';
-import { setSurveysAction, deleteSurveyByIdAction, resetSurveyStatus } from '../../actions/surveys';
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import {deleteSurveyByIdAction, resetSurveyStatus, setSurveysAction} from '../../actions/surveys';
+import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
-import Edit from '@material-ui/icons/Edit';
 import Delete from '@material-ui/icons/Delete';
 
 class Survey extends Component {
