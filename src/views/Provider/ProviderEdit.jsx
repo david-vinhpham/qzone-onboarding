@@ -134,8 +134,9 @@ class ProviderEdit extends React.Component {
       }
     }
     if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
-      alert('You have not selected an image');
-      return;
+      if (values.image === null) {
+        values.image = values.imagePreviewUrl;
+      }
     }
     values.providerInformation = providerInformation;
     this.props.editProvider(values, this.props.history);
@@ -180,6 +181,7 @@ class ProviderEdit extends React.Component {
           userStatus: provider.data.userStatus,
           userSub: provider.data.userSub,
           userType: provider.data.userType,
+          provider: 'aws',
           imageShow: provider.data.providerInformation.image ? provider.data.providerInformation.image.fileUrl : defaultImage,
           imagePreviewUrl:
             this.props.imageObject ||

@@ -56,6 +56,7 @@ class ProviderCreate extends React.Component {
         userStatus: 'FORCE_CHANGE_PASSWORD',
         userSub: null,
         userType: 'PROVIDER',
+        provider: 'aws',
         providerInformation: {
           description: null,
           qualifications: null,
@@ -192,6 +193,7 @@ class ProviderCreate extends React.Component {
           givenName: this.state.data.givenName,
           telephone: this.state.data.telephone,
           userStatus: 'FORCE_CHANGE_PASSWORD',
+          provider: 'aws',
           userSub: this.state.data.userSub,
           userType: 'PROVIDER',
           providerInformation: {
