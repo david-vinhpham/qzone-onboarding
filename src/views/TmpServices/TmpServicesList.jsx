@@ -55,9 +55,13 @@ class TmpServicesList extends PureComponent {
       this.setState({ data: nextProps.tmpServices });
       localStorage.setItem('tmpServices', JSON.stringify(nextProps.tmpServices));
     }
+    else {
+      this.setState({ data: nextProps.tmpServices });
+    }
   }
 
   componentDidMount() {
+    console.log('componentDidMount...');
     const userInfo = localStorage.getItem('user');
     if (userInfo === null) {
       this.props.history.push('/login');
@@ -258,7 +262,7 @@ class TmpServicesList extends PureComponent {
 
   render() {
     const {
-      classes, history, isLoading, delTmpServiceError,
+      classes, history, isLoading, tmpServiceError,
       providers, tzOptions, serviceOptions
     } = this.props;
     let data = [];
@@ -276,8 +280,8 @@ class TmpServicesList extends PureComponent {
       );
     }
 
-    if (delTmpServiceError) {
-      return <div className="alert alert-danger">Error</div>;
+    if (tmpServiceError) {
+      return <div className="alert alert-danger">{tmpServiceError}</div>;
     }
 
     data = (
@@ -429,7 +433,7 @@ TmpServicesList.propTypes = {
   classes: classesType.isRequired,
   history: historyType.isRequired,
   delTmpServiceLoading: PropTypes.bool.isRequired,
-  delTmpServiceError: PropTypes.bool,
+  tmpServiceError: PropTypes.bool,
   tzOptions: PropTypes.arrayOf(optionType).isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
   geoOptions: PropTypes.arrayOf(optionType).isRequired,
@@ -444,14 +448,14 @@ TmpServicesList.propTypes = {
 };
 
 TmpServicesList.defaultProps = {
-  delTmpServiceError: null,
+  tmpServiceError: null,
 }
 
 const mapStateToProps = state => ({
   tmpServices: state.tmpServices.list,
   isLoading: state.tmpServices.isLoading,
   delTmpServiceLoading: state.tmpServices.delTmpServiceLoading,
-  delTmpServiceError: state.tmpServices.delTmpServiceError,
+  tmpServiceError: state.tmpServices.tmpServiceError,
   providers: state.calendarManage.providers,
   tzOptions: state.calendarManage.tzOptions,
   serviceOptions: state.calendarManage.serviceOptions,

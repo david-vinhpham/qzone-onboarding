@@ -9,7 +9,7 @@ const initialState = {
   editTmpServiceError: null,
   editTmpServiceLoading: false,
 
-  delTmpServiceError: null,
+  tmpServiceError: null,
   delTmpServiceLoading: false,
 };
 
@@ -31,21 +31,19 @@ const reducer = (state = initialState, action) => {
     case tmp_service.DEL_TMP_SERVICE_SUCCESS:
       return { ...state, list: action.payload, isLoading: false };
 
-    case tmp_service.DEL_TMP_SERVICE_FAILURE:
+    case tmp_service.TMP_SERVICE_FAILURE:
       return {
         ...state,
-        delTmpServiceError: action.payload.error,
+        tmpServiceError: action.payload,
         isLoading: false
       };
     case tmp_service.SET_TMP_SERVICE:
       return {
         ...state,
-        list: state.list
-          .map(service => service.id === action.payload.id ? action.payload : service)
-          .sort((prev, next) => {
-            return prev.slot.startTime <= next.slot.startTime ? -1 : 1;
-          })
-      }
+        list: action.payload.sort((prev, next) => {
+          return prev.slot.startTime <= next.slot.startTime ? -1 : 1;
+        }),
+      };
     default:
       return state;
   }

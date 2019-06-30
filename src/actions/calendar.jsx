@@ -12,6 +12,7 @@ import {
   FETCH_TIMEZONE_OPTIONS,
   FETCH_SERVICE_OPTIONS
 } from 'constants/Calendar.constants';
+import {tmp_service} from "../constants/TmpServices.constants";
 
 const calendarLoading = isLoading => ({
   type: CALENDAR_LOADING,
@@ -153,19 +154,31 @@ export const createNewEvent = newEvent => dispatch => {
     .then(response => {
       if (response) {
         const data = get(response, 'data.object', {});
-        const event = {
-          ...data,
-          type: data.type || newEvent.type
-        };
-        if (newEvent.type === EVENT_TYPE.TMP_SERVICE) {
-          const tmpServices = localStorage.getItem('tmpServices');
-          if (tmpServices !== null) {
-            const listTmpServices = JSON.parse(tmpServices);
-            listTmpServices.push(data);
-            localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
+        if (response.data.success === false) {
+          dispatch({
+            type: tmp_service.TMP_SERVICE_FAILURE,
+            payload: response.data.message
+          });
+        } else {
+          const event = {
+            ...data,
+            type: data.type || newEvent.type
+          };
+          if (newEvent.type === EVENT_TYPE.TMP_SERVICE) {
+            const tmpServices = localStorage.getItem('tmpServices');
+            if (tmpServices !== null) {
+              const listTmpServices = JSON.parse(tmpServices);
+              listTmpServices.push(data);
+              localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
+              console.log('listTmpServices {}', listTmpServices.length)
+              dispatch({
+                type: tmp_service.SET_TMP_SERVICE,
+                payload: listTmpServices
+              });
+            }
           }
+          dispatch(createEventSuccess(event));
         }
-        dispatch(createEventSuccess(event));
       }
     })
     .finally(() => {
