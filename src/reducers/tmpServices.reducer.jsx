@@ -17,7 +17,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case tmp_service.FETCH_TMP_SERVICES_SUCCESS:
       return {
-        ...state,
+        ...state, tmpServiceError:[],
         list: action.payload.sort((prev, next) => {
           return prev.slot.startTime <= next.slot.startTime ? -1 : 1;
         }),
@@ -29,7 +29,7 @@ const reducer = (state = initialState, action) => {
       return { ...state, isLoading: true };
 
     case tmp_service.DEL_TMP_SERVICE_SUCCESS:
-      return { ...state, list: action.payload, isLoading: false };
+      return { ...state,  tmpServiceError:[], list: action.payload, isLoading: false };
 
     case tmp_service.TMP_SERVICE_FAILURE:
       return {
@@ -39,7 +39,7 @@ const reducer = (state = initialState, action) => {
       };
     case tmp_service.SET_TMP_SERVICE:
       return {
-        ...state,
+        ...state,  tmpServiceError:[],
         list: action.payload.sort((prev, next) => {
           return prev.slot.startTime <= next.slot.startTime ? -1 : 1;
         }),
