@@ -279,13 +279,9 @@ class TmpServicesList extends PureComponent {
         />
       );
     }
-
-    if (tmpServiceError) {
-      return <div className="alert alert-danger">{tmpServiceError}</div>;
-    }
-
     data = (
       <Paper>
+        {tmpServiceError !== null && tmpServiceError.length > 0  ? (<div className="alert alert-danger">{tmpServiceError}</div>) : null}
         <Table aria-labelledby="tmpServicesList">
           <TableHead>
             <TableRow>
