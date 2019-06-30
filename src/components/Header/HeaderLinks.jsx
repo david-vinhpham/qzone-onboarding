@@ -13,10 +13,11 @@ import {
   TextField
 } from '@material-ui/core';
 import { Person, Notifications, Dashboard, Search } from '@material-ui/icons';
-import { Auth } from 'aws-amplify';
 import Button from '../CustomButtons/Button';
 import headerLinksStyle from '../../assets/jss/material-dashboard-pro-react/components/headerLinksStyle';
 import { NavLink } from "react-router-dom";
+import { logout } from "../../actions/auth";
+
 
 class HeaderLinks extends React.Component {
   state = {
@@ -41,20 +42,14 @@ class HeaderLinks extends React.Component {
   };
 
   handleLogout = () => {
-    Auth.signOut({ global: true })
-      .then(data => console.log(data))
-      .catch(err => console.log(err));
-    // this.setState({ userOpen: false });
-    // window.location = "/login"
-  };
+    logout();
+  }
 
   render() {
     const { classes } = this.props;
     const { notificationOpen, userOpen } = this.state;
-    const dropdownItem = `${classes.dropdownItem} `;
-    const managerClasses = classNames({
-      [classes.managerClasses]: true
-    });
+    const managerClasses = classNames({ [classes.managerClasses]: true });
+
     return (
       <div>
         <TextField id="time" placeholder="Search" />
@@ -68,11 +63,9 @@ class HeaderLinks extends React.Component {
           href="/dashboard"
           justIcon
           className={classes.buttonLink}
-          muiClasses={{
-            label: ''
-          }}
+          muiClasses={{ label: '' }}
         >
-          <Dashboard className={`${classes.headerLinksSvg} ${classes.links}`} />
+          <Dashboard className={classNames(classes.headerLinksSvg, classes.links)} />
           <Hidden mdUp>
             <span className={classes.linkText}>Dashboard</span>
           </Hidden>
@@ -92,7 +85,7 @@ class HeaderLinks extends React.Component {
                 label: ''
               }}
             >
-              <Notifications className={`${classes.headerLinksSvg} ${classes.links}`} />
+              <Notifications className={classNames(classes.headerLinksSvg, classes.links)} />
               <span className={classes.notifications}>5</span>
               <Hidden mdUp>
                 <span onClick={this.handleClick} className={classes.linkText}>
@@ -104,27 +97,25 @@ class HeaderLinks extends React.Component {
           <Popper
             placement="bottom-start"
             eventsEnabled={notificationOpen}
-            className={`${classNames({ [classes.popperClose]: !notificationOpen })} ${
-              classes.pooperResponsive
-            }`}
+            className={classNames({ [classes.popperClose]: !notificationOpen }, classes.pooperResponsive)}
           >
             <ClickAwayListener onClickAway={this.handleClose}>
               <Grow in={notificationOpen} id="menu-list" style={{ transformOrigin: '0 0 0' }}>
                 <Paper className={classes.dropdown}>
                   <MenuList role="menu">
-                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                    <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
                       {'Mike John responded to your email'}
                     </MenuItem>
-                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                    <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
                       {'You have 5 new tasks'}
                     </MenuItem>
-                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                    <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
                       {"You're now friend with Andrew"}
                     </MenuItem>
-                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                    <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
                       {'Another Notification'}
                     </MenuItem>
-                    <MenuItem onClick={this.handleClose} className={dropdownItem}>
+                    <MenuItem onClick={this.handleClose} className={classes.dropdownItem}>
                       {'Another One'}
                     </MenuItem>
                   </MenuList>
@@ -133,58 +124,56 @@ class HeaderLinks extends React.Component {
             </ClickAwayListener>
           </Popper>
         </Manager>
-
-        <Manager className={managerClasses}>
-          <Target>
-            <Button
-              color="transparent"
-              justIcon
-              aria-label="Person"
-              aria-owns={userOpen ? 'menu-list' : null}
-              aria-haspopup="true"
-              onClick={this.handleUserClick}
-              className={classes.buttonLink}
-              muiClasses={{
-                label: ''
-              }}
+        <ClickAwayListener
+          onClickAway={this.handleUserClose}
+          mouseEvent="onMouseDown"
+          touchEvent="onTouchEnd"
+        >
+          <Manager className={managerClasses}>
+            <Target>
+              <Button
+                color="transparent"
+                justIcon
+                aria-label="Person"
+                aria-owns={userOpen ? 'menu-list' : null}
+                aria-haspopup="true"
+                onClick={this.handleUserClick}
+                className={classes.buttonLink}
+                muiClasses={{ label: '' }}
+              >
+                <Person className={classNames(classes.headerLinksSvg, classes.links)} />
+                <Hidden mdUp>
+                  <span className={classes.linkText}>Profile</span>
+                </Hidden>
+              </Button>
+            </Target>
+            <Popper
+              placement="bottom-start"
+              eventsEnabled={userOpen}
+              className={classNames({ [classes.popperClose]: !userOpen }, classes.pooperResponsive)}
             >
-              <Person className={`${classes.headerLinksSvg} ${classes.links}`} />
-              <Hidden mdUp>
-                <span className={classes.linkText}>Profile</span>
-              </Hidden>
-            </Button>
-          </Target>
-          <Popper
-            placement="bottom-start"
-            eventsEnabled={userOpen}
-            className={`${classNames({ [classes.popperClose]: !userOpen })} ${
-              classes.pooperResponsive
-            }`}
-          >
-            <ClickAwayListener onClickAway={this.handleUserClose}>
               <Grow in={userOpen} id="menu-list" style={{ transformOrigin: '0 0 0' }}>
                 <Paper className={classes.dropdown}>
                   <MenuList role="menu">
                     <NavLink
                       to="/profile"
-                      className={
-                        classes.itemLink + " " + classes.userCollapseLinks
-                      }
+                      className={classNames(classes.itemLink, classes.userCollapseLinks)}
                     >
-                      <MenuItem> {'Profile'} </MenuItem></NavLink>
+                      <MenuItem> {'Profile'} </MenuItem>
+                    </NavLink>
                     <NavLink
+                      onClick={this.handleLogout}
                       to="/login"
-                      className={
-                        classes.itemLink + " " + classes.userCollapseLinks
-                      }
+                      className={classNames(classes.itemLink, classes.userCollapseLinks)}
                     >
-                      <MenuItem> {'Logout'} </MenuItem></NavLink>
+                      <MenuItem> {'Logout'} </MenuItem>
+                    </NavLink>
                   </MenuList>
                 </Paper>
               </Grow>
-            </ClickAwayListener>
-          </Popper>
-        </Manager>
+            </Popper>
+          </Manager>
+        </ClickAwayListener>
       </div>
     );
   }

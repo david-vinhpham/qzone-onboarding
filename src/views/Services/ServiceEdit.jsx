@@ -72,7 +72,9 @@ class ServiceEdit extends React.Component {
     const { id } = this.props.match.params;
     this.props.fetchServiceById(id);
     const userSub = localStorage.getItem('userSub');
-    this.props.fetchOrganizationsByBusinessAdminId(userSub);
+    if (userSub) {
+      this.props.fetchOrganizationsByBusinessAdminId(userSub);
+    }
     localStorage.removeItem('imageObject');
   }
 

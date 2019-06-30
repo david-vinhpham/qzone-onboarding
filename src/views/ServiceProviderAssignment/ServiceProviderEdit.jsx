@@ -67,9 +67,11 @@ class ServiceProviderEdit extends React.Component {
     this.props.fetchServiceProviderById(id);
     localStorage.removeItem('originServiceTimeSlot');
     const userSub = localStorage.getItem('userSub');
-    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    if(userSub) {
+      this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+      this.props.findServiceOptionByBusinessAdminId(userSub);
+    }
     this.props.fetchProvidersOptionByServiceProviderId(id);
-    this.props.findServiceOptionByBusinessAdminId(userSub);
     this.props.fetchLocationsOption();
   }
 

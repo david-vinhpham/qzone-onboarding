@@ -22,13 +22,13 @@ export const authGetToken = () => {
   };
 };
 
-export function logout() {
+export function logout(history) {
   Auth.signOut({ global: true })
-    .then(() => {
+    .catch(console.log)
+    .finally(() => {
       localStorage.clear();
-      window.location = '/login';
-    })
-    .catch(console.log);
+      if (history) history.push('/login');
+    });
 }
 
 export const storeEmail = email => {
@@ -199,7 +199,7 @@ export const changePassword = (values, history) => {
             type: auth.CHANGE_PASSWORD_SUCCESS,
             payload: data
           });
-          history.push('/login');
+          logout(history);
         } else {
           dispatch({
             type: auth.CHANGE_PASSWORD_FAILURE,
@@ -288,17 +288,17 @@ export function fetchUser(id) {
         'Content-Type': 'application/json'
       }
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === 200 || data.status === 201 || data.success === true) {
-        dispatch(fetchUserSuccess(data));
-      } else {
-        dispatch(fetchUserFailure(data));
-      }
-    })
-    .catch(err => {
-      dispatch(fetchUserFailure(err));
-    });
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 200 || data.status === 201 || data.success === true) {
+          dispatch(fetchUserSuccess(data));
+        } else {
+          dispatch(fetchUserFailure(data));
+        }
+      })
+      .catch(err => {
+        dispatch(fetchUserFailure(err));
+      });
   }
 }
 

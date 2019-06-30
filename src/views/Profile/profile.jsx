@@ -50,15 +50,14 @@ class Profile extends React.Component {
 
   componentDidMount() {
     let userSub = localStorage.getItem('userSub');
-    if(userSub === null) {
-      window.location = '/login';
+    if(userSub) {
+      this.props.fetchUser(userSub);
     }
-    this.props.fetchUser(userSub);
 
-    let  account = {
+    let account = {
       email: '',
       emailState: '',
-    }
+    };
     this.setState({ id:userSub });
     this.setState({ account: account});
   }

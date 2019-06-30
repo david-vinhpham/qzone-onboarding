@@ -68,7 +68,9 @@ class ProviderEdit extends React.Component {
     const { id } = this.props.match.params;
     this.props.fetchProvider(id);
     const userSub = localStorage.getItem('userSub');
-    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    if(userSub) {
+      this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    }
     localStorage.removeItem('imageObject');
   }
 

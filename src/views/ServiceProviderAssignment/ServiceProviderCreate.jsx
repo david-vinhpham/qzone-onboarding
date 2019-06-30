@@ -67,7 +67,9 @@ class ServiceProviderCreate extends React.Component {
   componentDidMount() {
     const userSub = localStorage.getItem('userSub');
     this.setState({ businessAdminId: userSub });
-    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    if (userSub) {
+      this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    }
     this.props.fetchLocationsOption();
   }
 

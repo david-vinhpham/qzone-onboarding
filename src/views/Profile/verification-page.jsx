@@ -21,6 +21,7 @@ import verificationPageStyle from 'assets/jss/material-dashboard-pro-react/modul
 import { exactLength } from 'utils/validateLength';
 import { classesType, historyType } from 'types/global';
 import ResendCodeButton from './resend-code-button';
+import { logout } from "../../actions/auth";
 
 const codeLength = exactLength(6);
 
@@ -100,7 +101,7 @@ class VerificationPage extends React.PureComponent {
         if (page === 'login') {
           actionAfterSubmit();
         } else {
-          history.push('/login');
+          logout(history);
           Alert.success('Register successfully! Please login with your new account');
         }
       } else {
@@ -127,7 +128,7 @@ class VerificationPage extends React.PureComponent {
 
   handleClose = () => {
     const { history } = this.props;
-    history.push('/login');
+    logout(history);
   };
 
   render() {

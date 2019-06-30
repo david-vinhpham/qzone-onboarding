@@ -51,7 +51,9 @@ class ServicesList extends React.Component {
       this.setState({ data: servicesCached });
     } else {
       const businessAdminId = localStorage.getItem('userSub');
-      this.props.getServicesByBusinessAdminId(businessAdminId);
+      if (businessAdminId) {
+        this.props.getServicesByBusinessAdminId(businessAdminId);
+      }
     }
   }
 

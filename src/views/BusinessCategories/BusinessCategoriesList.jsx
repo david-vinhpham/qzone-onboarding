@@ -44,11 +44,7 @@ class BusinessCategoriesList extends PureComponent {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('user') === null) {
-      this.props.history.push('/login');
-    } else {
       this.props.fetchBusinessCategories();
-    }
   }
 
   handleAddBusinessCategoryDialogOpen = () => {
