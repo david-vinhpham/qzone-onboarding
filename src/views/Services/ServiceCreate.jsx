@@ -81,7 +81,9 @@ class ServiceCreate extends React.Component {
 	componentDidMount() {
 		this.props.fetchServiceCategories();
     let userSub = localStorage.getItem('userSub');
-    this.props.fetchOrganizationsByBusinessAdminId(userSub);
+    if (userSub) {
+      this.props.fetchOrganizationsByBusinessAdminId(userSub);
+    }
     localStorage.removeItem('imageObject');
 
   }

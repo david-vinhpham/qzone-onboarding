@@ -50,11 +50,7 @@ class ServiceCategoriesList extends PureComponent {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('user') === null) {
-      this.props.history.push('/login');
-    } else {
       this.props.fetchServiceCategories();
-    }
   }
 
   handleAddServiceCategoryDialogOpen = () => {

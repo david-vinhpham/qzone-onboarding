@@ -61,12 +61,6 @@ class TmpServicesList extends PureComponent {
   }
 
   componentDidMount() {
-    console.log('componentDidMount...');
-    const userInfo = localStorage.getItem('user');
-    if (userInfo === null) {
-      this.props.history.push('/login');
-    }
-
     const tmpServices = JSON.parse(localStorage.getItem('tmpServices'));
     this.businessId = localStorage.getItem('userSub');
     if (tmpServices !== null && tmpServices.length > 0) {

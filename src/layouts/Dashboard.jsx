@@ -11,6 +11,7 @@ import Header from '../components/Header/Header.jsx';
 import appStyle from '../assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx';
 import image from '../assets/img/sidebar-2.jpg';
 import logo from '../assets/img/logo-white.svg';
+import withAuth from "../hoc/withAuth";
 
 const switchRoutes = (
   <Switch>
@@ -18,9 +19,9 @@ const switchRoutes = (
       if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
       if (prop.collapse)
         return prop.views.map((prop, key) => {
-          return <Route path={prop.path} component={prop.component} key={key} />;
+          return <Route path={prop.path} component={withAuth(prop.component)} key={key} />;
         });
-      return <Route path={prop.path} component={prop.component} key={key} />;
+      return <Route path={prop.path} component={withAuth(prop.component)} key={key} />;
     })}
   </Switch>
 );

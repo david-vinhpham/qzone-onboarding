@@ -44,12 +44,10 @@ class ProviderList extends React.Component {
   }
 
   componentDidMount() {
-    let userInfo = localStorage.getItem('user');
-    if (userInfo === null) {
-      window.location = '/login';
-    }
     const sub = localStorage.getItem('userSub');
-    this.props.fetchProvidersByBusinessAdminId(sub);
+    if (sub) {
+      this.props.fetchProvidersByBusinessAdminId(sub);
+    }
   }
 
   componentWillReceiveProps(nextProps) {

@@ -50,11 +50,8 @@ class CustomerService extends PureComponent {
 
   componentDidMount() {
     const userSub = localStorage.getItem('userSub');
-
     if (userSub) {
       this.props.fetchProvidersAndServicesByBusinessAdminId(userSub);
-    } else {
-      this.props.history.push('/login');
     }
   }
 
@@ -298,7 +295,7 @@ class CustomerService extends PureComponent {
           {isBoardLoading && <div className={classes.spaceLoading}>
             <CircularProgress />
           </div>}
-          {!isBoardLoading && 
+          {!isBoardLoading &&
           (!boardData.customerFlowDetailList || boardData.customerFlowDetailList.length === 0) &&
             <div className={classes.spaceLoading}>
               <Typography variant="body1">There is no record</Typography>

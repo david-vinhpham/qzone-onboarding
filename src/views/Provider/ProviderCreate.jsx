@@ -97,7 +97,9 @@ class ProviderCreate extends React.Component {
     localStorage.removeItem('createProvider');
     this.props.fetchTimezonesOption();
     const userSub = localStorage.getItem('userSub');
-    this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    if(userSub) {
+      this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
+    }
     this.setState({ businessAdminId: userSub });
     localStorage.removeItem('imageObject');
   }
