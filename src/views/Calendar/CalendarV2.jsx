@@ -2,89 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, any, func } from 'prop-types';
 import {
-  Typography, Grid, Button,
+  Button,
   Select, MenuItem,
 } from '@material-ui/core';
-import { Schedule, Add } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
 
 import Calendar from 'components/Calendar';
-import { EVENT_BG_COLOR } from 'constants/Calendar.constants';
 import { providerType } from 'types/global';
 import styles from './CalendarV2.module.scss';
 
 class ManageCalendar extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedProvider: 'none'
-    };
+    this.state = { selectedProvider: 'none' };
   }
-
-  getEventStyle = (eventType, mustBeHeight) => {
-    return {
-      backgroundColor: EVENT_BG_COLOR[eventType].backgroundColor,
-      color: EVENT_BG_COLOR[eventType].color,
-      height: mustBeHeight,
-      paddingLeft: '8px',
-      borderRadius: '10px'
-    };
-  };
-
-  getStickerTemplate = (
-    schedulerData,
-    event,
-    bgColor,
-    isStart,
-    isEnd,
-    mustAddCssClass,
-    mustBeHeight,
-    agendaMaxEventWidth
-  ) => {
-    const titleText = schedulerData.behaviors.getEventTextFunc(schedulerData, event);
-    let divStyle = this.getEventStyle(event.type, mustBeHeight);
-    if (agendaMaxEventWidth) divStyle = { ...divStyle, maxWidth: agendaMaxEventWidth };
-    const titleStyle = { color: EVENT_BG_COLOR[event.type].color };
-
-    return (
-      <div key={event.id} className={mustAddCssClass} style={divStyle}>
-        <Typography variant="body2" style={titleStyle}>
-          {titleText}
-        </Typography>
-      </div>
-    );
-  };
-
-  getPopoverTemplate = (schedulerData, event, title, start, end) => {
-    return (
-      <Grid container spacing={2}>
-        <Grid item md={12} className={styles.eventActions}>
-          <div className={styles.eventTitle}>
-            <div className={styles.eventMarkerWrapper}>
-              <div
-                className={styles.eventMarker}
-                style={{ backgroundColor: EVENT_BG_COLOR[event.type].backgroundColor }}
-              />
-            </div>
-            <div>
-              <Typography variant="subtitle2">{title}</Typography>
-            </div>
-          </div>
-        </Grid>
-        <Grid item md={12}>
-          {event.description && <p>{event.description}</p>}
-          <div className={styles.eventPopoverTime}>
-            <Schedule fontSize="small" />
-            <div>
-              <Typography variant="caption">{start.format('L')} </Typography>
-              <Typography variant="caption">
-                {`from ${start.format('LT')} to ${end.format('LT')}`}
-              </Typography>
-            </div>
-          </div>
-        </Grid>
-      </Grid>
-    );
-  };
 
   onSelectProvider = ({ target: { value } }) => {
     this.setState({ selectedProvider: value });
@@ -92,10 +23,6 @@ class ManageCalendar extends React.PureComponent {
 
   rightCustomHeader = () => (
     <div className={styles.calendarRightCustomHeader}>
-      {this.state.selectedProvider !== 'none' &&
-        <Typography display="inline" classes={{ root: styles.providerTimezone }}>
-          Time zone: {(this.props.providers.find(p => p.id === this.state.selectedProvider) || {}).timezone}
-        </Typography>}
       <Select
         value={this.state.selectedProvider}
         onChange={this.onSelectProvider}
@@ -105,7 +32,7 @@ class ManageCalendar extends React.PureComponent {
           Select provider
         </MenuItem>
         {this.props.providers.map(prov => (
-          <MenuItem value={prov.id} key={prov.id}>
+          <MenuItem value={prov} key={prov.id}>
             {prov.name}
           </MenuItem>
         ))}
@@ -114,7 +41,7 @@ class ManageCalendar extends React.PureComponent {
         variant="contained"
         color="primary"
         style={{ color: 'white' }}
-        onClick={this.props.onClickNewEvent}
+        onClick={this.onClickNewEvent}
       >
         <Add fontSize="small" />
         &nbsp;New event
@@ -122,19 +49,20 @@ class ManageCalendar extends React.PureComponent {
     </div>
   );
 
+  onClickNewEvent = ({ start, end }) => {
+    this.props.onClickNewEvent(this.state.selectedProvider, start ? start.toDate() : undefined, end ? end.toDate() : undefined);
+  }
+
   render() {
-    const { providers, calendarData, onClickNewEvent } = this.props;
+    const { calendarData } = this.props;
     const { selectedProvider } = this.state;
-    const resources = providers.filter(prov => prov.id === selectedProvider);
+    const events = calendarData.filter(e => e.providerId === selectedProvider.id);
 
     return (
       <Calendar
-        resources={resources}
-        events={calendarData}
-        stickerTemplate={this.getStickerTemplate}
-        popoverTemplate={this.getPopoverTemplate}
-        onClickNewEvent={onClickNewEvent}
-        rightCustomHeader={this.rightCustomHeader()}
+        events={events}
+        onClickNewEvent={this.onClickNewEvent}
+        rightCustomHeader={this.rightCustomHeader}
       />
     );
   }
@@ -143,7 +71,7 @@ class ManageCalendar extends React.PureComponent {
 ManageCalendar.propTypes = {
   providers: arrayOf(providerType).isRequired,
   calendarData: arrayOf(any).isRequired,
-  onClickNewEvent: func.isRequired
+  onClickNewEvent: func.isRequired,
 };
 
 const mapStateToProps = state => ({

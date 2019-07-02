@@ -42,35 +42,21 @@ class ManageCalendar extends React.PureComponent {
 
   closeAddDialog = () => this.setState(this.initialState);
 
-  onClickNewEvent = (schedulerData, providerId, providerName, startTime, endTime) => {
+  onClickNewEvent = (providerDetail, startTime, endTime) => {
     this.setState(() => {
       const defaultProvider = this.props.providers[0];
-      const timezoneId = providerId
-        ? this.props.providers.find(provider => provider.id === providerId).timezone
-        : this.props.tzOptions.find(tz => tz.label.toLowerCase() === defaultProvider.timezone.toLowerCase()).label;
-
+      const chosenProvider = providerDetail === 'none' ? defaultProvider : providerDetail;
       const addEventData = {
         eventType: Object.values(EVENT_TYPE)[0],
         description: '',
-        repeat: {
-          type: Object.values(EVENT_REPEAT_TYPE)[0],
-          repeatEnd: {}
-        },
-        timezoneId,
+        repeat: { type: Object.values(EVENT_REPEAT_TYPE)[0], repeatEnd: {} },
+        timezoneId: chosenProvider.timezone,
+        providerId: chosenProvider.id,
+        providerName: chosenProvider.name,
         serviceId: this.props.serviceOptions.length > 0 ? this.props.serviceOptions[0].value : 0,
         tmpService: {},
-        ...(providerId ?
-          {
-            providerId,
-            providerName,
-            startTime,
-            endTime
-          } : {
-            providerId: defaultProvider.id,
-            providerName: defaultProvider.name,
-            startTime: moment().format(),
-            endTime: moment().add(1, 'hour').format()
-          })
+        startTime: moment(startTime).format(),
+        endTime: moment(endTime).format(),
       };
 
       return {
