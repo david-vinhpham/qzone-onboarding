@@ -1,137 +1,113 @@
-import React from 'react';
-import { arrayOf, any, func, bool, element } from 'prop-types';
+import React, { useState } from 'react';
+import { arrayOf, any, func } from 'prop-types';
+import TUICalendar from '@toast-ui/react-calendar';
+import { Button, Paper, Typography } from '@material-ui/core';
+import { DatePicker } from '@material-ui/pickers';
 import moment from 'moment-timezone';
-import { debounce } from 'lodash';
-import Scheduler, { SchedulerData, ViewTypes, DATETIME_FORMAT } from 'react-big-scheduler';
 import ReactResizeDetector from 'react-resize-detector';
-import produce from 'immer';
-import { Paper } from '@material-ui/core';
 
-import withDnDContext from 'hoc/withDnDContext';
-import 'react-big-scheduler/lib/css/style.css';
+import 'tui-calendar/dist/tui-calendar.css';
+import { EVENT_TYPE, EVENT_TYPE_TITLE, EVENT_BG_COLOR } from 'constants/Calendar.constants';
+import styles from './index.module.scss';
 
-class Calendar extends React.Component {
-  constructor(props) {
-    super(props);
+const localTimezone = moment.tz.guess();
 
-    const viewModel = new SchedulerData(
-      moment().format(DATETIME_FORMAT),
-      ViewTypes.Day,
-      false,
-      false,
-      {
-        resourceName: 'Providers',
-        ...(props.highlightWeekend
-          ? {}
-          : {
-              nonWorkingTimeHeadColor: 'inherit',
-              nonWorkingTimeHeadBgColor: 'transparent',
-              nonWorkingTimeBodyBgColor: 'transparent'
-            }),
-        views: [
-          {
-            viewName: 'Day',
-            viewType: ViewTypes.Day,
-            showAgenda: false,
-            isEventPerspective: false
-          },
-          {
-            viewName: 'Week',
-            viewType: ViewTypes.Week,
-            showAgenda: false,
-            isEventPerspective: false
-          },
-          {
-            viewName: 'Month',
-            viewType: ViewTypes.Month,
-            showAgenda: false,
-            isEventPerspective: false
-          }
-        ]
-      }
-    );
+const onClickToday = (setViewDate, ref) => () => {
+  ref.current.getInstance().today();
+  setViewDate(moment().toDate());
+}
 
-    viewModel.setResources(props.resources);
-    viewModel.setEvents(props.events);
+const onClickNext = (setViewDate, ref) => () => {
+  ref.current.getInstance().next();
+  setViewDate(oldViewDate => moment(oldViewDate).add(7, 'day').toDate());
+}
 
-    this.state = {
-      viewModel
-    };
-  }
+const onClickPrev = (setViewDate, ref) => () => {
+  ref.current.getInstance().prev();
+  setViewDate(oldViewDate => moment(oldViewDate).subtract(7, 'day').toDate());
+}
 
-  static getDerivedStateFromProps({ resources, events }, { viewModel }) {
-    viewModel.setResources(resources);
-    viewModel.setEvents(events);
-    return { viewModel };
-  }
+const onChangeViewDate = (setViewDate, ref) => (value) => {
+  const formattedDate = value.toDate();
+  setViewDate(formattedDate);
+  ref.current.getInstance().setDate(formattedDate);
+}
 
-  onSelectDate = (schedulerData, date) => {
-    schedulerData.setDate(date);
-    this.setState({ viewModel: schedulerData });
-  };
+const onResize = (ref) => () => {
+  ref.current.getInstance().render(true);
+}
 
-  onPrevClick = schedulerData => {
-    schedulerData.prev();
-    this.setState({ viewModel: schedulerData });
-  };
+const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
+  const calendarRef = React.createRef();
+  const [viewDate, setViewDate] = useState(new Date());
 
-  onNextClick = schedulerData => {
-    schedulerData.next();
-    this.setState({ viewModel: schedulerData });
-  };
-
-  onViewChange = (schedulerData, view) => {
-    schedulerData.setViewType(view.viewType, view.showAgenda, view.isEventPerspective);
-    this.setState({ viewModel: schedulerData });
-  };
-
-  onCalendarResize = debounce((width, height) => {
-    this.setState(oldState =>
-      produce(oldState, draftState => {
-        draftState.viewModel.config.schedulerWidth = width;
-        draftState.viewModel.config.schedulerMaxHeight = height - 100;
-      })
-    );
-  }, 150);
-
-  render() {
-    return (
-      <Paper style={{ padding: '8px 16px', height: 'calc(100vh - 130px)' }}>
-        <ReactResizeDetector handleWidth handleHeight onResize={this.onCalendarResize}>
-          <Scheduler
-            schedulerData={this.state.viewModel}
-            prevClick={this.onPrevClick}
-            nextClick={this.onNextClick}
-            onSelectDate={this.onSelectDate}
-            onViewChange={this.onViewChange}
-            newEvent={this.props.onClickNewEvent}
-            eventItemTemplateResolver={this.props.stickerTemplate}
-            eventItemPopoverTemplateResolver={this.props.popoverTemplate}
-            rightCustomHeader={this.props.rightCustomHeader}
-          />
-        </ReactResizeDetector>
+  return (
+    <ReactResizeDetector handleWidth handleHeight onResize={onResize(calendarRef)}>
+      <Paper classes={{ root: styles.calendarWrapper }}>
+        <div className={styles.calendarHeader}>
+          <div className={styles.calendarHeaderLeftItem}>
+            <Typography display="inline" classes={{ root: styles.calendarTimezone }}>
+              Time zone: {localTimezone}
+            </Typography>
+            <DatePicker
+              value={viewDate}
+              onChange={onChangeViewDate(setViewDate, calendarRef)}
+            />
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={onClickToday(setViewDate, calendarRef)}
+            >
+              Today
+          </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={onClickPrev(setViewDate, calendarRef)}
+            >
+              &lt;
+          </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={onClickNext(setViewDate, calendarRef)}
+            >
+              &gt;
+          </Button>
+          </div>
+          {rightCustomHeader && rightCustomHeader()}
+        </div>
+        <TUICalendar
+          ref={calendarRef}
+          onBeforeCreateSchedule={onClickNewEvent}
+          usageStatistics={false}
+          taskView={false}
+          scheduleView={['time']}
+          disableDblClick
+          useDetailPopup
+          height={'calc(100vh - 214px)'}
+          calendars={Object.keys(EVENT_TYPE).map(eventType => ({
+            id: eventType,
+            name: EVENT_TYPE_TITLE[eventType],
+            bgColor: EVENT_BG_COLOR[eventType].backgroundColor,
+            borderColor: EVENT_BG_COLOR[eventType].backgroundColor,
+            color: EVENT_BG_COLOR[eventType].color
+          }))}
+          schedules={events}
+        />
       </Paper>
-    );
-  }
+    </ReactResizeDetector>
+  );
 }
 
 Calendar.propTypes = {
-  resources: arrayOf(any),
-  events: arrayOf(any),
-  stickerTemplate: func,
-  popoverTemplate: func,
-  onClickNewEvent: func,
-  highlightWeekend: bool,
-  rightCustomHeader: element,
+  events: arrayOf(any).isRequired,
+  onClickNewEvent: func.isRequired,
+  rightCustomHeader: func,
 };
 
 Calendar.defaultProps = {
-  resources: [],
-  events: [],
-  stickerTemplate: undefined,
-  popoverTemplate: undefined,
-  onClickNewEvent: () => {},
-  highlightWeekend: false
-};
+  rightCustomHeader: undefined
+}
 
-export default withDnDContext(Calendar);
+export default Calendar;

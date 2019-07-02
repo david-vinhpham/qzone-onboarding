@@ -1,0 +1,26 @@
+.calendar {
+  &Wrapper {
+    padding: 16px;
+  }
+
+  &Header {
+    display: flex;
+    margin-bottom: 16px;
+
+    &LeftItem {
+      flex-grow: 1;
+      
+      & > div {
+        margin-right: 24px;
+      }
+
+      & > button {
+        margin: 0 8px;
+      }
+
+      .calendarTimezone {
+        margin-right: 32px;
+      }
+    }
+  }
+}

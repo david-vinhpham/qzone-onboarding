@@ -1,6 +1,4 @@
-import moment from 'moment-timezone';
 import { flow, map, sortBy } from 'lodash';
-import { DATETIME_FORMAT } from 'react-big-scheduler';
 import {
   FETCH_PROVIDER_BY_BUSINESS_ID,
   FETCH_EVENTS_BY_PROVIDERS,
@@ -17,17 +15,18 @@ const buildCalendarData = ({
   timezoneId,
   id,
   description,
-  providerId,
-  type
+  type,
+  providerId
 }) => ({
   id,
-  description,
-  providerId,
-  type,
-  start: moment.tz(startTime * 1000, timezoneId).format(DATETIME_FORMAT),
-  end: moment.tz(endTime * 1000, timezoneId).format(DATETIME_FORMAT),
-  resourceId: providerId,
+  body: description,
+  start: startTime * 1000,
+  end: endTime * 1000,
   title: EVENT_TYPE_TITLE[type],
+  calendarId: type,
+  category: 'time',
+  isReadOnly: true,
+  providerId
 });
 
 const initialState = {
