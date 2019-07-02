@@ -160,6 +160,7 @@ class CustomerService extends PureComponent {
       classes,
       isLoading,
       verifyData,
+      failureData,
       isVerifyBookingCodeSuccess,
       isBoardLoading,
       isFetchServiceOptionsByBusinessAdminIdSuccess,
@@ -210,6 +211,10 @@ class CustomerService extends PureComponent {
             </Button>
           </DialogActions>
         </Dialog>}
+         <div>
+             {typeof failureData !== 'undefined' && failureData !== null ?
+               (<div className="alert-danger">{failureData.message}</div>) : <div></div>}
+         </div>
         <div className={classes.cardTitleMargin + " " + classes.flexItem}>
           <h4 className={classes.boardHeader}>Customer Flow Board</h4>
           {boardData && boardData.mode && <Typography variant="subtitle2" className={classes.modeMargin}>Mode: {boardData.mode}</Typography>}
@@ -451,6 +456,7 @@ class CustomerService extends PureComponent {
 }
 
 CustomerService.propTypes = {
+  failureData: verifyBookingCodeType.isRequired,
   verifyData: verifyBookingCodeType.isRequired,
   boardData: customerFlowBoardType.isRequired,
   isLoading: PropTypes.bool.isRequired,
@@ -469,6 +475,7 @@ CustomerService.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  failureData: state.customerService.failureData,
   verifyData: state.customerService.verifyData,
   isLoading: state.customerService.isLoading,
   isVerifyBookingCodeSuccess: state.customerService.isVerifyBookingCodeSuccess,
@@ -476,7 +483,6 @@ const mapStateToProps = state => ({
   isBoardLoading: state.customerService.isBoardLoading,
   isFetchServiceOptionsByBusinessAdminIdSuccess: state.customerService.isFetchServiceOptionsByBusinessAdminIdSuccess,
   serviceOptions: state.customerService.serviceOptions,
-
   isFetchProviderOptionsByBusinessAdminIdSuccess: state.customerService.isFetchProviderOptionsByBusinessAdminIdSuccess,
   providerOptions: state.customerService.providerOptions,
 });
