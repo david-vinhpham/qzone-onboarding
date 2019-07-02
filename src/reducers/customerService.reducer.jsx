@@ -1,5 +1,4 @@
 import { customer_service } from '../constants/CustomerService.constants';
-import { eventStatus } from "../constants";
 
 const initialState = {
   isLoading: false,
@@ -8,6 +7,7 @@ const initialState = {
 
   isUpdateStatusSuccess: false,
   updateData: {},
+  failureData: {},
 
   isBoardLoading: false,
   boardData: {},
@@ -24,8 +24,14 @@ const reducer = (state = initialState, action) => {
     case customer_service.VERIFY_BOOKING_CODE_SUCCESS:
       return {
         ...state,
-        verifyData: action.payload,
+        verifyData: action.payload,  failureData: [],
         isVerifyBookingCodeSuccess: true
+      };
+    case customer_service.CUSTOMER_FLOW_FAILURE:
+      return {
+        ...state,
+        failureData: action.payload,
+        failureStatus: true
       };
     case customer_service.VERIFY_BOOKING_CODE_LOADING:
       return { ...state, isLoading: action.payload };
@@ -45,13 +51,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isUpdateStatusSuccess: true,
-        updateData: action.payload,
-        verifyData: action.payload.isFromBookingData ? { ...state.verifyData, status: eventStatus.checkedIn } : state.verifyData
+        updateData: action.payload, failureData: [],
+        verifyData: action.payload
       };
     case customer_service.FETCH_FLOW_BOARD_SUCCESS:
       return {
         ...state,
-        boardData: action.payload
+        boardData: action.payload,  failureData: [],
       };
     case customer_service.FETCH_FLOW_BOARD_LOADING:
       return { ...state, isBoardLoading: action.payload };
