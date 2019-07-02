@@ -17,8 +17,11 @@ export const verifyBookingCode = (bookingCode) => dispatch => {
   dispatch(setVerifyBookingCodeLoading(true));
   return axios.get(`${API_ROOT}${URL.VERIFY_BOOKING_CODE}/${bookingCode}`)
     .then(res => {
-      if (res && (res.status === 200 || res.data.success === true)) {
+      if (res && (res.status === 200 && res.data.success === true)) {
         dispatch(setVerifyBookingCodeSuccess(res.data.object));
+      }
+      else if (res && (res.status === 200 && res.data.success === false)) {
+        dispatch(setStatusFailure({ ...res.data }));
       }
     })
     .finally(() => {
@@ -31,6 +34,10 @@ export const setUpdateStatusSuccess = payload => ({
   payload
 });
 
+export const setStatusFailure = payload => ({
+  type: customer_service.CUSTOMER_FLOW_FAILURE,
+  payload
+});
 export const updateCustomerStatus = (data, cb) => (dispatch) => {
   dispatch(setVerifyBookingCodeLoading(true));
 
@@ -43,9 +50,12 @@ export const updateCustomerStatus = (data, cb) => (dispatch) => {
 
   return axios.put(API_ROOT + URL.UPDATE_CUSTOMER_FLOW_STATUS, data)
     .then(res => {
-      if (res && (res.status === 200 || res.data.success === true)) {
+      if (res && (res.status === 200 && res.data.success === true)) {
         dispatch(setUpdateStatusSuccess({ ...res.data, isFromBookingData }));
         cb(providerId, serviceId);
+      }
+      else if (res && (res.status === 200 && res.data.success === false)) {
+        dispatch(setStatusFailure({ ...res.data, isFromBookingData }));
       }
     })
     .finally(() => {
@@ -69,7 +79,7 @@ export const fetchFlowBoard = (data) => dispatch => {
 
   return axios.post(`${API_ROOT}${URL.FETCH_CUSTOMER_FLOW_BOARD}`, data)
     .then(res => {
-      if (res && (res.status === 200 || res.data.success === true)) {
+      if (res && (res.status === 200 && res.data.success === true)) {
         if (res.data.object && res.data.object.customerFlowDetailList && res.data.object.customerFlowDetailList.length > 0) {
           res.data.object.customerFlowDetailList = res.data.object.customerFlowDetailList.filter((customerFlowDetail) => {
             return customerFlowDetail.status.toUpperCase() === eventStatus.checkedIn
@@ -88,6 +98,9 @@ export const fetchFlowBoard = (data) => dispatch => {
         }
         dispatch(setFetchFlowBoardSuccess(res.data.object));
       }
+      else if (res && (res.status === 200 && res.data.success === false)) {
+        dispatch(setStatusFailure({ ...res.data }));
+      }
     })
     .finally(() => {
       dispatch(setFetchFlowBoardLoading(false));
@@ -102,8 +115,11 @@ export const setServiceOptionsByBusinessAdminIdSuccess = payload => ({
 export const fetchServiceOptionsByBusinessAdminId = businessAdminId => dispatch => {
   return axios.get(`${API_ROOT}${URL.FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
     .then(res => {
-      if (res && (res.status === 200 || res.data.success === true)) {
+      if (res && (res.status === 200 && res.data.success === true)) {
         dispatch(setServiceOptionsByBusinessAdminIdSuccess(res.data.objects));
+      }
+      else if (res && (res.status === 200 && res.data.success === false)) {
+        dispatch(setStatusFailure({ ...res.data }));
       }
     });
 };
@@ -116,8 +132,11 @@ export const setProviderOptionsByBusinessAdminIdSuccess = payload => ({
 export const fetchProviderOptionsByBusinessAdminId = (businessAdminId) => dispatch => {
   return axios.get(`${API_ROOT}${URL.FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
     .then(res => {
-      if (res && (res.status === 200 || res.data.success === true)) {
+      if (res && (res.status === 200 && res.data.success === true)) {
         dispatch(setProviderOptionsByBusinessAdminIdSuccess(res.data.objects));
+      }
+      else if (res && (res.status === 200 && res.data.success === false)) {
+        dispatch(setStatusFailure({ ...res.data }));
       }
     });
 };
