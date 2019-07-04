@@ -12,7 +12,7 @@ import {
   FETCH_TIMEZONE_OPTIONS,
   FETCH_SERVICE_OPTIONS
 } from 'constants/Calendar.constants';
-import {tmp_service} from "../constants/TmpServices.constants";
+import { tmp_service } from "../constants/TmpServices.constants";
 
 const calendarLoading = isLoading => ({
   type: CALENDAR_LOADING,
@@ -93,18 +93,35 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
           providerData => compact(providerData)
         )(providers);
 
-        /* Fetch events of providers */
         const fetchEvents = [];
+        const fetchTmpEvents = [];
         providerIds.forEach(providerId => {
           fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
-          fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}${providerId}`));
           fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID}${providerId}`));
+          fetchTmpEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_EVENTS_BY_PROVIDER_ID}${providerId}`));
         });
 
-        return Promise.all(fetchEvents).then(rep => {
-          const tmpEvents = reduce(rep, (acc, event) => acc.concat(get(event, 'data.objects', [])), []);
-          const events = [];
-          tmpEvents.forEach(e => {
+        Promise.all([Promise.all(fetchEvents), Promise.all(fetchTmpEvents)]).then(([rep, tmpEventsResp]) => {
+          const tmpEvents = reduce(tmpEventsResp, (acc, resp) => {
+            const listEvent = get(resp, 'data.objects', []);
+            return acc.concat(listEvent.map(e => ({
+              ...e,
+              providerId: resp.config.url.split('/').slice(-1)[0],
+            })));
+          }, []);
+          const otherEvents = reduce(rep, (acc, event) => acc.concat(get(event, 'data.objects', [])), []);
+          let events = [];
+
+          events = tmpEvents.map((e, index) => ({
+            slot: { startTime: e.istart, endTime: e.iend },
+            id: e.id,
+            description: '',
+            type: EVENT_TYPE.TMP_EVENTS,
+            providerId: e.providerId,
+            title: e.title,
+          }));
+
+          otherEvents.forEach(e => {
             let slots = [];
             if (e.slots && e.slots.length > 0) {
               slots = e.slots.slice();
@@ -119,7 +136,6 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
                 id: `${e.id}-repeat-${index}`,
                 slot,
                 type: e.type || EVENT_TYPE.TMP_SERVICE,
-                timezone: providers.find(p => p.id === e.providerId).providerInformation.timeZoneId,
               })
             });
           });

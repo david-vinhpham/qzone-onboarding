@@ -167,7 +167,7 @@ export const createOrganization = (values, history) => {
           })
             .then(res => res.json())
             .then(data => {
-              if (data.status === 200 || data.status === 201 || data.success === true) {
+              if (data.status === 200 || data.status === 201 || data.success) {
                 dispatch(createOrganizationSuccess(data));
                 history.push('/organization/list');
               } else {
@@ -182,41 +182,5 @@ export const createOrganization = (values, history) => {
         }
       })
       .catch(err => console.log('error', err));
-  };
-};
-
-export const fetchBusinessCategoriesLoading = () => {
-  return {
-    type: organization.FETCH_BUSINESS_CATEGORIES_LOADING
-  };
-};
-
-export const fetchBusinessCategoriesSucess = data => {
-  return {
-    type: organization.FETCH_BUSINESSES_CATEGORIES_SUCCESS,
-    payload: { data }
-  };
-};
-
-export const fetchBusinessCategoriesFailure = err => {
-  return {
-    type: organization.FETCH_BUSINESSES_CATEGORIES_FAILURE,
-    payload: { err }
-  };
-};
-
-export const fetchBusinessCategories = () => {
-  return dispatch => {
-    dispatch(fetchBusinessCategoriesLoading());
-    fetch(API_ROOT + URL.FETCH_BUSINESS_CATEGORIES, {
-      method: 'GET'
-    })
-      .then(res => res.json())
-      .then(data => {
-        dispatch(fetchBusinessCategoriesSucess(data));
-      })
-      .catch(err => {
-        dispatch(fetchBusinessCategoriesFailure(err));
-      });
   };
 };

@@ -57,7 +57,7 @@ class ForceChangePassword extends React.Component {
       finalPassword: newPassword,
       email,
     }, (response) => {
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.success) {
         const { closeChangePassword } = this.props;
         closeChangePassword();
         fetchUserAction(userId);

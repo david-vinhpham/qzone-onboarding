@@ -37,7 +37,7 @@ class ResetPassword extends React.Component {
   handleResetPassword = () => {
     const { resetPassword: resetPasswordAction } = this.props;
     resetPasswordAction(this.state, (response) => {
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.success) {
         this.setState({ open: false, openChangePassword: true });
         Alert.success(<AlertMessage>Code is successfully send to your email</AlertMessage>);
       } else {

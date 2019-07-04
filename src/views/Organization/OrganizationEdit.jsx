@@ -36,9 +36,9 @@ import ImageUpload from '../../components/CustomUpload/ImageUpload';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
 import {
   editOrganization,
-  fetchBusinessCategories,
   fetchOrganization
 } from '../../actions/organization.jsx';
+import { fetchBusinessCategories } from "../../actions/businessCategories";
 
 const override = css`
   display: block;
@@ -130,11 +130,8 @@ class OrganizationEdit extends React.Component {
       fetchOrganizationLoading,
       editOrganizationError
     } = this.props;
+
     const { data } = this.state;
-    let categoryOptions = [];
-    if (businessCategories && businessCategories.objects) {
-      categoryOptions = businessCategories.objects;
-    }
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     if (fetchOrganizationLoading || !this.state.data || this.state.data.length === 0) {
       return (
@@ -347,7 +344,7 @@ class OrganizationEdit extends React.Component {
                                   onChange={handleChange('businessCategoryId')}
                                   name="businessCategoryId"
                                 >
-                                  {categoryOptions.map(business => (
+                                  {businessCategories.map(business => (
                                     <MenuItem key={business.id} value={business.id}>
                                       {business.name}
                                     </MenuItem>
@@ -719,9 +716,8 @@ OrganizationEdit.propTypes = {
 };
 
 const mapsStateToProp = state => ({
-  businessCategories: state.organization.businessCategories,
-  fetchBusinessCategoriesLoading: state.organization.fetchBusinessCategoriesLoading,
-  fetchBusinessCategoriesError: state.organization.fetchBusinessCategoriesError,
+  businessCategories: state.businessCategory.businessCategories,
+  fetchBusinessCategoriesLoading: state.businessCategory.fetchBusinessCategoriesLoading,
   organization: state.organization.organization,
   editOrganizationLoading: state.organization.editOrganizationLoading,
   editOrganizationError: state.organization.editOrganizationError,

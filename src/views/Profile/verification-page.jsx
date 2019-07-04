@@ -97,7 +97,7 @@ class VerificationPage extends React.PureComponent {
     } = this.props;
 
     verifyUserAction({ email, code }, (response) => {
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.success) {
         if (page === 'login') {
           actionAfterSubmit();
         } else {

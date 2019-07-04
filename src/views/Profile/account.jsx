@@ -76,7 +76,7 @@ class Account extends PureComponent {
     const { resetPassword: resetPasswordAction } = this.props;
     const { email } = this.state;
     resetPasswordAction({ email }, (response) => {
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.success) {
         this.setState({ openChangePassword: true });
         Alert.success(<AlertMessage>Code is successfully send to your email</AlertMessage>);
       } else {

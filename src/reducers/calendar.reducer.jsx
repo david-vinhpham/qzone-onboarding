@@ -12,17 +12,17 @@ import {
 
 const buildCalendarData = ({
   slot: { startTime, endTime } = {},
-  timezoneId,
   id,
   description,
   type,
-  providerId
+  providerId,
+  title,
 }) => ({
   id,
   body: description,
   start: startTime * 1000,
   end: endTime * 1000,
-  title: EVENT_TYPE_TITLE[type],
+  title: title || EVENT_TYPE_TITLE[type],
   calendarId: type,
   category: 'time',
   isReadOnly: true,

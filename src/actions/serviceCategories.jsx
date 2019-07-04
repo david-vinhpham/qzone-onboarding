@@ -16,7 +16,7 @@ export const fetchServiceCategories = () => dispatch => {
   dispatch(setServiceCategoriesLoading(true));
   axios.get(`${API_ROOT}${URL.FETCH_SERVICE_CATEGORIES}`)
     .then(resp => {
-      if (resp.status === 200) {
+      if (resp.status === 200 && resp.data.success) {
         dispatch(setServiceCategoriesSuccess(resp.data.objects));
       }
     })

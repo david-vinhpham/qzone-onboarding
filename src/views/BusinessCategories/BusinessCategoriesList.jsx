@@ -98,11 +98,10 @@ class BusinessCategoriesList extends PureComponent {
   }
 
   render() {
-    const { classes, isLoading, businessCategory } = this.props;
+    const { classes, fetchBusinessCategoriesLoading, businessCategories } = this.props;
     let data = [];
     const { deletedBusinessCategory, selectedBusinessCategory, businessCategoryDialogOpen, isEditMode } = this.state;
-
-    if (isLoading) {
+    if (fetchBusinessCategoriesLoading) {
       return (
         <BeatLoader
           size={22}
@@ -122,7 +121,7 @@ class BusinessCategoriesList extends PureComponent {
             </TableRow>
           </TableHead>
           <TableBody>
-            {businessCategory.map((svc, index) => (
+            {businessCategories.map((svc, index) => (
               <TableRow key={svc.id} classes={{ root: classes.row }}>
                 <TableCell size="small">{index + 1}</TableCell>
                 <TableCell>{svc.name}</TableCell>
@@ -226,8 +225,8 @@ class BusinessCategoriesList extends PureComponent {
 }
 
 BusinessCategoriesList.propTypes = {
-  businessCategory: PropTypes.arrayOf(businessCategoryType).isRequired,
-  isLoading: PropTypes.bool.isRequired,
+  businessCategories: PropTypes.arrayOf(businessCategoryType).isRequired,
+  fetchBusinessCategoriesLoading: PropTypes.bool.isRequired,
   fetchBusinessCategories: PropTypes.func.isRequired,
   deleteBusinessCategory: PropTypes.func.isRequired,
   createBusinessCategory: PropTypes.func.isRequired,
@@ -235,8 +234,8 @@ BusinessCategoriesList.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  businessCategory: state.businessCategory.list,
-  isLoading: state.businessCategory.isLoading,
+  businessCategories: state.businessCategory.businessCategories,
+  fetchBusinessCategoriesLoading: state.businessCategory.fetchBusinessCategoriesLoading,
 });
 
 const mapDispatchToProps = {

@@ -16,7 +16,7 @@ export const fetchBusinessCategories = () => dispatch => {
   dispatch(setBusinessCategoriesLoading(true));
   axios.get(`${API_ROOT}${URL.FETCH_BUSINESS_CATEGORIES}`)
     .then(resp => {
-      if (resp.status === 200) {
+      if (resp.status === 200 && resp.data.success) {
         dispatch(setBusinessCategoriesSuccess(resp.data.objects));
       }
     })
@@ -31,7 +31,7 @@ export const deleteBusinessCategory = businessCategoryId => {
       .then(res => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { businessCategory } = getState();
-          const newList = businessCategory.list.filter(categoryObject => categoryObject.id !== businessCategoryId);
+          const newList = businessCategory.businessCategories.filter(categoryObject => categoryObject.id !== businessCategoryId);
           dispatch(setBusinessCategoriesSuccess(newList));
         }
       })
@@ -48,7 +48,7 @@ export const createBusinessCategory = (data) => {
       .then((res) => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { businessCategory } = getState();
-          const newList = businessCategory.list.concat([res.data.object]);
+          const newList = businessCategory.businessCategories.concat([res.data.object]);
           dispatch(setBusinessCategoriesSuccess(newList));
         }
       })
@@ -65,7 +65,7 @@ export const editBusinessCategory = (data) => {
       .then(res => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { businessCategory } = getState();
-          const newList = businessCategory.list.map(s => s.id === res.data.object.id ? res.data.object : s);
+          const newList = businessCategory.businessCategories.map(s => s.id === res.data.object.id ? res.data.object : s);
           dispatch(setBusinessCategoriesSuccess(newList));
         }
       })

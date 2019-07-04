@@ -28,7 +28,8 @@ export const EVENT_TYPE = Object.freeze({
   CLOSED: 'CLOSED',
   WEEKEND: 'WEEKEND',
   HOLIDAY: 'HOLIDAY',
-  VACATION: 'VACATION'
+  VACATION: 'VACATION',
+  TMP_EVENTS: 'TMP_EVENTS'
 });
 
 export const EVENT_TYPE_TITLE = Object.freeze({
@@ -38,7 +39,8 @@ export const EVENT_TYPE_TITLE = Object.freeze({
   [EVENT_TYPE.WEEKEND]: 'Weekend',
   [EVENT_TYPE.HOLIDAY]: 'Holiday',
   [EVENT_TYPE.TMP_SERVICE]: 'Temporary service',
-  [EVENT_TYPE.VACATION]: 'Vacation'
+  [EVENT_TYPE.VACATION]: 'Vacation',
+  [EVENT_TYPE.TMP_EVENTS]: 'Temporary event'
 });
 
 export const EVENT_BG_COLOR = Object.freeze({
@@ -47,12 +49,12 @@ export const EVENT_BG_COLOR = Object.freeze({
     backgroundColor: '#1589ff'
   },
   [EVENT_TYPE.WEEKEND]: {
-    color: '#000',
-    backgroundColor: '#efefef'
+    color: '#fff',
+    backgroundColor: '#ff4040'
   },
   [EVENT_TYPE.CLOSED]: {
-    color: '#000',
-    backgroundColor: '#efefef'
+    color: '#fff',
+    backgroundColor: '#999'
   },
   [EVENT_TYPE.BREAK]: {
     color: '#fff',
@@ -60,15 +62,19 @@ export const EVENT_BG_COLOR = Object.freeze({
   },
   [EVENT_TYPE.HOLIDAY]: {
     color: '#fff',
-    backgroundColor: '#4c4c4c'
+    backgroundColor: '#ff9800'
   },
   [EVENT_TYPE.VACATION]: {
     color: '#fff',
     backgroundColor: '#4c4c4c'
   },
   [EVENT_TYPE.TMP_SERVICE]: {
-    color: 'black',
+    color: '#000',
     backgroundColor: '#ffeb3b'
+  },
+  [EVENT_TYPE.TMP_EVENTS]: {
+    color: '#fff',
+    backgroundColor: '#4caf50'
   }
 });
 
