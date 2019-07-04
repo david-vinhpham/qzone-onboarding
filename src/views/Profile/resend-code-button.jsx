@@ -22,7 +22,7 @@ class ResendCodeButton extends PureComponent {
       if (countDownResendCode === 0) {
         const { email, cbAfterResend, verifyResendUser: verifyResendUserAction } = this.props;
         verifyResendUserAction({ email }, (response) => {
-          if (response.status !== 200) {
+          if (response.status !== 200 || !response.data.success) {
             Alert.error(response.data.message);
           }
           cbAfterResend();

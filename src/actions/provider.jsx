@@ -211,7 +211,7 @@ export const deleteProvider = providerId => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           dispatch({
             type: provider.DEL_PROVIDER_SUCCESS,
             payload: data.object
@@ -240,7 +240,7 @@ export function editProvider(values, history) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           history.push('/provider/list');
         } else {
           dispatch(editProviderFailure(data));
@@ -284,7 +284,7 @@ export function createProvider(values, history) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           dispatch(createProviderSuccess(data));
           history.push('/provider/list');
         } else {

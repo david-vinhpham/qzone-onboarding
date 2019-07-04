@@ -48,11 +48,13 @@ export default function CommonContent({
               className={addEventDialogStyles.eventTypeSelect}
               readOnly={isEventTypeReadOnly}
             >
-              {Object.values(EVENT_TYPE).map(e => (
-                <MenuItem value={e} key={e}>
-                  {EVENT_TYPE_TITLE[e]}
-                </MenuItem>
-              ))}
+              {Object.values(EVENT_TYPE)
+                .filter(e => e !== EVENT_TYPE.TMP_EVENTS)
+                .map(e => (
+                  <MenuItem value={e} key={e}>
+                    {EVENT_TYPE_TITLE[e]}
+                  </MenuItem>
+                ))}
             </Select>
           </Grid>
         </Grid>

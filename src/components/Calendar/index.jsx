@@ -86,6 +86,15 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
           disableDblClick
           useDetailPopup
           height={'calc(100vh - 214px)'}
+          template={{
+            time: function (schedule) {
+              return `${schedule.title}<br/>${moment(schedule.start.getTime()).format('HH:mm')} - ${moment(schedule.end.getTime()).format('HH:mm a')}`;
+            },
+          }}
+          theme={{
+            'week.timegridHalfHour.height': '70px',
+            'week.timegridOneHour.height': '140px'
+          }}
           calendars={Object.keys(EVENT_TYPE).map(eventType => ({
             id: eventType,
             name: EVENT_TYPE_TITLE[eventType],

@@ -32,7 +32,7 @@ export const deleteService = id => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           const objects = {
             data: []
           };
@@ -76,7 +76,7 @@ export const editService = (data, history) => {
     })
       .then(res => res.json())
       .then(svc => {
-        if (svc.status === 200 || svc.status === 201 || svc.success === true) {
+        if (svc.status === 200 || svc.status === 201 || svc.success) {
           let serviceCached = localStorage.getItem('serviceCached');
           if (serviceCached !== null) {
             serviceCached = JSON.parse(serviceCached);
@@ -309,7 +309,7 @@ export const createService = (data, history) => {
     })
       .then(res => res.json())
       .then(svc => {
-        if (svc.status === 200 || svc.status === 201 || svc.success === true) {
+        if (svc.status === 200 || svc.status === 201 || svc.success) {
           dispatch(createServiceSuccess(svc.object));
           let serviceCached = localStorage.getItem('serviceCached');
           if (serviceCached !== null) {

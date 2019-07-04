@@ -21,7 +21,7 @@ class ResendCodeButton extends PureComponent {
     if (countDownResendCode === 0) {
       const { email, cbAfterResend, verifyResendUser } = this.props;
       verifyResendUser({ email }, response => {
-        if (response.status !== 200) {
+        if (response.status !== 200 || !response.data.success) {
           SweetAlert.error(response.data.message, { effect: 'bouncyflip' });
         }
         cbAfterResend();

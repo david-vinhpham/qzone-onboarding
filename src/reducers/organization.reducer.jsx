@@ -1,10 +1,6 @@
 import { organization } from '../constants/Organization.constants';
 
 const initialState = {
-  businessCategories: [],
-  fetchBusinessCategoriesError: null,
-  fetchBusinessCategoriesLoading: false,
-
   organizations: [],
   fetchOrganizationsLoading: null,
   fetchOrganizationsError: false,
@@ -22,21 +18,6 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case organization.FETCH_BUSINESS_CATEGORIES_LOADING:
-      return { ...state, fetchBusinessCategoriesLoading: true };
-    case organization.FETCH_BUSINESSES_CATEGORIES_SUCCESS:
-      return {
-        ...state,
-        businessCategories: action.payload.data,
-        fetchBusinessCategoriesLoading: false
-      };
-    case organization.FETCH_BUSINESSES_CATEGORIES_FAILURE:
-      return {
-        ...state,
-        fetchBusinessCategoriesError: action.payload.err,
-        fetchBusinessCategoriesLoading: false
-      };
-
     case organization.CREATE_ORGANIZATION_LOADING:
       return { ...state, createOrganizationLoading: true };
     case organization.CREATE_ORGANIZATION_SUCCESS:

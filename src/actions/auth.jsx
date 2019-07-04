@@ -125,7 +125,7 @@ export const resetPassword = values => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           dispatch({
             type: auth.RESET_PASSWORD_SUCCESS,
             payload: data
@@ -194,7 +194,7 @@ export const changePassword = (values, history) => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           dispatch({
             type: auth.CHANGE_PASSWORD_SUCCESS,
             payload: data
@@ -248,7 +248,7 @@ export function editProfile(values) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           localStorage.setItem('user', JSON.stringify(data));
           dispatch(editUserSuccess(data));
         } else {
@@ -290,7 +290,7 @@ export function fetchUser(id) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           dispatch(fetchUserSuccess(data));
         } else {
           dispatch(fetchUserFailure(data));

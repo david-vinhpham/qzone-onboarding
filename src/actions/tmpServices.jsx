@@ -28,7 +28,7 @@ export const deleteTmpService = eventId => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success === true) {
+        if (data.status === 200 || data.status === 201 || data.success) {
           const objects = {
             data: []
           };
@@ -66,7 +66,7 @@ export const fetchTmpServices = businessId => dispatch => {
   dispatch(setTmpServicesLoading(true));
   axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_BUSINESS_ID}${businessId}`)
     .then(resp => {
-      if(resp && resp.status === 200) {
+      if(resp && resp.status === 200 && resp.data.success) {
         dispatch(setTmpServices(resp.data.objects));
       }
     })
@@ -79,7 +79,7 @@ export const editTmpService = payload => dispatch => {
   dispatch(setTmpServicesLoading(true));
   axios.put(`${API_ROOT}${URL.NEW_TMP_SERVICE}`, payload)
   .then(resp => {
-    if(resp && resp.status === 200) {
+    if(resp && resp.status === 200 && resp.data.success) {
       dispatch(setTmpService(resp.data.object));
     }
   })

@@ -19,8 +19,8 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import Accordion from "components/Accordion/Accordion.jsx";
 import PhoneInput from 'react-phone-number-input'
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
-import { fetchBusinessCategories, createOrganization } from "../../actions/organization.jsx"
-
+import { createOrganization } from "../../actions/organization.jsx"
+import { fetchBusinessCategories } from "../../actions/businessCategories";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/core";
@@ -100,10 +100,6 @@ class OrganizationCreate extends React.Component {
 
   render() {
     const { classes, businessCategories, createOrganizationError, createOrganizationLoading } = this.props;
-    let categoryOptions = [];
-    if (businessCategories && businessCategories.objects) {
-      categoryOptions = businessCategories.objects;
-    }
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     if (createOrganizationLoading) {
       return < BeatLoader
@@ -278,7 +274,7 @@ class OrganizationCreate extends React.Component {
                                 onChange={handleChange("businessCategoryId")}
                                 name="businessCategoryId"
                               >
-                                {categoryOptions.map(business => (
+                                {businessCategories.map(business => (
                                   <MenuItem key={business.id} value={business.id}>
                                     {business.name}
                                   </MenuItem>
@@ -659,9 +655,8 @@ OrganizationCreate.propTypes = {
 const mapsStateToProp = (state) => ({
   userDetails: state.user.userDetails,
   email: state.user.email,
-  businessCategories: state.organization.businessCategories,
-  fetchBusinessCategoriesLoading: state.organization.fetchBusinessCategoriesLoading,
-  fetchBusinessCategoriesError: state.organization.fetchBusinessCategoriesError,
+  businessCategories: state.businessCategory.businessCategories,
+  fetchBusinessCategoriesLoading: state.businessCategory.fetchBusinessCategoriesLoading,
   createOrganizationError: state.organization.createOrganizationError,
   organization: state.organization.organization,
   imageError: state.image.imageError,
