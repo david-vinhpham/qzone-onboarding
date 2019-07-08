@@ -7,13 +7,6 @@ export const editServiceLoading = () => {
   };
 };
 
-export const editServiceSuccess = data => {
-  return {
-    type: service.EDIT_SERVICE_SUCCESS,
-    payload: { data }
-  };
-};
-
 export const editServiceFailure = error => {
   return {
     type: service.EDIT_SERVICE_FAILURE,
@@ -201,67 +194,10 @@ export const fetchServicesFailure = error => {
   };
 };
 
-export const fetchServicesByOrgId = orgId => {
-  return dispatch => {
-    dispatch(fetchServicesLoading());
-    fetch(API_ROOT + URL.FETCH_SERVICES + orgId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        dispatch(fetchServicesSuccess(data.objects));
-      })
-      .catch(err => {
-        dispatch(fetchServicesFailure(err));
-      });
-  };
-};
-
 export const fetchServicesOptionByOrgId = orgId => {
   return dispatch => {
     dispatch(fetchServicesLoading());
     fetch(API_ROOT + URL.FETCH_SERVICES_OPTION + orgId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        dispatch(fetchServicesSuccess(data.objects));
-      })
-      .catch(err => {
-        dispatch(fetchServicesFailure(err));
-      });
-  };
-};
-
-export const findServiceOptionByBusinessAdminId = businessAdminId => {
-  return dispatch => {
-    dispatch(fetchServicesLoading());
-    fetch(API_ROOT + URL.FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID + businessAdminId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        dispatch(fetchServicesSuccess(data.objects));
-      })
-      .catch(err => {
-        dispatch(fetchServicesFailure(err));
-      });
-  };
-};
-
-export const fetchServicesByBusinessAdminId = businessAdminId => {
-  return dispatch => {
-    dispatch(fetchServicesLoading());
-    fetch(API_ROOT + URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -294,6 +230,25 @@ export const createServiceFailure = error => {
   return {
     type: service.CREATE_SERVICE_FAILURE,
     payload: { error }
+  };
+};
+
+export const fetchServicesByBusinessAdminId = businessAdminId => {
+  return dispatch => {
+    dispatch(fetchServicesLoading());
+    fetch(API_ROOT + URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch(fetchServicesSuccess(data.objects));
+      })
+      .catch(err => {
+        dispatch(fetchServicesFailure(err));
+      });
   };
 };
 

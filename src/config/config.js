@@ -12,10 +12,6 @@ export const URL = {
 
   FETCH_SERVICES_BY_BUSINESS_ADMIN_ID: 'services-by-business-admin-id/',
   FETCH_SERVICES_BY_ORG_ID: 'services-by-org-id/',
-  SERVICE_PROVIDER: 'service-providers',
-  FETCH_SERVICE_PROVIDER_BY_ID: 'service-providers/',
-  FETCH_SERVICE_PROVIDERS_BY_SERVICE_ID: 'service-providers-by-serviceId/',
-  FETCH_SERVICE_PROVIDERS_BY_BUSINESS_ADMIN_ID: 'service-providers-by-business-admin-id/',
 
   FETCH_SERVICES: 'services-by-org-id/',
   FETCH_SERVICES_OPTION: 'services-option-by-org-id/',
@@ -33,7 +29,7 @@ export const URL = {
   RESET_PASSWORD: 'users/reset-password',
   CHANGE_PASSWORD: 'users/change-password/',
   TIMEZONE: 'timezones',
-  TIMEZONE_OPTION: 'timezones-option',
+  TIMEZONE_OPTIONS: 'timezones-option',
   FETCH_PROVIDERS_OPTION_BY_ORG_ID: 'providers-by-org-id/',
   FETCH_PROVIDERS_BY_ORG_ID: 'providers-option-by-org-id/',
   FETCH_PROVIDERS_OPTION_BY_SERVICE_ID: 'providers-option-by-service-id/',

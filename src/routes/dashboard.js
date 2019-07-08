@@ -31,9 +31,6 @@ import RegisterPage from '../views/Auth/RegisterPage';
 import EmailTemplates from '../views/EmailTemplates/EmailTemplates';
 import EditEmailTemplate from '../views/EmailTemplates/EditEmailTemplate';
 import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
-import ServiceProviderList from '../views/ServiceProviderAssignment/ServiceProviderList';
-import ServiceProviderEdit from '../views/ServiceProviderAssignment/ServiceProviderEdit';
-import ServiceProviderCreate from '../views/ServiceProviderAssignment/ServiceProviderCreate';
 import TmpServicesList from '../views/TmpServices/TmpServicesList';
 import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesList';
 import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
@@ -149,24 +146,6 @@ export const otherRoutes = [
     name: 'Service Edit',
     icon: BusinessCenter,
     component: ServiceEdit
-  },
-  {
-    path: '/service-provider/list',
-    name: 'Assign Service Providers',
-    icon: BusinessCenter,
-    component: ServiceProviderList
-  },
-  {
-    path: '/service-provider/create',
-    name: 'Service Provider Create',
-    icon: BusinessCenter,
-    component: ServiceProviderCreate
-  },
-  {
-    path: '/service-provider/edit/:id',
-    name: 'Service Provider Edit',
-    icon: BusinessCenter,
-    component: ServiceProviderEdit
   },
   {
     path: '/administration',

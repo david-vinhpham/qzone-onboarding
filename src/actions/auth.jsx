@@ -165,7 +165,6 @@ export function loginUser(values, history) {
             .then(user => {
               dispatch(registerUserSuccess(user.object));
               localStorage.setItem('user', JSON.stringify(user.object));
-              localStorage.removeItem('serviceProvider');
               localStorage.removeItem('tmpServices');
               localStorage.removeItem('serviceCached');
               localStorage.removeItem('specialEvents');

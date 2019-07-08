@@ -24,7 +24,9 @@ import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Search from "@material-ui/icons/Search";
 import AddEventDialog from "views/Calendar/AddEventDialog";
-import { fetchProvidersByBusinessId, fetchTimezoneOptions, fetchServiceOptions, fetchGeoLocationOptions, createNewEvent } from "actions/calendar";
+import { fetchProvidersByBusinessId, fetchGeoLocationOptions, createNewEvent } from "actions/calendar";
+import { fetchTimezoneOptions } from "../../actions/timezoneOptions";
+import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
 import { defaultDateTimeFormat } from "constants.js";
@@ -77,7 +79,7 @@ class TmpServicesList extends PureComponent {
       this.props.fetchTimezoneOptions();
     }
     if (this.props.serviceOptions.length === 0) {
-      this.props.fetchServiceOptions(this.businessId);
+      this.props.fetchServiceOptionsByBusinessAdminId(this.businessId);
     }
     if (this.props.geoOptions.length === 0) {
       this.props.fetchGeoLocationOptions();
@@ -275,7 +277,7 @@ class TmpServicesList extends PureComponent {
     }
     data = (
       <Paper>
-        {tmpServiceError !== null && tmpServiceError.length > 0  ? (<div className="alert alert-danger">{tmpServiceError}</div>) : null}
+        {tmpServiceError !== null && tmpServiceError.length > 0 ? (<div className="alert alert-danger">{tmpServiceError}</div>) : null}
         <Table aria-labelledby="tmpServicesList">
           <TableHead>
             <TableRow>
@@ -430,7 +432,7 @@ TmpServicesList.propTypes = {
   providers: PropTypes.arrayOf(providerType).isRequired,
   fetchProvidersByBusinessId: PropTypes.func.isRequired,
   fetchTimezoneOptions: PropTypes.func.isRequired,
-  fetchServiceOptions: PropTypes.func.isRequired,
+  fetchServiceOptionsByBusinessAdminId: PropTypes.func.isRequired,
   editTmpService: PropTypes.func.isRequired,
   fetchGeoLocationOptions: PropTypes.func.isRequired,
   setTmpServices: PropTypes.func.isRequired,
@@ -439,7 +441,7 @@ TmpServicesList.propTypes = {
 
 TmpServicesList.defaultProps = {
   tmpServiceError: null,
-}
+};
 
 const mapStateToProps = state => ({
   tmpServices: state.tmpServices.list,
@@ -447,8 +449,8 @@ const mapStateToProps = state => ({
   delTmpServiceLoading: state.tmpServices.delTmpServiceLoading,
   tmpServiceError: state.tmpServices.tmpServiceError,
   providers: state.calendarManage.providers,
-  tzOptions: state.calendarManage.tzOptions,
-  serviceOptions: state.calendarManage.serviceOptions,
+  tzOptions: state.timezoneOptions.tzOptions,
+  serviceOptions: state.serviceOptions.serviceOptions,
   geoOptions: state.calendarManage.geoOptions
 });
 
@@ -457,7 +459,7 @@ const mapDispatchToProps = {
   deleteTmpService,
   fetchProvidersByBusinessId,
   fetchTimezoneOptions,
-  fetchServiceOptions,
+  fetchServiceOptionsByBusinessAdminId,
   editTmpService,
   fetchGeoLocationOptions,
   setTmpServices,

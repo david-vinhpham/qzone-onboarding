@@ -129,7 +129,7 @@ class AddEventDialog extends PureComponent {
     if (values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1) {
       this.setState({ tmpServiceStep: 2 });
       this.onChangeTmpServiceDateTime(setFieldValue, values)('fromTime')(values.addEventData.startTime);
-      this.onChangeTmpServiceDateTime(setFieldValue, values)('toTime')(values.addEventData.endTime);      
+      this.onChangeTmpServiceDateTime(setFieldValue, values)('toTime')(values.addEventData.endTime);
     } else {
       this.props.createNewEvent(values);
     }

@@ -108,8 +108,8 @@ ManageCalendar.propTypes = {
 const mapStateToProps = state => ({
   providers: state.calendarManage.providers,
   isLoading: state.calendarManage.isLoading,
-  tzOptions: state.calendarManage.tzOptions,
-  serviceOptions: state.calendarManage.serviceOptions
+  tzOptions: state.timezoneOptions.tzOptions,
+  serviceOptions: state.serviceOptions.serviceOptions
 });
 
 const mapDispatchToProps = dispatch => ({

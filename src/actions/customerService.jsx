@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_ROOT, URL } from 'config/config';
 import { customer_service } from '../constants/CustomerService.constants';
 import { boardMode, eventStatus } from '../constants';
+import { fetchServiceOptionsByBusinessAdminId } from '../actions/serviceOptions';
 
 const setVerifyBookingCodeLoading = payload => ({
   type: customer_service.VERIFY_BOOKING_CODE_LOADING,
@@ -104,23 +105,6 @@ export const fetchFlowBoard = (data) => dispatch => {
     })
     .finally(() => {
       dispatch(setFetchFlowBoardLoading(false));
-    });
-};
-
-export const setServiceOptionsByBusinessAdminIdSuccess = payload => ({
-  type: customer_service.FETCH_SERVICES_OPTIONS_BY_BUSINESS_ADMIN_ID_SUCCESS,
-  payload
-});
-
-export const fetchServiceOptionsByBusinessAdminId = businessAdminId => dispatch => {
-  return axios.get(`${API_ROOT}${URL.FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
-    .then(res => {
-      if (res && res.status === 200 && res.data.success) {
-        dispatch(setServiceOptionsByBusinessAdminIdSuccess(res.data.objects));
-      }
-      else if (res && res.status === 200 && !res.data.success) {
-        dispatch(setStatusFailure({ ...res.data }));
-      }
     });
 };
 

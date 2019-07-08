@@ -24,10 +24,10 @@ import {
   fetchFlowBoard,
   updateCustomerStatus,
   verifyBookingCode,
-  fetchServiceOptionsByBusinessAdminId,
   fetchProviderOptionsByBusinessAdminId,
   fetchProvidersAndServicesByBusinessAdminId
 } from "../../actions/customerService";
+import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import PropTypes from "prop-types";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import { defaultDateTimeFormat, eventStatus, boardMode } from "constants.js";
@@ -481,8 +481,8 @@ const mapStateToProps = state => ({
   isVerifyBookingCodeSuccess: state.customerService.isVerifyBookingCodeSuccess,
   boardData: state.customerService.boardData,
   isBoardLoading: state.customerService.isBoardLoading,
-  isFetchServiceOptionsByBusinessAdminIdSuccess: state.customerService.isFetchServiceOptionsByBusinessAdminIdSuccess,
-  serviceOptions: state.customerService.serviceOptions,
+  isFetchServiceOptionsByBusinessAdminIdSuccess: state.serviceOptions.isFetchServiceOptionsByBusinessAdminIdSuccess,
+  serviceOptions: state.serviceOptions.serviceOptions,
   isFetchProviderOptionsByBusinessAdminIdSuccess: state.customerService.isFetchProviderOptionsByBusinessAdminIdSuccess,
   providerOptions: state.customerService.providerOptions,
 });
