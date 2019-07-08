@@ -14,7 +14,8 @@ import CardText from '../../components/Card/CardText.jsx';
 import CardBody from '../../components/Card/CardBody.jsx';
 import CardFooter from '../../components/Card/CardFooter.jsx';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
-import { createProvider, fetchTimezonesOption } from '../../actions/provider';
+import { createProvider } from '../../actions/provider';
+import { fetchTimezoneOptions } from '../../actions/timezoneOptions';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -71,7 +72,7 @@ class ProviderCreate extends React.Component {
     };
     this.changeCheckbox = this.changeCheckbox.bind(this);
     this.doubleClick = this.doubleClick.bind(this);
-    this.handleTimeZone = this.handleTimeZone.bind(this);
+    this.handleTimezone = this.handleTimezone.bind(this);
     this.handleOrgChange = this.handleOrgChange.bind(this);
   }
 
@@ -79,7 +80,7 @@ class ProviderCreate extends React.Component {
     this.setState({ organizationOption: selectedOption });
   }
 
-  handleTimeZone(selectedOption) {
+  handleTimezone(selectedOption) {
     this.setState({ timezoneOption: selectedOption });
   }
 
@@ -95,7 +96,7 @@ class ProviderCreate extends React.Component {
 
   componentDidMount() {
     localStorage.removeItem('createProvider');
-    this.props.fetchTimezonesOption();
+    this.props.fetchTimezoneOptions();
     const userSub = localStorage.getItem('userSub');
     if(userSub) {
       this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
@@ -168,11 +169,7 @@ class ProviderCreate extends React.Component {
       createProviderError
     } = this.props;
     const { timezoneOption, organizationOption } = this.state;
-    let timeZoneOptions = [];
     let organizationOptions = [];
-    if (timezones.length > 0) {
-      timeZoneOptions = timezones;
-    }
     if (organizations.length > 0) {
       organizationOptions = organizations;
     }
@@ -264,9 +261,9 @@ class ProviderCreate extends React.Component {
                 <GridItem xs={12} sm={4}>
                   <FormControl fullWidth className={classes.selectFormControl}>
                     <Select
-                      options={timeZoneOptions}
+                      options={timezones}
                       value={timezoneOption}
-                      onChange={this.handleTimeZone}
+                      onChange={this.handleTimezone}
                     />
                   </FormControl>
                 </GridItem>
@@ -456,7 +453,7 @@ const mapStateToProps = state => {
   return {
     imageError: state.image.imageError,
     imageLoading: state.image.imageLoading,
-    timezones: state.provider.timezones,
+    timezones: state.timezoneOptions.tzOptions,
     organizations: state.organization.organizations,
     createProviderLoading: state.provider.createProviderLoading,
     createProviderError: state.provider.createProviderError
@@ -466,7 +463,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     createProvider: (provider, history) => dispatch(createProvider(provider, history)),
-    fetchTimezonesOption: () => dispatch(fetchTimezonesOption()),
+    fetchTimezoneOptions: () => dispatch(fetchTimezoneOptions()),
     fetchOrganizationsOptionByBusinessAdminId: id =>
       dispatch(fetchOrganizationsOptionByBusinessAdminId(id))
   };

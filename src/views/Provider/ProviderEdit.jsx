@@ -17,7 +17,8 @@ import CardText from '../../components/Card/CardText.jsx';
 import CardBody from '../../components/Card/CardBody.jsx';
 import CardFooter from '../../components/Card/CardFooter.jsx';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
-import { editProvider, fetchProvider, fetchTimezonesOption } from '../../actions/provider';
+import { editProvider, fetchProvider} from '../../actions/provider';
+import { fetchTimezoneOptions } from '../../actions/timezoneOptions';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -59,12 +60,12 @@ class ProviderEdit extends React.Component {
     };
 
     this.doubleClick = this.doubleClick.bind(this);
-    this.handleTimeZone = this.handleTimeZone.bind(this);
+    this.handleTimezone = this.handleTimezone.bind(this);
     this.handleOrgChange = this.handleOrgChange.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchTimezonesOption();
+    this.props.fetchTimezoneOptions();
     const { id } = this.props.match.params;
     this.props.fetchProvider(id);
     const userSub = localStorage.getItem('userSub');
@@ -89,7 +90,7 @@ class ProviderEdit extends React.Component {
     this.setState({ organizationOption: selectedOption });
   }
 
-  handleTimeZone(selectedOption) {
+  handleTimezone(selectedOption) {
     this.setState({ timezoneOption: selectedOption });
   }
 
@@ -153,11 +154,7 @@ class ProviderEdit extends React.Component {
       editProviderError
     } = this.props;
     const { timezoneOption, organizationOption, provider } = this.state;
-    let timeZoneOptions = [];
     let organizationOptions = [];
-    if (timezones.length > 0) {
-      timeZoneOptions = timezones;
-    }
     if (organizations.length > 0) {
       organizationOptions = organizations;
     }
@@ -330,15 +327,15 @@ class ProviderEdit extends React.Component {
                 <GridItem xs={12} sm={4}>
                   <FormControl fullWidth className={classes.selectFormControl}>
                     <Select
-                      options={timeZoneOptions}
+                      options={timezones}
                       value={
                         timezoneOption === null
-                          ? timeZoneOptions.find(element => {
+                          ? timezones.find(element => {
                               return element.label === values.providerInformation.timeZoneId;
                             })
                           : timezoneOption
                       }
-                      onChange={this.handleOrgChange}
+                      onChange={this.handleTimezone}
                     />
                   </FormControl>
                 </GridItem>
@@ -434,7 +431,7 @@ const mapStateToProps = state => {
     imageError: state.image.imageError,
     imageLoading: state.image.imageLoading,
     provider: state.provider.provider,
-    timezones: state.provider.timezones,
+    timezones: state.timezoneOptions.tzOptions,
     organizations: state.organization.organizations,
     fetchProviderLoading: state.provider.fetchProviderLoading,
     editProviderError: state.provider.editProviderError
@@ -445,7 +442,7 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchProvider: id => dispatch(fetchProvider(id)),
     editProvider: (provider, history) => dispatch(editProvider(provider, history)),
-    fetchTimezonesOption: () => dispatch(fetchTimezonesOption()),
+    fetchTimezoneOptions: () => dispatch(fetchTimezoneOptions()),
     fetchOrganizationsOptionByBusinessAdminId: id =>
       dispatch(fetchOrganizationsOptionByBusinessAdminId(id))
   };

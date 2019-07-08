@@ -3,11 +3,9 @@ import {
   FETCH_PROVIDER_BY_BUSINESS_ID,
   FETCH_EVENTS_BY_PROVIDERS,
   CALENDAR_LOADING,
-  FETCH_TIMEZONE_OPTIONS,
   CREATE_CALENDAR_EVENT,
   EVENT_TYPE_TITLE,
-  FETCH_GEO_OPTIONS,
-  FETCH_SERVICE_OPTIONS
+  FETCH_GEO_OPTIONS
 } from 'constants/Calendar.constants';
 
 const buildCalendarData = ({
@@ -32,9 +30,7 @@ const buildCalendarData = ({
 const initialState = {
   providers: [],
   calendarData: [],
-  tzOptions: [],
   geoOptions: [],
-  serviceOptions: [],
   isLoading: false
 };
 
@@ -74,10 +70,6 @@ const reducer = (state = initialState, action) => {
       return { ...state, geoOptions: action.geoOptions };
     case CALENDAR_LOADING:
       return { ...state, isLoading: action.isLoading };
-    case FETCH_TIMEZONE_OPTIONS.SUCCESS:
-      return { ...state, tzOptions: action.payload };
-    case FETCH_SERVICE_OPTIONS.SUCCESS:
-      return { ...state, serviceOptions: action.payload };
     default:
       return state;
   }

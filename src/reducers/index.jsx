@@ -8,14 +8,15 @@ import OrganizationReducer from './organization.reducer';
 import ServiceReducer from './service.reducer';
 import ImageUploadReducer from './imageUpload.reducer';
 import LocationReducer from './location.reducer';
-import ServiceProviderReducer from './serviceProvider.reducer';
 import calendarManage from './calendar.reducer';
 import tmpServicesReducer from './tmpServices.reducer';
 import customerServiceReducer from './customerService.reducer';
+import serviceOptionsReducer from './serviceOptions.reducer';
 import serviceCategoryReducer from './serviceCategory.reducer';
 import businessCategoryReducer from './businessCategory.reducer';
 import tmpServiceDetail from './tmpServiceDetail.reducer';
 import availabilitySlots from './availabilitySlots.reducer';
+import timezoneOptions from './timezoneOptions.reducer';
 import surveysReducer from './surveys';
 
 const rootReducer = combineReducers({
@@ -27,7 +28,6 @@ const rootReducer = combineReducers({
   service: ServiceReducer,
   image: ImageUploadReducer,
   location: LocationReducer,
-  serviceProvider: ServiceProviderReducer,
   calendarManage,
   tmpServices: tmpServicesReducer,
   serviceCategory: serviceCategoryReducer,
@@ -35,7 +35,9 @@ const rootReducer = combineReducers({
   tmpServiceDetail,
   availabilitySlots,
   customerService: customerServiceReducer,
+  serviceOptions: serviceOptionsReducer,
   surveys: surveysReducer,
+  timezoneOptions: timezoneOptions
 });
 
 export default rootReducer;

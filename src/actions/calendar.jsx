@@ -9,10 +9,10 @@ import {
   CREATE_CALENDAR_EVENT,
   EVENT_TYPE,
   FETCH_GEO_OPTIONS,
-  FETCH_TIMEZONE_OPTIONS,
-  FETCH_SERVICE_OPTIONS
 } from 'constants/Calendar.constants';
 import { tmp_service } from "../constants/TmpServices.constants";
+import { fetchTimezoneOptions } from './timezoneOptions';
+import { fetchServiceOptionsByBusinessAdminId } from "./serviceOptions";
 
 const calendarLoading = isLoading => ({
   type: CALENDAR_LOADING,
@@ -45,26 +45,6 @@ export const fetchGeoLocationOptions = () => dispatch => {
     .then(resp => {
       const data = get(resp, 'data.objects', []);
       dispatch(fetchGeoOptionsSuccess(data));
-    });
-}
-
-export const fetchServiceOptions = businessAdminId => dispatch => {
-  axios.get(`${API_ROOT}${URL.FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
-    .then(({ data }) => {
-      dispatch({
-        type: FETCH_SERVICE_OPTIONS.SUCCESS,
-        payload: data && data.objects ? data.objects : [],
-      });
-    });
-};
-
-export const fetchTimezoneOptions = () => dispatch => {
-  axios.get(`${API_ROOT}${URL.TIMEZONE_OPTION}`)
-    .then(({ data }) => {
-      dispatch({
-        type: FETCH_TIMEZONE_OPTIONS.SUCCESS,
-        payload: data && data.objects ? data.objects : []
-      });
     });
 };
 
@@ -147,7 +127,7 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
     .finally(() => {
       dispatch(calendarLoading(false));
       fetchGeoLocationOptions()(dispatch);
-      fetchServiceOptions(businessId)(dispatch);
+      fetchServiceOptionsByBusinessAdminId(businessId)(dispatch);
       fetchTimezoneOptions()(dispatch);
     });
 };
