@@ -88,7 +88,7 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
           height={'calc(100vh - 214px)'}
           template={{
             time(schedule) {
-              return `${schedule.title}<br/>custname: ${schedule.raw}<br/>${moment(schedule.start.getTime()).format('HH:mm')} - ${moment(schedule.end.getTime()).format('HH:mm a')}`;
+              return `${schedule.title}<br/>${schedule.raw}<br/>${moment(schedule.start.getTime()).format('HH:mm')} - ${moment(schedule.end.getTime()).format('HH:mm a')}`;
             }
           }}
           theme={{
