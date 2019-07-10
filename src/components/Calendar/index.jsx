@@ -87,9 +87,9 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
           useDetailPopup
           height={'calc(100vh - 214px)'}
           template={{
-            time: function (schedule) {
-              return `${schedule.title}<br/>${moment(schedule.start.getTime()).format('HH:mm')} - ${moment(schedule.end.getTime()).format('HH:mm a')}`;
-            },
+            time(schedule) {
+              return `${schedule.title}<br/>custname: ${schedule.raw}<br/>${moment(schedule.start.getTime()).format('HH:mm')} - ${moment(schedule.end.getTime()).format('HH:mm a')}`;
+            }
           }}
           theme={{
             'week.timegridHalfHour.height': '70px',

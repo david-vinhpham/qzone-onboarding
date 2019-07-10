@@ -15,6 +15,7 @@ const buildCalendarData = ({
   type,
   providerId,
   title,
+  raw
 }) => ({
   id,
   body: description,
@@ -24,7 +25,8 @@ const buildCalendarData = ({
   calendarId: type,
   category: 'time',
   isReadOnly: true,
-  providerId
+  providerId,
+  raw
 });
 
 const initialState = {

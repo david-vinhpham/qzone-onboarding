@@ -99,6 +99,7 @@ export const fetchEventsByBusinessId = businessId => dispatch => {
             type: EVENT_TYPE.TMP_EVENTS,
             providerId: e.providerId,
             title: e.title,
+            raw: e.resourceId
           }));
 
           otherEvents.forEach(e => {
