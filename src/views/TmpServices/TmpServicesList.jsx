@@ -24,7 +24,8 @@ import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Search from "@material-ui/icons/Search";
 import AddEventDialog from "views/Calendar/AddEventDialog";
-import { fetchProvidersByBusinessId, fetchGeoLocationOptions, createNewEvent } from "actions/calendar";
+import { fetchProvidersByBusinessId, createNewEvent } from "actions/calendar";
+import { fetchGeoLocationOptions } from "../../actions/geoOptions";
 import { fetchTimezoneOptions } from "../../actions/timezoneOptions";
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
@@ -451,7 +452,7 @@ const mapStateToProps = state => ({
   providers: state.calendarManage.providers,
   tzOptions: state.timezoneOptions.tzOptions,
   serviceOptions: state.serviceOptions.serviceOptions,
-  geoOptions: state.calendarManage.geoOptions
+  geoOptions: state.geoOptions.geoOptions
 });
 
 const mapDispatchToProps = {

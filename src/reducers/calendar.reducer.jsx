@@ -4,8 +4,7 @@ import {
   FETCH_EVENTS_BY_PROVIDERS,
   CALENDAR_LOADING,
   CREATE_CALENDAR_EVENT,
-  EVENT_TYPE_TITLE,
-  FETCH_GEO_OPTIONS
+  EVENT_TYPE_TITLE
 } from 'constants/Calendar.constants';
 
 const buildCalendarData = ({
@@ -32,7 +31,6 @@ const buildCalendarData = ({
 const initialState = {
   providers: [],
   calendarData: [],
-  geoOptions: [],
   isLoading: false
 };
 
@@ -68,8 +66,6 @@ const reducer = (state = initialState, action) => {
         })
       };
     }
-    case FETCH_GEO_OPTIONS.SUCCESS:
-      return { ...state, geoOptions: action.geoOptions };
     case CALENDAR_LOADING:
       return { ...state, isLoading: action.isLoading };
     default:

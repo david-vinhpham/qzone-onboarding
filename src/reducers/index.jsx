@@ -18,6 +18,7 @@ import tmpServiceDetail from './tmpServiceDetail.reducer';
 import availabilitySlots from './availabilitySlots.reducer';
 import timezoneOptions from './timezoneOptions.reducer';
 import surveysReducer from './surveys';
+import geoOptions from './geoOptions.reducer';
 
 const rootReducer = combineReducers({
   common: commonReducer,
@@ -37,7 +38,8 @@ const rootReducer = combineReducers({
   customerService: customerServiceReducer,
   serviceOptions: serviceOptionsReducer,
   surveys: surveysReducer,
-  timezoneOptions: timezoneOptions
+  timezoneOptions,
+  geoOptions
 });
 
 export default rootReducer;
