@@ -167,9 +167,8 @@ export const createNewEvent = newEvent => dispatch => {
               const listTmpServices = JSON.parse(tmpServices);
               listTmpServices.push(data);
               localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
-              console.log('listTmpServices {}', listTmpServices.length)
               dispatch({
-                type: tmp_service.SET_TMP_SERVICE,
+                type: tmp_service.FETCH_TMP_SERVICES_SUCCESS,
                 payload: listTmpServices
               });
             }
