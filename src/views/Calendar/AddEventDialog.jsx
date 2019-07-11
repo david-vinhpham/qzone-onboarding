@@ -350,4 +350,4 @@ AddEventDialog.defaultProps = {
   isProviderReadOnly: false
 };
 
-export default connect(state => ({ geoOptions: state.calendarManage.geoOptions }))(AddEventDialog);
+export default connect(state => ({ geoOptions: state.geoOptions.geoOptions }))(AddEventDialog);

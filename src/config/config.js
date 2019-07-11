@@ -20,9 +20,8 @@ export const URL = {
   FETCH_SERVICE_CATEGORIES: 'service-categories',
   FETCH_SERVICE_BY_ID: 'services/',
 
-  LOCATION: 'geo-locations',
-  LOCATIONS_OPTION: 'geo-locations-option',
-  FETCH_LOCATION: 'geo-locations/',
+  GEO_LOCATIONS: 'geo-locations',
+  GEO_LOCATION_OPTIONS: 'geo-locations-option',
 
   USER: 'users',
   AWS_USER: 'aws-users',
@@ -46,7 +45,6 @@ export const URL = {
   NEW_NORMAL_EVENT: 'normal-events',
   NEW_TMP_SERVICE: 'temporary-services',
   NEW_APPOINTMENTS_CUSTOMER_EVENT: 'appointment-customer-events',
-  GET_GEO_LOCATION_OPTIONS: 'geo-locations-option',
 
   FIND_TMP_SERVICES_BY_BUSINESS_ID: 'find-temporary-services-by-business-admin-id/',
   FIND_TMP_SERVICE_DETAIL_BY_TMP_SERVICE_ID: 'temporary-services/',

@@ -10,6 +10,7 @@ import { Add } from '@material-ui/icons';
 import Calendar from 'components/Calendar';
 import { providerType } from 'types/global';
 import styles from './CalendarV2.module.scss';
+import { fetchEventsByProviderId } from 'actions/calendar';
 
 class ManageCalendar extends React.PureComponent {
   constructor(props) {
@@ -19,6 +20,7 @@ class ManageCalendar extends React.PureComponent {
 
   onSelectProvider = ({ target: { value } }) => {
     this.setState({ selectedProvider: value });
+    if (value !== 'none') { this.props.fetchEventsByProviderId(value.id); }
   }
 
   rightCustomHeader = () => (
@@ -56,11 +58,10 @@ class ManageCalendar extends React.PureComponent {
   render() {
     const { calendarData } = this.props;
     const { selectedProvider } = this.state;
-    const events = calendarData.filter(e => e.providerId === selectedProvider.id);
 
     return (
       <Calendar
-        events={events}
+        events={selectedProvider === 'none' ? [] : calendarData}
         onClickNewEvent={this.onClickNewEvent}
         rightCustomHeader={this.rightCustomHeader}
       />
@@ -72,10 +73,11 @@ ManageCalendar.propTypes = {
   providers: arrayOf(providerType).isRequired,
   calendarData: arrayOf(any).isRequired,
   onClickNewEvent: func.isRequired,
+  fetchEventsByProviderId: func.isRequired
 };
 
 const mapStateToProps = state => ({
   calendarData: state.calendarManage.calendarData
 });
 
-export default connect(mapStateToProps)(ManageCalendar);
+export default connect(mapStateToProps, { fetchEventsByProviderId })(ManageCalendar);

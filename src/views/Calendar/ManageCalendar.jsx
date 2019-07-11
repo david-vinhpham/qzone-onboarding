@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 import moment from 'moment-timezone';
 
-import { fetchEventsByBusinessId, createNewEvent } from 'actions/calendar';
+import { createNewEvent, fetchProvidersByBusinessId } from 'actions/calendar';
 import {
   EVENT_LEVEL,
   EVENT_TYPE,
@@ -14,6 +14,9 @@ import Calendar from './CalendarV2';
 import AddEventDialog from './AddEventDialog';
 import CalendarLoading from './CalendarLoading';
 import { createNewEventHelper } from './helpers';
+import { fetchGeoLocationOptions } from 'actions/geoOptions';
+import { fetchServiceOptionsByBusinessAdminId } from 'actions/serviceOptions';
+import { fetchTimezoneOptions } from 'actions/timezoneOptions';
 
 class ManageCalendar extends React.PureComponent {
   constructor(props) {
@@ -36,7 +39,10 @@ class ManageCalendar extends React.PureComponent {
   componentDidMount() {
     const userId = localStorage.getItem('userSub');
     if (userId) {
-      this.props.fetchEventsByBusinessId(userId);
+      this.props.fetchProvidersByBusinessId(userId);
+      this.props.fetchServiceOptionsByBusinessAdminId(userId);
+      this.props.fetchGeoLocationOptions();
+      this.props.fetchTimezoneOptions();
     }
   }
 
@@ -99,10 +105,13 @@ class ManageCalendar extends React.PureComponent {
 
 ManageCalendar.propTypes = {
   providers: arrayOf(providerType).isRequired,
-  fetchEventsByBusinessId: func.isRequired,
+  fetchProvidersByBusinessId: func.isRequired,
   createNewEvent: func.isRequired,
   tzOptions: arrayOf(optionType).isRequired,
-  serviceOptions: arrayOf(optionType).isRequired
+  serviceOptions: arrayOf(optionType).isRequired,
+  fetchGeoLocationOptions: func.isRequired,
+  fetchServiceOptionsByBusinessAdminId: func.isRequired,
+  fetchTimezoneOptions: func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -112,10 +121,13 @@ const mapStateToProps = state => ({
   serviceOptions: state.serviceOptions.serviceOptions
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchEventsByBusinessId: businessId => dispatch(fetchEventsByBusinessId(businessId)),
-  createNewEvent: newEvent => dispatch(createNewEvent(newEvent)),
-});
+const mapDispatchToProps = {
+  createNewEvent,
+  fetchGeoLocationOptions,
+  fetchServiceOptionsByBusinessAdminId,
+  fetchTimezoneOptions,
+  fetchProvidersByBusinessId,
+};
 
 export default connect(
   mapStateToProps,

@@ -4,32 +4,7 @@ import { API_ROOT, URL } from '../config/config';
 export const fetchLocations = () => {
   return dispatch => {
     dispatch({ type: location.FETCH_LOCATIONS_LOADING });
-    fetch(API_ROOT + URL.LOCATION, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        dispatch({
-          type: location.FETCH_LOCATIONS_SUCCESS,
-          payload: data.objects
-        });
-      })
-      .catch(err => {
-        dispatch({
-          type: location.FETCH_LOCATIONS_FAILURE,
-          payload: err
-        });
-      });
-  };
-};
-
-export const fetchLocationsOption = () => {
-  return dispatch => {
-    dispatch({ type: location.FETCH_LOCATIONS_LOADING });
-    fetch(API_ROOT + URL.LOCATIONS_OPTION, {
+    fetch(API_ROOT + URL.GEO_LOCATIONS, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -54,7 +29,7 @@ export const fetchLocationsOption = () => {
 export const delLocation = id => {
   return dispatch => {
     dispatch({ type: location.DEL_LOCATION_LOADING });
-    fetch(`${API_ROOT + URL.LOCATION}/${id}`, {
+    fetch(`${API_ROOT + URL.GEO_LOCATIONS}/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -80,7 +55,7 @@ export const delLocation = id => {
 export const fetchLocation = id => {
   return dispatch => {
     dispatch({ type: location.FETCH_LOCATION_LOADING });
-    fetch(`${API_ROOT + URL.LOCATION}/${id}`, {
+    fetch(`${API_ROOT + URL.GEO_LOCATIONS}/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -105,7 +80,7 @@ export const fetchLocation = id => {
 export const createLocation = (values, history) => {
   return dispatch => {
     dispatch({ type: location.CREATE_LOCATION_LOADING });
-    fetch(API_ROOT + URL.LOCATION, {
+    fetch(API_ROOT + URL.GEO_LOCATIONS, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -132,7 +107,7 @@ export const createLocation = (values, history) => {
 export const editLocation = (values, history) => {
   return dispatch => {
     dispatch({ type: location.EDIT_LOCATION_LOADING });
-    fetch(API_ROOT + URL.LOCATION, {
+    fetch(API_ROOT + URL.GEO_LOCATIONS, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
