@@ -9,6 +9,7 @@ import ReactResizeDetector from 'react-resize-detector';
 import 'tui-calendar/dist/tui-calendar.css';
 import { EVENT_TYPE, EVENT_TYPE_TITLE, EVENT_BG_COLOR } from 'constants/Calendar.constants';
 import styles from './index.module.scss';
+import truncateText from 'utils/truncateText';
 
 const localTimezone = moment.tz.guess();
 
@@ -88,7 +89,15 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
           height={'calc(100vh - 214px)'}
           template={{
             time(schedule) {
-              return `${schedule.title}<br/>${schedule.raw}<br/>${moment(schedule.start.getTime()).format('HH:mm')} - ${moment(schedule.end.getTime()).format('HH:mm a')}`;
+              return `${
+                truncateText(schedule.title)
+                }<br/>${
+                schedule.raw
+                }<br/>${
+                moment(schedule.start.getTime()).format('HH:mm')
+                } - ${
+                moment(schedule.end.getTime()).format('HH:mm a')
+                }`;
             }
           }}
           theme={{
