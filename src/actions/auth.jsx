@@ -1,7 +1,11 @@
+import React from 'react';
 import axios from "axios";
 import { Auth } from "aws-amplify";
 import { API_ROOT, URL } from "../config/config";
 import { auth } from "../constants/Auth.constants";
+import { eUserType } from "constants.js";
+import Alert from 'react-s-alert';
+import AlertMessage from 'components/Alert/Message';
 
 const clientId = '3ov1blo2eji4acnqfcv88tcidn';
 
@@ -146,6 +150,7 @@ export const resetPassword = values => {
   };
 };
 
+
 export function loginUser(values, history) {
   return dispatch => {
     dispatch(storeEmail(values.loginEmail));
@@ -162,13 +167,18 @@ export function loginUser(values, history) {
             }
           })
             .then(res => res.json())
-            .then(user => {
-              dispatch(registerUserSuccess(user.object));
-              localStorage.setItem('user', JSON.stringify(user.object));
-              localStorage.removeItem('tmpServices');
-              localStorage.removeItem('serviceCached');
-              localStorage.removeItem('specialEvents');
-              history.push('/dashboard');
+            .then(resp => {
+              const userDetail = resp.object;
+              if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
+                dispatch(registerUserSuccess(userDetail));
+                localStorage.setItem('user', JSON.stringify(userDetail));
+                localStorage.removeItem('tmpServices');
+                localStorage.removeItem('serviceCached');
+                history.push('/dashboard');
+              } else {
+                Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
+                dispatch(registerUserFailure('Unauthorized'));
+              }
             })
             .catch(err => {
               dispatch(registerUserFailure(err));
@@ -278,7 +288,8 @@ export function fetchUserFailure(error) {
     payload: error
   };
 }
-export function fetchUser(id) {
+
+export function fetchUser(id, history) {
   return dispatch => {
     dispatch(fetchUserLoading());
     fetch(`${API_ROOT + URL.USER}/${id}`, {
@@ -289,14 +300,24 @@ export function fetchUser(id) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success) {
-          dispatch(fetchUserSuccess(data));
+        const userDetail = data.object;
+        if (data.success) {
+          if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
+            dispatch(fetchUserSuccess(data));
+          } else {
+            Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
+            dispatch(fetchUserFailure('Unauthorized'));
+            history.push('/login');
+          }
         } else {
           dispatch(fetchUserFailure(data));
+          history.push('/login');
         }
+
       })
       .catch(err => {
         dispatch(fetchUserFailure(err));
+        history.push('/login');
       });
   }
 }
