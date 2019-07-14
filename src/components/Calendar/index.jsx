@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classnames from 'classnames';
 import { arrayOf, any, func } from 'prop-types';
 import TUICalendar from '@toast-ui/react-calendar';
 import { Button, Paper, Typography, Select, MenuItem } from '@material-ui/core';
@@ -64,7 +65,12 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
 
   return (
     <ReactResizeDetector handleWidth handleHeight onResize={onResize(calendarRef)}>
-      <Paper classes={{ root: styles.calendarWrapper }}>
+      <Paper classes={{
+        root: classnames(
+          styles.calendarWrapper,
+          { [styles.isDayCalendar]: calendarView === 'day' }
+        )
+      }}>
         <div className={styles.calendarHeader}>
           <div className={styles.calendarHeaderLeftItem}>
             <Typography display="inline" classes={{ root: styles.calendarTimezone }}>
