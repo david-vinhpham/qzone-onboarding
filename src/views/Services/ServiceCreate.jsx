@@ -41,8 +41,11 @@ const ServiceCreateSchema = Yup.object().shape({
         .required("this field is required"),
     duration: Yup.number()
         .min(1),
+    gapBetweenAppointments: Yup.number()
+        .min(1)
+        .max(600),
     numberOfParallelCustomer: Yup.number()
-        .min(1),
+    .min(1).max(999),
     bookingHorizon: Yup.number()
         .min(1)
         .max(1095)
@@ -60,7 +63,7 @@ class ServiceCreate extends React.Component {
 			bookingHorizon: 3,
 			description: "",
 			duration: 60,
-			gapBetweenBookings: 1,
+      gapBetweenAppointments: 1,
 			mode: "SCHEDULE",
 			numberOfParallelCustomer: 1,
 			serviceCategoryId: null,
@@ -151,7 +154,7 @@ class ServiceCreate extends React.Component {
                             bookingHorizon: this.state.bookingHorizon,
                             description: this.state.description,
                             duration: this.state.duration,
-                            gapBetweenBookings: this.state.gapBetweenBookings,
+                            gapBetweenAppointments: this.state.gapBetweenAppointments,
                             mode: this.state.mode,
                             serviceCategoryId: this.state.serviceCategoryId,
                             tags: this.state.tags,
@@ -442,14 +445,14 @@ class ServiceCreate extends React.Component {
                                             <GridContainer>
                                                 <GridItem xs={12} sm={3}>
                                                     <FormLabel className={classes.labelHorizontal}>
-                                                        Gap between Bookings
+                                                      Gap between Appointments
                                             </FormLabel>
                                                 </GridItem>
                                                 <GridItem xs={12} sm={4}>
                                                     <CustomInput
                                                         placeholder="in mins"
-                                                        id="gapBetweenBookings"
-                                                        name="gapBetweenBookings"
+                                                        id="gapBetweenAppointments"
+                                                        name="gapBetweenAppointments"
                                                         formControlProps={{
                                                             fullWidth: true
                                                         }}
@@ -457,10 +460,10 @@ class ServiceCreate extends React.Component {
                                                             type: "number",
                                                         }}
                                                         onChange={handleChange}
-                                                        value={values.gapBetweenBookings}
+                                                        value={values.gapBetweenAppointments}
                                                     />
-													 {errors.gapBetweenBookings && touched.gapBetweenBookings ? (
-                                                        <div style={{ color: "red" }}>{errors.gapBetweenBookings}</div>
+													 {errors.gapBetweenAppointments && touched.gapBetweenAppointments ? (
+                                                        <div style={{ color: "red" }}>{errors.gapBetweenAppointments}</div>
                                                     ) : null}
                                                 </GridItem>
                                             </GridContainer>
