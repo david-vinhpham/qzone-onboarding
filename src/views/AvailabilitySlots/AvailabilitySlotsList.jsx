@@ -87,6 +87,11 @@ class AvailabilitySlotsList extends PureComponent {
                   <br />
                   Time zone ({moment.tz(state.customerTimezoneId).zoneAbbr()})
                 </TableCell>
+                <TableCell className={classes.cellHeaderBold}>
+                  End time (DD/MM/YYYY)
+                  <br />
+                  Time zone ({moment.tz(state.customerTimezoneId).zoneAbbr()})
+                </TableCell>
                 <TableCell className={classes.cellHeaderBold}>Duration (minutes)</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Available slots</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Total slots</TableCell>
@@ -99,6 +104,7 @@ class AvailabilitySlotsList extends PureComponent {
                   <TableCell>{slot.providerName}</TableCell>
                   <TableCell>{state.serviceName}</TableCell>
                   <TableCell>{slot.startTime}</TableCell>
+                  <TableCell>{slot.endTime}</TableCell>
                   <TableCell>{slot.durationSec}</TableCell>
                   <TableCell>{slot.spotsOpen}</TableCell>
                   <TableCell>{slot.spotsTotal}</TableCell>
@@ -133,6 +139,10 @@ const mapStateToProps = (state, ownProps) => ({
     return {
       ...slot,
       providerName,
+      endTime: moment.tz(
+        slot.endSec * 1000,
+        ownProps.history.location.state.customerTimezoneId
+      ).format(defaultDateTimeFormat),
       startTime: moment.tz(
         slot.startSec * 1000,
         ownProps.history.location.state.customerTimezoneId

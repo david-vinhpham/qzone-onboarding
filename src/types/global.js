@@ -133,4 +133,5 @@ export const availabilitySlotType = PropTypes.shape({
   spotsOpen: PropTypes.number,
   spotsTotal: PropTypes.number,
   startSec: PropTypes.number,
+  endSec: PropTypes.number,
 });

@@ -51,7 +51,10 @@ const ServiceEditSchema = Yup.object().shape({
     .max(1500, 'Description too long')
     .required('this field is required'),
   duration: Yup.number().min(1),
-  numberOfParallelCustomer: Yup.number().min(1).max(30),
+  gapBetweenAppointments: Yup.number()
+    .min(1)
+    .max(600),
+  numberOfParallelCustomer: Yup.number().min(1).max(999),
   bookingHorizon: Yup.number()
     .min(1)
     .max(1095)
@@ -180,7 +183,7 @@ class ServiceEdit extends React.Component {
               bookingHorizon: this.state.data.bookingHorizon,
               description: this.state.data.description,
               duration: this.state.data.duration,
-              gapBetweenBookings: this.state.data.gapBetweenBookings,
+              gapBetweenAppointments: this.state.data.gapBetweenAppointments,
               mode: this.state.data.mode,
               serviceCategoryId: this.state.data.serviceCategoryId,
               organizationId: this.state.data.organizationId,
@@ -464,14 +467,14 @@ class ServiceEdit extends React.Component {
                         <GridContainer>
                           <GridItem xs={12} sm={3}>
                             <FormLabel className={classes.labelHorizontal}>
-                              Gap between Bookings
+                              Gap between Appointments
                             </FormLabel>
                           </GridItem>
                           <GridItem xs={12} sm={4}>
                             <CustomInput
                               placeholder="in mins"
-                              id="gapBetweenBookings"
-                              name="gapBetweenBookings"
+                              id="gapBetweenAppointments"
+                              name="gapBetweenAppointments"
                               formControlProps={{
                                 fullWidth: true
                               }}
@@ -479,10 +482,10 @@ class ServiceEdit extends React.Component {
                                 type: 'number'
                               }}
                               onChange={handleChange}
-                              value={values.gapBetweenBookings}
+                              value={values.gapBetweenAppointments}
                             />
-                            {errors.gapBetweenBookings && touched.gapBetweenBookings ? (
-                              <div style={{ color: 'red' }}>{errors.gapBetweenBookings}</div>
+                            {errors.gapBetweenAppointments && touched.gapBetweenAppointments ? (
+                              <div style={{ color: 'red' }}>{errors.gapBetweenAppointments}</div>
                             ) : null}
                           </GridItem>
                         </GridContainer>
