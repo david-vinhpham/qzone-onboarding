@@ -235,7 +235,7 @@ class TmpServicesList extends PureComponent {
         endTime,
         tmpService: {
           additionalInfo: '',
-          avgServiceTime: 30,
+          avgServiceTime: 0,
           breakTimeStart: startTime,
           breakTimeEnd: endTime,
           geoLocationId: this.props.geoOptions[0].value,
