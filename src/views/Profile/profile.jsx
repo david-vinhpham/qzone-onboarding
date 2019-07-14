@@ -26,15 +26,15 @@ class Profile extends React.Component {
         userType: props.user.userType,
         telephone: props.user.telephone,
         userStatus: props.user.userStatus,
-        streetAddress: props.user.address ===null || props.user.address === undefined ? ''
+        streetAddress: props.user.address === null || props.user.address === undefined ? ''
           : props.user.address.streetAddress === null ? '' : props.user.address.streetAddress,
-        city: props.user.address ===null || props.user.address === undefined ? ''
+        city: props.user.address === null || props.user.address === undefined ? ''
           : props.user.address.city === null ? '' : props.user.address.city,
-        state: props.user.address ===null || props.user.address === undefined ? ''
+        state: props.user.address === null || props.user.address === undefined ? ''
           : props.user.address.state === null ? '' : props.user.address.state,
-        postCode: props.user.address ===null || props.user.address === undefined ? ''
+        postCode: props.user.address === null || props.user.address === undefined ? ''
           : props.user.address.postCode === null ? '' : props.user.address.postCode,
-        country: props.user.address ===null || props.user.address === undefined ? ''
+        country: props.user.address === null || props.user.address === undefined ? ''
           : props.user.address.country === null ? '' : props.user.address.country,
         userSub: props.user.userSub,
         email: props.user.email,
@@ -49,22 +49,18 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    let userSub = localStorage.getItem('userSub');
-    if(userSub) {
-      this.props.fetchUser(userSub);
-    }
-
-    let account = {
-      email: '',
-      emailState: '',
-    };
-    this.setState({ id:userSub });
-    this.setState({ account: account});
+    this.setState({ id: localStorage.getItem('userSub') });
+    this.setState({
+      account: {
+        email: '',
+        emailState: '',
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps) {
     const { user: { userStatus } } = nextProps;
-    if ( nextProps.user.email !== '') {
+    if (nextProps.user.email !== '') {
       this.setState(prevState => ({
         openResetPasswordStatus: userStatus === eUserStatus.changePassword,
         id: nextProps.user.id,
@@ -77,15 +73,15 @@ class Profile extends React.Component {
           userType: nextProps.user.userType,
           telephone: nextProps.user.telephone,
           userStatus: nextProps.user.userStatus,
-          streetAddress: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+          streetAddress: nextProps.user.address === null || nextProps.user.address === undefined ? ''
             : nextProps.user.address.streetAddress === null ? '' : nextProps.user.address.streetAddress,
-          city: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+          city: nextProps.user.address === null || nextProps.user.address === undefined ? ''
             : nextProps.user.address.city === null ? '' : nextProps.user.address.city,
-          state: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+          state: nextProps.user.address === null || nextProps.user.address === undefined ? ''
             : nextProps.user.address.state === null ? '' : nextProps.user.address.state,
-          postCode: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+          postCode: nextProps.user.address === null || nextProps.user.address === undefined ? ''
             : nextProps.user.address.postCode === null ? '' : nextProps.user.address.postCode,
-          country: nextProps.user.address ===null || nextProps.user.address === undefined ? ''
+          country: nextProps.user.address === null || nextProps.user.address === undefined ? ''
             : nextProps.user.address.country === null ? '' : nextProps.user.address.country,
           userSub: nextProps.user.userSub,
         },
@@ -107,7 +103,7 @@ class Profile extends React.Component {
       personal: { ...personalInfo },
     } = this.state;
 
-    let address  = personalInfo.address;
+    let address = personalInfo.address;
     address.streetAddress = personalInfo.streetAddress;
     address.city = personalInfo.city;
     address.state = personalInfo.state;
@@ -131,7 +127,7 @@ class Profile extends React.Component {
   };
 
   change = (event, stateName, type) => {
-    if(event === undefined || event.target === undefined) {
+    if (event === undefined || event.target === undefined) {
       return;
     }
     const { value } = event.target;
@@ -167,7 +163,7 @@ class Profile extends React.Component {
       openResetPasswordStatus,
       id,
     } = this.state;
-    const { resetPassword: resetPasswordAction , editUser} = this.props;
+    const { resetPassword: resetPasswordAction, editUser } = this.props;
     return (
       <React.Fragment>
         <label> {editUser.id !== undefined && editUser.id !== null ? "Update user successfully" : ''} </label>
@@ -203,7 +199,7 @@ class Profile extends React.Component {
 
 const mapStateToProps = state => ({
   user: state.user.userDetails,
-  editUser:state.user.editUser,
+  editUser: state.user.editUser,
   isDefaultPwdChanged: state.user.isDefaultPwdChanged,
 });
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -12,6 +13,7 @@ import appStyle from '../assets/jss/material-dashboard-pro-react/layouts/dashboa
 import image from '../assets/img/sidebar-2.jpg';
 import logo from '../assets/img/logo-white.svg';
 import withAuth from "../hoc/withAuth";
+import { fetchUser } from 'actions/auth.jsx';
 
 const switchRoutes = (
   <Switch>
@@ -34,6 +36,11 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
+    const userId = localStorage.getItem('userSub');
+    if (userId && !this.props.userDetail.userType) {
+      this.props.fetchUser(userId, this.props.history);
+    }
+
     if (navigator.platform.indexOf('Win') > -1) {
       ps = new PerfectScrollbar(this.refs.mainPanel, {
         suppressScrollX: true,
@@ -106,8 +113,15 @@ class Dashboard extends React.Component {
     );
   }
 }
+
 Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  fetchUser: PropTypes.func.isRequired,
+  userDetail: PropTypes.object.isRequired,
 };
 
-export default withStyles(appStyle)(Dashboard);
+const mapStateToProps = state => ({
+  userDetail: state.user.userDetails,
+});
+
+export default withStyles(appStyle)(connect(mapStateToProps, { fetchUser })(Dashboard));
