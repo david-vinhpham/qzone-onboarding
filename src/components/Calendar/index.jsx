@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { arrayOf, any, func } from 'prop-types';
 import TUICalendar from '@toast-ui/react-calendar';
-import { Button, Paper, Typography } from '@material-ui/core';
+import { Button, Paper, Typography, Select, MenuItem } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import moment from 'moment-timezone';
 import ReactResizeDetector from 'react-resize-detector';
@@ -11,6 +11,12 @@ import { EVENT_TYPE, EVENT_TYPE_TITLE, EVENT_BG_COLOR } from 'constants/Calendar
 import styles from './index.module.scss';
 import truncateText from 'utils/truncateText';
 
+const calendarViewToMomentUnitMapping = {
+  week: 'w',
+  day: 'd',
+  month: 'M'
+};
+
 const localTimezone = moment.tz.guess();
 
 const onClickToday = (setViewDate, ref) => () => {
@@ -18,14 +24,22 @@ const onClickToday = (setViewDate, ref) => () => {
   setViewDate(moment().toDate());
 }
 
-const onClickNext = (setViewDate, ref) => () => {
-  ref.current.getInstance().next();
-  setViewDate(oldViewDate => moment(oldViewDate).add(7, 'day').toDate());
+const onClickNext = (viewDate, setViewDate, ref) => () => {
+  const calendarInstance = ref.current.getInstance();
+  calendarInstance.next();
+  setViewDate(moment(viewDate).add(
+    1,
+    calendarViewToMomentUnitMapping[calendarInstance.getViewName()]
+  ));
 }
 
-const onClickPrev = (setViewDate, ref) => () => {
-  ref.current.getInstance().prev();
-  setViewDate(oldViewDate => moment(oldViewDate).subtract(7, 'day').toDate());
+const onClickPrev = (viewDate, setViewDate, ref) => () => {
+  const calendarInstance = ref.current.getInstance();
+  calendarInstance.prev();
+  setViewDate(moment(viewDate).subtract(
+    1,
+    calendarViewToMomentUnitMapping[calendarInstance.getViewName()]
+  ));
 }
 
 const onChangeViewDate = (setViewDate, ref) => (value) => {
@@ -38,9 +52,15 @@ const onResize = (ref) => () => {
   ref.current.getInstance().render(true);
 }
 
+const onSelectCalendarView = (setCalendarView, ref) => ({ target: { value } }) => {
+  ref.current.getInstance().changeView(value);
+  setCalendarView(value);
+}
+
 const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
   const calendarRef = React.createRef();
   const [viewDate, setViewDate] = useState(new Date());
+  const [calendarView, setCalendarView] = useState('week');
 
   return (
     <ReactResizeDetector handleWidth handleHeight onResize={onResize(calendarRef)}>
@@ -50,6 +70,20 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
             <Typography display="inline" classes={{ root: styles.calendarTimezone }}>
               Time zone: {localTimezone}
             </Typography>
+            <Select
+              value={calendarView}
+              onChange={onSelectCalendarView(setCalendarView, calendarRef)}
+            >
+              <MenuItem value="week">
+                Week
+              </MenuItem>
+              <MenuItem value="day">
+                Day
+              </MenuItem>
+              <MenuItem value="month">
+                Month
+              </MenuItem>
+            </Select>
             <DatePicker
               value={viewDate}
               onChange={onChangeViewDate(setViewDate, calendarRef)}
@@ -64,14 +98,14 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
             <Button
               variant="outlined"
               color="primary"
-              onClick={onClickPrev(setViewDate, calendarRef)}
+              onClick={onClickPrev(viewDate, setViewDate, calendarRef)}
             >
               &lt;
           </Button>
             <Button
               variant="outlined"
               color="primary"
-              onClick={onClickNext(setViewDate, calendarRef)}
+              onClick={onClickNext(viewDate, setViewDate, calendarRef)}
             >
               &gt;
           </Button>
@@ -94,15 +128,16 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
                 }<br/>${
                 schedule.raw
                 }<br/>${
-                moment(schedule.start.getTime()).format('HH:mm')
+                moment(schedule.start.getTime()).format('hh:mm a')
                 } - ${
-                moment(schedule.end.getTime()).format('HH:mm a')
+                moment(schedule.end.getTime()).format('hh:mm a')
                 }`;
             }
           }}
           theme={{
             'week.timegridHalfHour.height': '70px',
-            'week.timegridOneHour.height': '140px'
+            'week.timegridOneHour.height': '140px',
+            'month.schedule.height': '70px',
           }}
           calendars={Object.keys(EVENT_TYPE).map(eventType => ({
             id: eventType,
