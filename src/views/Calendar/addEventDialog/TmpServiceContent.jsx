@@ -67,7 +67,7 @@ export default function TmpServiceContent({
           </Grid>
           <Grid item md={3}>
             <Typography variant="body2" display="inline" noWrap>
-              minutes
+              minutes (if set 0, will get it from service duration)
               </Typography>
           </Grid>
         </Grid>
