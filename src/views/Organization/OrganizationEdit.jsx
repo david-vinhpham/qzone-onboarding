@@ -290,7 +290,7 @@ class OrganizationEdit extends React.Component {
                                 <CustomInput
                                   id="name"
                                   inputProps={{
-                                    disabled: true,
+                                    disabled: false,
                                     placeholder: 'Name',
                                     type: 'text'
                                   }}
