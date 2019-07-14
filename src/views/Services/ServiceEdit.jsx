@@ -50,7 +50,7 @@ const ServiceEditSchema = Yup.object().shape({
     .min(50, 'Description too short')
     .max(1500, 'Description too long')
     .required('this field is required'),
-  duration: Yup.number().min(60),
+  duration: Yup.number().min(5),
   numberOfParallelCustomer: Yup.number().min(1).max(30),
   bookingHorizon: Yup.number()
     .min(3)

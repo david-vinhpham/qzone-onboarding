@@ -40,7 +40,7 @@ const ServiceCreateSchema = Yup.object().shape({
         .max(1500, "Description too long")
         .required("this field is required"),
     duration: Yup.number()
-        .min(60),
+        .min(5),
     numberOfParallelCustomer: Yup.number()
         .min(1),
     bookingHorizon: Yup.number()
