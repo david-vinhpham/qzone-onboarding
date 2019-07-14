@@ -24,3 +24,9 @@
     }
   }
 }
+
+.isDayCalendar {
+  :global .tui-full-calendar-floating-layer {
+    left: 0 !important;
+  }
+}
