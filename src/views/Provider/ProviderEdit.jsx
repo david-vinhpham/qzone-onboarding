@@ -28,10 +28,11 @@ import _ from "lodash";
 import ImageUpload from '../../components/CustomUpload/ImageUpload';
 
 const override = css`
-  display: block;
   margin: 0 auto;
   border-color: red;
-`;
+  width: 100%;
+  display: flex;
+  justify-content: center;`;
 
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -161,7 +162,7 @@ class ProviderEdit extends React.Component {
     if (fetchProviderLoading || !this.state.provider || this.state.provider.length === 0) {
       return (
         <BeatLoader
-          className={override}
+          css={override}
           sizeUnit="px"
           size={22}
           color="#e91e63"

@@ -26,9 +26,11 @@ import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import ImageUpload from "../../components/CustomUpload/ImageUpload"
 const override = css`
-  display: block;
   margin: 0 auto;
   border-color: red;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 const ProviderSchema = Yup.object().shape({
   email: Yup.string()
@@ -176,7 +178,7 @@ class ProviderCreate extends React.Component {
     if (createProviderLoading) {
       return (
         <BeatLoader
-          className={override}
+          css={override}
           sizeUnit="px"
           size={22}
           color="#e91e63"

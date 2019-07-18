@@ -33,9 +33,12 @@ import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper 
 import { defaultDateTimeFormat } from "constants.js";
 
 const override = css`
-  display: block;
   margin: 0 auto;
   border-color: red;
+  width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 class TmpServicesList extends PureComponent {
   constructor(props) {
@@ -268,7 +271,7 @@ class TmpServicesList extends PureComponent {
     if (isLoading) {
       return (
         <BeatLoader
-          className={override}
+          css={override}
           sizeUnit="px"
           size={22}
           color="#e91e63"
@@ -363,7 +366,7 @@ class TmpServicesList extends PureComponent {
             <Card>
               <CardHeader color="primary" icon>
                 <CardText color="rose">
-                  <h4 className={classes.cardTitle}>List temporary services</h4>
+                  <h4 className={classes.cardTitle}>Temporary Services</h4>
                 </CardText>
                 <div>
                   <CustomInput
@@ -391,7 +394,7 @@ class TmpServicesList extends PureComponent {
                   className={classes.buttonDisplay}
                   onClick={this.openAddDialog}
                 >
-                  New temporary service
+                  New Service
                 </Button>
               </CardHeader>
             </Card>

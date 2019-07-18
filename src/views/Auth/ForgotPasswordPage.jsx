@@ -22,9 +22,11 @@ import { changePassword } from '../../actions/auth';
 import verificationPageStyle from '../../assets/jss/material-dashboard-pro-react/views/verificationPageStyle';
 
 const override = css`
-  display: block;
   margin: 0 auto;
   border-color: red;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 class ForgotPasswordPage extends React.PureComponent {

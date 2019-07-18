@@ -22,9 +22,11 @@ import listPageStyle from "../../assets/jss/material-dashboard-pro-react/views/l
 import { fetchOrganizationsByBusinessAdminId } from "../../actions/organization";
 
 const override = css`
-    display: block;
     margin: 0 auto;
     border-color: red;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 `;
 
 class OrganizationList extends React.Component {

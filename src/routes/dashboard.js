@@ -205,26 +205,26 @@ export const otherRoutes = [
   },
   {
     path: '/tmp-services',
-    name: 'List temporary services',
-    short: 'List temporary services',
+    name: 'Temporary Services',
+    short: 'Temporary Services',
     component: TmpServicesList
   },
   {
     path: '/service-categories',
-    name: 'List service categories',
-    short: 'List service categories',
+    name: 'List Service Categories',
+    short: 'List Service Categories',
     component: ServiceCategoriesList
   },
   {
     path: '/business-categories',
-    name: 'List business categories',
-    short: 'List business categories',
+    name: 'List Business Categories',
+    short: 'List Business Categories',
     component: BusinessCategoriesList
   },
   {
     path: '/tmp-service/detail/:id',
-    name: 'Temporary service detail',
-    short: 'Temporary service detail',
+    name: 'Temporary Service Detail',
+    short: 'Temporary Service Detail',
     component: TmpServicesDetail
   },
   {

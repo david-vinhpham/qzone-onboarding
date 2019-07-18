@@ -27,6 +27,15 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Search from "@material-ui/icons/Search";
 import BusinessCategoryDialog from './BusinessCategoryDialog';
+import { css } from "@emotion/core";
+
+const override = css`
+  margin: 0 auto;
+  border-color: red;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
 
 class BusinessCategoriesList extends PureComponent {
   constructor(props) {
@@ -101,9 +110,11 @@ class BusinessCategoriesList extends PureComponent {
     const { classes, fetchBusinessCategoriesLoading, businessCategories } = this.props;
     let data = [];
     const { deletedBusinessCategory, selectedBusinessCategory, businessCategoryDialogOpen, isEditMode } = this.state;
+
     if (fetchBusinessCategoriesLoading) {
       return (
         <BeatLoader
+          css={override}
           size={22}
           color={roseColor}
         />
