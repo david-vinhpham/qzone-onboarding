@@ -13,6 +13,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 
 import indexRoutes from './routes/index';
 import reducers from './reducers';
@@ -55,7 +56,7 @@ Amplify.configure({
 });
 
 const hist = createBrowserHistory();
-const createStoreWithMiddleware = composeEnhancers(applyMiddleware(thunk))(createStore);
+const createStoreWithMiddleware = composeEnhancers(applyMiddleware(thunk, logger))(createStore);
 const store = createStoreWithMiddleware(reducers);
 const theme = createMuiTheme({
   typography: {},
