@@ -36,9 +36,11 @@ import { fetchServiceCategories, fetchServiceById, editService } from '../../act
 import { fetchOrganizationsByBusinessAdminId } from '../../actions/organization';
 
 const override = css`
-  display: block;
   margin: 0 auto;
   border-color: red;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const ServiceEditSchema = Yup.object().shape({
@@ -164,7 +166,7 @@ class ServiceEdit extends React.Component {
     if (fetchServiceLoading || !this.state.data || this.state.data.length === 0) {
       return (
         <BeatLoader
-          className={override}
+          css={override}
           sizeUnit="px"
           size={22}
           color="#e91e63"

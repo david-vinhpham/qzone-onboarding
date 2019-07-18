@@ -26,9 +26,11 @@ import {fetchOrganizationsByBusinessAdminId} from "../../actions/organization";
 import {BeatLoader} from "react-spinners";
 import {css} from "@emotion/core";
 const override = css`
-    display: block;
     margin: 0 auto;
     border-color: red;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 `;
 const ServiceCreateSchema = Yup.object().shape({
     name: Yup.string()

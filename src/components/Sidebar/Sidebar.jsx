@@ -10,7 +10,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
 import sidebarStyle from "../../assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
-import avatar from "../../assets/img/faces/avatar.jpg";
 
 var ps;
 
@@ -214,7 +213,7 @@ class Sidebar extends React.Component {
                     </span>
                     <ListItemText
                       primary={
-                        "Temporary services"
+                        "Temporary Services"
                       }
                       disableTypography={true}
                       className={collapseItemText}

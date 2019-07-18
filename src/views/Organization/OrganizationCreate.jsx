@@ -27,9 +27,11 @@ import { css } from "@emotion/core";
 import defaultImage from "../../assets/img/default-avatar.png";
 
 const override = css`
-    display: block;
     margin: 0 auto;
     border-color: red;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 `;
 
 const OrganizationCreateSchema = Yup.object().shape({

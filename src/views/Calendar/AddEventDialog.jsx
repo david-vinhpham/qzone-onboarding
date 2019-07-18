@@ -34,7 +34,7 @@ class AddEventDialog extends PureComponent {
     }
   };
 
-  onSelectProvider = (setFieldValue, values) => event => {
+  onSelectProvider = (setFieldValue) => event => {
     const selectedProvider = this.props.providers.find(p => p.id === event.target.value);
     const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProvider.timezone.toLowerCase()).label;
     setFieldValue('addEventData.providerId', selectedProvider.id);
@@ -139,7 +139,7 @@ class AddEventDialog extends PureComponent {
     this.setState({ tmpServiceStep: 1 });
   };
 
-  onBlurServiceTime = (setFieldValue, values) => ({ target: { value } }) => {
+  onBlurServiceTime = (setFieldValue) => ({ target: { value } }) => {
     setFieldValue('addEventData.tmpService.avgServiceTime', value.length === 0 ? 30 : Number(value));
   };
 
@@ -160,66 +160,6 @@ class AddEventDialog extends PureComponent {
     if (type === 'toTime') {
       setFieldValue('addEventData.tmpService.breakTimeEnd', momentData.format());
     }
-  };
-
-  validateAvgServiceTime = () => {
-    const {
-      addEventData: {
-        tmpService: { avgServiceTime }
-      }
-    } = this.state;
-    if (avgServiceTime < 30) {
-      return { helperText: 'Must larger than 30', error: true };
-    }
-    if (avgServiceTime > 180) {
-      return { helperText: 'Must less than 180', error: true };
-    }
-    return {};
-  };
-
-  validateParallelCustomer = () => {
-    const {
-      addEventData: {
-        tmpService: { numberOfParallelCustomer }
-      }
-    } = this.state;
-    if (numberOfParallelCustomer < 1) {
-      return { helperText: 'Must be at least 1', error: true };
-    }
-    if (numberOfParallelCustomer > 50) {
-      return { helperText: 'No more than 50', error: true };
-    }
-    return {};
-  };
-
-  validateBreakTimeFrom = () => {
-    const {
-      addEventData: {
-        startTime,
-        endTime,
-        tmpService: { breakTimeStart, breakTimeEnd }
-      }
-    } = this.state;
-    const value = moment(breakTimeStart);
-    if (value.isBefore(startTime) || value.isAfter(endTime) || value.isAfter(breakTimeEnd)) {
-      return { error: true };
-    }
-    return {};
-  };
-
-  validateBreakTimeTo = () => {
-    const {
-      addEventData: {
-        startTime,
-        endTime,
-        tmpService: { breakTimeStart, breakTimeEnd }
-      }
-    } = this.state;
-    const value = moment(breakTimeEnd);
-    if (value.isBefore(breakTimeStart) || value.isBefore(startTime) || value.isAfter(endTime)) {
-      return { error: true };
-    }
-    return {};
   };
 
   render() {
@@ -244,7 +184,7 @@ class AddEventDialog extends PureComponent {
           initialValues={{ eventLevel, addEventData }}
           render={({
             values, errors, handleChange,
-            handleBlur, handleSubmit, isSubmitting,
+            isSubmitting,
             setFieldValue
           }) => (
               <>

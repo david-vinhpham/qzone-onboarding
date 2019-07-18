@@ -41,9 +41,11 @@ import {
 import { fetchBusinessCategories } from "../../actions/businessCategories";
 
 const override = css`
-  display: block;
   margin: 0 auto;
   border-color: red;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const OrganizationEditSchema = Yup.object().shape({

@@ -29,9 +29,11 @@ import Search from "@material-ui/icons/Search";
 import ServiceCategoryDialog from './ServiceCategoryDialog';
 
 const override = css`
-  display: block;
   margin: 0 auto;
   border-color: red;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 class ServiceCategoriesList extends PureComponent {
@@ -123,7 +125,7 @@ class ServiceCategoriesList extends PureComponent {
     if (isLoading) {
       return (
         <BeatLoader
-          className={override}
+          css={override}
           sizeUnit="px"
           size={22}
           color="#e91e63"
