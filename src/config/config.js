@@ -1,4 +1,4 @@
-export const API_ROOT = 'https://13.238.116.171:8080/api/';
+export const API_ROOT = 'http://13.238.116.171:8080/api/';
 export const API_SURVEY = `${API_ROOT}surveys`;
 export const API_MEDIA_URL = 'http://13.238.116.171:8093/api/media/medias';
 export const URL = {
