@@ -1,8 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
+import { get } from 'lodash';
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
@@ -62,8 +65,11 @@ class Sidebar extends React.Component {
       image,
       logoText,
       routes,
-      bgColor
+      bgColor,
+      userDetails,
     } = this.props;
+    const userName = get(userDetails, 'fullName');
+    const userImage = get(userDetails, 'imageUrl');
     const itemText =
       classes.itemText +
       " " +
@@ -92,7 +98,7 @@ class Sidebar extends React.Component {
     var user = (
       <div className={userWrapperClass}>
         <div className={photo}>
-          <img src={avatar} className={classes.avatarImg} alt="..." />
+          <img src={userImage} className={classes.avatarImg} alt="..." />
         </div>
         <List className={classes.list}>
           <ListItem className={classes.item + " " + classes.userItem}>
@@ -102,7 +108,7 @@ class Sidebar extends React.Component {
               onClick={(e) => { e.preventDefault(); this.openCollapse("openAvatar"); }}
             >
               <ListItemText
-                primary={"Tania Andrew"}
+                primary={userName}
                 secondary={
                   <b
                     className={
@@ -595,7 +601,13 @@ Sidebar.propTypes = {
   logo: PropTypes.string,
   logoText: PropTypes.string,
   image: PropTypes.string,
-  routes: PropTypes.arrayOf(PropTypes.object)
+  routes: PropTypes.arrayOf(PropTypes.object),
+  userDetails: PropTypes.objectOf(PropTypes.any),
 };
 
-export default withStyles(sidebarStyle)(Sidebar);
+export default compose(
+  withStyles(sidebarStyle),
+  connect(state => ({
+    ...state.user,
+  })),
+)(Sidebar);
