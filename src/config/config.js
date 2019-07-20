@@ -55,6 +55,7 @@ export const URL = {
   UPDATE_CUSTOMER_FLOW_STATUS: 'customer/flow/status',
   FETCH_CUSTOMER_FLOW_BOARD: 'customer/flow/board'
 };
+
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';
 
 export const GEO_CODING_KEY = 'AIzaSyCM4fZfA-m2F6ekcl4IyN77YZJlAdydxlc';

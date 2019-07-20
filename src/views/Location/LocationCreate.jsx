@@ -47,6 +47,10 @@ class LocationCreate extends React.Component {
       },
       error => {
         console.error(error);
+        values.coordinates = {};
+        values.coordinates.latitude = 0;
+        values.coordinates.longitude = 0;
+        this.props.createLocation(values, this.props.history);
       }
     );
   }

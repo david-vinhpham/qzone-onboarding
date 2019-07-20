@@ -58,6 +58,10 @@ class LocationEdit extends React.Component {
       },
       error => {
         console.error(error);
+        values.coordinates = {};
+        values.coordinates.latitude = 0;
+        values.coordinates.longitude = 0;
+        this.props.editLocation(values, this.props.history);
       }
     );
   }
