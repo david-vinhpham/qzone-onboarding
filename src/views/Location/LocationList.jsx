@@ -127,7 +127,7 @@ class LocationList extends React.Component {
               <TableCell>City</TableCell>
               <TableCell>state</TableCell>
               <TableCell>Country</TableCell>
-              <TableCell>View|Edit|Delete</TableCell>
+              <TableCell>Edit|Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
