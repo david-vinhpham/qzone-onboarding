@@ -20,6 +20,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
+  console.log('initialState...');
   switch (action.type) {
     case location.FETCH_LOCATIONS_LOADING:
       return { ...state, fetchLocationsLoading: true };
@@ -72,7 +73,7 @@ const reducer = (state = initialState, action) => {
     case location.DEL_LOCATION_LOADING:
       return { ...state, delLocationLoading: true };
     case location.DEL_LOCATION_SUCCESS:
-      return { ...state, locations: action.payload, delLocationLoading: false };
+      return { ...state, location: [], delProviderLoading: false };
     case location.DEL_LOCATION_FAILURE:
       return {
         ...state,

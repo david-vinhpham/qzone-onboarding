@@ -17,6 +17,7 @@ import LocationForm from './LocationForm';
 import { GEO_CODING_KEY } from '../../config/config';
 
 const LocationSchema = Yup.object().shape({
+  streetAddress: Yup.string().required('Please enter a streetAddress'),
   city: Yup.string().required('Please enter a city'),
   country: Yup.string().required('Please enter a valid Country'),
   postCode: Yup.string().required('Please enter a valid Postal code'),
@@ -37,7 +38,23 @@ class LocationCreate extends React.Component {
   }
 
   handleLocation(values) {
-    Geocode.fromAddress(values.streetAddress + values.city + values.country + values.postCode).then(
+    let fullAddress = values.streetAddress;
+    if(values.district != null && values.district.length > 0) {
+      fullAddress += ', ' + values.district;
+    }
+    if(values.city != null && values.city.length > 0) {
+      fullAddress += ', ' + values.city;
+    }
+    if(values.state != null && values.state.length > 0) {
+      fullAddress += ', ' + values.state;
+    }
+    if(values.postCode != null && values.postCode.length > 0) {
+      fullAddress += ' ' + values.postCode;
+    }
+    if(values.country != null && values.country.length > 0) {
+      fullAddress += ', ' + values.country;
+    }
+    Geocode.fromAddress(fullAddress).then(
       response => {
         const { lat, lng } = response.results[0].geometry.location;
         values.coordinates = {};

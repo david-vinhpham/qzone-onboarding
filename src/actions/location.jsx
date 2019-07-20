@@ -37,11 +37,12 @@ export const delLocation = id => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success) {
+        if (data.success) {
           dispatch({
             type: location.DEL_LOCATION_SUCCESS,
-            payload: data.objects
+            payload: data.object,
           });
+          dispatch(fetchLocations());
         } else {
           dispatch({
             type: location.DEL_LOCATION_FAILURE,

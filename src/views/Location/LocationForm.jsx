@@ -51,6 +51,37 @@ class LocationForm extends React.Component {
             )}
           </GridItem>
         </GridContainer>
+
+        <GridContainer>
+          <GridItem xs={12} sm={3}>
+            <FormLabel className={classes.labelHorizontal}>District</FormLabel>
+          </GridItem>
+          <GridItem xs={12} sm={4}>
+            {locationInfo.isEditMode === 'district' ? (
+              <CustomInput
+                id="district"
+                value={values.district || ''}
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  placeholder: 'district',
+                  type: 'text'
+                }}
+                onChange={handleChange}
+              />
+            ) : (
+              <InputLabel
+                className={classes.labelLeftHorizontal}
+                onClick={() => this.props.onDoubleClick('district')}
+              >
+                {values.district || 'District'}
+              </InputLabel>
+            )}
+            {errors.district && touched.district ? <div style={{ color: 'red' }}>{errors.district}</div> : null}
+          </GridItem>
+        </GridContainer>
+
         <GridContainer>
           <GridItem xs={12} sm={3}>
             <FormLabel className={classes.labelHorizontal}>City</FormLabel>
@@ -80,68 +111,7 @@ class LocationForm extends React.Component {
             {errors.city && touched.city ? <div style={{ color: 'red' }}>{errors.city}</div> : null}
           </GridItem>
         </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={3}>
-            <FormLabel className={classes.labelHorizontal}>Country</FormLabel>
-          </GridItem>
-          <GridItem xs={12} sm={4}>
-            {locationInfo.isEditMode === 'country' ? (
-              <CustomInput
-                id="country"
-                value={values.country}
-                formControlProps={{
-                  fullWidth: true
-                }}
-                inputProps={{
-                  placeholder: 'Country',
-                  type: 'text'
-                }}
-                onChange={handleChange}
-              />
-            ) : (
-              <InputLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('country')}
-              >
-                {values.country || 'Country'}
-              </InputLabel>
-            )}
-            {errors.country && touched.country ? (
-              <div style={{ color: 'red' }}>{errors.country}</div>
-            ) : null}
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={3}>
-            <FormLabel className={classes.labelHorizontal}>Zipcode</FormLabel>
-          </GridItem>
-          <GridItem xs={12} sm={4}>
-            {locationInfo.isEditMode === 'zipcode' ? (
-              <CustomInput
-                id="postCode"
-                value={values.postCode}
-                formControlProps={{
-                  fullWidth: true
-                }}
-                inputProps={{
-                  placeholder: 'Zip Code',
-                  type: 'text'
-                }}
-                onChange={handleChange}
-              />
-            ) : (
-              <InputLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('zipcode')}
-              >
-                {values.postCode || 'Zipcode'}
-              </InputLabel>
-            )}
-            {errors.postCode && touched.postCode ? (
-              <div style={{ color: 'red' }}>{errors.postCode}</div>
-            ) : null}
-          </GridItem>
-        </GridContainer>
+
         <GridContainer>
           <GridItem xs={12} sm={3}>
             <FormLabel className={classes.labelHorizontal}>State</FormLabel>
@@ -170,6 +140,70 @@ class LocationForm extends React.Component {
             )}
             {errors.state && touched.state ? (
               <div style={{ color: 'red' }}>{errors.state}</div>
+            ) : null}
+          </GridItem>
+        </GridContainer>
+
+        <GridContainer>
+          <GridItem xs={12} sm={3}>
+            <FormLabel className={classes.labelHorizontal}>PostCode</FormLabel>
+          </GridItem>
+          <GridItem xs={12} sm={4}>
+            {locationInfo.isEditMode === 'zipcode' ? (
+              <CustomInput
+                id="postCode"
+                value={values.postCode}
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  placeholder: 'Post Code',
+                  type: 'text'
+                }}
+                onChange={handleChange}
+              />
+            ) : (
+              <InputLabel
+                className={classes.labelLeftHorizontal}
+                onClick={() => this.props.onDoubleClick('zipcode')}
+              >
+                {values.postCode || 'Zipcode'}
+              </InputLabel>
+            )}
+            {errors.postCode && touched.postCode ? (
+              <div style={{ color: 'red' }}>{errors.postCode}</div>
+            ) : null}
+          </GridItem>
+        </GridContainer>
+
+        <GridContainer>
+          <GridItem xs={12} sm={3}>
+            <FormLabel className={classes.labelHorizontal}>Country</FormLabel>
+          </GridItem>
+          <GridItem xs={12} sm={4}>
+            {locationInfo.isEditMode === 'country' ? (
+              <CustomInput
+                id="country"
+                value={values.country}
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  placeholder: 'Country',
+                  type: 'text'
+                }}
+                onChange={handleChange}
+              />
+            ) : (
+              <InputLabel
+                className={classes.labelLeftHorizontal}
+                onClick={() => this.props.onDoubleClick('country')}
+              >
+                {values.country || 'Country'}
+              </InputLabel>
+            )}
+            {errors.country && touched.country ? (
+              <div style={{ color: 'red' }}>{errors.country}</div>
             ) : null}
           </GridItem>
         </GridContainer>
