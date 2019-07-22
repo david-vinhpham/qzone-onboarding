@@ -1,6 +1,6 @@
 export const API_ROOT = 'https://api.quezone.com.au/api/';
 export const API_SURVEY = `${API_ROOT}surveys`;
-export const API_MEDIA_URL = 'https://api.quezone.com.au/api/media/medias';
+export const API_MEDIA_URL = 'http://13.238.116.171:8093/api/media/medias';
 export const URL = {
   ORGANIZATION_NAME_VALIDATE: 'validate?name=',
   ORGANIZATION: 'organizations',
