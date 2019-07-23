@@ -19,7 +19,7 @@ import styles from './CommonContent.module.scss';
 import addEventDialogStyles from '../AddEventDialog.module.scss';
 
 export default function CommonContent({
-  values, providers, serviceOptions, errors, handleChange,
+  values, providers, serviceOptions, handleChange,
   onChangeEventType, onSelectEventLevel, onSelectProvider,
   onChangeNewEventDateTime, onSelectRepeatType, onRepeatEndSelect,
   onBlurOccurence, onChangeRepeatEndDate, onChangeCustomerMobilePhone,
@@ -466,7 +466,6 @@ CommonContent.propTypes = {
   }).isRequired,
   providers: PropTypes.arrayOf(providerType).isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
-  errors: PropTypes.objectOf(PropTypes.string).isRequired,
   handleChange: PropTypes.func.isRequired,
   onChangeEventType: PropTypes.func.isRequired,
   onSelectEventLevel: PropTypes.func.isRequired,

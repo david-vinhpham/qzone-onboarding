@@ -453,9 +453,9 @@ const mapStateToProps = state => ({
   delTmpServiceLoading: state.tmpServices.delTmpServiceLoading,
   tmpServiceError: state.tmpServices.tmpServiceError,
   providers: state.calendarManage.providers,
-  tzOptions: state.timezoneOptions.tzOptions,
-  serviceOptions: state.serviceOptions.serviceOptions,
-  geoOptions: state.geoOptions.geoOptions
+  tzOptions: state.options.timezone.tzOptions,
+  serviceOptions: state.options.service.serviceOptions,
+  geoOptions: state.options.geo.geoOptions
 });
 
 const mapDispatchToProps = {

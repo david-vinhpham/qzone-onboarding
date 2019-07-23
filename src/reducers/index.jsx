@@ -8,17 +8,17 @@ import OrganizationReducer from './organization.reducer';
 import ServiceReducer from './service.reducer';
 import ImageUploadReducer from './imageUpload.reducer';
 import LocationReducer from './location.reducer';
-import calendarManage from './calendar.reducer';
+import calendarManageReducer from './calendar.reducer';
 import tmpServicesReducer from './tmpServices.reducer';
 import customerServiceReducer from './customerService.reducer';
 import serviceOptionsReducer from './serviceOptions.reducer';
 import serviceCategoryReducer from './serviceCategory.reducer';
 import businessCategoryReducer from './businessCategory.reducer';
-import tmpServiceDetail from './tmpServiceDetail.reducer';
-import availabilitySlots from './availabilitySlots.reducer';
-import timezoneOptions from './timezoneOptions.reducer';
+import tmpServiceDetailReducer from './tmpServiceDetail.reducer';
+import availabilitySlotsReducer from './availabilitySlots.reducer';
+import timezoneOptionsReducer from './timezoneOptions.reducer';
 import surveysReducer from './surveys';
-import geoOptions from './geoOptions.reducer';
+import geoOptionsReducer from './geoOptions.reducer';
 
 const rootReducer = combineReducers({
   common: commonReducer,
@@ -29,17 +29,19 @@ const rootReducer = combineReducers({
   service: ServiceReducer,
   image: ImageUploadReducer,
   location: LocationReducer,
-  calendarManage,
+  calendarManage: calendarManageReducer,
   tmpServices: tmpServicesReducer,
   serviceCategory: serviceCategoryReducer,
   businessCategory: businessCategoryReducer,
-  tmpServiceDetail,
-  availabilitySlots,
+  tmpServiceDetail: tmpServiceDetailReducer,
+  availabilitySlots: availabilitySlotsReducer,
   customerService: customerServiceReducer,
-  serviceOptions: serviceOptionsReducer,
   surveys: surveysReducer,
-  timezoneOptions,
-  geoOptions
+  options: combineReducers({
+    geo: geoOptionsReducer,
+    timezone: timezoneOptionsReducer,
+    service: serviceOptionsReducer,
+  })
 });
 
 export default rootReducer;

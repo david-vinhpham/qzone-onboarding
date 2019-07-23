@@ -20,7 +20,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  console.log('initialState...');
   switch (action.type) {
     case location.FETCH_LOCATIONS_LOADING:
       return { ...state, fetchLocationsLoading: true };

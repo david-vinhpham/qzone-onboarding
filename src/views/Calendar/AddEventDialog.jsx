@@ -21,11 +21,6 @@ import TmpServiceContent from './addEventDialog/TmpServiceContent';
 import CommonContent from './addEventDialog/CommonContent';
 
 class AddEventDialog extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = { tmpServiceStep: 1 };
-  }
-
   onSelectEventLevel = (setFieldValue, values) => ({ target: { value: level } }) => {
     setFieldValue('eventLevel', level);
     if (!values.addEventData.providerId && level === EVENT_LEVEL.PROVIDER) {
@@ -124,21 +119,10 @@ class AddEventDialog extends PureComponent {
     setFieldValue('addEventData.customerMobilePhone', data);
   }
 
-  onClickNext = (setFieldValue, values) => () => {
-    const { tmpServiceStep } = this.state;
-    if (values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1) {
-      this.setState({ tmpServiceStep: 2 });
-      this.onChangeTmpServiceDateTime(setFieldValue, values)('fromTime')(values.addEventData.startTime);
-      this.onChangeTmpServiceDateTime(setFieldValue, values)('toTime')(values.addEventData.endTime);
-    } else {
-      this.props.createNewEvent(values);
-    }
+  onClickSubmit = (values) => () => {
+    this.props.createNewEvent(values);
   };
-
-  onClickPrevious = () => {
-    this.setState({ tmpServiceStep: 1 });
-  };
-
+  
   onBlurServiceTime = (setFieldValue) => ({ target: { value } }) => {
     setFieldValue('addEventData.tmpService.avgServiceTime', value.length === 0 ? 30 : Number(value));
   };
@@ -169,9 +153,9 @@ class AddEventDialog extends PureComponent {
       eventLevel, addEventData, isEditMode,
       isEventTypeReadOnly,
       isEventLevelReadOnly,
-      isProviderReadOnly
+      isProviderReadOnly,
     } = this.props;
-    const { tmpServiceStep } = this.state;
+
     return (
       <Dialog
         open={isOpenAddDialog}
@@ -183,7 +167,7 @@ class AddEventDialog extends PureComponent {
         <Formik
           initialValues={{ eventLevel, addEventData }}
           render={({
-            values, errors, handleChange,
+            values, handleChange,
             isSubmitting,
             setFieldValue
           }) => (
@@ -206,48 +190,37 @@ class AddEventDialog extends PureComponent {
                   </Typography>
                 </DialogTitle>
                 <DialogContent>
-                  {tmpServiceStep === 1 ?
-                    <CommonContent
-                      values={values}
-                      providers={providers}
-                      serviceOptions={serviceOptions}
-                      errors={errors}
-                      handleChange={handleChange}
-                      onChangeEventType={this.onChangeEventType(setFieldValue, values)}
-                      onSelectEventLevel={this.onSelectEventLevel(setFieldValue, values)}
-                      onSelectProvider={this.onSelectProvider(setFieldValue, values)}
-                      onChangeNewEventDateTime={this.onChangeNewEventDateTime(setFieldValue, values)}
-                      onSelectRepeatType={this.onSelectRepeatType(setFieldValue, values)}
-                      onRepeatEndSelect={this.onRepeatEndSelect(setFieldValue, values)}
-                      onBlurOccurence={this.onBlurOccurence(setFieldValue, values)}
-                      onChangeRepeatEndDate={this.onChangeRepeatEndDate(setFieldValue, values)}
-                      onChangeCustomerMobilePhone={this.onChangeCustomerMobilePhone(setFieldValue)}
-                      isEventTypeReadOnly={isEventTypeReadOnly}
-                      isEventLevelReadOnly={isEventLevelReadOnly}
-                      isProviderReadOnly={isProviderReadOnly}
-                    /> :
-                    <TmpServiceContent
-                      geoOptions={geoOptions}
-                      serviceOptions={serviceOptions}
-                      addEventData={values.addEventData}
-                      handleChange={handleChange}
-                      onBlurServiceTime={this.onBlurServiceTime(setFieldValue, values)}
-                      onChangeTmpServiceDateTime={this.onChangeTmpServiceDateTime(setFieldValue, values)}
-                      onBlurParallelCustomer={this.onBlurParallelCustomer(setFieldValue)}
-                      errors={errors}
-                    />
-                  }
+                  <CommonContent
+                    values={values}
+                    providers={providers}
+                    serviceOptions={serviceOptions}
+                    handleChange={handleChange}
+                    onChangeEventType={this.onChangeEventType(setFieldValue, values)}
+                    onSelectEventLevel={this.onSelectEventLevel(setFieldValue, values)}
+                    onSelectProvider={this.onSelectProvider(setFieldValue, values)}
+                    onChangeNewEventDateTime={this.onChangeNewEventDateTime(setFieldValue, values)}
+                    onSelectRepeatType={this.onSelectRepeatType(setFieldValue, values)}
+                    onRepeatEndSelect={this.onRepeatEndSelect(setFieldValue, values)}
+                    onBlurOccurence={this.onBlurOccurence(setFieldValue, values)}
+                    onChangeRepeatEndDate={this.onChangeRepeatEndDate(setFieldValue, values)}
+                    onChangeCustomerMobilePhone={this.onChangeCustomerMobilePhone(setFieldValue)}
+                    isEventTypeReadOnly={isEventTypeReadOnly}
+                    isEventLevelReadOnly={isEventLevelReadOnly}
+                    isProviderReadOnly={isProviderReadOnly}
+                  />
+                  {values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && <TmpServiceContent
+                    geoOptions={geoOptions}
+                    serviceOptions={serviceOptions}
+                    addEventData={values.addEventData}
+                    handleChange={handleChange}
+                    onBlurServiceTime={this.onBlurServiceTime(setFieldValue, values)}
+                    onChangeTmpServiceDateTime={this.onChangeTmpServiceDateTime(setFieldValue, values)}
+                    onBlurParallelCustomer={this.onBlurParallelCustomer(setFieldValue)}
+                  />}
                 </DialogContent>
                 <DialogActions classes={{ root: styles.calendarDialogFooter }}>
-                  {tmpServiceStep === 2 && (
-                    <Button variant="outlined" onClick={this.onClickPrevious} className={styles.prevButton}>
-                      Previous
-                    </Button>
-                  )}
-                  <Button variant="outlined" color="primary" onClick={this.onClickNext(setFieldValue, values)} disabled={isSubmitting}>
-                    {values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && tmpServiceStep === 1
-                      ? 'Next'
-                      : isEditMode ? 'Edit' : 'Create'}
+                  <Button variant="outlined" color="primary" onClick={this.onClickSubmit(values)} disabled={isSubmitting}>
+                    {isEditMode ? 'Edit' : 'Create'}
                   </Button>
                   <Button variant="outlined" onClick={closeAddDialog}>
                     Cancel
@@ -290,4 +263,4 @@ AddEventDialog.defaultProps = {
   isProviderReadOnly: false
 };
 
-export default connect(state => ({ geoOptions: state.geoOptions.geoOptions }))(AddEventDialog);
+export default connect(state => ({ geoOptions: state.options.geo.geoOptions }))(AddEventDialog);

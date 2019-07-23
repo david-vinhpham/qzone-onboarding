@@ -432,7 +432,7 @@ const mapStateToProps = state => {
     imageError: state.image.imageError,
     imageLoading: state.image.imageLoading,
     provider: state.provider.provider,
-    timezones: state.timezoneOptions.tzOptions,
+    timezones: state.options.timezone.tzOptions,
     organizations: state.organization.organizations,
     fetchProviderLoading: state.provider.fetchProviderLoading,
     editProviderError: state.provider.editProviderError
