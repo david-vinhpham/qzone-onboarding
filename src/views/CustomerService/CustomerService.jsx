@@ -481,8 +481,8 @@ const mapStateToProps = state => ({
   isVerifyBookingCodeSuccess: state.customerService.isVerifyBookingCodeSuccess,
   boardData: state.customerService.boardData,
   isBoardLoading: state.customerService.isBoardLoading,
-  isFetchServiceOptionsByBusinessAdminIdSuccess: state.serviceOptions.isFetchServiceOptionsByBusinessAdminIdSuccess,
-  serviceOptions: state.serviceOptions.serviceOptions,
+  isFetchServiceOptionsByBusinessAdminIdSuccess: state.options.service.isFetchServiceOptionsByBusinessAdminIdSuccess,
+  serviceOptions: state.options.service.serviceOptions,
   isFetchProviderOptionsByBusinessAdminIdSuccess: state.customerService.isFetchProviderOptionsByBusinessAdminIdSuccess,
   providerOptions: state.customerService.providerOptions,
 });

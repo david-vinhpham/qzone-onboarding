@@ -455,7 +455,7 @@ const mapStateToProps = state => {
   return {
     imageError: state.image.imageError,
     imageLoading: state.image.imageLoading,
-    timezones: state.timezoneOptions.tzOptions,
+    timezones: state.options.timezone.tzOptions,
     organizations: state.organization.organizations,
     createProviderLoading: state.provider.createProviderLoading,
     createProviderError: state.provider.createProviderError

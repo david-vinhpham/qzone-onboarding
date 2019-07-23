@@ -307,17 +307,17 @@ export function fetchUser(id, history) {
           } else {
             Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
             dispatch(fetchUserFailure('Unauthorized'));
-            history.push('/login');
+            logout(history);
           }
         } else {
           dispatch(fetchUserFailure(data));
-          history.push('/login');
+          logout(history);
         }
 
       })
       .catch(err => {
         dispatch(fetchUserFailure(err));
-        history.push('/login');
+        logout(history);
       });
   }
 }

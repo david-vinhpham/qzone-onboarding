@@ -53,8 +53,8 @@ export default function TmpServiceContent({
         <Grid container spacing={1} className={styles.averageBox}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" display="inline" noWrap>
-              Average Service Time:
-              </Typography>
+              Service time:
+            </Typography>
           </Grid>
           <Grid item md={2}>
             <TextField
@@ -68,7 +68,7 @@ export default function TmpServiceContent({
           <Grid item md={3}>
             <Typography variant="body2" display="inline" noWrap>
               minutes (if set 0, will get it from service duration)
-              </Typography>
+            </Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -77,12 +77,12 @@ export default function TmpServiceContent({
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2">
               Break time:
-              </Typography>
+            </Typography>
             <Tooltip
               title={`Must be between ${
-                moment.tz(startTime, timezoneId).format('LT')
+                moment(startTime).format('LT')
                 } and ${
-                moment.tz(endTime, timezoneId).format('LT')
+                moment(endTime).format('LT')
                 }`
               }
             >
@@ -137,7 +137,7 @@ export default function TmpServiceContent({
         <Grid container spacing={1} className={styles.averageBox}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" display="inline" noWrap>
-              Parallel Customers:
+              Parallel customers:
             </Typography>
           </Grid>
           <Grid item md={2}>
