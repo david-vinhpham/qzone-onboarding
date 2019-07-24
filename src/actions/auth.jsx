@@ -72,6 +72,7 @@ export function register(values) {
       attributes: {
         email: values.registerEmail,
         'custom:user_type': 'BUSINESS_ADMIN',
+        preferred_username: 'BUSINESS_ADMIN',
         given_name: values.registerGivenName
       },
       validationData: []
