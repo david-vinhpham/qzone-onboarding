@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import { get } from 'lodash';
+import uuidv1 from 'uuid/v1';
 import { classesType, historyType, tmpServiceType, optionType, providerType } from "types/global";
 import { connect } from "react-redux";
 import Delete from "@material-ui/icons/Delete";
@@ -217,12 +219,20 @@ class TmpServicesList extends PureComponent {
   openAddDialog = () => {
     this.setState(() => {
       const defaultProvider = this.props.providers[0];
-      const timezoneId = this.props.tzOptions.find(
-        tz => tz.label.toLowerCase() === defaultProvider.timezone.toLowerCase()
-      ).label;
+      const tempTz = this.props.tzOptions.find(
+        tz => {
+          const timezone = get(defaultProvider, 'timezone');
+          return timezone ? tz.label.toLowerCase() === timezone.toLowerCase() : null;
+        }
+      );
+      const timezoneId = tempTz ? tempTz.label : moment.tz.guess();
       const startTime = moment().format();
       const endTime = moment().add(1, 'hour').format();
 
+      const providerId = get(defaultProvider, 'id') || uuidv1();
+      const providerName = get(defaultProvider, 'name') || 'ProviderQ';
+      const { serviceOptions } = this.props;
+      const serviceId = get(serviceOptions, '0.value') || uuidv1();
       const addEventData = {
         eventType: EVENT_TYPE.TMP_SERVICE,
         description: '',
@@ -232,8 +242,8 @@ class TmpServicesList extends PureComponent {
         },
         timezoneId,
         serviceId: this.props.serviceOptions.length > 0 ? this.props.serviceOptions[0].value : 0,
-        providerId: defaultProvider.id,
-        providerName: defaultProvider.name,
+        providerId,
+        providerName,
         startTime,
         endTime,
         tmpService: {
@@ -243,7 +253,7 @@ class TmpServicesList extends PureComponent {
           breakTimeEnd: endTime,
           geoLocationId: this.props.geoOptions[0].value,
           numberOfParallelCustomer: 1,
-          serviceId: this.props.serviceOptions[0].value,
+          serviceId,
         }
       };
 
