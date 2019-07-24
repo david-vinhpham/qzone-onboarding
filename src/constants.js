@@ -47,7 +47,7 @@ export const restApiResponseCodes = {
 };
 
 // API
-const emailTemplate = 'https://api.quezone.com.au/api/';
+const emailTemplate = 'https://api.quezone.com.au/api';
 
 // Email Templates
 export const eTemplateUrl = '/email-templates';
