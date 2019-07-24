@@ -1,7 +1,7 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
   BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd, Report,
-  Assignment,
+  // Assignment,
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Profile from '../views/Profile/profile';
@@ -36,8 +36,8 @@ import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesL
 import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
 import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
-import Assessments from '../views/Surveys/Assessments';
-import CreateAssessment from '../views/Surveys/CreateAssessment';
+// import Assessments from '../views/Surveys/Assessments';
+// import CreateAssessment from '../views/Surveys/CreateAssessment';
 
 export const dashboardRoutes = [
   {
@@ -153,18 +153,18 @@ export const otherRoutes = [
     icon: LocationOn,
     component: Administration
   },
-  {
-    path: '/assessments/new',
-    name: 'Create New Assessment',
-    icon: Assignment,
-    component: CreateAssessment,
-  },
-  {
-    path: '/assessments',
-    name: 'Assessments',
-    icon: Assignment,
-    component: Assessments,
-  },
+  // {
+  //   path: '/assessments/new',
+  //   name: 'Create New Assessment',
+  //   icon: Assignment,
+  //   component: CreateAssessment,
+  // },
+  // {
+  //   path: '/assessments',
+  //   name: 'Assessments',
+  //   icon: Assignment,
+  //   component: Assessments,
+  // },
   {
     path: '/provider/list',
     name: 'Provider Details',
