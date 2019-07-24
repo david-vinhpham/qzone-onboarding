@@ -78,13 +78,13 @@ export function register(values) {
     })
       .then(json => {
         if (json) {
-          localStorage.setItem('username', json.object.email);
-          localStorage.setItem('user', JSON.stringify(json.object));
-          dispatch(registerUserSuccess(json.object));
+          const userDetail = {...json.user, email: json.user.username};
+          localStorage.setItem('username', userDetail.username);
+          localStorage.setItem('user', JSON.stringify(userDetail));
+          dispatch(registerUserSuccess(userDetail));
         } else {
           dispatch(registerUserFailure('Topology Error'));
         }
-        return json;
       })
       .catch(err => dispatch(registerUserFailure(err)));
   };
@@ -352,7 +352,7 @@ export function verifyUserCode(user, email, code, history) {
       .then(json => {
         if (json) {
           dispatch(verifyUserSuccess(json));
-          history.push('/registerorganization');
+          history.push('/');
         } else {
           dispatch(verifyUserFailure('Topology Error'));
         }

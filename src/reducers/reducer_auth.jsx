@@ -94,7 +94,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         verifyDetails: action.payload.user,
         verifyError: null,
-        verifyLoading: false
+        verifyLoading: false,
+        verify: false,
       };
     case auth.VERIFY_USER_FAILURE: // return error and make loading = false
       // error = action.payload || {message: action.payload.message};//2nd one is network or server down errors
