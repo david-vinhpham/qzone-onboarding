@@ -117,12 +117,14 @@ class EmailTemplates extends Component {
               }}
             />
           </ExpansionPanelDetails>
-          <ExpansionPanelActions>
+          {template.default === true ?   <ExpansionPanelActions/> :
+            <ExpansionPanelActions>
             <Link to={`/email-templates/edit/${template.id}`}>
-              <Button color="rose">Edit</Button>
+            <Button color="rose">Edit</Button>
             </Link>
             <Button onClick={() => this.deleteTemplateHandler(template.id)}>Delete</Button>
-          </ExpansionPanelActions>
+            </ExpansionPanelActions>
+          }
         </ExpansionPanel>
       ))
     ) : (
@@ -175,7 +177,8 @@ EmailTemplates.propTypes = {
   templates: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
-      name: PropTypes.string
+      name: PropTypes.string,
+      default: PropTypes.boolean
     })
   ).isRequired,
   loading: PropTypes.bool.isRequired,
