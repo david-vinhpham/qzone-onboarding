@@ -45,7 +45,7 @@ export const fetchEmailTemplatesSuccess = response => ({
 });
 export const fetchEmailTemplatesError = error => ({
   type: FETCH_EMAIL_TEMPLATES_ERROR,
-  payload: error.response.data
+  payload: error.response
 });
 
 export const fetchTemplateStart = () => ({ type: FETCH_TEMPLATE_START });
@@ -55,7 +55,7 @@ export const fetchTemplateSuccess = response => ({
 });
 export const fetchTemplateError = error => ({
   type: FETCH_TEMPLATE_ERROR,
-  payload: error.response.data
+  payload: error.response
 });
 export const cleanTemplateStatus = () => ({ type: CLEAN_TEMPLATE_EDIT_STATUS });
 
@@ -92,9 +92,10 @@ export const editTemplateError = error => ({
 export const saveTemplateNameList = list => ({ type: SAVE_TEMPLATE_NAME_LIST, payload: list });
 
 export const fetchTemplates = () => dispatch => {
+  const userSub = localStorage.getItem('userSub');
   dispatch(fetchEmailTemplatesStart());
   axios
-    .get(eTemplateApi)
+    .get(`${eTemplateApi}/business-admin/${userSub}`)
     .then(response => dispatch(fetchEmailTemplatesSuccess(response)))
     .catch(error => dispatch(fetchEmailTemplatesError(error)));
 };
@@ -116,11 +117,18 @@ export const deleteTemplate = id => dispatch => {
 };
 
 export const createTemplate = (name, content) => dispatch => {
+  const userSub = localStorage.getItem('userSub');
   dispatch(createTemplateStart());
   axios
-    .post(`${eTemplateApi}/${name}`, content, axiosConfig)
-    .then(response => dispatch(createTemplateSuccess(response)))
-    .catch(error => dispatch(createTemplateError(error)));
+    .post(`${eTemplateApi}/${name}/${userSub}`, content, axiosConfig)
+    .then((response) => {
+      if (response && response.data.success) {
+        dispatch(createTemplateSuccess(response));
+      }
+      else {
+        dispatch(createTemplateError(response));
+      }
+    })
 };
 
 export const editTemplate = (id, name, content) => dispatch => {
