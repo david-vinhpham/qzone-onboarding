@@ -28,11 +28,17 @@ class LoginPage extends React.Component {
       loginEmailState: '',
       loginPassword: '',
       loginPasswordState: '',
-      isForgotPassword: false
+      isForgotPassword: false,
+      userError: null,
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ userError: nextProps.userError })
+  }
+
   componentDidMount() {
+    this.setState({ userError: null})
     setTimeout(() => {
       this.setState({ cardAnimation: '' });
     }, 700);
@@ -121,8 +127,8 @@ class LoginPage extends React.Component {
                         </Button>
                       </div>
                     </CardHeader>
-                    <div className={`${classes.labelError} ${classes.textCenter}`}>{this.props.userError === null ? ''
-                      : (this.props.userError.error != null ? this.props.userError.error.message : '')}</div>
+                    <div className={`${classes.labelError} ${classes.textCenter}`}>{this.state.userError === null ? ''
+                      : (this.state.userError.error != null ? this.state.userError.error.message : '')}</div>
                     <CardBody>
                       <CustomInput
                         labelText="Email..."
