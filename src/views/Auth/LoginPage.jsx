@@ -121,6 +121,8 @@ class LoginPage extends React.Component {
                         </Button>
                       </div>
                     </CardHeader>
+                    <div className={`${classes.labelError} ${classes.textCenter}`}>{this.props.userError === null ? ''
+                      : (this.props.userError.error != null ? this.props.userError.error.message : '')}</div>
                     <CardBody>
                       <CustomInput
                         labelText="Email..."
