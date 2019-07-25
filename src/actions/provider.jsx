@@ -186,7 +186,7 @@ export const deleteProvider = providerId => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success) {
+        if (data.success) {
           dispatch({
             type: provider.DEL_PROVIDER_SUCCESS,
             payload: data.object
@@ -206,7 +206,7 @@ export const deleteProvider = providerId => {
 export function editProvider(values, history) {
   return dispatch => {
     dispatch(editProviderLoading());
-    fetch(API_ROOT + URL.USER, {
+    fetch(API_ROOT + URL.AWS_USER, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -215,7 +215,7 @@ export function editProvider(values, history) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success) {
+        if (data.success) {
           history.push('/provider/list');
         } else {
           dispatch(editProviderFailure(data));
@@ -259,7 +259,7 @@ export function createProvider(values, history) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success) {
+        if (data.success) {
           dispatch(createProviderSuccess(data));
           history.push('/provider/list');
         } else {
@@ -293,7 +293,7 @@ export function fetchProviderFailure(error) {
 export function fetchProvider(id) {
   return dispatch => {
     dispatch(fetchProviderLoading());
-    fetch(`${API_ROOT + URL.USER}/${id}`, {
+    fetch(`${API_ROOT + URL.PROVIDER}/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

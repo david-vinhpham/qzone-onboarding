@@ -24,6 +24,7 @@ export const URL = {
   GEO_LOCATION_OPTIONS: 'geo-locations-option',
 
   USER: 'users',
+  PROVIDER: 'providers',
   AWS_USER: 'aws-users',
   RESET_PASSWORD: 'users/reset-password',
   CHANGE_PASSWORD: 'users/change-password/',
