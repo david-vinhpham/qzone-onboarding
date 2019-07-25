@@ -87,7 +87,10 @@ export function register(values) {
           dispatch(registerUserFailure('Topology Error'));
         }
       })
-      .catch(err => dispatch(registerUserFailure(err)));
+      .catch(err =>
+      {
+        dispatch(registerUserFailure(err))
+      });
   };
 }
 

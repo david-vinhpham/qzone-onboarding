@@ -22,6 +22,7 @@ class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isActive: {},
       cardAnimation: 'cardHidden',
       registerOrganizationName: '',
       registerOrganizationNameState: '',
@@ -157,6 +158,8 @@ class RegisterPage extends React.Component {
         } else {
           this.setState({ [`${stateName}State`]: 'error' });
         }
+        let isActive = event.target.checked;
+        this.setState({ isActive: isActive });
         this.setState({ [stateName]: event.target.value });
         break;
       default:
@@ -185,8 +188,10 @@ class RegisterPage extends React.Component {
                   >
                     <h4 className={classes.cardTitle}>Register</h4>
                   </CardHeader>
-
+                  <div className={`${classes.labelError} ${classes.textCenter}`}>{this.props.userError === null ? ''
+                    : (this.props.userError.error != null ? this.props.userError.error.message : '')}</div>
                   <CardBody>
+
                     <CustomInput
                       labelText="Business Name"
                       success={this.state.registerEmailState === 'success'}
@@ -297,24 +302,10 @@ class RegisterPage extends React.Component {
                       page="register"
                     />
                     <div className={classes.center}>
-                      <Button color="rose" simple size="lg" block onClick={this.registerClick}>
+                      <Button disabled = {!this.state.isActive}color="rose" simple size="lg" block onClick={this.registerClick}>
                         Submit
                       </Button>
                     </div>
-
-                    {/* this.state.registrationType === 'Customer' &&
-                      (<div className={classes.center}>
-                        <Button color="rose" simple size="lg" block onClick={this.registerAsClick.bind(this, 'Organization')}>
-                           Or Register As Organization
-                  </Button>
-                      </div>) */}
-
-                    {/* this.state.registrationType === 'Organization' &&
-                      (<div className={classes.center}>
-                        <Button color="rose" simple size="lg" block onClick={this.registerAsClick.bind(this, 'Customer')}>
-                          Or Register As Customer
-                    </Button>
-                      </div>) */}
                   </CardBody>
                 </Card>
               </form>
