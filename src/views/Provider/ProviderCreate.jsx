@@ -46,6 +46,7 @@ class ProviderCreate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      createProviderError: [],
       businessAdminId: null,
       timezoneOption: null,
       organizationOption: null,
@@ -135,6 +136,10 @@ class ProviderCreate extends React.Component {
     }
     let providerInformation  = values.providerInformation;
     providerInformation.image = imageObject;
+    if(providerInformation.organizationId == null && this.props.organizations != null
+      && this.props.organizations.length > 0) {
+      providerInformation.organizationId = this.props.organizations[0].value;
+    }
     values.providerInformation = providerInformation;
     this.props.createProvider(values, this.props.history);
   }
