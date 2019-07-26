@@ -48,9 +48,10 @@ const reducer = (state = initialState, action) => {
         createServiceError: action.payload.error,
         createServiceLoading: false
       };
-
+    case service.EDIT_SERVICE_SUCCESS:
+      return { ...state, service: action.payload.data, editServiceLoading: false };
     case service.EDIT_SERVICE_LOADING:
-      return { ...state, fetchServiceLoading: true };
+      return { ...state, editServiceLoading: true };
     case service.EDIT_SERVICE_FAILURE:
       return {
         ...state,
