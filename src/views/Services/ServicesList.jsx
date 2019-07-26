@@ -47,16 +47,10 @@ class ServicesList extends React.Component {
   }
 
   componentDidMount() {
-    let servicesCached = localStorage.getItem('serviceCached');
-    servicesCached = JSON.parse(servicesCached);
-    if (servicesCached !== null && servicesCached.length > 0) {
-      this.setState({ data: servicesCached });
-    } else {
       const businessAdminId = localStorage.getItem('userSub');
       if (businessAdminId) {
         this.props.getServicesByBusinessAdminId(businessAdminId);
       }
-    }
   }
 
   componentWillReceiveProps(nextProps) {

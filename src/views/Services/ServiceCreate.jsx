@@ -160,7 +160,7 @@ class ServiceCreate extends React.Component {
                             mode: this.state.mode,
                             serviceCategoryId: this.state.serviceCategoryId,
                             tags: this.state.tags,
-                            organizationId: this.state.organizationId,
+                            organizationId: organizationOptions !== null && organizationOptions.length > 0 ? organizationOptions[0].id : null,
                             organizationName: this.state.organizationName,
                             businessAdminId: this.state.businessAdminId,
                             imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
