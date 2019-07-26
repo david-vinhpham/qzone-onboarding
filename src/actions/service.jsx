@@ -1,6 +1,8 @@
 import { API_ROOT, URL } from '../config/config';
 import { service } from '../constants/Service.constants';
-
+import React from "react";
+import Alert from 'react-s-alert';
+import AlertMessage from 'components/Alert/Message';
 export const editServiceLoading = () => {
   return {
     type: service.EDIT_SERVICE_LOADING
@@ -11,6 +13,13 @@ export const editServiceFailure = error => {
   return {
     type: service.EDIT_SERVICE_FAILURE,
     payload: { error }
+  };
+};
+
+export const editServiceSuccess = data => {
+  return {
+    type: service.EDIT_SERVICE_SUCCESS,
+    payload: { data }
   };
 };
 
@@ -25,28 +34,13 @@ export const deleteService = id => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success) {
-          const objects = {
-            data: []
-          };
-          let serviceCached = localStorage.getItem('serviceCached');
-          if (serviceCached !== null) {
-            serviceCached = JSON.parse(serviceCached); // json
-            for (let i = 0; i < serviceCached.length; i += 1) {
-              if (serviceCached[i].id === id) {
-                delete serviceCached[i];
-                break;
-              }
-            }
-            if (serviceCached.length > 0) {
-              objects.data = serviceCached; // json
-              localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
-            }
-          }
+        if (data.success) {
           dispatch({
             type: service.DEL_SERVICE_SUCCESS,
-            payload: objects
+            payload: data
           });
+          const sub = localStorage.getItem('userSub');
+          dispatch(fetchServicesByBusinessAdminId(sub));
         } else {
           dispatch({
             type: service.DEL_SERVICE_FAILURE,
@@ -69,29 +63,15 @@ export const editService = (data, history) => {
     })
       .then(res => res.json())
       .then(svc => {
-        if (svc.status === 200 || svc.status === 201 || svc.success) {
-          let serviceCached = localStorage.getItem('serviceCached');
-          if (serviceCached !== null) {
-            serviceCached = JSON.parse(serviceCached);
-            for (let i = 0; i < serviceCached.length; i += 1) {
-              // look for the entry with a matching `code` value
-              if (serviceCached[i].id === svc.object.id) {
-                // we found it
-                serviceCached[i] = svc.object;
-                break;
-              }
-            }
-            if (serviceCached.length > 0) {
-              localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
-            }
-          }
+        if (svc.success) {
+          dispatch(editServiceSuccess(svc.object));
           history.push('/services/list');
         } else {
-          dispatch(editServiceFailure(svc));
+          Alert.error(<AlertMessage>Cannot edit the service, missing image !</AlertMessage>);
         }
       })
       .catch(err => {
-        dispatch(editServiceFailure(err));
+        Alert.error(<AlertMessage>Cannot edit the service !</AlertMessage>);
       });
   };
 };
@@ -233,7 +213,7 @@ export const createServiceFailure = error => {
   };
 };
 
-export const fetchServicesByBusinessAdminId = businessAdminId => {
+export function fetchServicesByBusinessAdminId (businessAdminId) {
   return dispatch => {
     dispatch(fetchServicesLoading());
     fetch(API_ROOT + URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
@@ -264,15 +244,9 @@ export const createService = (data, history) => {
     })
       .then(res => res.json())
       .then(svc => {
-        if (svc.status === 200 || svc.status === 201 || svc.success) {
+        if (svc.success) {
           dispatch(createServiceSuccess(svc.object));
-          let serviceCached = localStorage.getItem('serviceCached');
-          if (serviceCached !== null) {
-            serviceCached = JSON.parse(serviceCached);
-            serviceCached.push(svc.object);
-            localStorage.setItem('serviceCached', JSON.stringify(serviceCached));
-            history.push('/services/list');
-          }
+          history.push('/services/list');
         } else {
           dispatch(createServiceFailure(svc));
         }
