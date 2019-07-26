@@ -246,7 +246,13 @@ class ProviderCreate extends React.Component {
                   <FormControl fullWidth className={classes.selectFormControl}>
                     <Select
                       options={organizationOptions}
-                      value={organizationOption}
+                      value={
+                        organizationOption === null
+                          ? organizationOptions.find(element => {
+                            return element.value;
+                          })
+                          : organizationOption
+                      }
                       onChange={this.handleOrgChange}
                     />
                   </FormControl>
