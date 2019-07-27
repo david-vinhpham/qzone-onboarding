@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import commonReducer from './common';
 import ProvidersReducer from './provider.reducer';
-import UserReducer from './reducer_auth';
+import UserReducer from './auth.reducer';
 import TemplateReducer from './email_templates';
 import OrganizationReducer from './organization.reducer';
 import ServiceReducer from './service.reducer';

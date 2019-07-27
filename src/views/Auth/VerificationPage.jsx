@@ -64,8 +64,8 @@ class VerificationPage extends React.PureComponent {
 
   handleVerificationCode = () => {
     const { code } = this.state;
-    const { email, history, user } = this.props;
-    this.props.verifyUserCode(user, email, code, history);
+    const { email, history, userSub } = this.props;
+    this.props.verifyUserCode(userSub, email, code, history);
   };
 
   cbAfterResend = () => {
@@ -140,16 +140,17 @@ const mapStateToProps = state => {
     verifyDetail: state.user.verifyDetail,
     verifyLoading: state.user.verifyLoading,
     verifyError: state.user.verifyError,
-    user: state.user.userDetails.userSub
+    userSub: state.user.userDetail.userSub
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    verifyUserCode: (user, email, code, history) =>
-      dispatch(verifyUserCode(user, email, code, history))
+    verifyUserCode: (userSub, email, code, history) =>
+      dispatch(verifyUserCode(userSub, email, code, history))
   };
 };
+
 export default compose(
   withStyles(verificationPageStyle),
   connect(

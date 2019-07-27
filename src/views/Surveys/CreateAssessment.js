@@ -68,7 +68,7 @@ class CreateAssessment extends React.Component {
 
   componentDidMount() {
     const { user, fetchTmpServices: fetchTmpServicesAction, history } = this.props;
-    const businessId = get(user, 'userDetails.userSub') || localStorage.getItem('userSub');
+    const businessId = get(user, 'userDetail.userSub') || localStorage.getItem('userSub');
     if (!businessId) {
       history.push('/assessments');
     } else {
@@ -101,7 +101,7 @@ class CreateAssessment extends React.Component {
     const { saveSurveyAction: saveSurvey, user } = this.props;
     const { surveyInfo } = this.state;
     const { title, description, tempServiceId } = surveyInfo;
-    const userId = get(user, 'userDetails.userSub') || localStorage.getItem('userSub');
+    const userId = get(user, 'userDetail.userSub') || localStorage.getItem('userSub');
     if (!isEmpty(title) && !isEmpty(description) && !isEmpty(tempServiceId) && !isEmpty(userId)) {
       saveSurvey({
         ...surveyInfo,

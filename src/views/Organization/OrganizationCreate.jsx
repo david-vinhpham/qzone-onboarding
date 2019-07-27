@@ -655,7 +655,6 @@ OrganizationCreate.propTypes = {
 
 
 const mapsStateToProp = (state) => ({
-  userDetails: state.user.userDetails,
   email: state.user.email,
   businessCategories: state.businessCategory.businessCategories,
   fetchBusinessCategoriesLoading: state.businessCategory.fetchBusinessCategoriesLoading,

@@ -105,7 +105,7 @@ class LoginPage extends React.Component {
         <div className={classes.container}>
           <GridContainer justify="center">
             <GridItem xs={12} sm={6} md={4} className={classes.justifyContentCenter}>
-              {userLoading === true ? (
+              {userLoading ? (
                 <Loading />
               ) : (
                 <form>
@@ -220,11 +220,9 @@ LoginPage.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    userDetails: state.user.userDetails,
     userLoading: state.user.userLoading,
     userError: state.user.userError,
     verify: state.user.verify,
-    resetPassword: state.user.resetPassword
   };
 };
 

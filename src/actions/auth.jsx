@@ -120,6 +120,7 @@ export function registerUser(values) {
     //   dispatch(register(values));
   };
 }
+
 export const resetPassword = values => {
   return dispatch => {
     dispatch(storeEmail(values.email));
@@ -308,6 +309,8 @@ export function fetchUser(id, history) {
         if (data.success) {
           if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
             dispatch(fetchUserSuccess(data));
+            localStorage.setItem('user', JSON.stringify(userDetail));
+            localStorage.setItem('userSub', userDetail.userSub);
           } else {
             Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
             dispatch(fetchUserFailure('Unauthorized'));
