@@ -39,7 +39,7 @@ import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsL
 // import Assessments from '../views/Surveys/Assessments';
 // import CreateAssessment from '../views/Surveys/CreateAssessment';
 
-export const dashboardRoutes = [
+const dashboardRoutes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
@@ -80,7 +80,7 @@ export const dashboardRoutes = [
   { redirect: true, path: '/', pathTo: '/login', name: 'Login' }
 ];
 
-export const otherRoutes = [
+const otherRoutes = [
   {
     path: '/location/edit/:id',
     name: 'Location Edit',
@@ -234,3 +234,7 @@ export const otherRoutes = [
     component: AvailabilitySlotsList
   }
 ];
+
+const providerRoutes = ['/calendar', '/profile'];
+
+export { dashboardRoutes, otherRoutes, providerRoutes };

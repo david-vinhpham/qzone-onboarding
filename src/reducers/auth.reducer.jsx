@@ -2,7 +2,7 @@ import { auth } from '../constants/Auth.constants';
 
 const initialState = {
   token: null,
-  userDetails: [],
+  userDetail: {},
   userError: null,
   userLoading: false,
   verify: false,
@@ -79,13 +79,13 @@ const reducer = (state = initialState, action) => {
     case auth.REGISTER_USER_SUCCESS: // return list of posts and make loading = false
       return {
         ...state,
-        userDetails: action.payload.user,
+        userDetail: action.payload.user,
         userError: [],
         userLoading: false,
         verify: true
       };
     case auth.REGISTER_USER_FAILURE: // return error and make loading = false
-      return { ...state, userDetails: [], userError: action.payload, userLoading: false };
+      return { ...state, userDetail: {}, userError: action.payload, userLoading: false };
 
     case auth.VERIFY_USER: // start fetching posts and set loading = true
       return { ...state, verifyError: [], verifyLoading: true };
@@ -108,7 +108,7 @@ const reducer = (state = initialState, action) => {
     case auth.EDIT_USER_LOADING:
       return { ...state, editUserLoading: true, editUser: [] };
     case auth.EDIT_USER_SUCCESS:
-      return { ...state, userDetails: action.payload, editUser: action.payload, editUserLoading: false };
+      return { ...state, userDetail: action.payload, editUser: action.payload, editUserLoading: false };
     case auth.EDIT_USER_FAILURE:
       return {
         ...state,
@@ -119,7 +119,7 @@ const reducer = (state = initialState, action) => {
     case auth.FETCH_USER_LOADING:
       return { ...state, fetchUserLoading: true };
     case auth.FETCH_USER_SUCCESS:
-      return { ...state, userDetails: action.payload, fetchUserLoading: false };
+      return { ...state, userDetail: action.payload, fetchUserLoading: false };
     case auth.FETCH_USER_FAILURE:
       return {
         ...state,

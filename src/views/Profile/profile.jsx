@@ -198,7 +198,7 @@ class Profile extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user.userDetails,
+  user: state.user.userDetail,
   editUser: state.user.editUser,
   isDefaultPwdChanged: state.user.isDefaultPwdChanged,
 });

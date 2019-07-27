@@ -6,7 +6,6 @@ export const eUserType = {
   admin: 'ADMIN',
 };
 
-
 export const eSurveyStatus = {
   completed: 'COMPLETED',
   inProgress: 'INPROGRESS',

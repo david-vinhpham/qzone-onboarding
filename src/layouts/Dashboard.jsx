@@ -15,18 +15,22 @@ import logo from '../assets/img/logo-white.svg';
 import withAuth from "../hoc/withAuth";
 import { fetchUser } from 'actions/auth.jsx';
 
-const switchRoutes = (
-  <Switch>
-    {[...otherRoutes, ...dashboardRoutes].map((prop, key) => {
-      if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
-      if (prop.collapse)
-        return prop.views.map((prop, key) => {
-          return <Route path={prop.path} component={withAuth(prop.component)} key={key} />;
-        });
-      return <Route path={prop.path} component={withAuth(prop.component)} key={key} />;
-    })}
-  </Switch>
-);
+const switchRoutes = (userDetail) => {
+  if (!userDetail || !userDetail.userType) return null;
+
+  return (
+    <Switch>
+      {[...otherRoutes, ...dashboardRoutes].map((prop, key) => {
+        if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
+        if (prop.collapse)
+          return prop.views.map((prop, key) => {
+            return <Route path={prop.path} component={withAuth(prop.component, userDetail)} key={key} />;
+          });
+        return <Route path={prop.path} component={withAuth(prop.component, userDetail)} key={key} />;
+      })}
+    </Switch>
+  );
+}
 
 let ps;
 class Dashboard extends React.Component {
@@ -83,6 +87,7 @@ class Dashboard extends React.Component {
       [classes.mainPanelSidebarMini]: this.state.miniActive,
       [classes.mainPanelWithPerfectScrollbar]: navigator.platform.indexOf('Win') > -1
     })}`;
+
     return (
       <div className={classes.wrapper}>
         <Sidebar
@@ -106,7 +111,7 @@ class Dashboard extends React.Component {
             {...rest}
           />
           <div className={classes.content}>
-            <div className={classes.container}>{switchRoutes}</div>
+            <div className={classes.container}>{switchRoutes(rest.userDetail)}</div>
           </div>
         </div>
       </div>
@@ -121,7 +126,7 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  userDetail: state.user.userDetails,
+  userDetail: state.user.userDetail,
 });
 
 export default withStyles(appStyle)(connect(mapStateToProps, { fetchUser })(Dashboard));
