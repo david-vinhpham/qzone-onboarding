@@ -179,7 +179,11 @@ export function loginUser(values, history) {
                 localStorage.setItem('user', JSON.stringify(userDetail));
                 localStorage.removeItem('tmpServices');
                 localStorage.removeItem('serviceCached');
-                history.push('/dashboard');
+                if(userDetail.userType === eUserType.provider) {
+                  history.push('/calendar');
+                } else {
+                  history.push('/dashboard');
+                }
               } else {
                 Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
                 dispatch(registerUserFailure('Unauthorized'));
