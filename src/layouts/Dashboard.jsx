@@ -15,22 +15,19 @@ import logo from '../assets/img/logo-white.svg';
 import withAuth from "../hoc/withAuth";
 import { fetchUser } from 'actions/auth.jsx';
 
-const switchRoutes = (userDetail) => {
-  if (!userDetail || !userDetail.userType) return null;
+const switchRoutes = (userDetail) => (
+  <Switch>
+    {[...otherRoutes, ...dashboardRoutes].map((prop, key) => {
+      if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
+      if (prop.collapse)
+        return prop.views.map((prop, key) => {
+          return <Route path={prop.path} component={withAuth(prop.component, userDetail)} key={key} />;
+        });
+      return <Route path={prop.path} component={withAuth(prop.component, userDetail)} key={key} />;
+    })}
+  </Switch>
+);
 
-  return (
-    <Switch>
-      {[...otherRoutes, ...dashboardRoutes].map((prop, key) => {
-        if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
-        if (prop.collapse)
-          return prop.views.map((prop, key) => {
-            return <Route path={prop.path} component={withAuth(prop.component, userDetail)} key={key} />;
-          });
-        return <Route path={prop.path} component={withAuth(prop.component, userDetail)} key={key} />;
-      })}
-    </Switch>
-  );
-}
 
 let ps;
 class Dashboard extends React.Component {
