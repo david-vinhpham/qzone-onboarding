@@ -74,7 +74,6 @@ class ForceChangePassword extends React.Component {
   };
 
   onChangePassword = ({ target: { value } }) => {
-    console.log('newPassword...' + value );
     const newState = {
       newPasswordState: value.length >= 8
         && value.length <= 60
@@ -96,11 +95,9 @@ class ForceChangePassword extends React.Component {
       confirmPwd: value,
     };
     this.setState(confirmState);
-    console.log('confirmState: ' + status);
   };
 
   onChangeDefaultPassword = ({ target: { value } }) => {
-    console.log('confirmPwd' + value);
     const newState = {
       defaultPwdState: value.length >= 8
         && value.length <= 60

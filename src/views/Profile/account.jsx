@@ -16,7 +16,7 @@ import CustomInput from '../../components/CustomInput/CustomInput';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
 import accountPageStyles from '../../assets/jss/material-dashboard-pro-react/modules/accountPageStyles';
-import ChangePassword from './change-password';
+/*import ChangePassword from './change-password';*/
 import { classesType } from '../../types/global';
 /*import AlertMessage from '../../components/Alert/Message';*/
 
@@ -152,11 +152,11 @@ class Account extends PureComponent {
               />
             </GridItem>
           </GridContainer>
-          <ChangePassword
+        {/*  <ChangePassword
             openChangePassword={openChangePassword}
             closeChangePassword={this.onCloseChangePassword}
             email={email}
-          />
+          />*/}
         </ExpansionPanelDetails>
       </ExpansionPanel>
     );
