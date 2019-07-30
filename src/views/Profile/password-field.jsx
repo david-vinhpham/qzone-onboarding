@@ -41,7 +41,7 @@ class PasswordField extends PureComponent {
     const defaultPwdProps = {
       labelText: useLabel ? 'Default Password (required)' : undefined,
       inputProps: {
-        onChange: onChangeDefaultPwd,
+        onChange: {onChangeDefaultPwd},
         type: 'password',
         placeholder: !useLabel ? 'Default Password (required)' : undefined,
         autoFocus: true,
@@ -51,7 +51,7 @@ class PasswordField extends PureComponent {
     const passwordProps = {
       labelText: useLabel ? 'Password (required)' : undefined,
       inputProps: {
-        onChange: onChangePassword,
+        onChange: {onChangePassword},
         type: 'password',
         placeholder: !useLabel ? 'Password (required)' : undefined,
         disabled: disabledFields,
@@ -61,7 +61,7 @@ class PasswordField extends PureComponent {
     const confirmPwdProps = {
       labelText: useLabel ? 'Confirm password (required)' : undefined,
       inputProps: {
-        onChange: onChangeConfirmPwd,
+        onChange: {onChangeConfirmPwd},
         type: 'password',
         placeholder: !useLabel ? 'Confirm password (required)' : undefined,
         disabled: disabledFields,
@@ -77,8 +77,6 @@ class PasswordField extends PureComponent {
             id="default"
             {...defaultPwdProps}
           />
-          <CustomInput id="hiddenPwd" customClass={classes.hiddenInput} />
-          <div />
         </div>
       )
       : null;

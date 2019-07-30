@@ -20,7 +20,7 @@ class Personal extends PureComponent {
     userType: PropTypes.string.isRequired,
     givenNameState: PropTypes.string.isRequired,
     familyName: PropTypes.string,
-    familyNameState: PropTypes.string.isRequired,
+    familyNameState: PropTypes.string,
     telephone: PropTypes.string.isRequired,
     userStatus: PropTypes.string.isRequired,
     streetAddress: PropTypes.string.isRequired,

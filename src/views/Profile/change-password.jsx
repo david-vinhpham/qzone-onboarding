@@ -25,7 +25,6 @@ class ChangePassword extends React.Component {
     email: PropTypes.string.isRequired,
     openChangePassword: PropTypes.bool.isRequired,
     closeChangePassword: PropTypes.func.isRequired,
-    changePassword: PropTypes.func.isRequired,
   };
 
   defaultState = {

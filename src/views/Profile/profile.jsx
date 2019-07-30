@@ -1,20 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import validateEmail from '../../utils/validateEmail';
 import ForceChangePassword from './force-change-password';
-import { userDetailType } from '../../types/global';
 import Account from './account';
 import Personal from './personal';
 import { userStatus as eUserStatus } from '../../constants';
 import { editProfile, fetchUser } from "../../actions/auth";
 
 class Profile extends React.Component {
-  static propTypes = {
-    user: userDetailType.isRequired,
-    updateProfile: PropTypes.func.isRequired,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -160,7 +153,6 @@ class Profile extends React.Component {
       personal,
       account,
       account: { email },
-      openResetPasswordStatus,
       id,
     } = this.state;
     const { resetPassword: resetPasswordAction, editUser } = this.props;
@@ -186,7 +178,7 @@ class Profile extends React.Component {
         )}
         {email !== undefined && (
           <ForceChangePassword
-            openChangePassword={openResetPasswordStatus}
+            openChangePassword={this.props.user.userStatus === eUserStatus.changePassword}
             closeChangePassword={this.handleClose}
             email={email}
             userId={id}

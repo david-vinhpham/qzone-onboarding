@@ -11,14 +11,14 @@ import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/CancelOutlined';
 import SaveIcon from '@material-ui/icons/CheckCircleOutlined';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Alert from 'react-s-alert';
+/*import Alert from 'react-s-alert';*/
 import CustomInput from '../../components/CustomInput/CustomInput';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
 import accountPageStyles from '../../assets/jss/material-dashboard-pro-react/modules/accountPageStyles';
 import ChangePassword from './change-password';
 import { classesType } from '../../types/global';
-import AlertMessage from '../../components/Alert/Message';
+/*import AlertMessage from '../../components/Alert/Message';*/
 
 class Account extends PureComponent {
   static propTypes = {
@@ -28,7 +28,6 @@ class Account extends PureComponent {
     emailState: PropTypes.string.isRequired,
     saveProfile: PropTypes.func.isRequired,
     resetAccount: PropTypes.func.isRequired,
-    resetPassword: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -73,7 +72,7 @@ class Account extends PureComponent {
   };
 
   onOpenChangePassword = () => {
-    const { resetPassword: resetPasswordAction } = this.props;
+/*    const { resetPassword: resetPasswordAction } = this.props;
     const { email } = this.state;
     resetPasswordAction({ email }, (response) => {
       if (response.status === 200 && response.data.success) {
@@ -82,7 +81,7 @@ class Account extends PureComponent {
       } else {
         Alert.error(<AlertMessage>{response.data.message}</AlertMessage>);
       }
-    });
+    });*/
   };
 
   render() {

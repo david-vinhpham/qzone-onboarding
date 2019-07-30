@@ -6,7 +6,6 @@ import { auth } from "../constants/Auth.constants";
 import { eUserType } from "constants.js";
 import Alert from 'react-s-alert';
 import AlertMessage from 'components/Alert/Message';
-
 const clientId = '3ov1blo2eji4acnqfcv88tcidn';
 
 export const authGetToken = () => {
@@ -177,8 +176,7 @@ export function loginUser(values, history) {
               if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
                 dispatch(registerUserSuccess(userDetail));
                 localStorage.setItem('user', JSON.stringify(userDetail));
-                localStorage.removeItem('tmpServices');
-                localStorage.removeItem('serviceCached');
+                localStorage.setItem('loginEmail',userDetail.email);
                 if(userDetail.userType === eUserType.provider) {
                   history.push('/calendar');
                 } else {
@@ -266,7 +264,7 @@ export function editProfile(values) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success) {
+        if (data.success) {
           localStorage.setItem('user', JSON.stringify(data));
           dispatch(editUserSuccess(data));
         } else {
@@ -402,3 +400,35 @@ export function facebookSignIn() {
     );
   };
 }
+
+export function completeNewPasswordChallenge(values, callback) {
+  return dispatch => {
+    dispatch({ type: auth.FORCE_RESET_PASSWORD_LOADING });
+    fetch(API_ROOT + URL.FORCE_CHANGE_PASSWORD, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          dispatch({
+            type: auth.FORCE_RESET_PASSWORD_SUCCESS,
+            payload: data
+          });
+          Alert.success(<AlertMessage>Password is successfully updated</AlertMessage>, {effect: 'bouncyflip'});
+        } else {
+          dispatch({
+            type: auth.FORCE_RESET_PASSWORD_FAILURE,
+            payload: data
+          });
+          Alert.error(<AlertMessage>{data.message}</AlertMessage>, {effect: 'bouncyflip'});
+        }
+      })
+  .catch(err => {
+    Alert.error(<AlertMessage>Cannot change password</AlertMessage>, {effect: 'bouncyflip'});
+    });
+  }
+};
