@@ -28,6 +28,7 @@ export const URL = {
   AWS_USER: 'aws-users',
   RESET_PASSWORD: 'users/reset-password',
   CHANGE_PASSWORD: 'users/change-password/',
+  FORCE_CHANGE_PASSWORD: 'users/completeNewPasswordChallenge',
   TIMEZONE: 'timezones',
   TIMEZONE_OPTIONS: 'timezones-option',
   FETCH_PROVIDERS_OPTION_BY_ORG_ID: 'providers-by-org-id/',
