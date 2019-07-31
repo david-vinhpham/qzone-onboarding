@@ -15,22 +15,8 @@ import logo from '../assets/img/logo-white.svg';
 import withAuth from "../hoc/withAuth";
 import { fetchUser } from 'actions/auth.jsx';
 
-const switchRoutes = (userDetail) => (
-  <Switch>
-    {[...otherRoutes, ...dashboardRoutes].map((prop, key) => {
-      if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
-      if (prop.collapse)
-        return prop.views.map((prop, key) => {
-          return <Route path={prop.path} component={withAuth(prop.component, userDetail)} key={key} />;
-        });
-      return <Route path={prop.path} component={withAuth(prop.component, userDetail)} key={key} />;
-    })}
-  </Switch>
-);
-
-
 let ps;
-class Dashboard extends React.Component {
+class Dashboard extends React.PureComponent {
   state = {
     mobileOpen: false,
     miniActive: false
@@ -108,7 +94,14 @@ class Dashboard extends React.Component {
             {...rest}
           />
           <div className={classes.content}>
-            <div className={classes.container}>{switchRoutes(rest.userDetail)}</div>
+            <div className={classes.container}>
+              <Switch>
+                {[...otherRoutes, ...dashboardRoutes].map((prop) => {
+                  if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={prop.path} />;
+                  return <Route path={prop.path} component={withAuth(prop.component, rest.userDetail)} key={prop.path} />;
+                })}
+              </Switch>
+            </div>
           </div>
         </div>
       </div>

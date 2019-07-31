@@ -21,7 +21,7 @@ const fetchEventsByProvidersSuccess = calendarData => ({
   calendarData
 });
 
-const fetchProvidersByBusinessIdSuccess = providers => ({
+export const fetchProvidersByBusinessIdSuccess = providers => ({
   type: FETCH_PROVIDER_BY_BUSINESS_ID.SUCCESS,
   providers
 });

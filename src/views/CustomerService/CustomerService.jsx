@@ -163,7 +163,7 @@ class CustomerService extends PureComponent {
       failureData,
       isVerifyBookingCodeSuccess,
       isBoardLoading,
-      isFetchServiceOptionsByBusinessAdminIdSuccess,
+      isFetchServiceOptionsSuccess,
       serviceOptions,
       isFetchProviderOptionsByBusinessAdminIdSuccess,
       providerOptions,
@@ -218,7 +218,7 @@ class CustomerService extends PureComponent {
         <div className={classes.cardTitleMargin + " " + classes.flexItem}>
           <h4 className={classes.boardHeader}>Customer Flow Board</h4>
           {boardData && boardData.mode && <Typography variant="subtitle2" className={classes.modeMargin}>Mode: {boardData.mode}</Typography>}
-          {isFetchServiceOptionsByBusinessAdminIdSuccess && <Select
+          {isFetchServiceOptionsSuccess && <Select
             className={classes.cardTitleMargin}
             value={defaultService}
             onChange={e => this.onChangeProviderOrService(e, 'defaultService')}
@@ -467,7 +467,7 @@ CustomerService.propTypes = {
   fetchFlowBoard: PropTypes.func.isRequired,
   isBoardLoading: PropTypes.bool.isRequired,
 
-  isFetchServiceOptionsByBusinessAdminIdSuccess: PropTypes.bool.isRequired,
+  isFetchServiceOptionsSuccess: PropTypes.bool.isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
 
   isFetchProviderOptionsByBusinessAdminIdSuccess: PropTypes.bool.isRequired,
@@ -481,7 +481,7 @@ const mapStateToProps = state => ({
   isVerifyBookingCodeSuccess: state.customerService.isVerifyBookingCodeSuccess,
   boardData: state.customerService.boardData,
   isBoardLoading: state.customerService.isBoardLoading,
-  isFetchServiceOptionsByBusinessAdminIdSuccess: state.options.service.isFetchServiceOptionsByBusinessAdminIdSuccess,
+  isFetchServiceOptionsSuccess: state.options.service.isFetchServiceOptionsSuccess,
   serviceOptions: state.options.service.serviceOptions,
   isFetchProviderOptionsByBusinessAdminIdSuccess: state.customerService.isFetchProviderOptionsByBusinessAdminIdSuccess,
   providerOptions: state.customerService.providerOptions,

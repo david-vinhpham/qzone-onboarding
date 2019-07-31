@@ -15,7 +15,7 @@ import {
   REPEAT_EVERY_DEF,
   REPEAT_END_TYPE,
 } from 'constants/Calendar.constants';
-import { providerType, optionType } from 'types/global';
+import { providerType, optionType, userDetailType } from 'types/global';
 import styles from './AddEventDialog.module.scss';
 import TmpServiceContent from './addEventDialog/TmpServiceContent';
 import CommonContent from './addEventDialog/CommonContent';
@@ -51,7 +51,7 @@ class AddEventDialog extends PureComponent {
           breakTimeEnd: values.addEventData.endTime,
           geoLocationId: this.props.geoOptions[0].value,
           numberOfParallelCustomer: 1,
-          serviceId: this.props.serviceOptions[0].value,
+          serviceId: get(this.props.serviceOptions, '0.value', '')
         } : {}
     );
   };
@@ -154,6 +154,7 @@ class AddEventDialog extends PureComponent {
       isEventTypeReadOnly,
       isEventLevelReadOnly,
       isProviderReadOnly,
+      userDetail,
     } = this.props;
 
     return (
@@ -191,6 +192,7 @@ class AddEventDialog extends PureComponent {
                 </DialogTitle>
                 <DialogContent>
                   <CommonContent
+                    userDetail={userDetail}
                     values={values}
                     providers={providers}
                     serviceOptions={serviceOptions}
@@ -253,7 +255,8 @@ AddEventDialog.propTypes = {
   isEditMode: PropTypes.bool,
   isEventTypeReadOnly: PropTypes.bool,
   isEventLevelReadOnly: PropTypes.bool,
-  isProviderReadOnly: PropTypes.bool
+  isProviderReadOnly: PropTypes.bool,
+  userDetail: userDetailType.isRequired
 };
 
 AddEventDialog.defaultProps = {
