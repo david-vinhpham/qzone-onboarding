@@ -12,6 +12,8 @@ export const CREATE_CALENDAR_EVENT = {
 };
 export const CALENDAR_LOADING = 'CALENDAR_LOADING';
 
+export const PROVIDER_EVENT_TYPE = ['TMP_SERVICE', 'BREAK'];
+
 export const EVENT_TYPE = Object.freeze({
   APPOINTMENT: 'APPOINTMENT',
   TMP_SERVICE: 'TMP_SERVICE',

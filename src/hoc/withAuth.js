@@ -4,7 +4,7 @@ import { eUserType } from 'constants.js';
 import { providerRoutes } from 'routes/dashboard';
 
 export default function withAuth(WrapComponent, userDetail) {
-  return class extends React.Component {
+  return class extends React.PureComponent {
     componentDidMount() {
       const userSub = localStorage.getItem('userSub');
       if (

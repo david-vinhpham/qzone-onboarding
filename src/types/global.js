@@ -21,9 +21,34 @@ export const optionType = PropTypes.shape({
   label: PropTypes.string
 });
 
-export const userDetailType = PropTypes.objectOf(PropTypes.oneOfType([
-  PropTypes.object, PropTypes.string,
-]));
+export const userDetailType = PropTypes.shape({
+  email: PropTypes.string,
+  familyName: PropTypes.string,
+  fullName: PropTypes.string,
+  givenName: PropTypes.string,
+  id: PropTypes.string,
+  imageUrl: PropTypes.string,
+  providerId: PropTypes.string,
+  providerInformation: PropTypes.shape({
+    businessId: PropTypes.string,
+    description: PropTypes.string,
+    image: PropTypes.shape({
+      fileUrl: PropTypes.string,
+      id: PropTypes.string,
+      keyName: PropTypes.string,
+      originName: PropTypes.string
+    }),
+    organizationId: PropTypes.string,
+    qualifications: PropTypes.string,
+    tags: PropTypes.string,
+    timeZoneId: PropTypes.string
+  }),
+  telephone: PropTypes.string,
+  token: PropTypes.string,
+  userStatus: PropTypes.string,
+  userSub: PropTypes.string,
+  userType: PropTypes.string,
+});
 
 export const customerFlowBoardType = PropTypes.shape({
   eventId: PropTypes.string,

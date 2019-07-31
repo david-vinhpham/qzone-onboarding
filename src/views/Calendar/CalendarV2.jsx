@@ -8,14 +8,18 @@ import {
 import { Add } from '@material-ui/icons';
 
 import Calendar from 'components/Calendar';
-import { providerType } from 'types/global';
+import { providerType, userDetailType } from 'types/global';
 import styles from './CalendarV2.module.scss';
 import { fetchEventsByProviderId } from 'actions/calendar';
+import { eUserType } from 'constants.js';
 
-class ManageCalendar extends React.PureComponent {
+class CalendarV2 extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { selectedProvider: 'none' };
+    this.state = {
+      selectedProvider: props.userDetail.userType === eUserType.provider
+        ? props.userDetail.id : 'none'
+    };
   }
 
   onSelectProvider = ({ target: { value } }) => {
@@ -23,33 +27,38 @@ class ManageCalendar extends React.PureComponent {
     if (value !== 'none') { this.props.fetchEventsByProviderId(value.id); }
   }
 
-  rightCustomHeader = () => (
-    <div className={styles.calendarRightCustomHeader}>
-      <Select
-        value={this.state.selectedProvider}
-        onChange={this.onSelectProvider}
-        className={styles.selectProvider}
-      >
-        <MenuItem value="none">
-          Select provider
-        </MenuItem>
-        {this.props.providers.map(prov => (
-          <MenuItem value={prov} key={prov.id}>
-            {prov.name}
-          </MenuItem>
-        ))}
-      </Select>
-      <Button
-        variant="contained"
-        color="primary"
-        style={{ color: 'white' }}
-        onClick={this.onClickNewEvent}
-      >
-        <Add fontSize="small" />
-        &nbsp;New event
-      </Button>
-    </div>
-  );
+  rightCustomHeader = () => {
+    const { userDetail } = this.props;
+
+    return (
+      <div className={styles.calendarRightCustomHeader}>
+        {userDetail.userType !== eUserType.provider &&
+          <Select
+            value={this.state.selectedProvider}
+            onChange={this.onSelectProvider}
+            className={styles.selectProvider}
+          >
+            <MenuItem value="none">
+              Select provider
+            </MenuItem>
+            {this.props.providers.map(prov => (
+              <MenuItem value={prov} key={prov.id}>
+                {prov.name}
+              </MenuItem>
+            ))}
+          </Select>}
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ color: 'white' }}
+          onClick={this.onClickNewEvent}
+        >
+          <Add fontSize="small" />
+          &nbsp;New event
+        </Button>
+      </div>
+    );
+  }
 
   onClickNewEvent = ({ start, end }) => {
     this.props.onClickNewEvent(this.state.selectedProvider, start ? start.toDate() : undefined, end ? end.toDate() : undefined);
@@ -69,15 +78,16 @@ class ManageCalendar extends React.PureComponent {
   }
 }
 
-ManageCalendar.propTypes = {
+CalendarV2.propTypes = {
   providers: arrayOf(providerType).isRequired,
   calendarData: arrayOf(any).isRequired,
   onClickNewEvent: func.isRequired,
-  fetchEventsByProviderId: func.isRequired
+  fetchEventsByProviderId: func.isRequired,
+  userDetail: userDetailType.isRequired
 };
 
 const mapStateToProps = state => ({
   calendarData: state.calendarManage.calendarData
 });
 
-export default connect(mapStateToProps, { fetchEventsByProviderId })(ManageCalendar);
+export default connect(mapStateToProps, { fetchEventsByProviderId })(CalendarV2);

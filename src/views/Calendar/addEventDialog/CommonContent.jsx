@@ -12,24 +12,27 @@ import { DatePicker, TimePicker } from '@material-ui/pickers'
 import {
   EVENT_LEVEL, EVENT_TYPE, EVENT_TYPE_TITLE,
   EVENT_REPEAT_TYPE, REPEAT_END_TYPE,
-  REPEAT_EVERY_DEF, REPEAT_DATE_DEF
+  REPEAT_EVERY_DEF, REPEAT_DATE_DEF, PROVIDER_EVENT_TYPE
 } from 'constants/Calendar.constants';
-import { providerType, optionType } from 'types/global';
+import { providerType, optionType, userDetailType } from 'types/global';
 import styles from './CommonContent.module.scss';
 import addEventDialogStyles from '../AddEventDialog.module.scss';
+import { eUserType } from 'constants.js';
 
 export default function CommonContent({
   values, providers, serviceOptions, handleChange,
   onChangeEventType, onSelectEventLevel, onSelectProvider,
   onChangeNewEventDateTime, onSelectRepeatType, onRepeatEndSelect,
   onBlurOccurence, onChangeRepeatEndDate, onChangeCustomerMobilePhone,
-  isEventTypeReadOnly, isEventLevelReadOnly, isProviderReadOnly
+  isEventTypeReadOnly, isEventLevelReadOnly, isProviderReadOnly,
+  userDetail
 }) {
   const startTime = moment(values.addEventData.startTime).toDate();
   const endTime = moment(values.addEventData.endTime).toDate();
   const repeatUntilDate = values.addEventData.repeat.repeatEnd.onDate
     ? moment(values.addEventData.repeat.repeatEnd.onDate).toDate()
     : undefined;
+  const isProvider = userDetail.userType === eUserType.provider;
 
   return (
     <Grid container spacing={1} className={addEventDialogStyles.calendarDatetimePicker}>
@@ -49,7 +52,15 @@ export default function CommonContent({
               readOnly={isEventTypeReadOnly}
             >
               {Object.values(EVENT_TYPE)
-                .filter(e => e !== EVENT_TYPE.TMP_EVENTS)
+                .filter(e => {
+                  if (e !== EVENT_TYPE.TMP_EVENTS) {
+                    if (isProvider) {
+                      return PROVIDER_EVENT_TYPE.includes(e);
+                    }
+                    return true;
+                  }
+                  return false;
+                })
                 .map(e => (
                   <MenuItem value={e} key={e}>
                     {EVENT_TYPE_TITLE[e]}
@@ -79,7 +90,8 @@ export default function CommonContent({
                   {EVENT_LEVEL.PROVIDER}
                 </MenuItem>
                 {values.addEventData.eventType !== EVENT_TYPE.APPOINTMENT
-                  && values.addEventData.eventType !== EVENT_TYPE.TMP_SERVICE &&
+                  && values.addEventData.eventType !== EVENT_TYPE.TMP_SERVICE
+                  && !isProvider &&
                   <MenuItem value={EVENT_LEVEL.BUSINESS}>
                     {EVENT_LEVEL.BUSINESS}
                   </MenuItem>}
@@ -478,5 +490,6 @@ CommonContent.propTypes = {
   onChangeCustomerMobilePhone: PropTypes.func.isRequired,
   isEventTypeReadOnly: PropTypes.bool.isRequired,
   isEventLevelReadOnly: PropTypes.bool.isRequired,
-  isProviderReadOnly: PropTypes.bool.isRequired
+  isProviderReadOnly: PropTypes.bool.isRequired,
+  userDetail: userDetailType.isRequired
 }

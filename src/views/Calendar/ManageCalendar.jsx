@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 import moment from 'moment-timezone';
 
-import { createNewEvent, fetchProvidersByBusinessId } from 'actions/calendar';
+import { createNewEvent, fetchProvidersByBusinessId, fetchEventsByProviderId, fetchProvidersByBusinessIdSuccess } from 'actions/calendar';
 import {
   EVENT_LEVEL,
   EVENT_TYPE,
   EVENT_REPEAT_TYPE
 } from 'constants/Calendar.constants';
-import { providerType, optionType } from 'types/global';
+import { providerType, optionType, userDetailType } from 'types/global';
 import Calendar from './CalendarV2';
 import AddEventDialog from './AddEventDialog';
 import CalendarLoading from './CalendarLoading';
@@ -17,6 +17,7 @@ import { createNewEventHelper } from './helpers';
 import { fetchGeoLocationOptions } from 'actions/geoOptions';
 import { fetchServiceOptionsByBusinessAdminId } from 'actions/serviceOptions';
 import { fetchTimezoneOptions } from 'actions/timezoneOptions';
+import { eUserType } from 'constants.js';
 
 class ManageCalendar extends React.PureComponent {
   constructor(props) {
@@ -39,8 +40,14 @@ class ManageCalendar extends React.PureComponent {
   componentDidMount() {
     const userId = localStorage.getItem('userSub');
     if (userId) {
-      this.props.fetchProvidersByBusinessId(userId);
-      this.props.fetchServiceOptionsByBusinessAdminId(userId);
+      if (this.props.userDetail.userType === eUserType.provider) {
+        this.props.fetchEventsByProviderId(userId);
+        this.props.fetchServiceOptionsByBusinessAdminId(this.props.userDetail.providerInformation.businessId);
+        this.props.fetchProvidersByBusinessIdSuccess([this.props.userDetail]);
+      } else {
+        this.props.fetchProvidersByBusinessId(userId);
+        this.props.fetchServiceOptionsByBusinessAdminId(userId);
+      }
       this.props.fetchGeoLocationOptions();
       this.props.fetchTimezoneOptions();
     }
@@ -53,7 +60,7 @@ class ManageCalendar extends React.PureComponent {
       const defaultProvider = this.props.providers[0];
       const chosenProvider = providerDetail === 'none' ? defaultProvider : providerDetail;
       const addEventData = {
-        eventType: Object.values(EVENT_TYPE)[0],
+        eventType: EVENT_TYPE.TMP_SERVICE,
         description: '',
         repeat: { type: Object.values(EVENT_REPEAT_TYPE)[0], repeatEnd: {} },
         timezoneId: chosenProvider.timezone,
@@ -79,15 +86,16 @@ class ManageCalendar extends React.PureComponent {
   };
 
   render() {
-    const { providers, tzOptions, serviceOptions, isLoading } = this.props;
+    const { providers, tzOptions, serviceOptions, isLoading, userDetail } = this.props;
     const { isOpenAddDialog, eventLevel, addEventData } = this.state;
 
     return (
       <>
-        <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} />
+        <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} userDetail={userDetail} />
         <CalendarLoading isLoading={isLoading} />
         {isOpenAddDialog && (
           <AddEventDialog
+            userDetail={userDetail}
             eventLevel={eventLevel}
             providers={providers}
             isOpenAddDialog={isOpenAddDialog}
@@ -112,13 +120,17 @@ ManageCalendar.propTypes = {
   fetchGeoLocationOptions: func.isRequired,
   fetchServiceOptionsByBusinessAdminId: func.isRequired,
   fetchTimezoneOptions: func.isRequired,
+  userDetail: userDetailType.isRequired,
+  fetchEventsByProviderId: func.isRequired,
+  fetchProvidersByBusinessIdSuccess: func.isRequired,
 };
 
 const mapStateToProps = state => ({
   providers: state.calendarManage.providers,
   isLoading: state.calendarManage.isLoading,
   tzOptions: state.options.timezone.tzOptions,
-  serviceOptions: state.options.service.serviceOptions
+  serviceOptions: state.options.service.serviceOptions,
+  userDetail: state.user.userDetail,
 });
 
 const mapDispatchToProps = {
@@ -127,6 +139,8 @@ const mapDispatchToProps = {
   fetchServiceOptionsByBusinessAdminId,
   fetchTimezoneOptions,
   fetchProvidersByBusinessId,
+  fetchEventsByProviderId,
+  fetchProvidersByBusinessIdSuccess
 };
 
 export default connect(
