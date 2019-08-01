@@ -48,52 +48,28 @@ export const fetchEventsByProviderId = providerId => dispatch => {
   dispatch(calendarLoading(true));
 
   const fetchEvents = [];
-  const fetchTmpEvents = [];
   fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
-  fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID}${providerId}`));
-  fetchTmpEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_EVENTS_BY_PROVIDER_ID}${providerId}`));
+  fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_EVENTS_BY_PROVIDER_ID}${providerId}`));
 
-  Promise.all([Promise.all(fetchEvents), Promise.all(fetchTmpEvents)])
-    .then(([rep, tmpEventsResp]) => {
-      const tmpEvents = reduce(tmpEventsResp, (acc, resp) => {
+  Promise.all(fetchEvents)
+    .then((eventsResp) => {
+      const tmpEvents = reduce(eventsResp, (acc, resp) => {
         const listEvent = get(resp, 'data.objects', []);
         return acc.concat(listEvent.map(e => ({
           ...e,
           providerId: resp.config.url.split('/').slice(-1)[0],
         })));
       }, []);
-      const otherEvents = reduce(rep, (acc, event) => acc.concat(get(event, 'data.objects', [])), []);
-      let events = [];
-
-      events = tmpEvents.map((e, index) => ({
-        slot: { startTime: e.istart, endTime: e.iend },
+      const events = tmpEvents.map((e, index) => ({
         id: e.id,
-        description: '',
-        type: EVENT_TYPE.TMP_EVENTS,
         providerId: e.providerId,
         title: e.title,
-        raw: e.resourceId
+        type: e.type || EVENT_TYPE.TMP_EVENTS,
+        slot: { startTime: e.istart, endTime: e.iend },
+        raw: e.resourceId,
+        description: '',
       }));
 
-      otherEvents.forEach(e => {
-        let slots = [];
-        if (e.slots && e.slots.length > 0) {
-          slots = e.slots.slice();
-          delete e.slots;
-        } else {
-          slots = [{ ...e.slot }];
-        }
-
-        slots.forEach((slot, index) => {
-          events.push({
-            ...e,
-            id: `${e.id}-repeat-${index}`,
-            slot,
-            type: e.type || EVENT_TYPE.TMP_SERVICE,
-            raw: e.resourceId
-          })
-        });
-      });
       dispatch(fetchEventsByProvidersSuccess(events));
     })
     .finally(() => { dispatch(calendarLoading(false)); });
