@@ -177,6 +177,7 @@ export function loginUser(values, history) {
                 dispatch(registerUserSuccess(userDetail));
                 localStorage.setItem('user', JSON.stringify(userDetail));
                 localStorage.setItem('loginEmail',userDetail.email);
+                localStorage.setItem('userStatus', userDetail.userStatus);
                 if(userDetail.userType === eUserType.provider) {
                   history.push('/calendar');
                 } else {
@@ -414,6 +415,7 @@ export function completeNewPasswordChallenge(values, callback) {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
+          localStorage.setItem('userStatus', 'CONFIRMED ');
           dispatch({
             type: auth.FORCE_RESET_PASSWORD_SUCCESS,
             payload: data

@@ -15,19 +15,16 @@ import { classesType } from '../../types/global';
 import AlertMessage from '../../components/Alert/Message';
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import { completeNewPasswordChallenge } from "../../actions/auth";
+import {userStatus as eUserStatus} from "../../constants";
 
 class ForceChangePassword extends React.Component {
   static propTypes = {
     classes: classesType.isRequired,
     email: PropTypes.string.isRequired,
-    openChangePassword: PropTypes.bool,
     completeNewPasswordChallenge: PropTypes.func.isRequired,
     userId: PropTypes.string,
   };
 
-  static defaultProps = {
-    openChangePassword: true,
-  };
 
   defaultState = {
     defaultPwd: undefined,
@@ -39,17 +36,21 @@ class ForceChangePassword extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.state = {email:'', ...this.defaultState };
+    this.state = {email:'', ...this.defaultState, openChangePassword: false };
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({openChangePassword: !nextProps.closeChangePasswordDialog});
+    const userStatus = localStorage.getItem('userStatus');
+    if(userStatus !== null && userStatus !== '') {
+      this.setState({openChangePassword: userStatus === eUserStatus.changePassword});
+    }
   }
 
   componentDidMount() {
     const loginEmail = localStorage.getItem('loginEmail');
     this.setState({email: loginEmail});
-    this.setState({openChangePassword: true});
+    const userStatus = localStorage.getItem('userStatus');
+    this.setState({openChangePassword: userStatus === eUserStatus.changePassword});
   }
   handleChangePassword = (event) => {
     event.preventDefault();
@@ -181,7 +182,7 @@ class ForceChangePassword extends React.Component {
 }
 const mapStateToProps = state => {
   return {
-    closeChangePasswordDialog: state.user.closeChangePasswordDialog
+    force_change_password: state.user.force_change_password
   };
 };
 

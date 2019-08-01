@@ -12,6 +12,7 @@ const initialState = {
   email: null,
 
   fetchUserLoading: false,
+  force_change_password: false,
 
   editUser: [],
   editUserError: null,
@@ -20,7 +21,6 @@ const initialState = {
   forceResetPasswordRsp: [], // verification code
   forceResetPasswordError: [], // verification code
   forceResetPasswordLoading: false,
-  closeChangePasswordDialog: false,
 
   resetPasswordRsp: [], // verification code
   resetPasswordError: [], // verification code
@@ -60,15 +60,13 @@ const reducer = (state = initialState, action) => {
     case auth.FORCE_RESET_PASSWORD_LOADING:
       return {
         ...state,
-        closeChangePasswordDialog: false
       };
     case auth.FORCE_RESET_PASSWORD_SUCCESS:
-      return { ...state, forceResetPasswordRsp: action.payload, closeChangePasswordDialog: true };
+      return { ...state, forceResetPasswordRsp: action.payload, force_change_password: true };
     case auth.FORCE_RESET_PASSWORD_FAILURE:
       return {
         ...state,
-        forceResetPasswordError: action.payload,
-        closeChangePasswordDialog: true,
+        forceResetPasswordError: action.payload,  force_change_password: false
       };
 
     case auth.CHANGE_PASSWORD_LOADING:
