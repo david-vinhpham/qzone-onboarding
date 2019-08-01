@@ -90,6 +90,7 @@ export const fetchEventsByProviderId = providerId => dispatch => {
             id: `${e.id}-repeat-${index}`,
             slot,
             type: e.type || EVENT_TYPE.TMP_SERVICE,
+            raw: e.resourceId
           })
         });
       });
