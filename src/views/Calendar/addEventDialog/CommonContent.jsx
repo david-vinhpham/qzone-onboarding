@@ -53,7 +53,7 @@ export default function CommonContent({
             >
               {Object.values(EVENT_TYPE)
                 .filter(e => {
-                  if (e !== EVENT_TYPE.TMP_EVENTS) {
+                  if (e !== EVENT_TYPE.TMP_EVENTS && e !== EVENT_TYPE.APPOINTMENT) {
                     if (isProvider) {
                       return PROVIDER_EVENT_TYPE.includes(e);
                     }
