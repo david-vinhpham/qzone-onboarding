@@ -9,7 +9,7 @@ import {
   EVENT_TYPE,
   EVENT_REPEAT_TYPE
 } from 'constants/Calendar.constants';
-import { providerType, optionType, userDetailType } from 'types/global';
+import { providerType, optionType, userDetailType, historyType } from 'types/global';
 import Calendar from './CalendarV2';
 import AddEventDialog from './AddEventDialog';
 import CalendarLoading from './CalendarLoading';
@@ -34,7 +34,10 @@ class ManageCalendar extends React.PureComponent {
       },
       eventLevel: EVENT_LEVEL.PROVIDER
     };
-    this.state = { ...this.initialState };
+
+    this.state = props.history.location.state
+      ? { isOpenAddDialog: true, ...props.history.location.state.prevState }
+      : { ...this.initialState };
   }
 
   componentDidMount() {
@@ -86,7 +89,7 @@ class ManageCalendar extends React.PureComponent {
   };
 
   render() {
-    const { providers, tzOptions, serviceOptions, isLoading, userDetail } = this.props;
+    const { providers, tzOptions, serviceOptions, isLoading, userDetail, history } = this.props;
     const { isOpenAddDialog, eventLevel, addEventData } = this.state;
 
     return (
@@ -104,6 +107,7 @@ class ManageCalendar extends React.PureComponent {
             createNewEvent={this.onCreateNewEvent}
             tzOptions={tzOptions}
             serviceOptions={serviceOptions}
+            history={history}
           />
         )}
       </>
@@ -123,6 +127,7 @@ ManageCalendar.propTypes = {
   userDetail: userDetailType.isRequired,
   fetchEventsByProviderId: func.isRequired,
   fetchProvidersByBusinessIdSuccess: func.isRequired,
+  history: historyType.isRequired
 };
 
 const mapStateToProps = state => ({

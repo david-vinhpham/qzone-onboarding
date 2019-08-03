@@ -27,17 +27,16 @@ class LocationCreate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.doubleClick = this.doubleClick.bind(this);
 
     Geocode.setApiKey(GEO_CODING_KEY);
     Geocode.enableDebug();
   }
 
-  doubleClick(fieldName) {
+  doubleClick = (fieldName) => {
     this.setState({ isEditMode: fieldName });
   }
 
-  handleLocation(values) {
+  handleLocation = (values) => {
     let fullAddress = values.streetAddress;
     if(values.district != null && values.district.length > 0) {
       fullAddress += ', ' + values.district;
@@ -72,6 +71,10 @@ class LocationCreate extends React.Component {
     );
   }
 
+  exitForm = () => {
+    this.props.history.goBack();
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -96,7 +99,7 @@ class LocationCreate extends React.Component {
               }
             }}
             validationSchema={LocationSchema}
-            onSubmit={values => this.handleLocation(values)}
+            onSubmit={this.handleLocation}
             children={props => (
               <LocationForm
                 {...props}
@@ -104,6 +107,7 @@ class LocationCreate extends React.Component {
                 onDoubleClick={this.doubleClick}
                 classes={this.props.classes}
                 buttonName="Create Address"
+                exitForm={this.exitForm}
               />
             )}
           />

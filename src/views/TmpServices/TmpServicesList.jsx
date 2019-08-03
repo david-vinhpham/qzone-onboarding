@@ -78,18 +78,10 @@ class TmpServicesList extends PureComponent {
       this.props.fetchTmpServices(this.businessId);
     }
 
-    if (this.props.providers.length === 0) {
-      this.props.fetchProvidersByBusinessId(this.businessId);
-    }
-    if (this.props.tzOptions.length === 0) {
-      this.props.fetchTimezoneOptions();
-    }
-    if (this.props.serviceOptions.length === 0) {
-      this.props.fetchServiceOptionsByBusinessAdminId(this.businessId);
-    }
-    if (this.props.geoOptions.length === 0) {
-      this.props.fetchGeoLocationOptions();
-    }
+    this.props.fetchProvidersByBusinessId(this.businessId);
+    this.props.fetchTimezoneOptions();
+    this.props.fetchServiceOptionsByBusinessAdminId(this.businessId);
+    this.props.fetchGeoLocationOptions();
   }
 
   handleClick(event, history) {

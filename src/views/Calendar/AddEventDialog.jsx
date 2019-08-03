@@ -15,7 +15,7 @@ import {
   REPEAT_EVERY_DEF,
   REPEAT_END_TYPE,
 } from 'constants/Calendar.constants';
-import { providerType, optionType, userDetailType } from 'types/global';
+import { providerType, optionType, userDetailType, historyType } from 'types/global';
 import styles from './AddEventDialog.module.scss';
 import TmpServiceContent from './addEventDialog/TmpServiceContent';
 import CommonContent from './addEventDialog/CommonContent';
@@ -122,7 +122,7 @@ class AddEventDialog extends PureComponent {
   onClickSubmit = (values) => () => {
     this.props.createNewEvent(values);
   };
-  
+
   onBlurServiceTime = (setFieldValue) => ({ target: { value } }) => {
     setFieldValue('addEventData.tmpService.avgServiceTime', value.length === 0 ? 30 : Number(value));
   };
@@ -145,6 +145,14 @@ class AddEventDialog extends PureComponent {
       setFieldValue('addEventData.tmpService.breakTimeEnd', momentData.format());
     }
   };
+
+  addNewLocation = values => () => {
+    const { history } = this.props;
+    history.push('/location/create', {
+      prevPage: '/calendar',
+      prevState: values
+    });
+  }
 
   render() {
     const {
@@ -218,6 +226,8 @@ class AddEventDialog extends PureComponent {
                     onBlurServiceTime={this.onBlurServiceTime(setFieldValue, values)}
                     onChangeTmpServiceDateTime={this.onChangeTmpServiceDateTime(setFieldValue, values)}
                     onBlurParallelCustomer={this.onBlurParallelCustomer(setFieldValue)}
+                    addNewLocation={this.addNewLocation(values)}
+                    userDetail={userDetail}
                   />}
                 </DialogContent>
                 <DialogActions classes={{ root: styles.calendarDialogFooter }}>
@@ -256,7 +266,8 @@ AddEventDialog.propTypes = {
   isEventTypeReadOnly: PropTypes.bool,
   isEventLevelReadOnly: PropTypes.bool,
   isProviderReadOnly: PropTypes.bool,
-  userDetail: userDetailType.isRequired
+  userDetail: userDetailType.isRequired,
+  history: historyType.isRequired
 };
 
 AddEventDialog.defaultProps = {

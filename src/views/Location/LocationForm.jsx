@@ -1,7 +1,6 @@
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { FormLabel, InputLabel } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -18,7 +17,8 @@ class LocationForm extends React.Component {
       handleChange,
       handleSubmit,
       errors,
-      touched
+      touched,
+      exitForm
     } = this.props;
     return (
       <form>
@@ -41,14 +41,14 @@ class LocationForm extends React.Component {
                 onChange={handleChange}
               />
             ) : (
-              <InputLabel
-                className={classes.labelLeftHorizontal}
-                sm={4}
-                onClick={() => this.props.onDoubleClick('streetAddress')}
-              >
-                {values.streetAddress || 'Street address'}
-              </InputLabel>
-            )}
+                <InputLabel
+                  className={classes.labelLeftHorizontal}
+                  sm={4}
+                  onClick={() => this.props.onDoubleClick('streetAddress')}
+                >
+                  {values.streetAddress || 'Street address'}
+                </InputLabel>
+              )}
           </GridItem>
         </GridContainer>
 
@@ -71,13 +71,13 @@ class LocationForm extends React.Component {
                 onChange={handleChange}
               />
             ) : (
-              <InputLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('district')}
-              >
-                {values.district || 'District'}
-              </InputLabel>
-            )}
+                <InputLabel
+                  className={classes.labelLeftHorizontal}
+                  onClick={() => this.props.onDoubleClick('district')}
+                >
+                  {values.district || 'District'}
+                </InputLabel>
+              )}
             {errors.district && touched.district ? <div style={{ color: 'red' }}>{errors.district}</div> : null}
           </GridItem>
         </GridContainer>
@@ -101,13 +101,13 @@ class LocationForm extends React.Component {
                 onChange={handleChange}
               />
             ) : (
-              <InputLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('city')}
-              >
-                {values.city || 'City'}
-              </InputLabel>
-            )}
+                <InputLabel
+                  className={classes.labelLeftHorizontal}
+                  onClick={() => this.props.onDoubleClick('city')}
+                >
+                  {values.city || 'City'}
+                </InputLabel>
+              )}
             {errors.city && touched.city ? <div style={{ color: 'red' }}>{errors.city}</div> : null}
           </GridItem>
         </GridContainer>
@@ -131,13 +131,13 @@ class LocationForm extends React.Component {
                 onChange={handleChange}
               />
             ) : (
-              <InputLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('state')}
-              >
-                {values.state || 'State'}
-              </InputLabel>
-            )}
+                <InputLabel
+                  className={classes.labelLeftHorizontal}
+                  onClick={() => this.props.onDoubleClick('state')}
+                >
+                  {values.state || 'State'}
+                </InputLabel>
+              )}
             {errors.state && touched.state ? (
               <div style={{ color: 'red' }}>{errors.state}</div>
             ) : null}
@@ -163,13 +163,13 @@ class LocationForm extends React.Component {
                 onChange={handleChange}
               />
             ) : (
-              <InputLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('zipcode')}
-              >
-                {values.postCode || 'Zipcode'}
-              </InputLabel>
-            )}
+                <InputLabel
+                  className={classes.labelLeftHorizontal}
+                  onClick={() => this.props.onDoubleClick('zipcode')}
+                >
+                  {values.postCode || 'Zipcode'}
+                </InputLabel>
+              )}
             {errors.postCode && touched.postCode ? (
               <div style={{ color: 'red' }}>{errors.postCode}</div>
             ) : null}
@@ -195,13 +195,13 @@ class LocationForm extends React.Component {
                 onChange={handleChange}
               />
             ) : (
-              <InputLabel
-                className={classes.labelLeftHorizontal}
-                onClick={() => this.props.onDoubleClick('country')}
-              >
-                {values.country || 'Country'}
-              </InputLabel>
-            )}
+                <InputLabel
+                  className={classes.labelLeftHorizontal}
+                  onClick={() => this.props.onDoubleClick('country')}
+                >
+                  {values.country || 'Country'}
+                </InputLabel>
+              )}
             {errors.country && touched.country ? (
               <div style={{ color: 'red' }}>{errors.country}</div>
             ) : null}
@@ -212,9 +212,7 @@ class LocationForm extends React.Component {
           <Button color="rose" onClick={handleSubmit}>
             {this.props.buttonName}
           </Button>
-          <Link to="/location/list">
-            <Button color="rose">Exit</Button>
-          </Link>
+          <Button color="rose" onClick={exitForm}>Exit</Button>
         </GridContainer>
       </form>
     );
