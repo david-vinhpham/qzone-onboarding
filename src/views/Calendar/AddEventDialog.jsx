@@ -147,10 +147,10 @@ class AddEventDialog extends PureComponent {
   };
 
   addNewLocation = values => () => {
-    const { history } = this.props;
+    const { history, isEditMode } = this.props;
     history.push('/location/create', {
-      prevPage: '/calendar',
-      prevState: values
+      prevPage: history.location.pathname,
+      prevState: { ...values, isEditMode }
     });
   }
 
@@ -277,4 +277,7 @@ AddEventDialog.defaultProps = {
   isProviderReadOnly: false
 };
 
-export default connect(state => ({ geoOptions: state.options.geo.geoOptions }))(AddEventDialog);
+export default connect(state => ({
+  geoOptions: state.options.geo.geoOptions,
+  userDetail: state.user.userDetail,
+}))(AddEventDialog);

@@ -36,7 +36,11 @@ class ManageCalendar extends React.PureComponent {
     };
 
     this.state = props.history.location.state
-      ? { isOpenAddDialog: true, ...props.history.location.state.prevState }
+      ? {
+        isOpenAddDialog: true,
+        addEventData: props.history.location.state.prevState.addEventData,
+        eventLevel: props.history.location.state.prevState.eventLevel,
+      }
       : { ...this.initialState };
   }
 
@@ -89,16 +93,15 @@ class ManageCalendar extends React.PureComponent {
   };
 
   render() {
-    const { providers, tzOptions, serviceOptions, isLoading, userDetail, history } = this.props;
+    const { providers, tzOptions, serviceOptions, isLoading, history } = this.props;
     const { isOpenAddDialog, eventLevel, addEventData } = this.state;
 
     return (
       <>
-        <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} userDetail={userDetail} />
+        <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} />
         <CalendarLoading isLoading={isLoading} />
         {isOpenAddDialog && (
           <AddEventDialog
-            userDetail={userDetail}
             eventLevel={eventLevel}
             providers={providers}
             isOpenAddDialog={isOpenAddDialog}

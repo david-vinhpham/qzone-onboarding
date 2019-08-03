@@ -38,19 +38,19 @@ class LocationCreate extends React.Component {
 
   handleLocation = (values) => {
     let fullAddress = values.streetAddress;
-    if(values.district != null && values.district.length > 0) {
+    if (values.district != null && values.district.length > 0) {
       fullAddress += ', ' + values.district;
     }
-    if(values.city != null && values.city.length > 0) {
+    if (values.city != null && values.city.length > 0) {
       fullAddress += ', ' + values.city;
     }
-    if(values.state != null && values.state.length > 0) {
+    if (values.state != null && values.state.length > 0) {
       fullAddress += ', ' + values.state;
     }
-    if(values.postCode != null && values.postCode.length > 0) {
+    if (values.postCode != null && values.postCode.length > 0) {
       fullAddress += ' ' + values.postCode;
     }
-    if(values.country != null && values.country.length > 0) {
+    if (values.country != null && values.country.length > 0) {
       fullAddress += ', ' + values.country;
     }
     Geocode.fromAddress(fullAddress).then(
@@ -72,7 +72,13 @@ class LocationCreate extends React.Component {
   }
 
   exitForm = () => {
-    this.props.history.goBack();
+    const { history } = this.props;
+    if (history.location.state) {
+      const { prevPage, prevState } = history.location.state;
+      history.push(prevPage, { prevState });
+    } else {
+      history.push('/location/list');
+    }
   }
 
   render() {

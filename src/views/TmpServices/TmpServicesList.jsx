@@ -45,16 +45,23 @@ const override = css`
 class TmpServicesList extends PureComponent {
   constructor(props) {
     super(props);
+
+    const { history: { location } } = props;
     this.state = {
       data: [],
       deletedTmpService: {
         id: 0,
         isDel: false
       },
-      isOpenAddEventDialog: false,
-      isEditMode: false,
-      eventLevel: EVENT_LEVEL.PROVIDER,
-      addEventData: {}
+      isOpenAddEventDialog: !!location.state,
+      ...(location.state
+        ? location.state.prevState
+        : {
+          isEditMode: false,
+          eventLevel: EVENT_LEVEL.PROVIDER,
+          addEventData: {},
+        }
+      ),
     };
   }
 
@@ -418,6 +425,7 @@ class TmpServicesList extends PureComponent {
             createNewEvent={isEditMode ? this.editTmpService : this.onCreateNewEvent}
             tzOptions={tzOptions}
             serviceOptions={serviceOptions}
+            history={history}
           />
         )}
       </div>

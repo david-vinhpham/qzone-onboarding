@@ -87,7 +87,8 @@ CalendarV2.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  calendarData: state.calendarManage.calendarData
+  calendarData: state.calendarManage.calendarData,
+  userDetail: state.user.userDetail,
 });
 
 export default connect(mapStateToProps, { fetchEventsByProviderId })(CalendarV2);
