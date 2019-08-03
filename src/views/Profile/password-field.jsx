@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import CustomInput from 'components/CustomInput/CustomInput';
 import registerPageStyle from 'assets/jss/material-dashboard-pro-react/modules/registerPageStyle';
-import { classesType } from 'types/global';
+import {classesType} from 'types/global';
 
 class PasswordField extends PureComponent {
   static propTypes = {
@@ -39,11 +39,11 @@ class PasswordField extends PureComponent {
     } = this.props;
 
     const defaultPwdProps = {
-      labelText: useLabel ? 'Default Password (required)' : undefined,
+      labelText: useLabel ? 'Current Password (required)' : undefined,
       inputProps: {
         onChange: {onChangeDefaultPwd},
         type: 'password',
-        placeholder: !useLabel ? 'Default Password (required)' : undefined,
+        placeholder: !useLabel ? 'Current Password (required)' : undefined,
         autoFocus: true,
       },
     };

@@ -1,20 +1,19 @@
 import React from 'react';
-import {
-  Dialog, DialogContent, DialogTitle, DialogActions, DialogContentText} from '@material-ui/core';
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 import Alert from 'react-s-alert';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import {compose} from 'redux';
+import {connect} from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '../../components/CustomButtons/Button';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
 import validatePassword from '../../utils/validatePassword';
 import verificationPageStyle from '../../assets/jss/material-dashboard-pro-react/modules/verificationPageStyle';
-import { classesType } from '../../types/global';
+import {classesType} from '../../types/global';
 import AlertMessage from '../../components/Alert/Message';
 import CustomInput from "components/CustomInput/CustomInput.jsx";
-import { completeNewPasswordChallenge } from "../../actions/auth";
+import {completeNewPasswordChallenge} from "../../actions/auth";
 import {userStatus as eUserStatus} from "../../constants";
 
 class ForceChangePassword extends React.Component {
@@ -138,7 +137,7 @@ class ForceChangePassword extends React.Component {
 
                       <CustomInput
                         id={`default`}
-                        inputProps={{ placeholder:  'Default Password (required)', type: "password" }}
+                        inputProps={{ placeholder:  'Current Password (required)', type: "password" }}
                         onChange={this.onChangeDefaultPassword}
                       />
                     </div>
