@@ -15,6 +15,8 @@ import AlertMessage from '../../components/Alert/Message';
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import {completeNewPasswordChallenge} from "../../actions/auth";
 import {userStatus as eUserStatus} from "../../constants";
+import {Link} from "react-router-dom";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class ForceChangePassword extends React.Component {
   static propTypes = {
@@ -108,8 +110,7 @@ class ForceChangePassword extends React.Component {
   };
 
   onDialogClose = () => {
-    const { openChangePassword } = this.state;
-    this.setState(this.defaultState, openChangePassword);
+    this.setState({openChangePassword: false});
   };
 
   render() {
@@ -128,7 +129,7 @@ class ForceChangePassword extends React.Component {
           <form onSubmit={this.handleChangePassword}>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Please enter your new password for security!
+                You must change to new password before update the information!
               </DialogContentText>
               <div>
                 <GridContainer>
@@ -171,6 +172,11 @@ class ForceChangePassword extends React.Component {
                 <Button disabled={false} type="submit" color="rose">
                   Submit
                 </Button>
+                <Link to={`/calendar`}>
+                <Button onClick={this.onDialogClose}>
+                  Close
+                </Button>
+                </Link>
               </div>
             </DialogActions>
           </form>
