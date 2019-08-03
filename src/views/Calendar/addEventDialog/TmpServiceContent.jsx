@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import {
   Typography, Grid,
   Select, MenuItem,
-  TextField, Tooltip
+  TextField, Tooltip, Button
 } from '@material-ui/core';
 import moment from 'moment-timezone';
 import { LiveHelp } from '@material-ui/icons';
 import { TimePicker } from '@material-ui/pickers'
 import addEventDialogStyles from '../AddEventDialog.module.scss';
 import styles from './TmpServiceContent.module.scss';
-import { optionType } from 'types/global';
+import { optionType, userDetailType } from 'types/global';
+import { eUserType } from 'constants.js';
 
 export default function TmpServiceContent({
   geoOptions,
@@ -20,9 +21,12 @@ export default function TmpServiceContent({
   onBlurServiceTime,
   onChangeTmpServiceDateTime,
   onBlurParallelCustomer,
+  addNewLocation,
+  userDetail
 }) {
   const breakStartTime = moment.tz(tmpService.breakTimeStart, timezoneId).toDate();
   const breakEndTime = moment.tz(tmpService.breakTimeEnd, timezoneId).toDate();
+  const isAdmin = userDetail.userType === eUserType.business_admin;
 
   return (
     <Grid container spacing={1} className={addEventDialogStyles.calendarDatetimePicker}>
@@ -117,7 +121,7 @@ export default function TmpServiceContent({
               Location:
             </Typography>
           </Grid>
-          <Grid item md={10}>
+          <Grid item md={isAdmin ? 8 : 10}>
             <Select
               name="addEventData.tmpService.geoLocationId"
               value={tmpService.geoLocationId}
@@ -131,6 +135,11 @@ export default function TmpServiceContent({
               ))}
             </Select>
           </Grid>
+          {isAdmin && <Grid item md={2}>
+            <Button fullWidth size="small" variant="contained" color="primary" onClick={addNewLocation}>
+              New location
+            </Button>
+          </Grid>}
         </Grid>
       </Grid>
       <Grid item md={12}>
@@ -181,4 +190,6 @@ TmpServiceContent.propTypes = {
   onBlurServiceTime: PropTypes.func.isRequired,
   onChangeTmpServiceDateTime: PropTypes.func.isRequired,
   onBlurParallelCustomer: PropTypes.func.isRequired,
+  addNewLocation: PropTypes.func.isRequired,
+  userDetail: userDetailType.isRequired
 }

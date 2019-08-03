@@ -94,7 +94,23 @@ export const createLocation = (values, history) => {
           type: location.CREATE_LOCATION_SUCCESS,
           payload: data.object
         });
-        history.push('/location/list');
+        if (history.location.state) {
+          const { prevPage, prevState } = history.location.state;
+          history.push(prevPage, {
+            prevState: {
+              ...prevState,
+              addEventData: {
+                ...prevState.addEventData,
+                tmpService: {
+                  ...prevState.addEventData.tmpService,
+                  geoLocationId: data.object.id
+                }
+              }
+            }
+          });
+        } else {
+          history.push('/location/list');
+        }
       })
       .catch(err => {
         dispatch({
