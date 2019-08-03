@@ -16,7 +16,6 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 import {completeNewPasswordChallenge} from "../../actions/auth";
 import {userStatus as eUserStatus} from "../../constants";
 import {Link} from "react-router-dom";
-import Tooltip from "@material-ui/core/Tooltip";
 
 class ForceChangePassword extends React.Component {
   static propTypes = {
