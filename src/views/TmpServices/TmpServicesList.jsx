@@ -271,7 +271,7 @@ class TmpServicesList extends PureComponent {
 
   render() {
     const {
-      classes, history, isLoading, tmpServiceError,
+      classes, history, isLoading,
       providers, tzOptions, serviceOptions
     } = this.props;
     let data = [];
@@ -290,7 +290,6 @@ class TmpServicesList extends PureComponent {
     }
     data = (
       <Paper>
-        {tmpServiceError !== null && tmpServiceError.length > 0 ? (<div className="alert alert-danger">{tmpServiceError}</div>) : null}
         <Table aria-labelledby="tmpServicesList">
           <TableHead>
             <TableRow>
@@ -439,7 +438,6 @@ TmpServicesList.propTypes = {
   classes: classesType.isRequired,
   history: historyType.isRequired,
   delTmpServiceLoading: PropTypes.bool.isRequired,
-  tmpServiceError: PropTypes.bool,
   tzOptions: PropTypes.arrayOf(optionType).isRequired,
   serviceOptions: PropTypes.arrayOf(optionType).isRequired,
   geoOptions: PropTypes.arrayOf(optionType).isRequired,
@@ -453,15 +451,10 @@ TmpServicesList.propTypes = {
   createNewEvent: PropTypes.func.isRequired,
 };
 
-TmpServicesList.defaultProps = {
-  tmpServiceError: null,
-};
-
 const mapStateToProps = state => ({
   tmpServices: state.tmpServices.list,
   isLoading: state.tmpServices.isLoading,
   delTmpServiceLoading: state.tmpServices.delTmpServiceLoading,
-  tmpServiceError: state.tmpServices.tmpServiceError,
   providers: state.calendarManage.providers,
   tzOptions: state.options.timezone.tzOptions,
   serviceOptions: state.options.service.serviceOptions,

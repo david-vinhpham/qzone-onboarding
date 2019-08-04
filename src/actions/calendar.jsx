@@ -93,12 +93,7 @@ export const createNewEvent = newEvent => dispatch => {
     .then(response => {
       if (response) {
         const data = get(response, 'data.object', {});
-        if (response.data.success === false) {
-          dispatch({
-            type: tmp_service.TMP_SERVICE_FAILURE,
-            payload: response.data.message
-          });
-        } else {
+        if (response.data.success) {
           const event = {
             ...data,
             type: data.type || newEvent.type

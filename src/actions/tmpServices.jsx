@@ -28,7 +28,7 @@ export const deleteTmpService = eventId => {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.status === 200 || data.status === 201 || data.success) {
+        if (data.success) {
           const objects = {
             data: []
           };
@@ -52,11 +52,6 @@ export const deleteTmpService = eventId => {
               payload: objects.data
             });
           }
-        } else {
-          dispatch({
-            type: tmp_service.TMP_SERVICE_FAILURE,
-            payload: []
-          });
         }
       });
   };
