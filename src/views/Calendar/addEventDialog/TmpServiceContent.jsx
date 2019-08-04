@@ -16,7 +16,7 @@ import { eUserType } from 'constants.js';
 export default function TmpServiceContent({
   geoOptions,
   serviceOptions,
-  addEventData: { tmpService, startTime, endTime, timezoneId },
+  addEventData: { tmpService, startTime, endTime },
   handleChange,
   onBlurServiceTime,
   onChangeTmpServiceDateTime,
@@ -24,8 +24,8 @@ export default function TmpServiceContent({
   addNewLocation,
   userDetail
 }) {
-  const breakStartTime = moment.tz(tmpService.breakTimeStart, timezoneId).toDate();
-  const breakEndTime = moment.tz(tmpService.breakTimeEnd, timezoneId).toDate();
+  const breakStartTime = moment(tmpService.breakTimeStart).toDate();
+  const breakEndTime = moment(tmpService.breakTimeEnd).toDate();
   const isAdmin = userDetail.userType === eUserType.business_admin;
 
   return (
