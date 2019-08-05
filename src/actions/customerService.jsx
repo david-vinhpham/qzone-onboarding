@@ -21,9 +21,6 @@ export const verifyBookingCode = (bookingCode) => dispatch => {
       if (res && res.status === 200 && res.data.success) {
         dispatch(setVerifyBookingCodeSuccess(res.data.object));
       }
-      else if (res && res.status === 200 && !res.data.success) {
-        dispatch(setStatusFailure({ ...res.data }));
-      }
     })
     .finally(() => {
       dispatch(setVerifyBookingCodeLoading(false));
@@ -35,10 +32,6 @@ export const setUpdateStatusSuccess = payload => ({
   payload
 });
 
-export const setStatusFailure = payload => ({
-  type: customer_service.CUSTOMER_FLOW_FAILURE,
-  payload
-});
 export const updateCustomerStatus = (data, cb) => (dispatch) => {
   dispatch(setVerifyBookingCodeLoading(true));
 
@@ -51,12 +44,9 @@ export const updateCustomerStatus = (data, cb) => (dispatch) => {
 
   return axios.put(API_ROOT + URL.UPDATE_CUSTOMER_FLOW_STATUS, data)
     .then(res => {
-      if (res && res.status === 200 && res.data.success) {
+      if (res && res.data.success) {
         dispatch(setUpdateStatusSuccess({ ...res.data, isFromBookingData }));
         cb(providerId, serviceId);
-      }
-      else if (res && res.status === 200 && !res.data.success) {
-        dispatch(setStatusFailure({ ...res.data, isFromBookingData }));
       }
     })
     .finally(() => {
@@ -99,9 +89,6 @@ export const fetchFlowBoard = (data) => dispatch => {
         }
         dispatch(setFetchFlowBoardSuccess(res.data.object));
       }
-      else if (res && res.status === 200 && !res.data.success) {
-        dispatch(setStatusFailure({ ...res.data }));
-      }
     })
     .finally(() => {
       dispatch(setFetchFlowBoardLoading(false));
@@ -119,9 +106,6 @@ export const fetchProviderOptionsByBusinessAdminId = (businessAdminId) => dispat
       if (res && res.status === 200 && res.data.success) {
         dispatch(setProviderOptionsByBusinessAdminIdSuccess(res.data.objects));
       }
-      else if (res && res.status === 200 && !res.data.success) {
-        dispatch(setStatusFailure({ ...res.data }));
-      }
     });
 };
 
@@ -130,3 +114,13 @@ export const fetchProvidersAndServicesByBusinessAdminId = (businessAdminId) => d
   fetchProviderOptionsByBusinessAdminId(businessAdminId)(dispatch)]);
 };
 
+
+export const updateGuestInfo = (payload, bookingCode) => dispatch => {
+  dispatch(setVerifyBookingCodeLoading(true));
+  return axios.put(`${API_ROOT}${URL.UPDATE_GUEST_INFO}`, payload)
+    .then(res => {
+      if(res && res.data.success) {
+        verifyBookingCode(bookingCode)(dispatch);
+      }
+    });
+}

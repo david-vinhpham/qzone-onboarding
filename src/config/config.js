@@ -55,7 +55,8 @@ export const URL = {
 
   VERIFY_BOOKING_CODE: 'customer/booking/code/verify',
   UPDATE_CUSTOMER_FLOW_STATUS: 'customer/flow/status',
-  FETCH_CUSTOMER_FLOW_BOARD: 'customer/flow/board'
+  FETCH_CUSTOMER_FLOW_BOARD: 'customer/flow/board',
+  UPDATE_GUEST_INFO: 'guest-users',
 };
 
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';

@@ -1,4 +1,5 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react';
+import classnames from 'classnames';
 import Button from "../../components/CustomButtons/Button";
 import GridItem from "../../components/Grid/GridItem";
 import Card from "../../components/Card/Card";
@@ -25,7 +26,8 @@ import {
   updateCustomerStatus,
   verifyBookingCode,
   fetchProviderOptionsByBusinessAdminId,
-  fetchProvidersAndServicesByBusinessAdminId
+  fetchProvidersAndServicesByBusinessAdminId,
+  updateGuestInfo
 } from "../../actions/customerService";
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import PropTypes from "prop-types";
@@ -34,6 +36,7 @@ import { defaultDateTimeFormat, eventStatus, boardMode } from "constants.js";
 import moment from "moment-timezone";
 import { verifyBookingCodeType, customerFlowBoardType, optionType } from "types/global";
 import customerServiceStyle from 'assets/jss/material-dashboard-pro-react/views/customerService';
+import BookingInformation from './BookingInformation';
 
 class CustomerService extends PureComponent {
   constructor(props) {
@@ -155,12 +158,16 @@ class CustomerService extends PureComponent {
     }
   };
 
+  editGuestInfo = payload => () => {
+    const { updateGuestInfo, verifyData } = this.props;
+    updateGuestInfo(payload, verifyData.bookingCode);
+  }
+
   render() {
     const {
       classes,
       isLoading,
       verifyData,
-      failureData,
       isVerifyBookingCodeSuccess,
       isBoardLoading,
       isFetchServiceOptionsSuccess,
@@ -179,7 +186,7 @@ class CustomerService extends PureComponent {
     } = this.state;
 
     let data = (
-      <Card className={isBoardLoading ? `${classes.loadingEffect}` : ''}>
+      <Card className={classnames({ [classes.loadingEffect]: isBoardLoading })}>
         {!confirmChangeStatusDialogOpen || <Dialog
           open
           onClose={this.handleConfirmChangeStatusDialogClose}
@@ -211,11 +218,7 @@ class CustomerService extends PureComponent {
             </Button>
           </DialogActions>
         </Dialog>}
-         <div>
-             {typeof failureData !== 'undefined' && failureData !== null ?
-               (<div className="alert-danger">{failureData.message}</div>) : <div></div>}
-         </div>
-        <div className={classes.cardTitleMargin + " " + classes.flexItem}>
+        <div className={classnames(classes.cardTitleMargin, classes.flexItem)}>
           <h4 className={classes.boardHeader}>Customer Flow Board</h4>
           {boardData && boardData.mode && <Typography variant="subtitle2" className={classes.modeMargin}>Mode: {boardData.mode}</Typography>}
           {isFetchServiceOptionsSuccess && <Select
@@ -247,7 +250,8 @@ class CustomerService extends PureComponent {
           <Table aria-labelledby="serviceCategories">
             <TableHead>
               <TableRow>
-                {boardData.mode && boardData.mode.toUpperCase() === boardMode.queue && <TableCell className={classes.cellHeaderBold}>Position</TableCell>}
+                {boardData.mode && boardData.mode.toUpperCase() === boardMode.queue &&
+                  <TableCell className={classes.cellHeaderBold}>Position</TableCell>}
                 <TableCell className={classes.cellHeaderBold}>Slot</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Booking code</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Name</TableCell>
@@ -301,7 +305,7 @@ class CustomerService extends PureComponent {
             <CircularProgress />
           </div>}
           {!isBoardLoading &&
-          (!boardData.customerFlowDetailList || boardData.customerFlowDetailList.length === 0) &&
+            (!boardData.customerFlowDetailList || boardData.customerFlowDetailList.length === 0) &&
             <div className={classes.spaceLoading}>
               <Typography variant="body1">There is no record</Typography>
             </div>
@@ -311,7 +315,7 @@ class CustomerService extends PureComponent {
     );
     return (
       <div>
-        <Card className={isLoading ? `${classes.loadingEffect}` : ''}>
+        <Card className={classnames({ [classes.loadingEffect]: isLoading })}>
           <GridContainer className={classes.gridContainerPadding}>
             {isLoading && <CircularProgress className={classes.loadingCenter} />}
             <GridItem xs={4} className={classes.gridItemPadding}>
@@ -321,7 +325,7 @@ class CustomerService extends PureComponent {
               <div>
                 <CustomInput
                   formControlProps={{
-                    className: classes.top + " " + classes.search
+                    className: classnames(classes.top, classes.search)
                   }}
                   inputProps={{
                     placeholder: "Enter booking code",
@@ -342,111 +346,14 @@ class CustomerService extends PureComponent {
                 </Button>
               </div>
             </GridItem>
-            <GridItem xs={8} className={classes.borderLeft + ' ' + classes.gridItemPadding}>
-              <h4>
-                Booking information
-              </h4>
-              <GridContainer>
-                <GridItem md={6}>
-                  <CustomInput
-                    labelText="First name"
-                    id="firstName"
-                    formControlProps={{ fullWidth: true }}
-                    inputProps={{
-                      disabled: true,
-                    }}
-                    value={verifyData.firstName || ""}
-                  />
-                </GridItem>
-                <GridItem md={6}>
-                  <CustomInput
-                    labelText="Email"
-                    id="email"
-                    formControlProps={{ fullWidth: true }}
-                    inputProps={{
-                      disabled: true,
-                    }}
-                    value={verifyData.email || ""}
-                  />
-                </GridItem>
-                <GridItem md={6}>
-                  <CustomInput
-                    labelText="Phone Number"
-                    id="phoneNumber"
-                    formControlProps={{ fullWidth: true }}
-                    inputProps={{
-                      disabled: true,
-                    }}
-                    value={verifyData.phoneNumber || ""}
-                  />
-                </GridItem>
-                <GridItem md={6}>
-                  <CustomInput
-                    labelText="Position"
-                    id="position"
-                    formControlProps={{ fullWidth: true }}
-                    inputProps={{
-                      disabled: true,
-                    }}
-                    value={(verifyData.position === undefined) ? "" : verifyData.position}
-                  />
-                </GridItem>
-                <GridItem md={6}>
-                  <CustomInput
-                    labelText="Slot"
-                    id="slot"
-                    formControlProps={{ fullWidth: true }}
-                    inputProps={{
-                      disabled: true,
-                    }}
-                    value={verifyData.sslot ? moment.tz(verifyData.sslot, verifyData.timezoneId).format(defaultDateTimeFormat) : ''}
-                  />
-                </GridItem>
-                <GridItem md={6}>
-                  <CustomInput
-                    labelText="Provider Name"
-                    id="providerName"
-                    formControlProps={{ fullWidth: true }}
-                    inputProps={{
-                      disabled: true,
-                    }}
-                    value={verifyData.providerName || ""}
-                  />
-                </GridItem>
-                <GridItem md={6}>
-                  <CustomInput
-                    labelText="Service Name"
-                    id="serviceName"
-                    formControlProps={{ fullWidth: true }}
-                    inputProps={{
-                      disabled: true,
-                    }}
-                    value={verifyData.serviceName || ""}
-                  />
-                </GridItem>
-                {(isVerifyBookingCodeSuccess &&
-                  ([eventStatus.unspecified, eventStatus.confirmed].includes(verifyData.status.toUpperCase())))
-                  ? <GridItem md={6}>
-                    <Button
-                      color="success"
-                      className={classes.checkInButton}
-                      onClick={() => this.updateStatus(verifyData, eventStatus.checkedIn, true)}>
-                      Check In
-                  </Button>
-                  </GridItem> :
-                  <GridItem md={6}>
-                    <CustomInput
-                      labelText="Status"
-                      id="status"
-                      formControlProps={{ fullWidth: true }}
-                      inputProps={{
-                        disabled: true,
-                      }}
-                      value={this.getDisplayStatus(verifyData.status) || ""}
-                    />
-                  </GridItem>}
-              </GridContainer>
-            </GridItem>
+            <BookingInformation
+              classes={classes}
+              verifyData={verifyData}
+              isVerifyBookingCodeSuccess={isVerifyBookingCodeSuccess}
+              updateStatus={this.updateStatus}
+              getDisplayStatus={this.getDisplayStatus}
+              editGuestInfo={this.editGuestInfo}
+            />
           </GridContainer>
         </Card>
         {data}
@@ -456,7 +363,6 @@ class CustomerService extends PureComponent {
 }
 
 CustomerService.propTypes = {
-  failureData: verifyBookingCodeType.isRequired,
   verifyData: verifyBookingCodeType.isRequired,
   boardData: customerFlowBoardType.isRequired,
   isLoading: PropTypes.bool.isRequired,
@@ -472,10 +378,10 @@ CustomerService.propTypes = {
 
   isFetchProviderOptionsByBusinessAdminIdSuccess: PropTypes.bool.isRequired,
   providerOptions: PropTypes.arrayOf(optionType).isRequired,
+  updateGuestInfo: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  failureData: state.customerService.failureData,
   verifyData: state.customerService.verifyData,
   isLoading: state.customerService.isLoading,
   isVerifyBookingCodeSuccess: state.customerService.isVerifyBookingCodeSuccess,
@@ -493,7 +399,8 @@ const mapDispatchToProps = {
   fetchFlowBoard,
   fetchServiceOptionsByBusinessAdminId,
   fetchProviderOptionsByBusinessAdminId,
-  fetchProvidersAndServicesByBusinessAdminId
+  fetchProvidersAndServicesByBusinessAdminId,
+  updateGuestInfo
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
