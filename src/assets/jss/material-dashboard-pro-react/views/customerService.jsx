@@ -44,6 +44,10 @@ const customerServiceStyle = {
   borderLeft: {
     borderLeft: '#999999 solid 1px'
   },
+  bookingInformationActions: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
 };
 
 export default customerServiceStyle;

@@ -82,7 +82,7 @@ export const verifyBookingCodeType = PropTypes.shape({
   bookingCode: PropTypes.string,
   eventId: PropTypes.string,
   email: PropTypes.string,
-  firstName: PropTypes.string,
+  givenName: PropTypes.string,
   mode: PropTypes.string,
   phoneNumber: PropTypes.string,
   serviceName: PropTypes.string,
@@ -92,7 +92,9 @@ export const verifyBookingCodeType = PropTypes.shape({
   position: PropTypes.number,
   startTime: PropTypes.string,
   timezoneId: PropTypes.string,
-  status: PropTypes.string
+  status: PropTypes.string,
+  customerId: PropTypes.string,
+  userType: PropTypes.string,
 });
 
 export const serviceCategoryType = PropTypes.shape({

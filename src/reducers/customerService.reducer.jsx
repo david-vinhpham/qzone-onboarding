@@ -7,7 +7,6 @@ const initialState = {
 
   isUpdateStatusSuccess: false,
   updateData: {},
-  failureData: {},
 
   isBoardLoading: false,
   boardData: {},
@@ -21,14 +20,8 @@ const reducer = (state = initialState, action) => {
     case customer_service.VERIFY_BOOKING_CODE_SUCCESS:
       return {
         ...state,
-        verifyData: action.payload,  failureData: [],
+        verifyData: action.payload,
         isVerifyBookingCodeSuccess: true
-      };
-    case customer_service.CUSTOMER_FLOW_FAILURE:
-      return {
-        ...state,
-        failureData: action.payload,
-        failureStatus: true
       };
     case customer_service.VERIFY_BOOKING_CODE_LOADING:
       return { ...state, isLoading: action.payload };
@@ -42,13 +35,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isUpdateStatusSuccess: true,
-        updateData: action.payload, failureData: [],
+        updateData: action.payload,
         verifyData: action.payload
       };
     case customer_service.FETCH_FLOW_BOARD_SUCCESS:
       return {
         ...state,
-        boardData: action.payload,  failureData: [],
+        boardData: action.payload,
       };
     case customer_service.FETCH_FLOW_BOARD_LOADING:
       return { ...state, isBoardLoading: action.payload };

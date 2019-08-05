@@ -8,14 +8,14 @@ axios.interceptors.response.use(
     if (resp.config.method !== 'get') {
       if (resp.data.success) {
         Alert.success(<AlertMessage>{resp.data.message}</AlertMessage>);
-      } else {
+      } else if (resp.data.message) {
         Alert.error(<AlertMessage>{resp.data.message}</AlertMessage>);
       }
     }
     return resp;
   },
   error => {
-    if (error.response) {
+    if (error.response && error.response.data.message) {
       Alert.error(<AlertMessage>{error.response.data.message}</AlertMessage>);
     }
   }
