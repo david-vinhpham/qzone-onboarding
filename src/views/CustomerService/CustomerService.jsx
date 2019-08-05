@@ -128,7 +128,7 @@ class CustomerService extends PureComponent {
   };
 
   verifyCode = () => {
-    this.props.verifyBookingCode(this.state.bookingCode);
+    this.props.verifyBookingCode(this.state.bookingCode, this.props.userDetailId);
   };
 
   handleConfirmChangeStatusDialogClose = () => {
@@ -159,8 +159,8 @@ class CustomerService extends PureComponent {
   };
 
   editGuestInfo = payload => () => {
-    const { updateGuestInfo, verifyData } = this.props;
-    updateGuestInfo(payload, verifyData.bookingCode);
+    const { updateGuestInfo, verifyData, userDetailId } = this.props;
+    updateGuestInfo(payload, verifyData.bookingCode, userDetailId);
   }
 
   render() {
@@ -379,6 +379,7 @@ CustomerService.propTypes = {
   isFetchProviderOptionsByBusinessAdminIdSuccess: PropTypes.bool.isRequired,
   providerOptions: PropTypes.arrayOf(optionType).isRequired,
   updateGuestInfo: PropTypes.func.isRequired,
+  userDetailId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -391,6 +392,7 @@ const mapStateToProps = state => ({
   serviceOptions: state.options.service.serviceOptions,
   isFetchProviderOptionsByBusinessAdminIdSuccess: state.customerService.isFetchProviderOptionsByBusinessAdminIdSuccess,
   providerOptions: state.customerService.providerOptions,
+  userDetailId: state.user.userDetail.id
 });
 
 const mapDispatchToProps = {

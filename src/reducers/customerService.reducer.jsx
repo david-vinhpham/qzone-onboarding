@@ -23,6 +23,12 @@ const reducer = (state = initialState, action) => {
         verifyData: action.payload,
         isVerifyBookingCodeSuccess: true
       };
+    case customer_service.VERIFY_BOOKING_CODE_FAILURE:
+      return {
+        ...state,
+        verifyData: {},
+        isVerifyBookingCodeSuccess: false
+      }
     case customer_service.VERIFY_BOOKING_CODE_LOADING:
       return { ...state, isLoading: action.payload };
     case customer_service.FETCH_PROVIDERS_OPTIONS_BY_BUSINESS_ADMIN_ID_SUCCESS:

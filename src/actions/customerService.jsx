@@ -14,14 +14,21 @@ export const setVerifyBookingCodeSuccess = payload => ({
   payload
 });
 
-export const verifyBookingCode = (bookingCode) => dispatch => {
+const setVerifyBookingCodeFailure = () => ({
+  type: customer_service.VERIFY_BOOKING_CODE_FAILURE
+});
+
+export const verifyBookingCode = (bookingCode, userDetailId) => dispatch => {
   dispatch(setVerifyBookingCodeLoading(true));
-  return axios.get(`${API_ROOT}${URL.VERIFY_BOOKING_CODE}/${bookingCode}`)
+  return axios.get(`${API_ROOT}${URL.VERIFY_BOOKING_CODE}/${bookingCode}/${userDetailId}`)
     .then(res => {
       if (res && res.status === 200 && res.data.success) {
         dispatch(setVerifyBookingCodeSuccess(res.data.object));
+      } else {
+        dispatch(setVerifyBookingCodeFailure());
       }
     })
+    .catch(() => dispatch(setVerifyBookingCodeFailure()))
     .finally(() => {
       dispatch(setVerifyBookingCodeLoading(false));
     });
@@ -115,12 +122,12 @@ export const fetchProvidersAndServicesByBusinessAdminId = (businessAdminId) => d
 };
 
 
-export const updateGuestInfo = (payload, bookingCode) => dispatch => {
+export const updateGuestInfo = (payload, bookingCode, userDetailId) => dispatch => {
   dispatch(setVerifyBookingCodeLoading(true));
   return axios.put(`${API_ROOT}${URL.UPDATE_GUEST_INFO}`, payload)
     .then(res => {
       if(res && res.data.success) {
-        verifyBookingCode(bookingCode)(dispatch);
+        verifyBookingCode(bookingCode, userDetailId)(dispatch);
       }
     });
 }
