@@ -2,6 +2,9 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
   BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd, Report,
   // Assignment,
+  AssignmentInd,
+  FilterVintage,
+  Update,
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Profile from '../views/Profile/profile';
@@ -38,6 +41,7 @@ import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
 // import Assessments from '../views/Surveys/Assessments';
 // import CreateAssessment from '../views/Surveys/CreateAssessment';
+import Reschedule from '../views/Reschedule/Reschedule';
 
 const dashboardRoutes = [
   {
@@ -49,14 +53,20 @@ const dashboardRoutes = [
   {
     path: '/profile',
     name: 'Profile',
-    icon: DashboardIcon,
+    icon: AssignmentInd,
     component: Profile
   },
   {
     path: '/customer-service',
-    name: 'Customer service',
-    icon: DashboardIcon,
+    name: 'Customer Service',
+    icon: FilterVintage,
     component: CustomerService
+  },
+  {
+    path: '/reschedule',
+    name: 'Reschedule Event',
+    icon: Update,
+    component: Reschedule,
   },
   {
     path: '/reports',
@@ -232,6 +242,12 @@ const otherRoutes = [
     name: 'Availability',
     short: 'Availability',
     component: AvailabilitySlotsList
+  },
+  {
+    path: '/reschedule',
+    name: 'Reschedule Event',
+    short: 'Reschedule',
+    component: Reschedule,
   }
 ];
 
