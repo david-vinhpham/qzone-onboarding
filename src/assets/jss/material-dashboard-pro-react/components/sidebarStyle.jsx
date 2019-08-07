@@ -18,6 +18,9 @@ import {
 } from "../../material-dashboard-pro-react.jsx";
 
 const sidebarStyle = theme => ({
+  avatar: {
+    background: "linear-gradient(to bottom, #e91e63, #4d4739)",
+  },
   drawerPaperRTL: {
     [theme.breakpoints.up("md")]: {
       left: "auto !important",
@@ -264,7 +267,10 @@ const sidebarStyle = theme => ({
     whiteSpace: "nowrap"
   },
   userItemText: {
-    lineHeight: "22px"
+    lineHeight: "22px",
+    marginLeft: "70px",
+    width: "34px",
+    height: "34px",
   },
   itemTextRTL: {
     marginRight: "45px",
@@ -367,7 +373,9 @@ const sidebarStyle = theme => ({
     borderLeft: "4px solid transparent"
   },
   userCaret: {
-    marginTop: "10px"
+    marginTop: "10px",
+    position: "absolute",
+    right: "-125px",
   },
   caretRTL: {
     left: "11px",
@@ -462,16 +470,11 @@ const sidebarStyle = theme => ({
     }
   },
   photo: {
+    position: "absolute",
+    marginLeft: "18px",
     transition: "all 300ms linear",
     width: "34px",
     height: "34px",
-    overflow: "hidden",
-    float: "left",
-    zIndex: "5",
-    marginRight: "11px",
-    borderRadius: "50%",
-    marginLeft: "23px",
-    ...boxShadow
   },
   photoRTL: {
     float: "right",
