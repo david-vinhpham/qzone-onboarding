@@ -4,7 +4,7 @@ import {
   // Assignment,
   AssignmentInd,
   FilterVintage,
-  Update,
+  // Update,
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Profile from '../views/Profile/profile';
@@ -41,7 +41,7 @@ import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
 // import Assessments from '../views/Surveys/Assessments';
 // import CreateAssessment from '../views/Surveys/CreateAssessment';
-import Reschedule from '../views/Reschedule/Reschedule';
+// import Reschedule from '../views/Reschedule/Reschedule';
 
 const dashboardRoutes = [
   {
@@ -62,12 +62,12 @@ const dashboardRoutes = [
     icon: FilterVintage,
     component: CustomerService
   },
-  {
-    path: '/reschedule',
-    name: 'Reschedule Event',
-    icon: Update,
-    component: Reschedule,
-  },
+  // {
+  //   path: '/reschedule',
+  //   name: 'Reschedule Event',
+  //   icon: Update,
+  //   component: Reschedule,
+  // },
   {
     path: '/reports',
     name: 'Reports',
@@ -243,12 +243,6 @@ const otherRoutes = [
     short: 'Availability',
     component: AvailabilitySlotsList
   },
-  {
-    path: '/reschedule',
-    name: 'Reschedule Event',
-    short: 'Reschedule',
-    component: Reschedule,
-  }
 ];
 
 const providerRoutes = ['/calendar', '/profile'];
