@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 import cx from "classnames";
 import { get } from 'lodash';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText, Avatar } from "@material-ui/core";
 import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
 import sidebarStyle from "../../assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
 import { eUserType } from "constants.js";
@@ -86,7 +86,10 @@ class Sidebar extends React.Component {
     const user = (
       <div className={userWrapperClass}>
         <div className={classes.photo}>
-          <img src={userImage} className={classes.avatarImg} alt="..." />
+          {userImage && <img src={userImage} className={classes.avatarImg} alt="..." />}
+          {!userImage && <Avatar classes={{
+            colorDefault: classes.avatar,
+          }} component='div'>{userName && userName[0]}</Avatar>}
         </div>
         <List className={classes.list}>
           <ListItem className={cx(classes.item, classes.userItem)}>
@@ -416,7 +419,7 @@ class Sidebar extends React.Component {
     const brand = (
       <div className={logoClasses}>
         <a href="/" className={classes.logoMini}>
-          <img src={logo} alt="logo" className={classes.img} />
+          <img src={logo} alt="logo" className={classes.img} width="26px" height="25px" />
         </a>
         <a href="/" className={logoNormal}>
           {logoText}

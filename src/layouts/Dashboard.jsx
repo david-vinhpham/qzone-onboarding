@@ -11,7 +11,7 @@ import Sidebar from '../components/Sidebar/Sidebar.jsx';
 import Header from '../components/Header/Header.jsx';
 import appStyle from '../assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx';
 import image from '../assets/img/sidebar-2.jpg';
-import logo from '../assets/img/logo-white.svg';
+import logo from '../assets/img/favicon.png';
 import withAuth from "../hoc/withAuth";
 import { fetchUser } from 'actions/auth.jsx';
 
