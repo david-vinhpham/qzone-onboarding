@@ -57,6 +57,8 @@ export const URL = {
   UPDATE_CUSTOMER_FLOW_STATUS: 'customer/flow/status',
   FETCH_CUSTOMER_FLOW_BOARD: 'customer/flow/board',
   UPDATE_GUEST_INFO: 'guest-users',
+
+  SCHEDULE_REPORT: 'availabilities/temporary/report',
 };
 
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';

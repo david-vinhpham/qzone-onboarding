@@ -4,18 +4,16 @@ import { get } from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { classesType, historyType, tmpServiceType, optionType, providerType } from "types/global";
 import { connect } from "react-redux";
-import Delete from "@material-ui/icons/Delete";
-import Edit from "@material-ui/icons/Edit";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { ArtTrack, Delete, Edit, Search, BarChart } from "@material-ui/icons";
 import moment from "moment-timezone";
-import { deleteTmpService, fetchTmpServices, editTmpService, setTmpServices } from "../../actions/tmpServices";
+import { deleteTmpService, fetchTmpServices, editTmpService, setTmpServices, getScheduleReport, setScheduleReportData } from "../../actions/tmpServices";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle";
 import listPageStyle from 'assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
 import DeletionModal from "../../shared/deletion-modal";
 import { BeatLoader } from "react-spinners";
-import ArtTrack from "@material-ui/icons/ArtTrack";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
@@ -24,7 +22,6 @@ import CardText from "../../components/Card/CardText.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
-import Search from "@material-ui/icons/Search";
 import AddEventDialog from "views/Calendar/AddEventDialog";
 import { fetchProvidersByBusinessId, createNewEvent } from "actions/calendar";
 import { fetchGeoLocationOptions } from "../../actions/geoOptions";
@@ -33,6 +30,7 @@ import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptio
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
 import { defaultDateTimeFormat } from "constants.js";
+import ScheduleReportDialog from "./tmpServicesList/ScheduleReportDialog";
 
 const override = css`
   margin: 0 auto;
@@ -48,6 +46,7 @@ class TmpServicesList extends PureComponent {
 
     const { history: { location } } = props;
     this.state = {
+      isOpenScheduleReport: false,
       data: [],
       deletedTmpService: {
         id: 0,
@@ -269,13 +268,26 @@ class TmpServicesList extends PureComponent {
     createNewEventHelper(payload, this.props.providers, this.props.createNewEvent);
   };
 
+  openScheduleReportDialog = tmpServiceId => () => {
+    this.props.getScheduleReport(tmpServiceId);
+    this.setState({ isOpenScheduleReport: true });
+  }
+
+  closeScheduleReportDialog = () => {
+    this.props.setScheduleReportData({ providerName: '', tmServiceReportList: [] });
+    this.setState({ isOpenScheduleReport: false });
+  }
+
   render() {
     const {
       classes, history, isLoading,
-      providers, tzOptions, serviceOptions
+      providers, tzOptions, serviceOptions,
+      reportData, isReportLoading
     } = this.props;
-    let data = [];
-    const { deletedTmpService, isOpenAddEventDialog, eventLevel, addEventData, isEditMode } = this.state;
+    const {
+      deletedTmpService, isOpenAddEventDialog, eventLevel,
+      addEventData, isEditMode, isOpenScheduleReport
+    } = this.state;
 
     if (isLoading) {
       return (
@@ -288,7 +300,8 @@ class TmpServicesList extends PureComponent {
         />
       );
     }
-    data = (
+
+    const dataTable = (
       <Paper>
         <Table aria-labelledby="tmpServicesList">
           <TableHead>
@@ -314,42 +327,57 @@ class TmpServicesList extends PureComponent {
                   {event.description ? event.description.substring(0, 150) : ''}
                 </TableCell>
                 <TableCell>
-                  <Tooltip onClick={() => this.handleClick(event, history)}
-                    id="tooltip-top"
-                    title="View"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
+                  <Button
+                    onClick={this.openScheduleReportDialog(event.id)}
+                    color="danger"
+                    simple
+                    justIcon
                   >
-                    <Button color="transparent" simple justIcon>
-                      <ArtTrack className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                    onClick={() => this.openEditDialog(event)}
-                  >
-                    <Button color="success" simple justIcon>
-                      <Edit className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Remove"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Button
-                      onClick={() => this.deleteTmpService(event.id)}
-                      color="danger"
-                      simple
-                      justIcon
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Schedule report"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
                     >
-                      <Delete className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
+                      <BarChart />
+                    </Tooltip>
+                  </Button>
+                  <Button color="transparent" simple justIcon>
+                    <Tooltip onClick={() => this.handleClick(event, history)}
+                      id="tooltip-top"
+                      title="View"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <ArtTrack />
+                    </Tooltip>
+                  </Button>
+                  <Button color="success" simple justIcon>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Edit"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                      onClick={() => this.openEditDialog(event)}
+                    >
+                      <Edit />
+                    </Tooltip>
+                  </Button>
+                  <Button
+                    onClick={() => this.deleteTmpService(event.id)}
+                    color="danger"
+                    simple
+                    justIcon
+                  >
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Remove"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Delete />
+                    </Tooltip>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -357,15 +385,6 @@ class TmpServicesList extends PureComponent {
         </Table>
       </Paper>
     );
-
-    const deletionPopup = deletedTmpService.isDel ? (
-      <DeletionModal
-        openDialog={deletedTmpService.isDel}
-        closeDialog={this.cancelDelete}
-        itemDeleteHandler={this.confirmDelete}
-        itemId={deletedTmpService.id}
-      />
-    ) : null;
 
     return (
       <div>
@@ -408,8 +427,15 @@ class TmpServicesList extends PureComponent {
             </Card>
           </GridItem>
         </GridContainer>
-        {data}
-        {deletionPopup}
+        {dataTable}
+        {deletedTmpService.isDel && (
+          <DeletionModal
+            openDialog={deletedTmpService.isDel}
+            closeDialog={this.cancelDelete}
+            itemDeleteHandler={this.confirmDelete}
+            itemId={deletedTmpService.id}
+          />
+        )}
         {isOpenAddEventDialog && (
           <AddEventDialog
             isEventTypeReadOnly
@@ -425,6 +451,13 @@ class TmpServicesList extends PureComponent {
             tzOptions={tzOptions}
             serviceOptions={serviceOptions}
             history={history}
+          />
+        )}
+        {isOpenScheduleReport && (
+          <ScheduleReportDialog
+            onDialogClose={this.closeScheduleReportDialog}
+            reportData={reportData}
+            isReportLoading={isReportLoading}
           />
         )}
       </div>
@@ -449,6 +482,21 @@ TmpServicesList.propTypes = {
   fetchGeoLocationOptions: PropTypes.func.isRequired,
   setTmpServices: PropTypes.func.isRequired,
   createNewEvent: PropTypes.func.isRequired,
+  getScheduleReport: PropTypes.func.isRequired,
+  reportData: PropTypes.shape({
+    filename: PropTypes.string,
+    data: PropTypes.arrayOf(PropTypes.shape({
+      providerName: PropTypes.string,
+      customerName: PropTypes.string,
+      customerEmail: PropTypes.string,
+      customerPhone: PropTypes.string,
+      startTime: PropTypes.string,
+      toTime: PropTypes.string,
+      status: PropTypes.string,
+    })),
+  }),
+  setScheduleReportData: PropTypes.func.isRequired,
+  isReportLoading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -458,7 +506,9 @@ const mapStateToProps = state => ({
   providers: state.calendarManage.providers,
   tzOptions: state.options.timezone.tzOptions,
   serviceOptions: state.options.service.serviceOptions,
-  geoOptions: state.options.geo.geoOptions
+  geoOptions: state.options.geo.geoOptions,
+  reportData: state.tmpServices.reportData,
+  isReportLoading: state.tmpServices.isReportLoading
 });
 
 const mapDispatchToProps = {
@@ -471,6 +521,8 @@ const mapDispatchToProps = {
   fetchGeoLocationOptions,
   setTmpServices,
   createNewEvent,
+  getScheduleReport,
+  setScheduleReportData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
