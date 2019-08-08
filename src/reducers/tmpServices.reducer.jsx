@@ -10,6 +10,19 @@ const initialState = {
   editTmpServiceLoading: false,
 
   delTmpServiceLoading: false,
+
+  reportData: {
+    filename: '',
+    data: [],
+    headers: [
+      { label: 'Email', key: 'customerEmail' },
+      { label: 'Full name', key: 'customerName' },
+      { label: 'Phone number', key: 'customerPhone' },
+      { label: 'Start time', key: 'startTime' },
+      { label: 'To time', key: 'toTime' }
+    ]
+  },
+  isReportLoading: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -38,6 +51,28 @@ const reducer = (state = initialState, action) => {
           .sort((prev, next) => {
             return prev.slot.startTime <= next.slot.startTime ? -1 : 1;
           })
+      };
+    case tmp_service.SET_SCHEDULE_REPORT_DATA:
+      return {
+        ...state,
+        reportData: {
+          ...state.reportData,
+          filename: action.payload.providerName
+            ? `Queuezone schedule report for provider ${action.payload.providerName}.csv`
+            : '',
+          data: action.payload.tmServiceReportList.map(item => ({
+            customerEmail: item.customerEmail,
+            customerName: item.customerName,
+            customerPhone: `=""${item.customerPhone}""`,
+            startTime: item.startTime,
+            toTime: item.toTime
+          })),
+        }
+      };
+    case tmp_service.SET_SCHEDULE_REPORT_LOADING:
+      return {
+        ...state,
+        isReportLoading: action.payload
       };
     default:
       return state;

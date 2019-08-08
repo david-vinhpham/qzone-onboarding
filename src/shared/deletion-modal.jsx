@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle,
+  Slide
 } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Slide from '@material-ui/core/Slide';
 import Button from 'components/CustomButtons/Button';
 import deletionModalStyle from '../assets/jss/material-dashboard-pro-react/modules/deletionModal';
 export const CTA = {
@@ -75,32 +75,30 @@ class DeletionModal extends Component {
       </div>
     ) : null;
     return (
-      <React.Fragment>
-        <Dialog
-          TransitionComponent={Transition}
-          keepMounted
-          open={openDialog}
-          onClose={this.onDialogClose}
-          aria-labelledby="delete-item-dialog"
-          disableBackdropClick
-          classes={{ paper: classes.paper }}
-        >
-          <DialogTitle id="delete-item-title">
-            {dialogTitle}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="delete-item-content">
-              {dialogContent}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <div>
-              <Button onClick={this.onDialogClose}>{cancelButtonLabel}</Button>
-            </div>
-            { deleteButton }
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+      <Dialog
+        TransitionComponent={Transition}
+        keepMounted
+        open={openDialog}
+        onClose={this.onDialogClose}
+        aria-labelledby="delete-item-dialog"
+        disableBackdropClick
+        classes={{ paper: classes.paper }}
+      >
+        <DialogTitle id="delete-item-title">
+          {dialogTitle}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-item-content">
+            {dialogContent}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <div>
+            <Button onClick={this.onDialogClose}>{cancelButtonLabel}</Button>
+          </div>
+          {deleteButton}
+        </DialogActions>
+      </Dialog>
     );
   }
 }

@@ -43,8 +43,8 @@ export const deleteTmpService = eventId => {
                 break;
               }
             }
-            if(position !== -1) {
-                localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
+            if (position !== -1) {
+              localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
             }
             objects.data = listTmpServices; // json
             dispatch({
@@ -61,7 +61,7 @@ export const fetchTmpServices = businessId => dispatch => {
   dispatch(setTmpServicesLoading(true));
   axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_BUSINESS_ID}${businessId}`)
     .then(resp => {
-      if(resp && resp.status === 200 && resp.data.success) {
+      if (resp && resp.status === 200 && resp.data.success) {
         dispatch(setTmpServices(resp.data.objects));
       }
     })
@@ -73,12 +73,35 @@ export const fetchTmpServices = businessId => dispatch => {
 export const editTmpService = payload => dispatch => {
   dispatch(setTmpServicesLoading(true));
   axios.put(`${API_ROOT}${URL.NEW_TMP_SERVICE}`, payload)
-  .then(resp => {
-    if(resp && resp.status === 200 && resp.data.success) {
-      dispatch(setTmpService(resp.data.object));
-    }
-  })
-  .finally(() => {
-    dispatch(setTmpServicesLoading(false));
-  });
+    .then(resp => {
+      if (resp && resp.status === 200 && resp.data.success) {
+        dispatch(setTmpService(resp.data.object));
+      }
+    })
+    .finally(() => {
+      dispatch(setTmpServicesLoading(false));
+    });
+}
+
+export const setScheduleReportData = payload => ({
+  type: tmp_service.SET_SCHEDULE_REPORT_DATA,
+  payload
+});
+
+const setScheduleReportLoading = payload => ({
+  type: tmp_service.SET_SCHEDULE_REPORT_LOADING,
+  payload
+});
+
+export const getScheduleReport = tmpServiceId => dispatch => {
+  dispatch(setScheduleReportLoading(true));
+  axios.post(`${API_ROOT}${URL.SCHEDULE_REPORT}`, { tmpServiceId })
+    .then(resp => {
+      if (resp && resp.data.success) {
+        dispatch(setScheduleReportData(resp.data.object));
+      }
+    })
+    .finally(() => {
+      dispatch(setScheduleReportLoading(false));
+    });
 }
