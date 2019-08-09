@@ -11,7 +11,11 @@ export default function withAuth(WrapComponent, userDetail) {
         !userSub
         || (userDetail
           && userDetail.userType === eUserType.provider
-          && !providerRoutes.includes(this.props.history.location.pathname))
+          && !providerRoutes.some((route) =>
+            this.props.history.location.pathname.includes(
+              route.split('/:')[0]
+            )
+          ))
       ) {
         logout(this.props.history);
       }

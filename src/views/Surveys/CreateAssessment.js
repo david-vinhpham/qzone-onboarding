@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { isEmpty, get } from 'lodash';
 import { Poll } from '@material-ui/icons';
 import { saveSurveyAction, resetSurveyStatus } from '../../actions/surveys';
-import { fetchTmpServices } from '../../actions/tmpServices';
+import { fetchTmpServicesByAdminId } from '../../actions/tmpServices';
 import withStyles from '@material-ui/core/styles/withStyles';
 import validationFormStyle from 'assets/jss/material-dashboard-pro-react/modules/validationFormStyle';
 import Card from '../../components/Card/Card';
@@ -20,7 +20,7 @@ class CreateAssessment extends React.Component {
     classes: objectOf(any).isRequired,
     history: objectOf(any).isRequired,
     saveSurveyAction: func.isRequired,
-    fetchTmpServices: func.isRequired,
+    fetchTmpServicesByAdminId: func.isRequired,
     resetSurveyStatus: func.isRequired,
     user: objectOf(any).isRequired,
     isSavedSurvey: objectOf(any),
@@ -67,12 +67,12 @@ class CreateAssessment extends React.Component {
   }
 
   componentDidMount() {
-    const { user, fetchTmpServices: fetchTmpServicesAction, history } = this.props;
+    const { user, fetchTmpServicesByAdminId: fetchTmpServicesByAdminIdAction, history } = this.props;
     const businessId = get(user, 'userDetail.userSub') || localStorage.getItem('userSub');
     if (!businessId) {
       history.push('/assessments');
     } else {
-      fetchTmpServicesAction(businessId);
+      fetchTmpServicesByAdminIdAction(businessId);
     }
   }
 
@@ -167,5 +167,5 @@ const mapStateToProps = ({ user, tmpServices, surveys }) => ({
 
 export default compose(
   withStyles(validationFormStyle),
-  connect(mapStateToProps, { saveSurveyAction, fetchTmpServices, resetSurveyStatus }),
+  connect(mapStateToProps, { saveSurveyAction, fetchTmpServicesByAdminId, resetSurveyStatus }),
 )(CreateAssessment);

@@ -2,7 +2,7 @@ import moment from 'moment-timezone';
 import { isEmpty } from 'lodash';
 import { EVENT_REPEAT_TYPE, REPEAT_END_TYPE, EVENT_LEVEL, EVENT_TYPE } from 'constants/Calendar.constants';
 
-export const generateTmpServicePayload = (tmpService, providerTzOffset, businessAdminId) => {
+export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
   const {
     additionalInfo,
     avgServiceTime,
@@ -22,7 +22,6 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset, business
     geoLocationId,
     numberOfParallelCustomer,
     serviceId,
-    businessAdminId
   };
 };
 
@@ -114,7 +113,7 @@ const generatePayload = (addEventData, providers) => {
   };
 
   if (eventType === EVENT_TYPE.TMP_SERVICE) {
-    payload = { ...payload, ...generateTmpServicePayload(tmpService, providerTzOffset, localStorage.getItem('userSub')) };
+    payload = { ...payload, ...generateTmpServicePayload(tmpService, providerTzOffset) };
   }
 
   if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {

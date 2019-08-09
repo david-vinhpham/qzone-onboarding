@@ -60,8 +60,22 @@ class AddEventDialog extends PureComponent {
     const momentData = moment(data);
 
     if (type === 'date') {
-      setFieldValue('addEventData.startTime', momentData.format());
-      setFieldValue('addEventData.endTime', momentData.clone().add(1, 'hour').format());
+      setFieldValue(
+        'addEventData.startTime',
+        moment(values.addEventData.startTime)
+          .year(momentData.year())
+          .month(momentData.month())
+          .date(momentData.date())
+          .format()
+      );
+      setFieldValue(
+        'addEventData.endTime',
+        moment(values.addEventData.endTime)
+          .year(momentData.year())
+          .month(momentData.month())
+          .date(momentData.date())
+          .format()
+      );
 
       if (values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE) {
         setFieldValue(
@@ -70,6 +84,7 @@ class AddEventDialog extends PureComponent {
             .year(momentData.year())
             .month(momentData.month())
             .date(momentData.date())
+            .format()
         );
         setFieldValue(
           'addEventData.tmpService.breakTimeEnd',
@@ -77,6 +92,7 @@ class AddEventDialog extends PureComponent {
             .year(momentData.year())
             .month(momentData.month())
             .date(momentData.date())
+            .format()
         );
       }
     }

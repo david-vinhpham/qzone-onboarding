@@ -18,7 +18,7 @@ const setTmpService = payload => ({
 })
 
 export const deleteTmpService = eventId => {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch({ type: tmp_service.DEL_TMP_SERVICE_LOADING });
     fetch(`${API_ROOT + URL.NEW_TMP_SERVICE}/${eventId}`, {
       method: 'DELETE',
@@ -29,35 +29,16 @@ export const deleteTmpService = eventId => {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          const objects = {
-            data: []
-          };
-          let position = -1;
-          const tmpServices = localStorage.getItem('tmpServices');
-          if (tmpServices !== null) {
-            let listTmpServices = JSON.parse(tmpServices);
-            for (let i = 0; i < listTmpServices.length; i += 1) {
-              if (listTmpServices[i].id === eventId) {
-                position = i;
-                listTmpServices.splice(position, 1);
-                break;
-              }
-            }
-            if (position !== -1) {
-              localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
-            }
-            objects.data = listTmpServices; // json
-            dispatch({
-              type: tmp_service.DEL_TMP_SERVICE_SUCCESS,
-              payload: objects.data
-            });
-          }
+          dispatch({
+            type: tmp_service.DEL_TMP_SERVICE_SUCCESS,
+            payload: getState().tmpServices.list.filter(tmpService => tmpService.id !== eventId)
+          });
         }
       });
   };
 };
 
-export const fetchTmpServices = businessId => dispatch => {
+export const fetchTmpServicesByAdminId = businessId => dispatch => {
   dispatch(setTmpServicesLoading(true));
   axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_BUSINESS_ID}${businessId}`)
     .then(resp => {
@@ -103,5 +84,18 @@ export const getScheduleReport = tmpServiceId => dispatch => {
     })
     .finally(() => {
       dispatch(setScheduleReportLoading(false));
+    });
+}
+
+export const fetchTmpServicesByProviderId = providerId => dispatch => {
+  dispatch(setTmpServicesLoading(true));
+  axios.get(`${API_ROOT}${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}${providerId}`)
+    .then(resp => {
+      if (resp && resp.status === 200 && resp.data.success) {
+        dispatch(setTmpServices(resp.data.objects));
+      }
+    })
+    .finally(() => {
+      dispatch(setTmpServicesLoading(false));
     });
 }

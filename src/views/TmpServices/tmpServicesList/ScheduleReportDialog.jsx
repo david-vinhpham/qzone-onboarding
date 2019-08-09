@@ -51,6 +51,22 @@ const ScheduleReportDialog = ({ onDialogClose, reportData, isReportLoading }) =>
     };
   }, [isReportLoading]);
 
+  let dialogContent = (<>
+    <Typography>Please click the link below for downloading the report!</Typography>
+    <div className={classes.reportLinkWrapper}>
+      <CSVLink className={classes.reportLink} {...reportData}>{reportData.filename}</CSVLink>
+    </div>
+  </>);
+
+  if (isReportLoading) {
+    dialogContent = (<>
+      <Typography>Please wait while your report is generating!</Typography>
+      <LinearProgress variant="determinate" value={completed} />
+    </>);
+  } else if (reportData.data.length === 0) {
+    dialogContent = (<Typography>Your report cannot be generated!</Typography>)
+  }
+
   return (
     <Dialog
       disableBackdropClick
@@ -62,17 +78,7 @@ const ScheduleReportDialog = ({ onDialogClose, reportData, isReportLoading }) =>
         Schedule report
       </DialogTitle>
       <DialogContent>
-        {isReportLoading
-          ? (<>
-            <Typography>Please wait while your report is generating!</Typography>
-            <LinearProgress variant="determinate" value={completed} />
-          </>)
-          : (<>
-            <Typography>Please click the link below for downloading the report!</Typography>
-            <div className={classes.reportLinkWrapper}>
-              <CSVLink className={classes.reportLink} {...reportData}>{reportData.filename}</CSVLink>
-            </div>
-          </>)}
+        {dialogContent}
       </DialogContent>
       <DialogActions>
         <Button onClick={onDialogClose}>Close</Button>

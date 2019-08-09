@@ -75,7 +75,7 @@ export const fetchEventsByProviderId = providerId => dispatch => {
     .finally(() => { dispatch(calendarLoading(false)); });
 };
 
-export const createNewEvent = newEvent => dispatch => {
+export const createNewEvent = newEvent => (dispatch, getState) => {
   dispatch(calendarLoading(true));
 
   let api = URL.NEW_NORMAL_EVENT;
@@ -98,18 +98,14 @@ export const createNewEvent = newEvent => dispatch => {
             ...data,
             type: data.type || newEvent.type
           };
+
           if (newEvent.type === EVENT_TYPE.TMP_SERVICE) {
-            const tmpServices = localStorage.getItem('tmpServices');
-            if (tmpServices !== null) {
-              const listTmpServices = JSON.parse(tmpServices);
-              listTmpServices.push(data);
-              localStorage.setItem('tmpServices', JSON.stringify(listTmpServices));
-              dispatch({
-                type: tmp_service.FETCH_TMP_SERVICES_SUCCESS,
-                payload: listTmpServices
-              });
-            }
+            dispatch({
+              type: tmp_service.FETCH_TMP_SERVICES_SUCCESS,
+              payload: [...getState().tmpServices.list, data]
+            });
           }
+
           dispatch(createEventSuccess(event));
         }
       }

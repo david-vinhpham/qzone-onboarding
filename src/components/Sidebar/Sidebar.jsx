@@ -83,6 +83,174 @@ class Sidebar extends React.Component {
       [classes.whiteAfter]: bgColor === "white"
     });
 
+    const adminNavItems = (
+      <List className={cx(classes.list, classes.collapseList)}>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/organization/list"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"OL"}
+            </span>
+            <ListItemText
+              primary={
+                "Organization List"
+              }
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/location/list"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"BL"}
+            </span>
+            <ListItemText
+              primary="Business Locations"
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/services/list"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"MS"}
+            </span>
+            <ListItemText
+              primary="Manage Services"
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/tmp-services"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"TS"}
+            </span>
+            <ListItemText
+              primary="Temporary Services"
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/service-categories"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"SC"}
+            </span>
+            <ListItemText
+              primary="Service Categories"
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/business-categories"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"BC"}
+            </span>
+            <ListItemText
+              primary={
+                "Business Categories"
+              }
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/administration"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"AD"}
+            </span>
+            <ListItemText
+              primary={
+                "Administration"
+              }
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/provider/list"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"PD"}
+            </span>
+            <ListItemText
+              primary={
+                "Provider Details"
+              }
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="#"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"S"}
+            </span>
+            <ListItemText
+              primary={"Settings"}
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+      </List>
+    );
+
+    const providerNavItems = (
+      <List className={cx(classes.list, classes.collapseList)}>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
+            to="/tmp-services"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"TS"}
+            </span>
+            <ListItemText
+              primary="Temporary Services"
+              disableTypography={true}
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+      </List>
+    );
+
     const user = (
       <div className={userWrapperClass}>
         <div className={classes.photo}>
@@ -98,229 +266,28 @@ class Sidebar extends React.Component {
               className={cx(classes.itemLink, classes.userCollapseButton)}
               onClick={(e) => {
                 e.preventDefault();
-                if (!isProvider) {
-                  this.openCollapse("openAvatar");
-                }
+                this.openCollapse("openAvatar");
               }}
             >
               <ListItemText
                 primary={userName}
-                secondary={!isProvider &&
-                  (<b className={cx(classes.caret, classes.userCaret, {
+                secondary={
+                  <b className={cx(classes.caret, classes.userCaret, {
                     [classes.caretActive]: !!this.state.openAvatar
-                  })} />)
+                  })} />
                 }
                 disableTypography={true}
                 className={cx(itemText, classes.userItemText)}
               />
             </NavLink>
-            {!isProvider && <Collapse in={this.state.openAvatar} unmountOnExit>
-              <List className={cx(classes.list, classes.collapseList)}>
-                {/*<ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="#"
-                    className={
-                      classes.itemLink + " " + classes.userCollapseLinks
-                    }
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"MP"}
-                    </span>
-                    <ListItemText
-                      primary={"My Profile"}
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>*/}
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/organization/list"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"OL"}
-                    </span>
-                    <ListItemText
-                      primary={
-                        "Organization List"
-                      }
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/location/list"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"BL"}
-                    </span>
-                    <ListItemText
-                      primary="Business Locations"
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/services/list"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"MS"}
-                    </span>
-                    <ListItemText
-                      primary="Manage Services"
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/tmp-services"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"TS"}
-                    </span>
-                    <ListItemText
-                      primary="Temporary Services"
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/service-categories"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"SC"}
-                    </span>
-                    <ListItemText
-                      primary="Service Categories"
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/business-categories"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"BC"}
-                    </span>
-                    <ListItemText
-                      primary={
-                        "Business Categories"
-                      }
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-                {/*<ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/service-provider/list"
-                    className={
-                      classes.itemLink + " " + classes.userCollapseLinks
-                    }
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"MS"}
-                    </span>
-                    <ListItemText
-                      primary={
-                        "Assign Service Providers"
-                      }
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>*/}
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/administration"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"AD"}
-                    </span>
-                    <ListItemText
-                      primary={
-                        "Administration"
-                      }
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-                {/*<ListItem className={classes.collapseItem}>*/}
-                {/*  <NavLink*/}
-                {/*    to="/assessments"*/}
-                {/*    className={*/}
-                {/*      classes.itemLink + " " + classes.userCollapseLinks*/}
-                {/*    }*/}
-                {/*  >*/}
-                {/*    <span className={classes.collapseItemMini}>*/}
-                {/*      {"SV"}*/}
-                {/*    </span>*/}
-                {/*    <ListItemText*/}
-                {/*      primary={*/}
-                {/*        "Assessments"*/}
-                {/*      }*/}
-                {/*      disableTypography={true}*/}
-                {/*      className={collapseItemText}*/}
-                {/*    />*/}
-                {/*  </NavLink>*/}
-                {/*</ListItem>*/}
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="/provider/list"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"PD"}
-                    </span>
-                    <ListItemText
-                      primary={
-                        "Provider Details"
-                      }
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="#"
-                    className={cx(classes.itemLink, classes.userCollapseLinks)}
-                  >
-                    <span className={classes.collapseItemMini}>
-                      {"S"}
-                    </span>
-                    <ListItemText
-                      primary={"Settings"}
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-              </List>
+            {<Collapse in={this.state.openAvatar} unmountOnExit>
+              {isProvider
+                ? providerNavItems
+                : adminNavItems}
             </Collapse>}
           </ListItem>
         </List>
-      </div>
+      </div >
     );
 
     const links = (

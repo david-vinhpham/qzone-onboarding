@@ -245,6 +245,6 @@ const otherRoutes = [
   },
 ];
 
-const providerRoutes = ['/calendar', '/profile'];
+const providerRoutes = ['/calendar', '/profile', '/tmp-services', '/tmp-service/detail/:id', '/availability'];
 
 export { dashboardRoutes, otherRoutes, providerRoutes };
