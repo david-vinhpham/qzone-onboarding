@@ -19,7 +19,8 @@ const initialState = {
       { label: 'Full name', key: 'customerName' },
       { label: 'Phone number', key: 'customerPhone' },
       { label: 'Start time', key: 'startTime' },
-      { label: 'To time', key: 'toTime' }
+      { label: 'To time', key: 'toTime' },
+      { label: 'Status', key: 'status' }
     ]
   },
   isReportLoading: false,
@@ -58,14 +59,15 @@ const reducer = (state = initialState, action) => {
         reportData: {
           ...state.reportData,
           filename: action.payload.providerName
-            ? `Queuezone schedule report for provider ${action.payload.providerName}.csv`
+            ? `Quezone schedule report ${action.payload.providerName} - ${action.payload.dateEvent}.csv`
             : '',
           data: action.payload.tmServiceReportList.map(item => ({
             customerEmail: item.customerEmail,
             customerName: item.customerName,
             customerPhone: `=""${item.customerPhone}""`,
             startTime: item.startTime,
-            toTime: item.toTime
+            toTime: item.toTime,
+            status: item.status
           })),
         }
       };

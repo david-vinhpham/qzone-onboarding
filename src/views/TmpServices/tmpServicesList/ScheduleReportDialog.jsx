@@ -87,6 +87,7 @@ ScheduleReportDialog.propTypes = {
     filename: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.shape({
       providerName: PropTypes.string,
+      dateEvent: PropTypes.string,
       customerName: PropTypes.string,
       customerEmail: PropTypes.string,
       customerPhone: PropTypes.string,
