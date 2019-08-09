@@ -179,7 +179,7 @@ export function loginUser(values, history) {
                 localStorage.setItem('loginEmail',userDetail.email);
                 localStorage.setItem('userStatus', userDetail.userStatus);
                 if(userDetail.userType === eUserType.provider) {
-                  history.push('/calendar');
+                  history.push('/dashboard');
                 } else {
                   history.push('/dashboard');
                 }
