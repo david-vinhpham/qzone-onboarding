@@ -1,4 +1,5 @@
-export const API_ROOT = 'https://api.quezone.com.au/api/';
+export const API_ROOT = process.env.NODE_ENV === 'development'
+  ? 'http://54.252.134.87:8080/api/' : 'https://api.quezone.com.au/api/';
 export const API_SURVEY = `${API_ROOT}surveys`;
 export const API_MEDIA_URL = 'https://communication.quezone.com.au/api/media/medias';
 export const URL = {
@@ -49,6 +50,7 @@ export const URL = {
   NEW_APPOINTMENTS_CUSTOMER_EVENT: 'appointment-customer-events',
 
   FIND_TMP_SERVICES_BY_BUSINESS_ID: 'find-temporary-services-by-business-admin-id/',
+  FIND_TMP_SERVICES_BY_PROVIDER_ID: 'find-temporary-services-by-provider-id/',
   FIND_TMP_SERVICE_DETAIL_BY_TMP_SERVICE_ID: 'temporary-services/',
 
   FIND_AVAILABILITY_BY_TMP_SERVICE: 'availabilities/temporary/service',

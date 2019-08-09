@@ -2,12 +2,20 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { get } from 'lodash';
 import uuidv1 from 'uuid/v1';
-import { classesType, historyType, tmpServiceType, optionType, providerType } from "types/global";
+import { classesType, historyType, tmpServiceType, optionType, providerType, userDetailType } from "types/global";
 import { connect } from "react-redux";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { ArtTrack, Delete, Edit, Search, BarChart } from "@material-ui/icons";
 import moment from "moment-timezone";
-import { deleteTmpService, fetchTmpServices, editTmpService, setTmpServices, getScheduleReport, setScheduleReportData } from "../../actions/tmpServices";
+import {
+  deleteTmpService,
+  fetchTmpServicesByAdminId,
+  editTmpService,
+  setTmpServices,
+  getScheduleReport,
+  setScheduleReportData,
+  fetchTmpServicesByProviderId
+} from "../../actions/tmpServices";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle";
 import listPageStyle from 'assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -23,13 +31,13 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import AddEventDialog from "views/Calendar/AddEventDialog";
-import { fetchProvidersByBusinessId, createNewEvent } from "actions/calendar";
+import { fetchProvidersByBusinessId, createNewEvent, fetchProvidersByBusinessIdSuccess } from "actions/calendar";
 import { fetchGeoLocationOptions } from "../../actions/geoOptions";
 import { fetchTimezoneOptions } from "../../actions/timezoneOptions";
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
-import { defaultDateTimeFormat } from "constants.js";
+import { defaultDateTimeFormat, eUserType } from "constants.js";
 import ScheduleReportDialog from "./tmpServicesList/ScheduleReportDialog";
 
 const override = css`
@@ -67,7 +75,6 @@ class TmpServicesList extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.tmpServices != null && nextProps.tmpServices.length > 0 && !nextProps.delTmpServiceLoading) {
       this.setState({ data: nextProps.tmpServices });
-      localStorage.setItem('tmpServices', JSON.stringify(nextProps.tmpServices));
     }
     else {
       this.setState({ data: nextProps.tmpServices });
@@ -75,18 +82,20 @@ class TmpServicesList extends PureComponent {
   }
 
   componentDidMount() {
-    const tmpServices = JSON.parse(localStorage.getItem('tmpServices'));
-    this.businessId = localStorage.getItem('userSub');
-    if (tmpServices !== null && tmpServices.length > 0) {
-      this.setState({ data: tmpServices });
-      this.props.setTmpServices(tmpServices);
-    } else {
-      this.props.fetchTmpServices(this.businessId);
+    this.userId = localStorage.getItem('userSub');
+    if (this.userId) {
+      const { userDetail } = this.props;
+      if (userDetail.userType === eUserType.provider) {
+        this.props.fetchTmpServicesByProviderId(this.userId);
+        this.props.fetchServiceOptionsByBusinessAdminId(userDetail.providerInformation.businessId);
+        this.props.fetchProvidersByBusinessIdSuccess([userDetail]);
+      } else {
+        this.props.fetchTmpServicesByAdminId(this.userId);
+        this.props.fetchProvidersByBusinessId(this.userId);
+        this.props.fetchServiceOptionsByBusinessAdminId(this.userId);
+      }
     }
-
-    this.props.fetchProvidersByBusinessId(this.businessId);
     this.props.fetchTimezoneOptions();
-    this.props.fetchServiceOptionsByBusinessAdminId(this.businessId);
     this.props.fetchGeoLocationOptions();
   }
 
@@ -249,7 +258,7 @@ class TmpServicesList extends PureComponent {
           avgServiceTime: 0,
           breakTimeStart: startTime,
           breakTimeEnd: endTime,
-          geoLocationId: this.props.geoOptions[0].value,
+          geoLocationId: get(this.props.geoOptions, '0.value', ''),
           numberOfParallelCustomer: 1,
           serviceId,
         }
@@ -282,12 +291,13 @@ class TmpServicesList extends PureComponent {
     const {
       classes, history, isLoading,
       providers, tzOptions, serviceOptions,
-      reportData, isReportLoading
+      reportData, isReportLoading, userDetail
     } = this.props;
     const {
       deletedTmpService, isOpenAddEventDialog, eventLevel,
       addEventData, isEditMode, isOpenScheduleReport
     } = this.state;
+    const isAdmin = userDetail.userType === eUserType.business_admin;
 
     if (isLoading) {
       return (
@@ -363,7 +373,7 @@ class TmpServicesList extends PureComponent {
                       <Edit />
                     </Tooltip>
                   </Button>
-                  <Button
+                  {isAdmin && <Button
                     onClick={() => this.deleteTmpService(event.id)}
                     color="danger"
                     simple
@@ -377,7 +387,7 @@ class TmpServicesList extends PureComponent {
                     >
                       <Delete />
                     </Tooltip>
-                  </Button>
+                  </Button>}
                 </TableCell>
               </TableRow>
             ))}
@@ -467,7 +477,7 @@ class TmpServicesList extends PureComponent {
 
 TmpServicesList.propTypes = {
   tmpServices: PropTypes.arrayOf(tmpServiceType).isRequired,
-  fetchTmpServices: PropTypes.func.isRequired,
+  fetchTmpServicesByAdminId: PropTypes.func.isRequired,
   classes: classesType.isRequired,
   history: historyType.isRequired,
   delTmpServiceLoading: PropTypes.bool.isRequired,
@@ -497,6 +507,9 @@ TmpServicesList.propTypes = {
   }),
   setScheduleReportData: PropTypes.func.isRequired,
   isReportLoading: PropTypes.bool.isRequired,
+  fetchProvidersByBusinessIdSuccess: PropTypes.func.isRequired,
+  fetchTmpServicesByProviderId: PropTypes.func.isRequired,
+  userDetail: userDetailType.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -508,11 +521,12 @@ const mapStateToProps = state => ({
   serviceOptions: state.options.service.serviceOptions,
   geoOptions: state.options.geo.geoOptions,
   reportData: state.tmpServices.reportData,
-  isReportLoading: state.tmpServices.isReportLoading
+  isReportLoading: state.tmpServices.isReportLoading,
+  userDetail: state.user.userDetail,
 });
 
 const mapDispatchToProps = {
-  fetchTmpServices,
+  fetchTmpServicesByAdminId,
   deleteTmpService,
   fetchProvidersByBusinessId,
   fetchTimezoneOptions,
@@ -522,7 +536,9 @@ const mapDispatchToProps = {
   setTmpServices,
   createNewEvent,
   getScheduleReport,
-  setScheduleReportData
+  setScheduleReportData,
+  fetchProvidersByBusinessIdSuccess,
+  fetchTmpServicesByProviderId
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

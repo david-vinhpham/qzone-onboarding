@@ -14,13 +14,14 @@ import CustomInput from 'components/CustomInput/CustomInput';
 import headerLinksStyle from 'assets/jss/material-dashboard-pro-react/components/headerLinksStyle';
 import tableStyle from 'assets/jss/material-dashboard-pro-react/components/tableStyle';
 import { fetchAvailability } from 'actions/availabilitySlots';
-import { historyType, availabilitySlotType, classesType, providerType } from 'types/global';
-import { fetchProvidersByBusinessAdminId } from 'actions/provider';
-import { defaultDateTimeFormat } from 'constants.js';
+import { historyType, availabilitySlotType, classesType, userDetailType } from 'types/global';
+import { fetchProvidersByBusinessAdminId, fetchProvidersSuccess } from 'actions/provider';
+import { defaultDateTimeFormat, eUserType } from 'constants.js';
 
 class AvailabilitySlotsList extends PureComponent {
   componentDidMount() {
-    const { history: { location: { state = {} } } } = this.props;
+    const { history: { location: { state = {} } }, userDetail } = this.props;
+
     if (!state.specialEventId) {
       this.props.history.replace('/tmp-services');
     } else {
@@ -28,7 +29,10 @@ class AvailabilitySlotsList extends PureComponent {
         specialEventId: state.specialEventId,
         customerTimezoneId: state.customerTimezoneId
       });
-      if (this.props.providers.length === 0) {
+
+      if (userDetail.userType === eUserType.provider) {
+        this.props.fetchProvidersSuccess([userDetail]);
+      } else {
         this.props.fetchProvidersByBusinessAdminId(localStorage.getItem('userSub'));
       }
     }
@@ -69,7 +73,8 @@ class AvailabilitySlotsList extends PureComponent {
                 color="white"
                 aria-label="edit"
                 justIcon
-                round>
+                round
+              >
                 <Search />
               </CustomButton>
             </div>
@@ -123,8 +128,9 @@ AvailabilitySlotsList.propTypes = {
   availabilitySlots: PropTypes.arrayOf(availabilitySlotType).isRequired,
   fetchAvailability: PropTypes.func.isRequired,
   classes: classesType.isRequired,
-  providers: PropTypes.arrayOf(providerType).isRequired,
   fetchProvidersByBusinessAdminId: PropTypes.func.isRequired,
+  fetchProvidersSuccess: PropTypes.func.isRequired,
+  userDetail: userDetailType.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
@@ -149,10 +155,10 @@ const mapStateToProps = (state, ownProps) => ({
       ).format(defaultDateTimeFormat)
     };
   }),
-  providers: state.provider.providers
+  userDetail: state.user.userDetail,
 });
 
 export default connect(
   mapStateToProps,
-  { fetchAvailability, fetchProvidersByBusinessAdminId }
+  { fetchAvailability, fetchProvidersByBusinessAdminId, fetchProvidersSuccess }
 )(withStyles(tableStyle, headerLinksStyle)(AvailabilitySlotsList));
