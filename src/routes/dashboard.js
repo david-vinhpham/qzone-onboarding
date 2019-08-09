@@ -2,12 +2,10 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
   BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd, Report,
   // Assignment,
-  AssignmentInd,
-  FilterVintage,
+  FilterVintage, Star
   // Update,
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
-import Profile from '../views/Profile/profile';
 import Administration from '../views/Administration/Administration';
 import OrganizationCreate from '../views/Organization/OrganizationCreate';
 import OrganizationEdit from '../views/Organization/OrganizationEdit';
@@ -35,7 +33,6 @@ import EmailTemplates from '../views/EmailTemplates/EmailTemplates';
 import EditEmailTemplate from '../views/EmailTemplates/EditEmailTemplate';
 import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
 import TmpServicesList from '../views/TmpServices/TmpServicesList';
-import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesList';
 import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
 import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
@@ -50,12 +47,12 @@ const dashboardRoutes = [
     icon: DashboardIcon,
     component: Dashboard
   },
-  {
+/*  {
     path: '/profile',
     name: 'Profile',
     icon: AssignmentInd,
     component: Profile
-  },
+  },*/
   {
     path: '/customer-service',
     name: 'Customer Service',
@@ -79,6 +76,12 @@ const dashboardRoutes = [
     name: 'Manage Calendar',
     icon: BubbleChart,
     component: ManageCalendar
+  },
+  {
+    path: '/tmp-services',
+    name: 'Temporary Services',
+    icon: Star,
+    component: TmpServicesList
   },
   {
     path: '/email-templates',
@@ -219,12 +222,12 @@ const otherRoutes = [
     short: 'Temporary Services',
     component: TmpServicesList
   },
-  {
+/*  {
     path: '/service-categories',
     name: 'List Service Categories',
     short: 'List Service Categories',
     component: ServiceCategoriesList
-  },
+  },*/
   {
     path: '/business-categories',
     name: 'List Business Categories',

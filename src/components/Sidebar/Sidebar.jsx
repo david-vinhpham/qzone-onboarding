@@ -132,7 +132,7 @@ class Sidebar extends React.Component {
             />
           </NavLink>
         </ListItem>
-        <ListItem className={classes.collapseItem}>
+{/*        <ListItem className={classes.collapseItem}>
           <NavLink
             to="/tmp-services"
             className={cx(classes.itemLink, classes.userCollapseLinks)}
@@ -146,7 +146,7 @@ class Sidebar extends React.Component {
               className={collapseItemText}
             />
           </NavLink>
-        </ListItem>
+        </ListItem>*/}
         <ListItem className={classes.collapseItem}>
           <NavLink
             to="/service-categories"
