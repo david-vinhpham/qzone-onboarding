@@ -132,21 +132,6 @@ class Sidebar extends React.Component {
             />
           </NavLink>
         </ListItem>
-{/*        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/tmp-services"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
-          >
-            <span className={classes.collapseItemMini}>
-              {"TS"}
-            </span>
-            <ListItemText
-              primary="Temporary Services"
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>*/}
         <ListItem className={classes.collapseItem}>
           <NavLink
             to="/service-categories"
@@ -231,26 +216,6 @@ class Sidebar extends React.Component {
       </List>
     );
 
-    const providerNavItems = (
-      <List className={cx(classes.list, classes.collapseList)}>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/tmp-services"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
-          >
-            <span className={classes.collapseItemMini}>
-              {"TS"}
-            </span>
-            <ListItemText
-              primary="Temporary Services"
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-      </List>
-    );
-
     const user = (
       <div className={userWrapperClass}>
         <div className={classes.photo}>
@@ -266,13 +231,13 @@ class Sidebar extends React.Component {
               className={cx(classes.itemLink, classes.userCollapseButton)}
               onClick={(e) => {
                 e.preventDefault();
-                this.openCollapse("openAvatar");
+                if(!isProvider) this.openCollapse("openAvatar");
               }}
             >
               <ListItemText
                 primary={userName}
                 secondary={
-                  <b className={cx(classes.caret, classes.userCaret, {
+                  !isProvider && <b className={cx(classes.caret, classes.userCaret, {
                     [classes.caretActive]: !!this.state.openAvatar
                   })} />
                 }
@@ -280,10 +245,8 @@ class Sidebar extends React.Component {
                 className={cx(itemText, classes.userItemText)}
               />
             </NavLink>
-            {<Collapse in={this.state.openAvatar} unmountOnExit>
-              {isProvider
-                ? providerNavItems
-                : adminNavItems}
+            {!isProvider && <Collapse in={this.state.openAvatar} unmountOnExit>
+              {adminNavItems}
             </Collapse>}
           </ListItem>
         </List>

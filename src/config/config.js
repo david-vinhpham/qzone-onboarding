@@ -55,7 +55,7 @@ export const URL = {
 
   FIND_AVAILABILITY_BY_TMP_SERVICE: 'availabilities/temporary/service',
 
-  VERIFY_BOOKING_CODE: 'customer/booking/code/verify',
+  VERIFY_BOOKING_CODE: 'verify',
   UPDATE_CUSTOMER_FLOW_STATUS: 'customer/flow/status',
   FETCH_CUSTOMER_FLOW_BOARD: 'customer/flow/board',
   UPDATE_GUEST_INFO: 'guest-users',

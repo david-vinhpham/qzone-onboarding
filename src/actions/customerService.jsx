@@ -18,16 +18,22 @@ const setVerifyBookingCodeFailure = () => ({
   type: customer_service.VERIFY_BOOKING_CODE_FAILURE
 });
 
-export const verifyBookingCode = (bookingCode, userDetailId) => dispatch => {
+export const verifyBookingCode = (bookingCode, userDetailId, isProvider) => dispatch => {
   dispatch(setVerifyBookingCodeLoading(true));
-  return axios.get(`${API_ROOT}${URL.VERIFY_BOOKING_CODE}/${bookingCode}/${userDetailId}`)
-    .then(res => {
-      if (res && res.status === 200 && res.data.success) {
-        dispatch(setVerifyBookingCodeSuccess(res.data.object));
-      } else {
-        dispatch(setVerifyBookingCodeFailure());
-      }
-    })
+  return axios.get(`${API_ROOT}${URL.VERIFY_BOOKING_CODE}/${
+    bookingCode
+    }/${
+    isProvider ? 'provider' : 'admin'
+    }/${
+    userDetailId
+    }`
+  ).then(res => {
+    if (res && res.status === 200 && res.data.success) {
+      dispatch(setVerifyBookingCodeSuccess(res.data.object));
+    } else {
+      dispatch(setVerifyBookingCodeFailure());
+    }
+  })
     .catch(() => dispatch(setVerifyBookingCodeFailure()))
     .finally(() => {
       dispatch(setVerifyBookingCodeLoading(false));
@@ -102,8 +108,8 @@ export const fetchFlowBoard = (data) => dispatch => {
     });
 };
 
-export const setProviderOptionsByBusinessAdminIdSuccess = payload => ({
-  type: customer_service.FETCH_PROVIDERS_OPTIONS_BY_BUSINESS_ADMIN_ID_SUCCESS,
+export const setProviderOptionsSuccess = payload => ({
+  type: customer_service.FETCH_PROVIDERS_OPTIONS_SUCCESS,
   payload
 });
 
@@ -111,14 +117,16 @@ export const fetchProviderOptionsByBusinessAdminId = (businessAdminId) => dispat
   return axios.get(`${API_ROOT}${URL.FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
     .then(res => {
       if (res && res.status === 200 && res.data.success) {
-        dispatch(setProviderOptionsByBusinessAdminIdSuccess(res.data.objects));
+        dispatch(setProviderOptionsSuccess(res.data.objects));
       }
     });
 };
 
 export const fetchProvidersAndServicesByBusinessAdminId = (businessAdminId) => dispatch => {
-  return Promise.all([fetchServiceOptionsByBusinessAdminId(businessAdminId)(dispatch),
-  fetchProviderOptionsByBusinessAdminId(businessAdminId)(dispatch)]);
+  return Promise.all([
+    fetchServiceOptionsByBusinessAdminId(businessAdminId)(dispatch),
+    fetchProviderOptionsByBusinessAdminId(businessAdminId)(dispatch)
+  ]);
 };
 
 
@@ -126,7 +134,7 @@ export const updateGuestInfo = (payload, bookingCode, userDetailId) => dispatch 
   dispatch(setVerifyBookingCodeLoading(true));
   return axios.put(`${API_ROOT}${URL.UPDATE_GUEST_INFO}`, payload)
     .then(res => {
-      if(res && res.data.success) {
+      if (res && res.data.success) {
         verifyBookingCode(bookingCode, userDetailId)(dispatch);
       }
     });

@@ -31,7 +31,7 @@ const reducer = (state = initialState, action) => {
       }
     case customer_service.VERIFY_BOOKING_CODE_LOADING:
       return { ...state, isLoading: action.payload };
-    case customer_service.FETCH_PROVIDERS_OPTIONS_BY_BUSINESS_ADMIN_ID_SUCCESS:
+    case customer_service.FETCH_PROVIDERS_OPTIONS_SUCCESS:
       return {
         ...state,
         providerOptions: action.payload,

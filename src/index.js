@@ -16,11 +16,12 @@ import thunk from 'redux-thunk';
 
 import indexRoutes from './routes/index';
 import reducers from './reducers';
-import './utils/errorsHandler';
+import './utils/responseHandler';
 import './assets/scss/material-dashboard-pro-react.css';
 import 'react-phone-number-input/style.css';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+import { RESET_ALL_STATES } from 'actions/common';
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -56,7 +57,10 @@ Amplify.configure({
 
 const hist = createBrowserHistory();
 const createStoreWithMiddleware = composeEnhancers(applyMiddleware(thunk))(createStore);
-const store = createStoreWithMiddleware(reducers);
+const store = createStoreWithMiddleware((state, action) => {
+  if (action.type === RESET_ALL_STATES) return reducers(undefined, action);
+  return reducers(state, action);
+});
 const theme = createMuiTheme({
   typography: {},
   palette: {
@@ -82,3 +86,5 @@ ReactDOM.render(
   </MuiThemeProvider>,
   document.getElementById('root')
 );
+
+export default store;
