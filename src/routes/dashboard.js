@@ -12,6 +12,7 @@ import OrganizationEdit from '../views/Organization/OrganizationEdit';
 import OrganizationList from '../views/Organization/OrganizationList';
 import ManageCalendar from '../views/Calendar/ManageCalendar';
 import CustomerService from '../views/CustomerService/CustomerService';
+import Profile from '../views/Profile/profile';
 
 import ProviderList from '../views/Provider/ProviderList';
 import ProviderCreate from '../views/Provider/ProviderCreate';
@@ -94,6 +95,12 @@ const dashboardRoutes = [
 ];
 
 const otherRoutes = [
+    {
+    path: '/profile',
+    name: 'Profile',
+    icon: Person,
+    component: Profile
+  },
   {
     path: '/location/edit/:id',
     name: 'Location Edit',
