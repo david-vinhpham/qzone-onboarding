@@ -6,6 +6,9 @@ import { auth } from "../constants/Auth.constants";
 import { eUserType } from "constants.js";
 import Alert from 'react-s-alert';
 import AlertMessage from 'components/Alert/Message';
+import { resetAllStates } from './common';
+import store from 'index.js';
+
 const clientId = '3ov1blo2eji4acnqfcv88tcidn';
 
 export const authGetToken = () => {
@@ -29,6 +32,7 @@ export function logout(history) {
   Auth.signOut({ global: true })
     .catch(console.log)
     .finally(() => {
+      store.dispatch(resetAllStates());
       localStorage.clear();
       if (history) history.push('/login');
     });
@@ -78,7 +82,7 @@ export function register(values) {
     })
       .then(json => {
         if (json) {
-          const userDetail = {...json.user, email: json.user.username};
+          const userDetail = { ...json.user, email: json.user.username };
           localStorage.setItem('username', userDetail.username);
           localStorage.setItem('user', JSON.stringify(userDetail));
           dispatch(registerUserSuccess(userDetail));
@@ -86,8 +90,7 @@ export function register(values) {
           dispatch(registerUserFailure('Topology Error'));
         }
       })
-      .catch(err =>
-      {
+      .catch(err => {
         dispatch(registerUserFailure(err))
       });
   };
@@ -176,9 +179,9 @@ export function loginUser(values, history) {
               if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
                 dispatch(registerUserSuccess(userDetail));
                 localStorage.setItem('user', JSON.stringify(userDetail));
-                localStorage.setItem('loginEmail',userDetail.email);
+                localStorage.setItem('loginEmail', userDetail.email);
                 localStorage.setItem('userStatus', userDetail.userStatus);
-                if(userDetail.userType === eUserType.provider) {
+                if (userDetail.userType === eUserType.provider) {
                   history.push('/dashboard');
                 } else {
                   history.push('/dashboard');
@@ -420,17 +423,17 @@ export function completeNewPasswordChallenge(values, callback) {
             type: auth.FORCE_RESET_PASSWORD_SUCCESS,
             payload: data
           });
-          Alert.success(<AlertMessage>Password is successfully updated</AlertMessage>, {effect: 'bouncyflip'});
+          Alert.success(<AlertMessage>Password is successfully updated</AlertMessage>, { effect: 'bouncyflip' });
         } else {
           dispatch({
             type: auth.FORCE_RESET_PASSWORD_FAILURE,
             payload: data
           });
-          Alert.error(<AlertMessage>{data.message}</AlertMessage>, {effect: 'bouncyflip'});
+          Alert.error(<AlertMessage>{data.message}</AlertMessage>, { effect: 'bouncyflip' });
         }
       })
-  .catch(err => {
-    Alert.error(<AlertMessage>Cannot change password</AlertMessage>, {effect: 'bouncyflip'});
-    });
+      .catch(err => {
+        Alert.error(<AlertMessage>Cannot change password</AlertMessage>, { effect: 'bouncyflip' });
+      });
   }
 };

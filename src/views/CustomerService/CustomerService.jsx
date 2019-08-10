@@ -27,14 +27,15 @@ import {
   verifyBookingCode,
   fetchProviderOptionsByBusinessAdminId,
   fetchProvidersAndServicesByBusinessAdminId,
-  updateGuestInfo
+  updateGuestInfo,
+  setProviderOptionsSuccess
 } from "../../actions/customerService";
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import PropTypes from "prop-types";
 import CustomInput from "../../components/CustomInput/CustomInput";
-import { defaultDateTimeFormat, eventStatus, boardMode } from "constants.js";
+import { defaultDateTimeFormat, eventStatus, boardMode, eUserType } from "constants.js";
 import moment from "moment-timezone";
-import { verifyBookingCodeType, customerFlowBoardType, optionType } from "types/global";
+import { verifyBookingCodeType, customerFlowBoardType, optionType, userDetailType } from "types/global";
 import customerServiceStyle from 'assets/jss/material-dashboard-pro-react/views/customerService';
 import BookingInformation from './BookingInformation';
 
@@ -52,9 +53,12 @@ class CustomerService extends PureComponent {
   }
 
   componentDidMount() {
-    const userSub = localStorage.getItem('userSub');
-    if (userSub) {
-      this.props.fetchProvidersAndServicesByBusinessAdminId(userSub);
+    const { userDetail } = this.props;
+    if (userDetail.userType === eUserType.provider) {
+      this.props.fetchServiceOptionsByBusinessAdminId(userDetail.providerInformation.businessId);
+      this.props.setProviderOptionsSuccess([{ label: userDetail.fullName, value: userDetail.id }]);
+    } else {
+      this.props.fetchProvidersAndServicesByBusinessAdminId(userDetail.id);
     }
   }
 
@@ -128,7 +132,12 @@ class CustomerService extends PureComponent {
   };
 
   verifyCode = () => {
-    this.props.verifyBookingCode(this.state.bookingCode, this.props.userDetailId);
+    const { userDetail } = this.props;
+    this.props.verifyBookingCode(
+      this.state.bookingCode,
+      userDetail.id,
+      userDetail.userType === eUserType.provider
+    );
   };
 
   handleConfirmChangeStatusDialogClose = () => {
@@ -159,8 +168,8 @@ class CustomerService extends PureComponent {
   };
 
   editGuestInfo = payload => () => {
-    const { updateGuestInfo, verifyData, userDetailId } = this.props;
-    updateGuestInfo(payload, verifyData.bookingCode, userDetailId);
+    const { updateGuestInfo, verifyData, userDetail } = this.props;
+    updateGuestInfo(payload, verifyData.bookingCode, userDetail.id);
   }
 
   render() {
@@ -379,7 +388,8 @@ CustomerService.propTypes = {
   isFetchProviderOptionsByBusinessAdminIdSuccess: PropTypes.bool.isRequired,
   providerOptions: PropTypes.arrayOf(optionType).isRequired,
   updateGuestInfo: PropTypes.func.isRequired,
-  userDetailId: PropTypes.string.isRequired,
+  userDetail: userDetailType.isRequired,
+  setProviderOptionsSuccess: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -392,7 +402,7 @@ const mapStateToProps = state => ({
   serviceOptions: state.options.service.serviceOptions,
   isFetchProviderOptionsByBusinessAdminIdSuccess: state.customerService.isFetchProviderOptionsByBusinessAdminIdSuccess,
   providerOptions: state.customerService.providerOptions,
-  userDetailId: state.user.userDetail.id
+  userDetail: state.user.userDetail
 });
 
 const mapDispatchToProps = {
@@ -402,7 +412,8 @@ const mapDispatchToProps = {
   fetchServiceOptionsByBusinessAdminId,
   fetchProviderOptionsByBusinessAdminId,
   fetchProvidersAndServicesByBusinessAdminId,
-  updateGuestInfo
+  updateGuestInfo,
+  setProviderOptionsSuccess
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

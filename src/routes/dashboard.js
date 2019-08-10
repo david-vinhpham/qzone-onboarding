@@ -255,6 +255,10 @@ const otherRoutes = [
   },
 ];
 
-const providerRoutes = ['/calendar', '/profile', '/dashboard', '/tmp-services', '/tmp-service/detail/:id', '/availability'];
+const providerRoutes = [
+  '/calendar', '/profile', '/dashboard',
+  '/tmp-services', '/tmp-service/detail/:id', '/availability',
+  '/customer-service'
+];
 
 export { dashboardRoutes, otherRoutes, providerRoutes };
