@@ -38,7 +38,6 @@ import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptio
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
 import { defaultDateTimeFormat, eUserType } from "constants.js";
-import ScheduleReportDialog from "./tmpServicesList/ScheduleReportDialog";
 
 const override = css`
   margin: 0 auto;
@@ -102,6 +101,15 @@ class TmpServicesList extends PureComponent {
   handleClick(event, history) {
     history.push('/tmp-service/detail/' + event.id);
   }
+
+  handleReportClick(event, history) {
+    history.push('/schedule-report/detail/' + event.id);
+  }
+
+  handleAvailabilityClick(event, history) {
+    history.push('/availability/detail/' + event.id);
+  }
+
 
   cancelDelete = () => {
     const data = {
@@ -291,11 +299,11 @@ class TmpServicesList extends PureComponent {
     const {
       classes, history, isLoading,
       providers, tzOptions, serviceOptions,
-      reportData, isReportLoading, userDetail
+       userDetail
     } = this.props;
     const {
       deletedTmpService, isOpenAddEventDialog, eventLevel,
-      addEventData, isEditMode, isOpenScheduleReport
+      addEventData, isEditMode
     } = this.state;
     const isAdmin = userDetail.userType === eUserType.business_admin;
 
@@ -338,12 +346,11 @@ class TmpServicesList extends PureComponent {
                 </TableCell>
                 <TableCell>
                   <Button
-                    onClick={this.openScheduleReportDialog(event.id)}
                     color="danger"
                     simple
                     justIcon
                   >
-                    <Tooltip
+                    <Tooltip onClick={() => this.handleReportClick(event, history)}
                       id="tooltip-top"
                       title="Schedule report"
                       placement="bottom"
@@ -353,7 +360,7 @@ class TmpServicesList extends PureComponent {
                     </Tooltip>
                   </Button>
                   <Button color="transparent" simple justIcon>
-                    <Tooltip onClick={() => this.handleClick(event, history)}
+                    <Tooltip onClick={() => this.handleAvailabilityClick(event, history)}
                       id="tooltip-top"
                       title="View"
                       placement="bottom"
@@ -461,13 +468,6 @@ class TmpServicesList extends PureComponent {
             tzOptions={tzOptions}
             serviceOptions={serviceOptions}
             history={history}
-          />
-        )}
-        {isOpenScheduleReport && (
-          <ScheduleReportDialog
-            onDialogClose={this.closeScheduleReportDialog}
-            reportData={reportData}
-            isReportLoading={isReportLoading}
           />
         )}
       </div>

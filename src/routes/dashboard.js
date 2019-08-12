@@ -35,8 +35,9 @@ import EditEmailTemplate from '../views/EmailTemplates/EditEmailTemplate';
 import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
 import TmpServicesList from '../views/TmpServices/TmpServicesList';
 import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
-import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';
+/*import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';*/
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
+import ScheduleReportList from "../views/ScheduleReport/ScheduleReportList";
 // import Assessments from '../views/Surveys/Assessments';
 // import CreateAssessment from '../views/Surveys/CreateAssessment';
 // import Reschedule from '../views/Reschedule/Reschedule';
@@ -242,22 +243,22 @@ const otherRoutes = [
     component: BusinessCategoriesList
   },
   {
-    path: '/tmp-service/detail/:id',
-    name: 'Temporary Service Detail',
-    short: 'Temporary Service Detail',
-    component: TmpServicesDetail
-  },
-  {
-    path: '/availability',
-    name: 'Availability',
-    short: 'Availability',
+    path: '/availability/detail/:id',
+    name: 'Availability Detail',
+    short: 'Availability Detail',
     component: AvailabilitySlotsList
   },
+  {
+    path: '/schedule-report/detail/:id',
+    name: 'Schedule Report Detail',
+    short: 'Schedule Report Detail',
+    component: ScheduleReportList
+  }
 ];
 
 const providerRoutes = [
   '/calendar', '/profile', '/dashboard',
-  '/tmp-services', '/tmp-service/detail/:id', '/availability',
+  '/tmp-services', '/availability/detail/:id', '/schedule-report/detail/:id',
   '/customer-service'
 ];
 

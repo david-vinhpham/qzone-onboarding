@@ -16,6 +16,7 @@ import serviceCategoryReducer from './serviceCategory.reducer';
 import businessCategoryReducer from './businessCategory.reducer';
 import tmpServiceDetailReducer from './tmpServiceDetail.reducer';
 import availabilitySlotsReducer from './availabilitySlots.reducer';
+import scheduleReportsReducer from './scheduleReport.reducer';
 import timezoneOptionsReducer from './timezoneOptions.reducer';
 import surveysReducer from './surveys';
 import geoOptionsReducer from './geoOptions.reducer';
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   businessCategory: businessCategoryReducer,
   tmpServiceDetail: tmpServiceDetailReducer,
   availabilitySlots: availabilitySlotsReducer,
+  scheduleReports: scheduleReportsReducer,
   customerService: customerServiceReducer,
   surveys: surveysReducer,
   options: combineReducers({

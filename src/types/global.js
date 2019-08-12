@@ -153,12 +153,21 @@ export const availabilitySlotType = PropTypes.shape({
   customerStartSec: PropTypes.string,
   durationSec: PropTypes.number,
   id: PropTypes.string,
-  providerId: PropTypes.string,
   providerStartSec: PropTypes.string,
-  serviceId: PropTypes.string,
-  specialServiceId: PropTypes.string,
   spotsOpen: PropTypes.number,
-  spotsTotal: PropTypes.number,
-  startSec: PropTypes.number,
-  endSec: PropTypes.number,
+  spotsTotal: PropTypes.number
+});
+
+export const scheduleReportType = PropTypes.shape({
+  providerName: PropTypes.string,
+  dateEvent: PropTypes.string,
+  tmServiceReportList: PropTypes.arrayOf(PropTypes.shape({
+    customerName: PropTypes.string,
+    customerEmail: PropTypes.string,
+    customerPhone: PropTypes.string,
+    startTime: PropTypes.string,
+    toTime: PropTypes.string,
+    status: PropTypes.string,
+    iStartTime: PropTypes.number
+  }))
 });

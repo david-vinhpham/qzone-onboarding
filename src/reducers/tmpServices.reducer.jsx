@@ -27,6 +27,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
+  console.log('SET_SCHEDULE_REPORT_DATA...')
   switch (action.type) {
     case tmp_service.FETCH_TMP_SERVICES_SUCCESS:
       return {

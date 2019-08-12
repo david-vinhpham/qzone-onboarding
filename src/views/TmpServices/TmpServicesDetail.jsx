@@ -23,7 +23,7 @@ class TmpServicesDetail extends PureComponent {
   navigateToAvailability = (event) => {
     event.preventDefault();
     this.props.history.push('/availability', {
-      specialEventId: this.props.tmpServiceDetail.id,
+      specialEventId: this.props.match.params,
       customerTimezoneId: this.props.tmpServiceDetail.timezoneId,
       serviceName: this.props.tmpServiceDetail.serviceName
     });
@@ -41,16 +41,6 @@ class TmpServicesDetail extends PureComponent {
                 <ArrowBack />
               </Button>
               <Typography display="inline" variant="h6">Event detail</Typography>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Link
-                href="/availability"
-                target="_blank"
-                rel="noreferrer"
-                onClick={this.navigateToAvailability}
-              >
-                Check availability
-            </Link>
             </div>
           </div>
           {tmpServiceDetail.id ?
