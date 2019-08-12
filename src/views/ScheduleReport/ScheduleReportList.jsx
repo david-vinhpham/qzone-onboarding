@@ -163,10 +163,10 @@ class ScheduleReportList extends PureComponent {
                 <TableCell className={classes.cellHeaderBold}>Customer Email</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Customer Phone</TableCell>
                 <TableCell className={classes.cellHeaderBold}>
-                  Start time (DD/MM/YYYY)
+                  Start time
                 </TableCell>
                 <TableCell className={classes.cellHeaderBold}>
-                  End time (DD/MM/YYYY)
+                  End time
                 </TableCell>
                 <TableCell className={classes.cellHeaderBold}>Status</TableCell>
               </TableRow>

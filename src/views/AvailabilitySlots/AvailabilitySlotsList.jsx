@@ -164,7 +164,7 @@ class AvailabilitySlotsList extends PureComponent {
               <TableRow>
                 <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
                 <TableCell className={classes.cellHeaderBold}>
-                  Start time (DD/MM/YYYY)
+                  Start time
                   <br />
                 </TableCell>
                 <TableCell className={classes.cellHeaderBold}>Duration (minutes)</TableCell>
