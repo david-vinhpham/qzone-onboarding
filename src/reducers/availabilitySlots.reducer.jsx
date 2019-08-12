@@ -13,7 +13,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  console.log('availabilitySlots reducer...')
   switch (action.type) {
     case availabilitySlots.FETCH_AVAILABILITY_LOADING:
       return { ...state, isLoading: action.payload };

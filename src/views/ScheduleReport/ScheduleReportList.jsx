@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment-timezone';
 import {
   Paper,
   Table,
@@ -70,7 +69,7 @@ class ScheduleReportList extends PureComponent {
 
   render() {
     const { classes, providerName, dateEvent, reportList,
-      reportData, isReportLoading, isLoading, history: { location: { state = {} } } } = this.props;
+      reportData, isReportLoading, isLoading, timezone } = this.props;
     const {
       isOpenScheduleReport,
     } = this.state;
@@ -127,15 +126,32 @@ class ScheduleReportList extends PureComponent {
                       {dateEvent}
                     </Typography>
                   </Grid>
+                  <Grid item sm={3} xs={12}>
+                    <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
+                      Timezone:
+                    </Typography>
+                  </Grid>
+                  <Grid item sm={9} xs={12}>
+                    <Typography variant="body2">
+                      {timezone}
+                    </Typography>
+                  </Grid>
+                  <Grid item sm={3} xs={12}>
+                    <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
+                      Print Schedule:
+                    </Typography>
+                  </Grid>
+                  <Grid item sm={9} xs={12}>
+                    <CardHeader color="primary" style={{cursor:'pointer'}} icon>
+                      <CardText color="rose" onClick={this.openScheduleReportDialog}>
+                        <h4 className={classes.cardTitle}>Export Schedule</h4>
+                      </CardText>
+                    </CardHeader>
+                  </Grid>
                 </Grid> :
                 <Loading />
               }
             </div>
-            <CardHeader color="primary" style={{cursor:'pointer'}} icon>
-              <CardText color="rose" onClick={this.openScheduleReportDialog}>
-                <h4 className={classes.cardTitle}>Export Schedule</h4>
-              </CardText>
-            </CardHeader>
           </Paper>
         </Card>
         <Paper>
@@ -148,13 +164,9 @@ class ScheduleReportList extends PureComponent {
                 <TableCell className={classes.cellHeaderBold}>Customer Phone</TableCell>
                 <TableCell className={classes.cellHeaderBold}>
                   Start time (DD/MM/YYYY)
-                  <br />
-                  Time zone ({moment.tz(state.customerTimezoneId).zoneAbbr()})
                 </TableCell>
                 <TableCell className={classes.cellHeaderBold}>
                   End time (DD/MM/YYYY)
-                  <br />
-                  Time zone ({moment.tz(state.customerTimezoneId).zoneAbbr()})
                 </TableCell>
                 <TableCell className={classes.cellHeaderBold}>Status</TableCell>
               </TableRow>
@@ -195,6 +207,7 @@ const mapStateToProps = (state) => {
       reportList: state.scheduleReports.list,
       providerName: state.scheduleReports.providerName,
       dateEvent: state.scheduleReports.dateEvent,
+      timezone: state.scheduleReports.timezone,
       isLoading: state.scheduleReports.isLoading,
       reportData: state.tmpServices.reportData,
       isReportLoading: state.tmpServices.isReportLoading,
