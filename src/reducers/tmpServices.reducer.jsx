@@ -18,6 +18,7 @@ const initialState = {
       { label: 'Email', key: 'customerEmail' },
       { label: 'Full name', key: 'customerName' },
       { label: 'Phone number', key: 'customerPhone' },
+      { label: 'Booking code', key: 'bookingCode' },
       { label: 'Start time', key: 'startTime' },
       { label: 'To time', key: 'toTime' },
       { label: 'Status', key: 'status' }
@@ -64,6 +65,7 @@ const reducer = (state = initialState, action) => {
           data: action.payload.tmServiceReportList.map(item => ({
             customerEmail: item.customerEmail,
             customerName: item.customerName,
+            bookingCode: item.bookingCode,
             customerPhone: `=""${item.customerPhone}""`,
             startTime: item.startTime,
             toTime: item.toTime,

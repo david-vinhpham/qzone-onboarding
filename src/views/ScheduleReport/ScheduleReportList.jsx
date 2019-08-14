@@ -162,11 +162,9 @@ class ScheduleReportList extends PureComponent {
                 <TableCell className={classes.cellHeaderBold}>Customer Name</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Customer Email</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Customer Phone</TableCell>
+                <TableCell className={classes.cellHeaderBold}> Booking Code</TableCell>
                 <TableCell className={classes.cellHeaderBold}>
                   Start time
-                </TableCell>
-                <TableCell className={classes.cellHeaderBold}>
-                  End time
                 </TableCell>
                 <TableCell className={classes.cellHeaderBold}>Status</TableCell>
               </TableRow>
@@ -178,8 +176,8 @@ class ScheduleReportList extends PureComponent {
                   <TableCell>{report.customerName}</TableCell>
                   <TableCell>{report.customerEmail}</TableCell>
                   <TableCell>{report.customerPhone}</TableCell>
+                  <TableCell>{report.bookingCode}</TableCell>
                   <TableCell>{report.startTime}</TableCell>
-                  <TableCell>{report.toTime}</TableCell>
                   <TableCell>{report.status}</TableCell>
                 </TableRow>
               ))}

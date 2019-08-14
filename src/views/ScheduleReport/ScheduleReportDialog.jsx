@@ -97,6 +97,7 @@ ScheduleReportDialog.propTypes = {
       customerName: PropTypes.string,
       customerEmail: PropTypes.string,
       customerPhone: PropTypes.string,
+      bookingCode: PropTypes.string,
       startTime: PropTypes.string,
       toTime: PropTypes.string,
       status: PropTypes.string,
