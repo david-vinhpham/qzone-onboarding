@@ -35,6 +35,7 @@ import EditEmailTemplate from '../views/EmailTemplates/EditEmailTemplate';
 import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
 import TmpServicesList from '../views/TmpServices/TmpServicesList';
 import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
+import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesList';
 /*import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';*/
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
 import ScheduleReportList from "../views/ScheduleReport/ScheduleReportList";
@@ -230,12 +231,12 @@ const otherRoutes = [
     short: 'Temporary Services',
     component: TmpServicesList
   },
-/*  {
+  {
     path: '/service-categories',
     name: 'List Service Categories',
     short: 'List Service Categories',
     component: ServiceCategoriesList
-  },*/
+  },
   {
     path: '/business-categories',
     name: 'List Business Categories',
