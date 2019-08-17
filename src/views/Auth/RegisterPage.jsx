@@ -40,16 +40,10 @@ class RegisterPage extends React.Component {
       code: '',
       loading: false,
       registrationType: 'Organization',
-      userError: null,
     };
-    this.change = this.change.bind(this);
-  }
-  componentWillReceiveProps(nextProps) {
-    this.setState({ userError: nextProps.userError })
   }
 
   componentDidMount() {
-    this.setState({ userError: null})
     setTimeout(() => {
       this.setState({ cardAnimation: '' });
     }, 200);
@@ -126,7 +120,7 @@ class RegisterPage extends React.Component {
     this.setState({ registrationType });
   }
 
-  change(event, stateName, type, stateNameEqualTo, maxValue) {
+  change = (event, stateName, type, stateNameEqualTo, maxValue) => {
     switch (type) {
       case 'email':
         if (this.verifyEmail(event.target.value)) {
@@ -193,10 +187,7 @@ class RegisterPage extends React.Component {
                   >
                     <h4 className={classes.cardTitle}>Register</h4>
                   </CardHeader>
-                  <div className={`${classes.labelError} ${classes.textCenter}`}>{this.state.userError === null ? ''
-                    : (this.state.userError.error != null ? this.state.userError.error.message : '')}</div>
                   <CardBody>
-
                     <CustomInput
                       labelText="Business Name"
                       success={this.state.registerEmailState === 'success'}
@@ -330,7 +321,6 @@ const mapStateToProps = state => {
   return {
     userDetail: state.user.userDetail,
     userLoading: state.user.userLoading,
-    userError: state.user.userError,
     verify: state.user.verify
   };
 };

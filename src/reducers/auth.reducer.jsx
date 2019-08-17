@@ -3,7 +3,6 @@ import { auth } from '../constants/Auth.constants';
 const initialState = {
   token: null,
   userDetail: {},
-  userError: null,
   userLoading: false,
   verify: false,
   verifyDetails: [],
@@ -92,17 +91,16 @@ const reducer = (state = initialState, action) => {
       };
 
     case auth.REGISTER_USER: // start fetching posts and set loading = true
-      return { ...state, userError: [], userLoading: true };
+      return { ...state, userLoading: true };
     case auth.REGISTER_USER_SUCCESS: // return list of posts and make loading = false
       return {
         ...state,
         userDetail: action.payload.user,
-        userError: [],
         userLoading: false,
         verify: true
       };
     case auth.REGISTER_USER_FAILURE: // return error and make loading = false
-      return { ...state, userDetail: {}, userError: action.payload, userLoading: false };
+      return { ...state, userDetail: {}, userLoading: false };
 
     case auth.VERIFY_USER: // start fetching posts and set loading = true
       return { ...state, verifyError: [], verifyLoading: true };
@@ -140,7 +138,6 @@ const reducer = (state = initialState, action) => {
     case auth.FETCH_USER_FAILURE:
       return {
         ...state,
-        userError: action.payload.error,
         fetchProviderLoading: false
       };
     default:

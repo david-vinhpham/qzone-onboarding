@@ -29,16 +29,10 @@ class LoginPage extends React.Component {
       loginPassword: '',
       loginPasswordState: '',
       isForgotPassword: false,
-      userError: null,
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ userError: nextProps.userError })
-  }
-
   componentDidMount() {
-    this.setState({ userError: null})
     setTimeout(() => {
       this.setState({ cardAnimation: '' });
     }, 700);
@@ -108,104 +102,102 @@ class LoginPage extends React.Component {
               {userLoading ? (
                 <Loading />
               ) : (
-                <form>
-                  <Card login className={classes[this.state.cardAnimation]}>
-                    <CardHeader
-                      className={`${classes.cardHeader} ${classes.textCenter}`}
-                      color="rose"
-                    >
-                      <h4 className={classes.cardTitle}>Log in</h4>
-                      <div className={classes.socialLine}>
-                        <Button justIcon href="" target="_blank" color="transparent">
-                          <i className="fab fa-twitter" />
-                        </Button>
-                        <Button justIcon href="" target="_blank" color="transparent">
-                          <i className="fab fa-facebook" />
-                        </Button>
-                        <Button justIcon href="" target="_blank" color="transparent">
-                          <i className="fab fa-google-plus-g" />
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <div className={`${classes.labelError} ${classes.textCenter}`}>{this.state.userError === null ? ''
-                      : (this.state.userError.error != null ? this.state.userError.error.message : '')}</div>
-                    <CardBody>
-                      <CustomInput
-                        labelText="Email..."
-                        success={this.state.loginEmailState === 'success'}
-                        error={this.state.loginEmailState === 'error'}
-                        id="loginemail"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          type: 'email',
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <Email className={classes.inputAdornmentIcon} />
-                            </InputAdornment>
-                          )
-                        }}
-                        onChange={event => this.change(event, 'loginEmail', 'email')}
-                      />
-                      <CustomInput
-                        labelText="Password"
-                        success={this.state.loginPasswordState === 'success'}
-                        error={this.state.loginPasswordState === 'error'}
-                        id="loginPassword"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          type: 'password',
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <LockOutline className={classes.inputAdornmentIcon} />
-                            </InputAdornment>
-                          )
-                        }}
-                        onChange={event => this.change(event, 'loginPassword', 'password')}
-                      />
-                      <div>
-                        <Button color="rose" simple size="lg" block onClick={this.loginClick}>
-                          Submit
-                        </Button>
-                      </div>
-                      <div>
-                        <Link to="/register">
-                          <Button color="rose" simple size="lg" block>
-                            Register as Business User
+                  <form>
+                    <Card login className={classes[this.state.cardAnimation]}>
+                      <CardHeader
+                        className={`${classes.cardHeader} ${classes.textCenter}`}
+                        color="rose"
+                      >
+                        <h4 className={classes.cardTitle}>Log in</h4>
+                        <div className={classes.socialLine}>
+                          <Button justIcon href="" target="_blank" color="transparent">
+                            <i className="fab fa-twitter" />
                           </Button>
-                        </Link>
-                      </div>
+                          <Button justIcon href="" target="_blank" color="transparent">
+                            <i className="fab fa-facebook" />
+                          </Button>
+                          <Button justIcon href="" target="_blank" color="transparent">
+                            <i className="fab fa-google-plus-g" />
+                          </Button>
+                        </div>
+                      </CardHeader>
+                      <CardBody>
+                        <CustomInput
+                          labelText="Email..."
+                          success={this.state.loginEmailState === 'success'}
+                          error={this.state.loginEmailState === 'error'}
+                          id="loginemail"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            type: 'email',
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <Email className={classes.inputAdornmentIcon} />
+                              </InputAdornment>
+                            )
+                          }}
+                          onChange={event => this.change(event, 'loginEmail', 'email')}
+                        />
+                        <CustomInput
+                          labelText="Password"
+                          success={this.state.loginPasswordState === 'success'}
+                          error={this.state.loginPasswordState === 'error'}
+                          id="loginPassword"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            type: 'password',
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <LockOutline className={classes.inputAdornmentIcon} />
+                              </InputAdornment>
+                            )
+                          }}
+                          onChange={event => this.change(event, 'loginPassword', 'password')}
+                        />
+                        <div>
+                          <Button color="rose" simple size="lg" block onClick={this.loginClick}>
+                            Submit
+                        </Button>
+                        </div>
+                        <div>
+                          <Link to="/register">
+                            <Button color="rose" simple size="lg" block>
+                              Register as Business User
+                          </Button>
+                          </Link>
+                        </div>
 
-                      <ForgotPasswordPage
-                        open={isForgotPassword}
-                        email={loginEmail}
-                        history={history}
-                        page="register"
-                      />
+                        <ForgotPasswordPage
+                          open={isForgotPassword}
+                          email={loginEmail}
+                          history={history}
+                          page="register"
+                        />
 
-                      <div>
-                        <Tooltip
-                          title={forgotPasswordTitle}
-                          placement="top-end"
-                          classes={{ tooltip: 'tooltip-lg' }}
-                        >
-                          <Typography
-                            onClick={this.handleReqVerificationCode}
-                            variant="subtitle2"
-                            color="textSecondary"
-                            className={forgotClass}
+                        <div>
+                          <Tooltip
+                            title={forgotPasswordTitle}
+                            placement="top-end"
+                            classes={{ tooltip: 'tooltip-lg' }}
                           >
-                            Forgot Password?
+                            <Typography
+                              onClick={this.handleReqVerificationCode}
+                              variant="subtitle2"
+                              color="textSecondary"
+                              className={forgotClass}
+                            >
+                              Forgot Password?
                           </Typography>
-                        </Tooltip>
-                      </div>
-                    </CardBody>
-                  </Card>
-                </form>
-              )}
+                          </Tooltip>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </form>
+                )}
             </GridItem>
           </GridContainer>
         </div>
@@ -221,7 +213,6 @@ LoginPage.propTypes = {
 const mapStateToProps = state => {
   return {
     userLoading: state.user.userLoading,
-    userError: state.user.userError,
     verify: state.user.verify,
   };
 };

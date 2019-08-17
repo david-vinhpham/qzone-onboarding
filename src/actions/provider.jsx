@@ -1,17 +1,12 @@
+import axios from 'axios';
 import { provider } from '../constants/Provider.constants';
-import { API_ROOT, URL } from '../config/config';
+import { URL } from '../config/config';
 
 export const fetchTimezones = () => {
   return dispatch => {
     dispatch({ type: provider.FETCH_TIMEZONES_LOADING });
-    fetch(API_ROOT + URL.TIMEZONE, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.get(URL.TIMEZONE)
+      .then(({ data }) => {
         dispatch({
           type: provider.FETCH_TIMEZONES_SUCCESS,
           payload: data.objects
@@ -49,20 +44,14 @@ export function fetchProvidersFailure(error) {
 export function fetchProvidersByOrdId(orgId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_ORG_ID + orgId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json.objects) {
-          dispatch(fetchProvidersSuccess(json.objects));
+    axios.get(URL.FETCH_PROVIDERS_BY_ORG_ID + orgId)
+      .then(({ data }) => {
+        if (data.objects) {
+          dispatch(fetchProvidersSuccess(data.objects));
         } else {
           dispatch(fetchProvidersFailure('Topology Error'));
         }
-        return json;
+        return data;
       })
       .catch(err => dispatch(fetchProvidersFailure(err)));
   };
@@ -71,20 +60,14 @@ export function fetchProvidersByOrdId(orgId) {
 export function fetchProvidersOptionByServiceProviderId(serviceProviderId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    fetch(API_ROOT + URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID + serviceProviderId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json.objects) {
-          dispatch(fetchProvidersSuccess(json.objects));
+    axios.get(URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID + serviceProviderId)
+      .then(({ data }) => {
+        if (data.objects) {
+          dispatch(fetchProvidersSuccess(data.objects));
         } else {
           dispatch(fetchProvidersFailure('Topology Error'));
         }
-        return json;
+        return data;
       })
       .catch(err => dispatch(fetchProvidersFailure(err)));
   };
@@ -93,20 +76,14 @@ export function fetchProvidersOptionByServiceProviderId(serviceProviderId) {
 export function fetchProvidersOptionByOrdId(orgId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    fetch(API_ROOT + URL.FETCH_PROVIDERS_OPTION_BY_ORG_ID + orgId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json.objects) {
-          dispatch(fetchProvidersSuccess(json.objects));
+    axios.get(URL.FETCH_PROVIDERS_OPTION_BY_ORG_ID + orgId)
+      .then(({ data }) => {
+        if (data.objects) {
+          dispatch(fetchProvidersSuccess(data.objects));
         } else {
           dispatch(fetchProvidersFailure('Topology Error'));
         }
-        return json;
+        return data;
       })
       .catch(err => dispatch(fetchProvidersFailure(err)));
   };
@@ -115,20 +92,14 @@ export function fetchProvidersOptionByOrdId(orgId) {
 export function fetchProvidersOptionByServiceId(serviceId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    fetch(API_ROOT + URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_ID + serviceId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json.objects) {
-          dispatch(fetchProvidersSuccess(json.objects));
+    axios.get(URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_ID + serviceId)
+      .then(({ data }) => {
+        if (data.objects) {
+          dispatch(fetchProvidersSuccess(data.objects));
         } else {
-          dispatch(fetchProvidersFailure(json));
+          dispatch(fetchProvidersFailure(data));
         }
-        return json;
+        return data;
       })
       .catch(err => dispatch(fetchProvidersFailure(err)));
   };
@@ -136,20 +107,14 @@ export function fetchProvidersOptionByServiceId(serviceId) {
 export function fetchProvidersByBusinessAdminId(businessAdminId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    fetch(API_ROOT + URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID + businessAdminId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json.objects) {
-          dispatch(fetchProvidersSuccess(json.objects));
+    axios.get(URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID + businessAdminId)
+      .then(({ data }) => {
+        if (data.objects) {
+          dispatch(fetchProvidersSuccess(data.objects));
         } else {
           dispatch(fetchProvidersFailure('Topology Error'));
         }
-        return json;
+        return data;
       })
       .catch(err => dispatch(fetchProvidersFailure(err)));
   };
@@ -178,14 +143,8 @@ export const editProviderFailure = error => {
 export const deleteProvider = providerId => {
   return dispatch => {
     dispatch({ type: provider.DEL_PROVIDER_LOADING });
-    fetch(`${API_ROOT + URL.USER}/${providerId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.delete(`${URL.USER}/${providerId}`)
+      .then(({ data }) => {
         if (data.success) {
           dispatch({
             type: provider.DEL_PROVIDER_SUCCESS,
@@ -206,15 +165,8 @@ export const deleteProvider = providerId => {
 export function editProvider(values, history) {
   return dispatch => {
     dispatch(editProviderLoading());
-    fetch(API_ROOT + URL.AWS_USER, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.put(URL.AWS_USER, values)
+      .then(({ data }) => {
         if (data.success) {
           history.push('/provider/list');
         } else {
@@ -250,15 +202,8 @@ export function createProvider(values, history) {
 
   return dispatch => {
     dispatch({ type: provider.CREATE_PROVIDER_LOADING });
-    fetch(API_ROOT + URL.ADMIN_CREATE_AWS_USER, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.post(URL.ADMIN_CREATE_AWS_USER, values)
+      .then(({ data }) => {
         if (data.success) {
           dispatch(createProviderSuccess(data));
           history.push('/provider/list');
@@ -293,20 +238,14 @@ export function fetchProviderFailure(error) {
 export function fetchProvider(id) {
   return dispatch => {
     dispatch(fetchProviderLoading());
-    fetch(`${API_ROOT + URL.PROVIDER}/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json.object) {
-          dispatch(fetchProviderSuccess(json.object));
+    axios.get(`${URL.PROVIDER}/${id}`)
+      .then(({ data }) => {
+        if (data.object) {
+          dispatch(fetchProviderSuccess(data.object));
         } else {
           dispatch(fetchProviderFailure('Topology Error'));
         }
-        return json;
+        return data;
       })
       .catch(err => dispatch(fetchProviderFailure(err)));
   };

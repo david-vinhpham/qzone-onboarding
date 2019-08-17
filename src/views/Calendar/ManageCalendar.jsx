@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 import moment from 'moment-timezone';
+import { get } from 'lodash';
 
 import { createNewEvent, fetchProvidersByBusinessId, fetchEventsByProviderId, fetchProvidersByBusinessIdSuccess } from 'actions/calendar';
 import {
@@ -66,6 +67,7 @@ class ManageCalendar extends React.PureComponent {
     this.setState(() => {
       const defaultProvider = this.props.providers[0];
       const chosenProvider = providerDetail === 'none' ? defaultProvider : providerDetail;
+      const serviceId = get(this.props.serviceOptions, '0.value', 0);
       const addEventData = {
         eventType: EVENT_TYPE.TMP_SERVICE,
         description: '',
@@ -73,8 +75,16 @@ class ManageCalendar extends React.PureComponent {
         timezoneId: chosenProvider.timezone,
         providerId: chosenProvider.id,
         providerName: chosenProvider.name,
-        serviceId: this.props.serviceOptions.length > 0 ? this.props.serviceOptions[0].value : 0,
-        tmpService: {},
+        serviceId,
+        tmpService: {
+          additionalInfo: '',
+          avgServiceTime: 0,
+          breakTimeStart: moment(startTime).hour(12).minute(0).second(0).format(),
+          breakTimeEnd: moment(endTime).hour(13).minute(0).second(0).format(),
+          geoLocationId: get(this.props.geoOptions, '0.value', 0),
+          numberOfParallelCustomer: 1,
+          serviceId,
+        },
         startTime: moment(startTime).format(),
         endTime: moment(endTime).format(),
       };
@@ -124,6 +134,7 @@ ManageCalendar.propTypes = {
   createNewEvent: func.isRequired,
   tzOptions: arrayOf(optionType).isRequired,
   serviceOptions: arrayOf(optionType).isRequired,
+  geoOptions: arrayOf(optionType).isRequired,
   fetchGeoLocationOptions: func.isRequired,
   fetchServiceOptionsByBusinessAdminId: func.isRequired,
   fetchTimezoneOptions: func.isRequired,
@@ -138,6 +149,7 @@ const mapStateToProps = state => ({
   isLoading: state.calendarManage.isLoading,
   tzOptions: state.options.timezone.tzOptions,
   serviceOptions: state.options.service.serviceOptions,
+  geoOptions: state.options.geo.geoOptions,
   userDetail: state.user.userDetail,
 });
 

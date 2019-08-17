@@ -13,7 +13,7 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
     serviceId
   } = tmpService;
   return {
-    additionalInfo: additionalInfo.length === 0 ? undefined : additionalInfo,
+    additionalInfo: additionalInfo || undefined,
     avgServiceTime,
     breakTime: {
       breakStart: moment(breakTimeStart).utcOffset(providerTzOffset, true).unix(),

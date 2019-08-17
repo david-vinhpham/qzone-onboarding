@@ -61,7 +61,11 @@ class CalendarV2 extends React.PureComponent {
   }
 
   onClickNewEvent = ({ start, end }) => {
-    this.props.onClickNewEvent(this.state.selectedProvider, start ? start.toDate() : undefined, end ? end.toDate() : undefined);
+    this.props.onClickNewEvent(
+      this.state.selectedProvider,
+      start ? start.toDate() : (new Date()).setHours(8, 0, 0),
+      end ? end.toDate() : (new Date()).setHours(18, 0, 0)
+    );
   }
 
   render() {

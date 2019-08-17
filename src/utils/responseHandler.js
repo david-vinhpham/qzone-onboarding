@@ -5,16 +5,18 @@ import AlertMessage from 'components/Alert/Message';
 
 axios.interceptors.response.use(
   resp => {
-    if (resp.data.success) {
-      Alert.success(
-        <AlertMessage>
-          {resp.data.message === 'success' && resp.config.method === 'get'
-            ? 'Fetch resources successfully'
-            : resp.data.message}
-        </AlertMessage>
-      );
-    } else if (resp.data.message) {
-      Alert.error(<AlertMessage>{resp.data.message}</AlertMessage>);
+    if (resp.data.message) {
+      if (resp.data.success) {
+        Alert.success(
+          <AlertMessage>
+            {resp.data.message === 'success' && resp.config.method === 'get'
+              ? 'Fetch resources successfully'
+              : resp.data.message}
+          </AlertMessage>
+        );
+      } else {
+        Alert.error(<AlertMessage>{resp.data.message}</AlertMessage>);
+      }
     }
     return resp;
   },

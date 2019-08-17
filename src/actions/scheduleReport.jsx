@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { get } from 'lodash';
 import { scheduleReportConstant } from 'constants/ScheduleReport.constant';
-import { API_ROOT, URL } from 'config/config';
+import { URL } from 'config/config';
 import Alert from "react-s-alert";
 
 const setScheduleReportLoading = payload => ({
@@ -15,17 +15,15 @@ const setScheduleReportSuccess = payload => ({
 });
 
 export const fetchScheduleReport = payload => dispatch => {
-  console.log('fetchScheduleReport...');
   dispatch(setScheduleReportLoading(true));
-  axios.post(`${API_ROOT}${URL.FIND_SCHEDULE_REPORT_BY_TMP_SERVICE}`, payload)
+  axios.post(URL.FIND_SCHEDULE_REPORT_BY_TMP_SERVICE, payload)
     .then(resp => {
       if (resp && resp.data.success) {
         dispatch(setScheduleReportSuccess(get(resp, 'data.object', [])));
-      }
-      else {
-        Alert.success("Failed to load data");
+      } else {
+        Alert.error("Failed to load data");
         window.location.replace("/dashboard");
-}
-})
+      }
+    })
     .finally(() => { dispatch(setScheduleReportLoading(false)) });
 }

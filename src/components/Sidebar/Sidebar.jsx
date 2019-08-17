@@ -134,21 +134,6 @@ class Sidebar extends React.Component {
         </ListItem>
         <ListItem className={classes.collapseItem}>
           <NavLink
-            to="/service-categories"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
-          >
-            <span className={classes.collapseItemMini}>
-              {"SC"}
-            </span>
-            <ListItemText
-              primary="Service Categories"
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
             to="/business-categories"
             className={cx(classes.itemLink, classes.userCollapseLinks)}
           >
@@ -158,23 +143,6 @@ class Sidebar extends React.Component {
             <ListItemText
               primary={
                 "Business Categories"
-              }
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/administration"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
-          >
-            <span className={classes.collapseItemMini}>
-              {"AD"}
-            </span>
-            <ListItemText
-              primary={
-                "Administration"
               }
               disableTypography={true}
               className={collapseItemText}
@@ -193,21 +161,6 @@ class Sidebar extends React.Component {
               primary={
                 "Provider Details"
               }
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="#"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
-          >
-            <span className={classes.collapseItemMini}>
-              {"S"}
-            </span>
-            <ListItemText
-              primary={"Settings"}
               disableTypography={true}
               className={collapseItemText}
             />

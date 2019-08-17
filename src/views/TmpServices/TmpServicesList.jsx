@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { get } from 'lodash';
-import uuidv1 from 'uuid/v1';
 import { classesType, historyType, tmpServiceType, optionType, providerType, userDetailType } from "types/global";
 import { connect } from "react-redux";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
@@ -241,13 +240,16 @@ class TmpServicesList extends PureComponent {
         }
       );
       const timezoneId = tempTz ? tempTz.label : moment.tz.guess();
-      const startTime = moment().format();
-      const endTime = moment().add(1, 'hour').format();
+      const today = moment();
+      const startTime = today.hour(8).minute(0).second(0).format();
+      const endTime = today.hour(18).minute(0).second(0).format();
+      const breakTimeStart = today.hour(12).minute(0).second(0).format();
+      const breakTimeEnd = today.hour(13).minute(0).second(0).format();
 
-      const providerId = get(defaultProvider, 'id') || uuidv1();
-      const providerName = get(defaultProvider, 'name') || 'ProviderQ';
+      const providerId = get(defaultProvider, 'id', '');
+      const providerName = get(defaultProvider, 'name', '');
       const { serviceOptions } = this.props;
-      const serviceId = get(serviceOptions, '0.value') || uuidv1();
+      const serviceId = get(serviceOptions, '0.value', 0);
       const addEventData = {
         eventType: EVENT_TYPE.TMP_SERVICE,
         description: '',
@@ -256,7 +258,7 @@ class TmpServicesList extends PureComponent {
           repeatEnd: {}
         },
         timezoneId,
-        serviceId: this.props.serviceOptions.length > 0 ? this.props.serviceOptions[0].value : 0,
+        serviceId,
         providerId,
         providerName,
         startTime,
@@ -264,9 +266,9 @@ class TmpServicesList extends PureComponent {
         tmpService: {
           additionalInfo: '',
           avgServiceTime: 0,
-          breakTimeStart: startTime,
-          breakTimeEnd: endTime,
-          geoLocationId: get(this.props.geoOptions, '0.value', ''),
+          breakTimeStart,
+          breakTimeEnd,
+          geoLocationId: get(this.props.geoOptions, '0.value', 0),
           numberOfParallelCustomer: 1,
           serviceId,
         }

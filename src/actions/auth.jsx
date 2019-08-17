@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from "axios";
 import { Auth } from "aws-amplify";
-import { API_ROOT, URL } from "../config/config";
+import { URL } from "../config/config";
 import { auth } from "../constants/Auth.constants";
 import { eUserType } from "constants.js";
 import Alert from 'react-s-alert';
@@ -99,27 +99,6 @@ export function register(values) {
 export function registerUser(values) {
   return dispatch => {
     dispatch(register(values));
-    // if (values.registrationType === 'Organization') {
-    // Call organization api
-    //  fetch(API_ROOT + URL.ORGANIZATION_NAME_VALIDATE + values.registerOrganizationName, {
-    //    method: 'GET',
-    //   headers: {
-    //     'Accept': '*/*',
-    //      'Content-Type': 'application/json'
-    //    }
-    //  })
-    // .then(res => res.json())
-    // .then(json => {
-    //    if (json.object === 'VALID') {
-    //      dispatch(register(values));
-    //   } else {
-    //     alert("Already registered organization please login");
-    //   }
-    //  })
-    //  .catch(err => console.log("error", err))
-    // }
-    // else // for customer
-    //   dispatch(register(values));
   };
 }
 
@@ -127,15 +106,8 @@ export const resetPassword = values => {
   return dispatch => {
     dispatch(storeEmail(values.email));
     dispatch({ type: auth.RESET_PASSWORD_LOADING });
-    fetch(API_ROOT + URL.RESET_PASSWORD, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.post(URL.RESET_PASSWORD, values)
+      .then(({ data }) => {
         if (data.status === 200 || data.status === 201 || data.success) {
           dispatch({
             type: auth.RESET_PASSWORD_SUCCESS,
@@ -157,7 +129,6 @@ export const resetPassword = values => {
   };
 };
 
-
 export function loginUser(values, history) {
   return dispatch => {
     dispatch(storeEmail(values.loginEmail));
@@ -165,35 +136,37 @@ export function loginUser(values, history) {
     Auth.signIn(values.loginEmail, values.loginPassword)
       .then(json => {
         if (json) {
-          localStorage.setItem('userSub', json.username);
-          fetch(`${API_ROOT + URL.USER}/${json.username}`, {
-            method: 'GET',
-            headers: {
-              Accept: '*/*',
-              'Content-Type': 'application/json'
-            }
-          })
-            .then(res => res.json())
-            .then(resp => {
-              const userDetail = resp.object;
-              if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
-                dispatch(registerUserSuccess(userDetail));
-                localStorage.setItem('user', JSON.stringify(userDetail));
-                localStorage.setItem('loginEmail', userDetail.email);
-                localStorage.setItem('userStatus', userDetail.userStatus);
-                if (userDetail.userType === eUserType.provider) {
-                  history.push('/dashboard');
+          const { idToken: { jwtToken, payload } } = json.signInUserSession;
+          if (payload.email_verified) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+            localStorage.setItem('userSub', json.username);
+
+            axios.get(`${URL.USER}/${json.username}`)
+              .then(resp => {
+                if (resp.data.success) {
+                  const userDetail = resp.data.object;
+                  if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
+                    dispatch(registerUserSuccess(userDetail));
+                    localStorage.setItem('user', JSON.stringify(userDetail));
+                    localStorage.setItem('loginEmail', userDetail.email);
+                    localStorage.setItem('userStatus', userDetail.userStatus);
+                    history.push('/dashboard');
+                  } else {
+                    Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
+                    dispatch(registerUserFailure('Unauthorized'));
+                  }
                 } else {
-                  history.push('/dashboard');
+                  Alert.error(<AlertMessage>User is not existed!</AlertMessage>);
+                  dispatch(registerUserFailure('fetch user failed'));
                 }
-              } else {
-                Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
-                dispatch(registerUserFailure('Unauthorized'));
-              }
-            })
-            .catch(err => {
-              dispatch(registerUserFailure(err));
-            });
+              })
+              .catch(err => {
+                dispatch(registerUserFailure(err));
+              });
+          } else {
+            Alert.error(<AlertMessage>Your email is not verified!</AlertMessage>);
+            dispatch(registerUserFailure('Email is not verified'));
+          }
         } else {
           dispatch(registerUserFailure('Topology Error'));
         }
@@ -205,15 +178,8 @@ export function loginUser(values, history) {
 export const changePassword = (values, history) => {
   return dispatch => {
     dispatch({ type: auth.CHANGE_PASSWORD_LOADING });
-    fetch(API_ROOT + URL.CHANGE_PASSWORD, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.post(URL.CHANGE_PASSWORD, values)
+      .then(({ data }) => {
         if (data.status === 200 || data.status === 201 || data.success) {
           dispatch({
             type: auth.CHANGE_PASSWORD_SUCCESS,
@@ -259,15 +225,8 @@ export const editUserFailure = error => {
 export function editProfile(values) {
   return dispatch => {
     dispatch(editUserLoading());
-    fetch(API_ROOT + URL.AWS_USER, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.put(URL.AWS_USER, values)
+      .then(({ data }) => {
         if (data.success) {
           localStorage.setItem('user', JSON.stringify(data));
           dispatch(editUserSuccess(data));
@@ -303,18 +262,12 @@ export function fetchUserFailure(error) {
 export function fetchUser(id, history) {
   return dispatch => {
     dispatch(fetchUserLoading());
-    fetch(`${API_ROOT + URL.USER}/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        const userDetail = data.object;
-        if (data.success) {
+    axios.get(`${URL.USER}/${id}`)
+      .then(resp => {
+        if (resp.data.success) {
+          const userDetail = resp.data.object;
           if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
-            dispatch(fetchUserSuccess(data));
+            dispatch(fetchUserSuccess(resp.data));
             localStorage.setItem('user', JSON.stringify(userDetail));
             localStorage.setItem('userSub', userDetail.userSub);
           } else {
@@ -323,7 +276,7 @@ export function fetchUser(id, history) {
             logout(history);
           }
         } else {
-          dispatch(fetchUserFailure(data));
+          dispatch(fetchUserFailure(resp.data));
           logout(history);
         }
 
@@ -365,18 +318,18 @@ export function verifyUserCode(user, email, code, history) {
       .then(json => {
         if (json) {
           dispatch(verifyUserSuccess(json));
-          history.push('/');
+          history.push('/login');
+          Alert.success(<AlertMessage>Your email is verified successfully!</AlertMessage>);
         } else {
           dispatch(verifyUserFailure('Topology Error'));
         }
-        // return json;
       })
       .catch(err => dispatch(verifyUserFailure(err)));
   };
 }
 
 export function verifyResendUser(values, callback) {
-  axios.post(`${API_ROOT}/resendEmailConfirm`, values).then(
+  axios.post('resendEmailConfirm', values).then(
     response => {
       callback(response);
     },
@@ -408,15 +361,8 @@ export function facebookSignIn() {
 export function completeNewPasswordChallenge(values, callback) {
   return dispatch => {
     dispatch({ type: auth.FORCE_RESET_PASSWORD_LOADING });
-    fetch(API_ROOT + URL.FORCE_CHANGE_PASSWORD, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.post(URL.FORCE_CHANGE_PASSWORD, values)
+      .then(({ data }) => {
         if (data.success) {
           localStorage.setItem('userStatus', 'CONFIRMED ');
           dispatch({
@@ -437,3 +383,22 @@ export function completeNewPasswordChallenge(values, callback) {
       });
   }
 };
+
+export const refreshToken = (history) => dispatch => {
+  if (!axios.defaults.headers.common['Authorization']) {
+    return Auth.currentSession()
+      .then(data => {
+        const { idToken: { jwtToken, payload } } = data;
+        if (payload.email_verified) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+        } else {
+          Alert.error(<AlertMessage>Your email is not verified!</AlertMessage>);
+          history.push('/login');
+        }
+      })
+      .catch(err => {
+        Alert.error(<AlertMessage>Your session is expired</AlertMessage>);
+        history.push('/login');
+      });
+  }
+}

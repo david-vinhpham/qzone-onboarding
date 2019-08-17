@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_ROOT, URL } from 'config/config';
+import { URL } from 'config/config';
 import { service_category } from '../constants/ServiceCategory.constants';
 
 const setServiceCategoriesLoading = payload => ({
@@ -14,7 +14,7 @@ export const setServiceCategoriesSuccess = payload => ({
 
 export const fetchServiceCategories = () => dispatch => {
   dispatch(setServiceCategoriesLoading(true));
-  axios.get(`${API_ROOT}${URL.FETCH_SERVICE_CATEGORIES}`)
+  axios.get(URL.FETCH_SERVICE_CATEGORIES)
     .then(resp => {
       if (resp.status === 200 && resp.data.success) {
         dispatch(setServiceCategoriesSuccess(resp.data.objects));
@@ -27,7 +27,7 @@ export const fetchServiceCategories = () => dispatch => {
 export const deleteServiceCategory = serviceCategoryId => {
   return (dispatch, getState) => {
     dispatch(setServiceCategoriesLoading(true));
-    axios.delete(`${API_ROOT + URL.FETCH_SERVICE_CATEGORIES}/${serviceCategoryId}`)
+    axios.delete(`${URL.FETCH_SERVICE_CATEGORIES}/${serviceCategoryId}`)
       .then(res => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { serviceCategory } = getState();
@@ -44,7 +44,7 @@ export const deleteServiceCategory = serviceCategoryId => {
 export const createServiceCategory = (data) => {
   return (dispatch, getState) => {
     dispatch(setServiceCategoriesLoading(true));
-    axios.post(API_ROOT + URL.FETCH_SERVICE_CATEGORIES, data)
+    axios.post(URL.FETCH_SERVICE_CATEGORIES, data)
       .then((res) => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { serviceCategory } = getState();
@@ -61,7 +61,7 @@ export const createServiceCategory = (data) => {
 export const editServiceCategory = (data) => {
   return (dispatch, getState) => {
     dispatch(setServiceCategoriesLoading(true));
-    axios.put(API_ROOT + URL.FETCH_SERVICE_CATEGORIES, data)
+    axios.put(URL.FETCH_SERVICE_CATEGORIES, data)
       .then(res => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { serviceCategory } = getState();

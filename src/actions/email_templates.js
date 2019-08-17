@@ -91,27 +91,39 @@ export const editTemplateError = error => ({
 
 export const saveTemplateNameList = list => ({ type: SAVE_TEMPLATE_NAME_LIST, payload: list });
 
+const templateAxios = axios.create({
+  baseURL: eTemplateApi,
+});
+
+const setToken = () => {
+  if (!templateAxios.defaults.headers.common['Authorization']) {
+    templateAxios.defaults.headers.common['Authorization'] = axios.defaults.headers.common['Authorization'];
+  }
+}
+
 export const fetchTemplates = () => dispatch => {
   const userSub = localStorage.getItem('userSub');
   dispatch(fetchEmailTemplatesStart());
-  axios
-    .get(`${eTemplateApi}/business-admin/${userSub}`)
+  setToken();
+  templateAxios.get(`/business-admin/${userSub}`)
     .then(response => dispatch(fetchEmailTemplatesSuccess(response)))
     .catch(error => dispatch(fetchEmailTemplatesError(error)));
 };
 
 export const fetchTemplate = id => dispatch => {
   dispatch(fetchTemplateStart());
-  axios
-    .get(`${eTemplateApi}/${id}`)
+  setToken();
+  templateAxios
+    .get(`/${id}`)
     .then(response => dispatch(fetchTemplateSuccess(response)))
     .catch(error => dispatch(fetchTemplateError(error)));
 };
 
 export const deleteTemplate = id => dispatch => {
   dispatch(deleteTemplateStart(id));
-  axios
-    .delete(`${eTemplateApi}/{id}?id=${id}`)
+  setToken();
+  templateAxios
+    .delete(`/{id}?id=${id}`)
     .then(response => dispatch(deleteTemplateSuccess(response)))
     .catch(error => dispatch(deleteTemplateError(error)));
 };
@@ -119,8 +131,9 @@ export const deleteTemplate = id => dispatch => {
 export const createTemplate = (name, content) => dispatch => {
   const userSub = localStorage.getItem('userSub');
   dispatch(createTemplateStart());
-  axios
-    .post(`${eTemplateApi}/${name}/${userSub}`, content, axiosConfig)
+  setToken();
+  templateAxios
+    .post(`/${name}/${userSub}`, content, axiosConfig)
     .then((response) => {
       if (response && response.data.success) {
         dispatch(createTemplateSuccess(response));
@@ -133,8 +146,9 @@ export const createTemplate = (name, content) => dispatch => {
 
 export const editTemplate = (id, name, content) => dispatch => {
   dispatch(editTemplateStart());
-  axios
-    .put(`${eTemplateApi}/${id}/${name}`, content, axiosConfig)
+  setToken();
+  templateAxios
+    .put(`/${id}/${name}`, content, axiosConfig)
     .then(response => dispatch(editTemplateSuccess(response)))
     .catch(error => dispatch(editTemplateError(error)));
 };

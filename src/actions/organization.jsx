@@ -1,17 +1,12 @@
+import axios from 'axios';
 import { organization } from '../constants/Organization.constants';
-import { API_ROOT, URL } from '../config/config';
+import { URL } from '../config/config';
 
 export const fetchOrganization = id => {
   return dispatch => {
     dispatch({ type: organization.FETCH_ORGANIZATION_LOADING });
-    fetch(API_ROOT + URL.FETCH_ORGANIZATION + id, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.get(URL.FETCH_ORGANIZATION + id)
+      .then(({ data }) => {
         dispatch({
           type: organization.FETCH_ORGANIZATION_SUCCESS,
           payload: data.object
@@ -49,15 +44,8 @@ export const editOrganizationFailure = error => {
 export const editOrganization = (values, history) => {
   return dispatch => {
     dispatch(editOrganizationLoading());
-    fetch(API_ROOT + URL.ORGANIZATION, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.put(URL.ORGANIZATION, values)
+      .then(({ data }) => {
         dispatch(editOrganizationSuccess(data));
         history.push('/organization/list');
       })
@@ -90,18 +78,12 @@ export const fetchOrganizationsFailure = error => {
 export const fetchOrganizationsByBusinessAdminId = adminId => {
   return dispatch => {
     dispatch(fetchOrganizationsLoading());
-    fetch(API_ROOT + URL.FETCH_ORGANIZATIONS_BY_BUSINESS_ADMIN_ID + adminId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        dispatch(fetchOrganizationsSuccess(json.objects));
+    axios.get(URL.FETCH_ORGANIZATIONS_BY_BUSINESS_ADMIN_ID + adminId)
+      .then(({ data }) => {
+        dispatch(fetchOrganizationsSuccess(data.objects));
       })
       .catch(err => {
-        dispatch(fetchOrganizationsFailure(err));
+        dispatch(fetchOrganizationsFailure('Cannot fetch organizations'));
       });
   };
 };
@@ -109,18 +91,12 @@ export const fetchOrganizationsByBusinessAdminId = adminId => {
 export const fetchOrganizationsOptionByBusinessAdminId = adminId => {
   return dispatch => {
     dispatch(fetchOrganizationsLoading());
-    fetch(API_ROOT + URL.FETCH_ORGANIZATIONS_OPTION_BY_BUSINESS_ADMIN_ID + adminId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        dispatch(fetchOrganizationsSuccess(json.objects));
+    axios.get(URL.FETCH_ORGANIZATIONS_OPTION_BY_BUSINESS_ADMIN_ID + adminId)
+      .then(({ data }) => {
+        dispatch(fetchOrganizationsSuccess(data.objects));
       })
       .catch(err => {
-        dispatch(fetchOrganizationsFailure(err));
+        dispatch(fetchOrganizationsFailure('Cannot fetch organizations options'));
       });
   };
 };
@@ -148,25 +124,11 @@ export const createOrganizationFailure = error => {
 export const createOrganization = (values, history) => {
   return dispatch => {
     dispatch(createOrganizationLoading());
-    fetch(API_ROOT + URL.ORGANIZATION_NAME_VALIDATE + values.registerOrganizationName, {
-      method: 'GET',
-      headers: {
-        Accept: '*/*',
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json.object === 'VALID') {
-          fetch(API_ROOT + URL.ORGANIZATION, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-          })
-            .then(res => res.json())
-            .then(data => {
+    axios.get(URL.ORGANIZATION_NAME_VALIDATE + values.registerOrganizationName)
+      .then((resp) => {
+        if (resp.data.object === 'VALID') {
+          axios.post(URL.ORGANIZATION, values)
+            .then(({ data }) => {
               if (data.status === 200 || data.status === 201 || data.success) {
                 dispatch(createOrganizationSuccess(data));
                 history.push('/organization/list');
