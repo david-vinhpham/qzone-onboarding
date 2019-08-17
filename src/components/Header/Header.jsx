@@ -62,7 +62,7 @@ function Header({ ...props }) {
           </div>
         </Hidden>
         <div className={classes.flex}>
-          <Button href="#" className={classes.title} color="transparent">
+          <Button href="#" data-test-id="pageTitle" className={classes.title} color="transparent">
             {makeBrand()}
           </Button>
         </div>

@@ -46,26 +46,30 @@ const dashboardRoutes = [
     path: '/customer-service',
     name: 'Customer Service',
     icon: FilterVintage,
-    component: CustomerService
+    component: CustomerService,
+    dataTestId: 'customerServiceNavLink'
   },
   {
     path: '/calendar',
     name: 'Manage Calendar',
     icon: BubbleChart,
-    component: ManageCalendar
+    component: ManageCalendar,
+    dataTestId: 'calendarNavLink'
   },
   {
     path: '/tmp-services',
     name: 'Temporary Services',
     icon: Star,
-    component: TmpServicesList
+    component: TmpServicesList,
+    dataTestId: 'tmpServicesNavLink'
   },
   {
     path: '/email-templates',
     name: 'Email Templates',
     icon: Email,
     guarded: true,
-    component: EmailTemplates
+    component: EmailTemplates,
+    dataTestId: 'emailTemplatesNavLink'
   },
   { redirect: true, path: '/', pathTo: '/login', name: 'Login' }
 ];
