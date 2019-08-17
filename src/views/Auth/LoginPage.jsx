@@ -126,7 +126,7 @@ class LoginPage extends React.Component {
                           labelText="Email..."
                           success={this.state.loginEmailState === 'success'}
                           error={this.state.loginEmailState === 'error'}
-                          id="loginemail"
+                          id="loginEmail"
                           formControlProps={{
                             fullWidth: true
                           }}
@@ -159,9 +159,16 @@ class LoginPage extends React.Component {
                           onChange={event => this.change(event, 'loginPassword', 'password')}
                         />
                         <div>
-                          <Button color="rose" simple size="lg" block onClick={this.loginClick}>
+                          <Button
+                            simple
+                            block
+                            data-test-id="loginBtn"
+                            color="rose"
+                            size="lg"
+                            onClick={this.loginClick}
+                          >
                             Submit
-                        </Button>
+                          </Button>
                         </div>
                         <div>
                           <Link to="/register">

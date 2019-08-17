@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
@@ -18,10 +18,14 @@ import axios from 'axios';
 
 let ps;
 class Dashboard extends React.PureComponent {
-  state = {
-    mobileOpen: false,
-    miniActive: false
-  };
+  constructor(props) {
+    super(props);
+    this.mainPanelRef = createRef();
+    this.state = {
+      mobileOpen: false,
+      miniActive: false
+    };
+  }
 
   async componentDidMount() {
     const { history, userDetail } = this.props;
@@ -30,8 +34,8 @@ class Dashboard extends React.PureComponent {
     await this.props.refreshToken(history);
     if (userSub) this.props.fetchUser(userSub, history);
 
-    if (navigator.platform.indexOf('Win') > -1) {
-      ps = new PerfectScrollbar(this.refs.mainPanel, {
+    if (this.mainPanelRef.current && navigator.platform.indexOf('Win') > -1) {
+      ps = new PerfectScrollbar(this.mainPanelRef.current, {
         suppressScrollX: true,
         suppressScrollY: false
       });
@@ -41,7 +45,7 @@ class Dashboard extends React.PureComponent {
 
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
-      this.refs.mainPanel.scrollTop = 0;
+      this.mainPanelRef.current.scrollTop = 0;
       if (this.state.mobileOpen) {
         this.setState({ mobileOpen: false });
       }
@@ -87,7 +91,7 @@ class Dashboard extends React.PureComponent {
           miniActive={this.state.miniActive}
           {...rest}
         />
-        <div className={mainPanel} ref="mainPanel">
+        <div className={mainPanel} ref={this.mainPanelRef}>
           <Header
             sidebarMinimize={this.sidebarMinimize}
             miniActive={this.state.miniActive}

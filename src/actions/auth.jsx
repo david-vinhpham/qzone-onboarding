@@ -168,10 +168,14 @@ export function loginUser(values, history) {
             dispatch(registerUserFailure('Email is not verified'));
           }
         } else {
+          Alert.error(<AlertMessage>Your email or password is incorrect!</AlertMessage>);
           dispatch(registerUserFailure('Topology Error'));
         }
       })
-      .catch(err => dispatch(registerUserFailure(err)));
+      .catch(err => {
+        Alert.error(<AlertMessage>Your email or password is incorrect!</AlertMessage>);
+        dispatch(registerUserFailure(err))
+      });
   };
 }
 

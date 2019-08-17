@@ -88,6 +88,7 @@ class Sidebar extends React.Component {
         <ListItem className={classes.collapseItem}>
           <NavLink
             to="/organization/list"
+            data-test-id="orgListNavLink"
             className={cx(classes.itemLink, classes.userCollapseLinks)}
           >
             <span className={classes.collapseItemMini}>
@@ -105,6 +106,7 @@ class Sidebar extends React.Component {
         <ListItem className={classes.collapseItem}>
           <NavLink
             to="/location/list"
+            data-test-id="businessLocationListNavLink"
             className={cx(classes.itemLink, classes.userCollapseLinks)}
           >
             <span className={classes.collapseItemMini}>
@@ -120,6 +122,7 @@ class Sidebar extends React.Component {
         <ListItem className={classes.collapseItem}>
           <NavLink
             to="/services/list"
+            data-test-id="manageServicesNavLink"
             className={cx(classes.itemLink, classes.userCollapseLinks)}
           >
             <span className={classes.collapseItemMini}>
@@ -135,6 +138,7 @@ class Sidebar extends React.Component {
         <ListItem className={classes.collapseItem}>
           <NavLink
             to="/business-categories"
+            data-test-id="businessCategoriesNavLink"
             className={cx(classes.itemLink, classes.userCollapseLinks)}
           >
             <span className={classes.collapseItemMini}>
@@ -152,6 +156,7 @@ class Sidebar extends React.Component {
         <ListItem className={classes.collapseItem}>
           <NavLink
             to="/provider/list"
+            data-test-id="providerListNavLink"
             className={cx(classes.itemLink, classes.userCollapseLinks)}
           >
             <span className={classes.collapseItemMini}>
@@ -181,6 +186,7 @@ class Sidebar extends React.Component {
           <ListItem className={cx(classes.item, classes.userItem)}>
             <NavLink
               to="#"
+              data-test-id="openAvatar"
               className={cx(classes.itemLink, classes.userCollapseButton)}
               onClick={(e) => {
                 e.preventDefault();
@@ -276,7 +282,7 @@ class Sidebar extends React.Component {
 
           return (
             <ListItem key={key} className={classes.item}>
-              <NavLink to={prop.path} className={navLinkClasses}>
+              <NavLink to={prop.path} data-test-id={prop.dataTestId} className={navLinkClasses}>
                 <ListItemIcon className={classes.itemIcon}>
                   <prop.icon />
                 </ListItemIcon>
