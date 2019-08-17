@@ -1,6 +1,6 @@
 export const API_ROOT = process.env.NODE_ENV === 'development'
   ? 'http://54.252.134.87:8080/api/' : 'https://api.quezone.com.au/api/';
-export const API_SURVEY = `${API_ROOT}surveys`;
+export const API_SURVEY = `surveys`;
 export const API_MEDIA_URL = 'https://communication.quezone.com.au/api/media/medias';
 export const URL = {
   ORGANIZATION_NAME_VALIDATE: 'validate?name=',

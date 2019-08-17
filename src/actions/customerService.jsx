@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_ROOT, URL } from 'config/config';
+import { URL } from 'config/config';
 import { customer_service } from '../constants/CustomerService.constants';
 import { boardMode, eventStatus } from '../constants';
 import { fetchServiceOptionsByBusinessAdminId } from '../actions/serviceOptions';
@@ -20,7 +20,7 @@ const setVerifyBookingCodeFailure = () => ({
 
 export const verifyBookingCode = (bookingCode, userDetailId, isProvider) => dispatch => {
   dispatch(setVerifyBookingCodeLoading(true));
-  return axios.get(`${API_ROOT}${URL.VERIFY_BOOKING_CODE}/${
+  return axios.get(`${URL.VERIFY_BOOKING_CODE}/${
     bookingCode
     }/${
     isProvider ? 'provider' : 'admin'
@@ -55,7 +55,7 @@ export const updateCustomerStatus = (data, cb) => (dispatch) => {
   delete data.providerId;
   delete data.serviceId;
 
-  return axios.put(API_ROOT + URL.UPDATE_CUSTOMER_FLOW_STATUS, data)
+  return axios.put(URL.UPDATE_CUSTOMER_FLOW_STATUS, data)
     .then(res => {
       if (res && res.data.success) {
         dispatch(setUpdateStatusSuccess({ ...res.data, isFromBookingData }));
@@ -81,7 +81,7 @@ export const fetchFlowBoard = (data) => dispatch => {
   dispatch(setFetchFlowBoardLoading(true));
   dispatch(setFetchFlowBoardSuccess({}));
 
-  return axios.post(`${API_ROOT}${URL.FETCH_CUSTOMER_FLOW_BOARD}`, data)
+  return axios.post(URL.FETCH_CUSTOMER_FLOW_BOARD, data)
     .then(res => {
       if (res && res.status === 200 && res.data.success) {
         if (res.data.object && res.data.object.customerFlowDetailList && res.data.object.customerFlowDetailList.length > 0) {
@@ -114,7 +114,7 @@ export const setProviderOptionsSuccess = payload => ({
 });
 
 export const fetchProviderOptionsByBusinessAdminId = (businessAdminId) => dispatch => {
-  return axios.get(`${API_ROOT}${URL.FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
+  return axios.get(`${URL.FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
     .then(res => {
       if (res && res.status === 200 && res.data.success) {
         dispatch(setProviderOptionsSuccess(res.data.objects));
@@ -123,19 +123,17 @@ export const fetchProviderOptionsByBusinessAdminId = (businessAdminId) => dispat
 };
 
 export const fetchProvidersAndServicesByBusinessAdminId = (businessAdminId) => dispatch => {
-  return Promise.all([
-    fetchServiceOptionsByBusinessAdminId(businessAdminId)(dispatch),
-    fetchProviderOptionsByBusinessAdminId(businessAdminId)(dispatch)
-  ]);
+  dispatch(fetchServiceOptionsByBusinessAdminId(businessAdminId));
+  dispatch(fetchProviderOptionsByBusinessAdminId(businessAdminId));
 };
 
 
 export const updateGuestInfo = (payload, bookingCode, userDetailId) => dispatch => {
   dispatch(setVerifyBookingCodeLoading(true));
-  return axios.put(`${API_ROOT}${URL.UPDATE_GUEST_INFO}`, payload)
+  return axios.put(URL.UPDATE_GUEST_INFO, payload)
     .then(res => {
       if (res && res.data.success) {
-        verifyBookingCode(bookingCode, userDetailId)(dispatch);
+        dispatch(verifyBookingCode(bookingCode, userDetailId));
       }
     });
 }

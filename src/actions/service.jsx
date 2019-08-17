@@ -1,4 +1,5 @@
-import { API_ROOT, URL } from '../config/config';
+import axios from 'axios';
+import { URL } from '../config/config';
 import { service } from '../constants/Service.constants';
 import React from "react";
 import Alert from 'react-s-alert';
@@ -26,14 +27,8 @@ export const editServiceSuccess = data => {
 export const deleteService = id => {
   return dispatch => {
     dispatch({ type: service.DEL_SERVICE_LOADING });
-    fetch(`${API_ROOT + URL.SERVICE}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.delete(`${URL.SERVICE}/${id}`)
+      .then(({ data }) => {
         if (data.success) {
           dispatch({
             type: service.DEL_SERVICE_SUCCESS,
@@ -51,20 +46,13 @@ export const deleteService = id => {
   };
 };
 
-export const editService = (data, history) => {
+export const editService = (body, history) => {
   return dispatch => {
     dispatch(editServiceLoading());
-    fetch(API_ROOT + URL.SERVICE, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(svc => {
-        if (svc.success) {
-          dispatch(editServiceSuccess(svc.object));
+    axios.put(URL.SERVICE, body)
+      .then(({ data }) => {
+        if (data.success) {
+          dispatch(editServiceSuccess(data.object));
           history.push('/services/list');
         } else {
           Alert.error(<AlertMessage>Cannot edit the service, missing image !</AlertMessage>);
@@ -99,14 +87,8 @@ export const fetchServiceFailure = error => {
 export const fetchServiceById = id => {
   return dispatch => {
     dispatch(fetchServiceLoading());
-    fetch(API_ROOT + URL.FETCH_SERVICE_BY_ID + id, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.get(URL.FETCH_SERVICE_BY_ID + id)
+      .then(({ data }) => {
         dispatch(fetchServiceSuccess(data.object));
       })
       .catch(err => {
@@ -138,14 +120,8 @@ export const fetchServiceCategoriesFailure = error => {
 export const fetchServiceCategories = () => {
   return dispatch => {
     dispatch(fetchServiceCategoriesLoading());
-    fetch(API_ROOT + URL.FETCH_SERVICE_CATEGORIES, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.get(URL.FETCH_SERVICE_CATEGORIES)
+      .then(({ data }) => {
         dispatch(fetchServiceCategoriesSuccess(data.objects));
       })
       .catch(err => {
@@ -177,14 +153,8 @@ export const fetchServicesFailure = error => {
 export const fetchServicesOptionByOrgId = orgId => {
   return dispatch => {
     dispatch(fetchServicesLoading());
-    fetch(API_ROOT + URL.FETCH_SERVICES_OPTION + orgId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.get(URL.FETCH_SERVICES_OPTION + orgId)
+      .then(({ data }) => {
         dispatch(fetchServicesSuccess(data.objects));
       })
       .catch(err => {
@@ -213,17 +183,11 @@ export const createServiceFailure = error => {
   };
 };
 
-export function fetchServicesByBusinessAdminId (businessAdminId) {
+export function fetchServicesByBusinessAdminId(businessAdminId) {
   return dispatch => {
     dispatch(fetchServicesLoading());
-    fetch(API_ROOT + URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.get(URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId)
+      .then(({ data }) => {
         dispatch(fetchServicesSuccess(data.objects));
       })
       .catch(err => {
@@ -232,23 +196,16 @@ export function fetchServicesByBusinessAdminId (businessAdminId) {
   };
 };
 
-export const createService = (data, history) => {
+export const createService = (body, history) => {
   return dispatch => {
     dispatch(createServiceLoading());
-    fetch(API_ROOT + URL.SERVICE, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(svc => {
-        if (svc.success) {
-          dispatch(createServiceSuccess(svc.object));
+    axios.post(URL.SERVICE, body)
+      .then(({ data }) => {
+        if (data.success) {
+          dispatch(createServiceSuccess(data.object));
           history.push('/services/list');
         } else {
-          dispatch(createServiceFailure(svc));
+          dispatch(createServiceFailure(data));
         }
       })
       .catch(err => {

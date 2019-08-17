@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { get } from 'lodash';
 
-import { API_ROOT, URL } from 'config/config';
+import { URL } from 'config/config';
 import { FETCH_GEO_OPTIONS } from 'constants/GeoOptions.constants';
 
 const fetchGeoOptionsSuccess = geoOptions => ({
@@ -10,9 +10,9 @@ const fetchGeoOptionsSuccess = geoOptions => ({
 });
 
 export const fetchGeoLocationOptions = () => dispatch => {
-  axios.get(`${API_ROOT}${URL.GEO_LOCATION_OPTIONS}`)
+  axios.get(URL.GEO_LOCATION_OPTIONS)
     .then(resp => {
-      if(resp.data.success) {
+      if(resp && resp.data.success) {
         const data = get(resp, 'data.objects', []);
         dispatch(fetchGeoOptionsSuccess(data));
       }

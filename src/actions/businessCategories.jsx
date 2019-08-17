@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_ROOT, URL } from 'config/config';
+import { URL } from 'config/config';
 import { business_category } from '../constants/BusinessCategory.constants';
 
 const setBusinessCategoriesLoading = payload => ({
@@ -14,7 +14,7 @@ export const setBusinessCategoriesSuccess = payload => ({
 
 export const fetchBusinessCategories = () => dispatch => {
   dispatch(setBusinessCategoriesLoading(true));
-  axios.get(`${API_ROOT}${URL.FETCH_BUSINESS_CATEGORIES}`)
+  axios.get(URL.FETCH_BUSINESS_CATEGORIES)
     .then(resp => {
       if (resp.status === 200 && resp.data.success) {
         dispatch(setBusinessCategoriesSuccess(resp.data.objects));
@@ -27,7 +27,7 @@ export const fetchBusinessCategories = () => dispatch => {
 export const deleteBusinessCategory = businessCategoryId => {
   return (dispatch, getState) => {
     dispatch(setBusinessCategoriesLoading(true));
-    axios.delete(`${API_ROOT + URL.FETCH_BUSINESS_CATEGORIES}/${businessCategoryId}`)
+    axios.delete(`${URL.FETCH_BUSINESS_CATEGORIES}/${businessCategoryId}`)
       .then(res => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { businessCategory } = getState();
@@ -44,7 +44,7 @@ export const deleteBusinessCategory = businessCategoryId => {
 export const createBusinessCategory = (data) => {
   return (dispatch, getState) => {
     dispatch(setBusinessCategoriesLoading(true));
-    axios.post(API_ROOT + URL.FETCH_BUSINESS_CATEGORIES, data)
+    axios.post(URL.FETCH_BUSINESS_CATEGORIES, data)
       .then((res) => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { businessCategory } = getState();
@@ -61,7 +61,7 @@ export const createBusinessCategory = (data) => {
 export const editBusinessCategory = (data) => {
   return (dispatch, getState) => {
     dispatch(setBusinessCategoriesLoading(true));
-    axios.put(API_ROOT + URL.FETCH_BUSINESS_CATEGORIES, data)
+    axios.put(URL.FETCH_BUSINESS_CATEGORIES, data)
       .then(res => {
         if (res.status === 200 || res.status === 201 || res.data.success) {
           const { businessCategory } = getState();

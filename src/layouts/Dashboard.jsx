@@ -13,7 +13,8 @@ import appStyle from '../assets/jss/material-dashboard-pro-react/layouts/dashboa
 import image from '../assets/img/sidebar-2.jpg';
 import logo from '../assets/img/favicon.png';
 import withAuth from "../hoc/withAuth";
-import { fetchUser } from 'actions/auth.jsx';
+import { refreshToken, fetchUser } from 'actions/auth.jsx';
+import axios from 'axios';
 
 let ps;
 class Dashboard extends React.PureComponent {
@@ -22,11 +23,12 @@ class Dashboard extends React.PureComponent {
     miniActive: false
   };
 
-  componentDidMount() {
-    const userId = localStorage.getItem('userSub');
-    if (userId && !this.props.userDetail.userType) {
-      this.props.fetchUser(userId, this.props.history);
-    }
+  async componentDidMount() {
+    const { history, userDetail } = this.props;
+    const userSub = userDetail.id || localStorage.getItem('userSub');
+
+    await this.props.refreshToken(history);
+    if (userSub) this.props.fetchUser(userSub, history);
 
     if (navigator.platform.indexOf('Win') > -1) {
       ps = new PerfectScrollbar(this.refs.mainPanel, {
@@ -47,7 +49,7 @@ class Dashboard extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    if (navigator.platform.indexOf('Win') > -1) {
+    if (ps && navigator.platform.indexOf('Win') > -1) {
       ps.destroy();
     }
   }
@@ -95,12 +97,12 @@ class Dashboard extends React.PureComponent {
           />
           <div className={classes.content}>
             <div className={classes.container}>
-              <Switch>
+              {!!axios.defaults.headers.common['Authorization'] && <Switch>
                 {[...otherRoutes, ...dashboardRoutes].map((prop) => {
                   if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={prop.path} />;
                   return <Route path={prop.path} component={withAuth(prop.component, rest.userDetail)} key={prop.path} />;
                 })}
-              </Switch>
+              </Switch>}
             </div>
           </div>
         </div>
@@ -111,12 +113,13 @@ class Dashboard extends React.PureComponent {
 
 Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
-  fetchUser: PropTypes.func.isRequired,
   userDetail: PropTypes.object.isRequired,
+  refreshToken: PropTypes.func.isRequired,
+  fetchUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   userDetail: state.user.userDetail,
 });
 
-export default withStyles(appStyle)(connect(mapStateToProps, { fetchUser })(Dashboard));
+export default withStyles(appStyle)(connect(mapStateToProps, { refreshToken, fetchUser })(Dashboard));

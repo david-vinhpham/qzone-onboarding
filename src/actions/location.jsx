@@ -1,17 +1,12 @@
+import axios from 'axios';
 import { location } from '../constants/Location.constants';
-import { API_ROOT, URL } from '../config/config';
+import { URL } from '../config/config';
 
 export const fetchLocations = () => {
   return dispatch => {
     dispatch({ type: location.FETCH_LOCATIONS_LOADING });
-    fetch(API_ROOT + URL.GEO_LOCATIONS, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.get(URL.GEO_LOCATIONS)
+      .then(({ data }) => {
         dispatch({
           type: location.FETCH_LOCATIONS_SUCCESS,
           payload: data.objects
@@ -29,14 +24,8 @@ export const fetchLocations = () => {
 export const delLocation = id => {
   return dispatch => {
     dispatch({ type: location.DEL_LOCATION_LOADING });
-    fetch(`${API_ROOT + URL.GEO_LOCATIONS}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.delete(`${URL.GEO_LOCATIONS}/${id}`)
+      .then(({ data }) => {
         if (data.success) {
           dispatch({
             type: location.DEL_LOCATION_SUCCESS,
@@ -56,14 +45,8 @@ export const delLocation = id => {
 export const fetchLocation = id => {
   return dispatch => {
     dispatch({ type: location.FETCH_LOCATION_LOADING });
-    fetch(`${API_ROOT + URL.GEO_LOCATIONS}/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.get(`${URL.GEO_LOCATIONS}/${id}`)
+      .then(({ data }) => {
         dispatch({
           type: location.FETCH_LOCATION_SUCCESS,
           payload: data.object
@@ -81,15 +64,8 @@ export const fetchLocation = id => {
 export const createLocation = (values, history) => {
   return dispatch => {
     dispatch({ type: location.CREATE_LOCATION_LOADING });
-    fetch(API_ROOT + URL.GEO_LOCATIONS, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
-      .then(data => {
+    axios.post(URL.GEO_LOCATIONS, values)
+      .then(({ data }) => {
         dispatch({
           type: location.CREATE_LOCATION_SUCCESS,
           payload: data.object
@@ -124,19 +100,8 @@ export const createLocation = (values, history) => {
 export const editLocation = (values, history) => {
   return dispatch => {
     dispatch({ type: location.EDIT_LOCATION_LOADING });
-    fetch(API_ROOT + URL.GEO_LOCATIONS, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
-    })
-      .then(res => res.json())
+    axios.put(URL.GEO_LOCATIONS, values)
       .then(() => {
-        // dispatch({
-        //    type: location.EDIT_LOCATION_SUCCESS,
-        //    payload: data.object
-        // })
         history.push('/location/list');
       })
       .catch(err => {

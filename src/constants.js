@@ -1,3 +1,5 @@
+import { API_ROOT } from "config/config";
+
 export const eUserType = {
   guest: 'GUEST',
   customer: 'CUSTOMER',
@@ -45,13 +47,10 @@ export const restApiResponseCodes = {
   notfound: 404
 };
 
-// API
-const emailTemplate = 'https://api.quezone.com.au/api';
-
 // Email Templates
-export const eTemplateUrl = '/email-templates';
+export const eTemplateUrl = 'email-templates';
 export const eTemplateNameMax = 250;
 export const eTemplateContentMax = 15000;
-export const eTemplateApi = `${emailTemplate}${eTemplateUrl}`;
+export const eTemplateApi = `${API_ROOT}${eTemplateUrl}`;
 
 export const defaultDateTimeFormat = 'DD/MM/YYYY LT Z';

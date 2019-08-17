@@ -1,9 +1,7 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
-  BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd, Report,
-  // Assignment,
+  BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd,
   FilterVintage, Star
-  // Update,
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Administration from '../views/Administration/Administration';
@@ -17,8 +15,6 @@ import Profile from '../views/Profile/profile';
 import ProviderList from '../views/Provider/ProviderList';
 import ProviderCreate from '../views/Provider/ProviderCreate';
 import ProviderEdit from '../views/Provider/ProviderEdit';
-
-import Reports from '../views/Reports/Reports';
 
 import ServicesList from '../views/Services/ServicesList';
 import ServiceCreate from '../views/Services/ServiceCreate';
@@ -36,12 +32,8 @@ import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
 import TmpServicesList from '../views/TmpServices/TmpServicesList';
 import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
 import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesList';
-/*import TmpServicesDetail from '../views/TmpServices/TmpServicesDetail';*/
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
 import ScheduleReportList from "../views/ScheduleReport/ScheduleReportList";
-// import Assessments from '../views/Surveys/Assessments';
-// import CreateAssessment from '../views/Surveys/CreateAssessment';
-// import Reschedule from '../views/Reschedule/Reschedule';
 
 const dashboardRoutes = [
   {
@@ -50,29 +42,11 @@ const dashboardRoutes = [
     icon: DashboardIcon,
     component: Dashboard
   },
-/*  {
-    path: '/profile',
-    name: 'Profile',
-    icon: AssignmentInd,
-    component: Profile
-  },*/
   {
     path: '/customer-service',
     name: 'Customer Service',
     icon: FilterVintage,
     component: CustomerService
-  },
-  // {
-  //   path: '/reschedule',
-  //   name: 'Reschedule Event',
-  //   icon: Update,
-  //   component: Reschedule,
-  // },
-  {
-    path: '/reports',
-    name: 'Reports',
-    icon: Report,
-    component: Reports
   },
   {
     path: '/calendar',
@@ -97,7 +71,7 @@ const dashboardRoutes = [
 ];
 
 const otherRoutes = [
-    {
+  {
     path: '/profile',
     name: 'Profile',
     icon: Person,
@@ -175,18 +149,6 @@ const otherRoutes = [
     icon: LocationOn,
     component: Administration
   },
-  // {
-  //   path: '/assessments/new',
-  //   name: 'Create New Assessment',
-  //   icon: Assignment,
-  //   component: CreateAssessment,
-  // },
-  // {
-  //   path: '/assessments',
-  //   name: 'Assessments',
-  //   icon: Assignment,
-  //   component: Assessments,
-  // },
   {
     path: '/provider/list',
     name: 'Provider Details',

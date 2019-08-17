@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { get, reduce } from 'lodash';
 
-import { API_ROOT, URL } from 'config/config';
+import { URL } from 'config/config';
 import {
   CALENDAR_LOADING,
   FETCH_EVENTS_BY_PROVIDERS,
@@ -34,7 +34,7 @@ const createEventSuccess = newEvent => ({
 export const fetchProvidersByBusinessId = businessId => dispatch => {
   dispatch(calendarLoading(true));
   return axios
-    .get(`${API_ROOT}${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}${businessId}`)
+    .get(`${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}${businessId}`)
     .then((response) => {
       if (response && response.data.success) {
         const providers = get(response, 'data.objects', []);
@@ -48,8 +48,8 @@ export const fetchEventsByProviderId = providerId => dispatch => {
   dispatch(calendarLoading(true));
 
   const fetchEvents = [];
-  fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
-  fetchEvents.push(axios.get(`${API_ROOT}${URL.FIND_TMP_EVENTS_BY_PROVIDER_ID}${providerId}`));
+  fetchEvents.push(axios.get(`${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
+  fetchEvents.push(axios.get(`${URL.FIND_TMP_EVENTS_BY_PROVIDER_ID}${providerId}`));
 
   Promise.all(fetchEvents)
     .then((eventsResp) => {
@@ -89,7 +89,7 @@ export const createNewEvent = newEvent => (dispatch, getState) => {
   }
 
   return axios
-    .post(`${API_ROOT}${api}`, newEvent)
+    .post(api, newEvent)
     .then(response => {
       if (response) {
         const data = get(response, 'data.object', {});

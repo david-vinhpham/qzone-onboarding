@@ -46,7 +46,8 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         organizations: action.payload.organizations,
-        fetchOrganizationsLoading: false
+        fetchOrganizationsLoading: false,
+        fetchOrganizationsError: false,
       };
     case organization.FETCH_ORGANIZATIONS_FAILURE:
       return {

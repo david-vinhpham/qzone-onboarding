@@ -22,6 +22,10 @@ import 'react-phone-number-input/style.css';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import { RESET_ALL_STATES } from 'actions/common';
+import axios from 'axios';
+import { API_ROOT } from 'config/config';
+
+axios.defaults.baseURL = API_ROOT;
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

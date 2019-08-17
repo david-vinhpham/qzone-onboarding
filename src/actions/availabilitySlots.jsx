@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { get } from 'lodash';
 import { availabilitySlots } from 'constants/AvailabilitySlots';
-import { API_ROOT, URL } from 'config/config';
+import { URL } from 'config/config';
 import Alert from "react-s-alert";
 
 const setAvailabilityLoading = payload => ({
@@ -16,7 +16,7 @@ const setAvailabilitySlots = payload => ({
 
 export const fetchAvailability = payload => dispatch => {
   dispatch(setAvailabilityLoading(true));
-  axios.post(`${API_ROOT}${URL.FIND_AVAILABILITY_BY_TMP_SERVICE}`, payload)
+  axios.post(URL.FIND_AVAILABILITY_BY_TMP_SERVICE, payload)
     .then(resp => {
       if (resp && resp.data.success) {
         dispatch(setAvailabilitySlots(get(resp, 'data', [])));
