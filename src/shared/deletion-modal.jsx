@@ -71,7 +71,7 @@ class DeletionModal extends Component {
     const isDeleteButtonVisible = cancelButtonLabel === 'Cancel';
     const deleteButton = isDeleteButtonVisible ? (
       <div>
-        <Button onClick={this.deleteItemHandler} color="rose">Delete</Button>
+        <Button data-test-id="confirmDeleteBtn" onClick={this.deleteItemHandler} color="rose">Delete</Button>
       </div>
     ) : null;
     return (

@@ -62,6 +62,7 @@ export default function TmpServiceContent({
           </Grid>
           <Grid item md={2}>
             <TextField
+              data-test-id="avgServiceTimeInput"
               type="number"
               name="addEventData.tmpService.avgServiceTime"
               value={tmpService.avgServiceTime}

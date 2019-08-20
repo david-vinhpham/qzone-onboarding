@@ -264,7 +264,13 @@ class AddEventDialog extends PureComponent {
                   />}
                 </DialogContent>
                 <DialogActions classes={{ root: styles.calendarDialogFooter }}>
-                  <Button variant="outlined" color="primary" onClick={this.onClickSubmit(values)} disabled={isSubmitting}>
+                  <Button
+                    data-test-id="createEventBtn"
+                    variant="outlined"
+                    color="primary"
+                    onClick={this.onClickSubmit(values)}
+                    disabled={isSubmitting}
+                  >
                     {isEditMode ? 'Edit' : 'Create'}
                   </Button>
                   <Button variant="outlined" onClick={closeAddDialog}>

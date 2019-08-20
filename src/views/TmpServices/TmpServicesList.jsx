@@ -341,9 +341,9 @@ class TmpServicesList extends PureComponent {
                 <TableCell size="small">{index + 1}</TableCell>
                 <TableCell>{event.providerName}</TableCell>
                 <TableCell>{event.serviceName}</TableCell>
-                <TableCell>{moment.tz(event.slot.startTime * 1000, event.timezoneId).format(defaultDateTimeFormat)}</TableCell>
-                <TableCell>{moment.tz(event.slot.endTime * 1000, event.timezoneId).format(defaultDateTimeFormat)}</TableCell>
-                <TableCell>
+                <TableCell data-test-id="tmpServiceStartTime">{moment.tz(event.slot.startTime * 1000, event.timezoneId).format(defaultDateTimeFormat)}</TableCell>
+                <TableCell data-test-id="tmpServiceEndTime">{moment.tz(event.slot.endTime * 1000, event.timezoneId).format(defaultDateTimeFormat)}</TableCell>
+                <TableCell data-test-id="tmpServiceDescription">
                   {event.description ? event.description.substring(0, 150) : ''}
                 </TableCell>
                 <TableCell>
@@ -385,6 +385,7 @@ class TmpServicesList extends PureComponent {
                   {isAdmin && <Button
                     onClick={() => this.deleteTmpService(event.id)}
                     color="danger"
+                    data-test-id="tmpServiceDeleteBtn"
                     simple
                     justIcon
                   >

@@ -48,6 +48,7 @@ class CalendarV2 extends React.PureComponent {
             ))}
           </Select>}
         <Button
+          data-test-id="newCalendarEventBtn"
           variant="contained"
           color="primary"
           style={{ color: 'white' }}

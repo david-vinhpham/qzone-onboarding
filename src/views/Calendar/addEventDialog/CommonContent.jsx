@@ -53,16 +53,13 @@ export default function CommonContent({
             >
               {Object.values(EVENT_TYPE)
                 .filter(e => {
-                  if (e !== EVENT_TYPE.TMP_EVENTS && e !== EVENT_TYPE.APPOINTMENT) {
-                    if (isProvider) {
-                      return PROVIDER_EVENT_TYPE.includes(e);
-                    }
-                    return true;
+                  if (e === EVENT_TYPE.TMP_EVENTS || e === EVENT_TYPE.APPOINTMENT) {
+                    return false;
                   }
-                  return false;
+                  return isProvider ? PROVIDER_EVENT_TYPE.includes(e) : true;
                 })
                 .map(e => (
-                  <MenuItem value={e} key={e}>
+                  <MenuItem value={e} key={e} data-test-id={`eventTypeOption-${e}`}>
                     {EVENT_TYPE_TITLE[e]}
                   </MenuItem>
                 ))}
@@ -259,7 +256,9 @@ export default function CommonContent({
           </Grid>
           <Grid item md={2}>
             <DatePicker
+              data-test-id="startDatePicker"
               name="addEventData.startTime"
+              DialogProps={{ 'data-test-id': 'startDateDialog' }}
               value={startTime}
               onChange={onChangeNewEventDateTime('date')}
             />
@@ -296,6 +295,7 @@ export default function CommonContent({
       </Grid>
       <Grid item md={12}>
         <TextField
+          data-test-id="descriptionTextArea"
           value={values.addEventData.description}
           className={addEventDialogStyles.calendarDesc}
           label="Description"
