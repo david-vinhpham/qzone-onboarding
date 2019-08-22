@@ -137,6 +137,21 @@ class Sidebar extends React.Component {
         </ListItem>
         <ListItem className={classes.collapseItem}>
           <NavLink
+            to="/service-categories"
+            className={cx(classes.itemLink, classes.userCollapseLinks)}
+          >
+            <span className={classes.collapseItemMini}>
+              {"SC"}
+            </span>
+            <ListItemText
+              disableTypography
+              primary="Service Categories"
+              className={collapseItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.collapseItem}>
+          <NavLink
             to="/business-categories"
             data-test-id="businessCategoriesNavLink"
             className={cx(classes.itemLink, classes.userCollapseLinks)}
@@ -190,7 +205,7 @@ class Sidebar extends React.Component {
               className={cx(classes.itemLink, classes.userCollapseButton)}
               onClick={(e) => {
                 e.preventDefault();
-                if(!isProvider) this.openCollapse("openAvatar");
+                if (!isProvider) this.openCollapse("openAvatar");
               }}
             >
               <ListItemText
