@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 describe('Calendar page', () => {
   describe('Admin user', () => {
     beforeEach(() => {
@@ -7,10 +9,7 @@ describe('Calendar page', () => {
     });
 
     it('should create temporary service successfully', () => {
-      const today = new Date();
-      const currentDate = today.getDate();
-      const currentMonth = today.getMonth() + 1;
-      const currentYear = today.getFullYear();
+      const nextDay = moment().add(1, 'd');
       const avgServiceTime = 60;
       const description = 'This event is created from e2e tests';
 
@@ -34,14 +33,13 @@ describe('Calendar page', () => {
 
       cy.get('[data-test-id="tmpServiceStartTime"]').should(
         'contain',
-        `${currentDate + 1}/${currentMonth}/${currentYear} 08:00 AM +07:00`
+        `${nextDay.set('h', 8).set('m', 0).format('DD/MM/YYYY LT Z')}`
       );
       cy.get('[data-test-id="tmpServiceEndTime"]').should(
         'contain',
-        `${currentDate + 1}/${currentMonth}/${currentYear} 06:00 PM +07:00`
+        `${nextDay.set('h', 18).set('m', 0).format('DD/MM/YYYY LT Z')}`
       );
       cy.get('[data-test-id="tmpServiceDescription"]').should('contain', description);
-      cy.get('[data-test-id="tmpServiceDeleteBtn"]').should('have.length', 1);
 
       cy.get('[data-test-id="tmpServiceDeleteBtn"]').click();
       cy.get('[data-test-id="confirmDeleteBtn"]').click();
