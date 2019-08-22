@@ -60,7 +60,7 @@ class ForceChangePassword extends React.Component {
       email, defaultPwdState, newPasswordState, confirmPwdState, defaultPwd, newPassword,
     } = this.state;
     const isValid = (defaultPwdState === 'success' && confirmPwdState === 'success'
-      && newPasswordState === 'success' && defaultPwd !== newPassword);
+      && newPasswordState === 'success');
     if (!isValid) {
       Alert.success(<AlertMessage>Invalid input data!</AlertMessage>, { effect: 'bouncyflip' });
       return;
