@@ -1,21 +1,21 @@
 import React from 'react';
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import Alert from 'react-s-alert';
 import PropTypes from 'prop-types';
-import {compose} from 'redux';
-import {connect} from 'react-redux';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '../../components/CustomButtons/Button';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
 import validatePassword from '../../utils/validatePassword';
 import verificationPageStyle from '../../assets/jss/material-dashboard-pro-react/modules/verificationPageStyle';
-import {classesType} from '../../types/global';
+import { classesType } from '../../types/global';
 import AlertMessage from '../../components/Alert/Message';
 import CustomInput from "components/CustomInput/CustomInput.jsx";
-import {completeNewPasswordChallenge} from "../../actions/auth";
-import {userStatus as eUserStatus} from "../../constants";
-import {Link} from "react-router-dom";
+import { completeNewPasswordChallenge } from "../../actions/auth";
+import { userStatus as eUserStatus } from "../../constants";
+import { Link } from "react-router-dom";
 
 class ForceChangePassword extends React.Component {
   static propTypes = {
@@ -36,22 +36,23 @@ class ForceChangePassword extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.state = {email:'', ...this.defaultState, openChangePassword: false };
+    this.state = { email: '', ...this.defaultState, openChangePassword: false };
   }
 
   componentWillReceiveProps(nextProps) {
     const userStatus = localStorage.getItem('userStatus');
-    if(userStatus !== null && userStatus !== '') {
-      this.setState({openChangePassword: userStatus === eUserStatus.changePassword});
+    if (userStatus !== null && userStatus !== '') {
+      this.setState({ openChangePassword: userStatus === eUserStatus.changePassword });
     }
   }
 
   componentDidMount() {
     const loginEmail = localStorage.getItem('loginEmail');
-    this.setState({email: loginEmail});
+    this.setState({ email: loginEmail });
     const userStatus = localStorage.getItem('userStatus');
-    this.setState({openChangePassword: userStatus === eUserStatus.changePassword});
+    this.setState({ openChangePassword: userStatus === eUserStatus.changePassword });
   }
+
   handleChangePassword = (event) => {
     event.preventDefault();
     /*const { userId } = this.props;*/
@@ -60,18 +61,19 @@ class ForceChangePassword extends React.Component {
     } = this.state;
     const isValid = (defaultPwdState === 'success' && confirmPwdState === 'success'
       && newPasswordState === 'success' && defaultPwd !== newPassword);
-    if(!isValid) {
-      Alert.success(<AlertMessage>Invalid input data!</AlertMessage>, {effect: 'bouncyflip'});
+    if (!isValid) {
+      Alert.success(<AlertMessage>Invalid input data!</AlertMessage>, { effect: 'bouncyflip' });
       return;
     }
     const {
       completeNewPasswordChallenge: completeNewPasswordChallengeAction,
+      history
     } = this.props;
     completeNewPasswordChallengeAction({
       tempPassword: defaultPwd,
       finalPassword: newPassword,
       email
-    });
+    }, history);
   };
 
   onChangePassword = ({ target: { value } }) => {
@@ -88,7 +90,7 @@ class ForceChangePassword extends React.Component {
   onChangeConfirmPwd = ({ target: { value } }) => {
     let status = 'error';
     let newPwd = this.state.newPassword;
-    if(value !== '' && value === newPwd) {
+    if (value !== '' && value === newPwd) {
       status = 'success';
     }
     const confirmState = {
@@ -109,7 +111,7 @@ class ForceChangePassword extends React.Component {
   };
 
   onDialogClose = () => {
-    this.setState({openChangePassword: false});
+    this.setState({ openChangePassword: false });
   };
 
   render() {
@@ -137,7 +139,7 @@ class ForceChangePassword extends React.Component {
 
                       <CustomInput
                         id={`default`}
-                        inputProps={{ placeholder:  'Current Password (required)', type: "password" }}
+                        inputProps={{ placeholder: 'Current Password (required)', type: "password" }}
                         onChange={this.onChangeDefaultPassword}
                       />
                     </div>
@@ -146,13 +148,13 @@ class ForceChangePassword extends React.Component {
 
                       <CustomInput
                         id={`password `}
-                        inputProps={{ placeholder:  'Password (required)', type: "password" }}
+                        inputProps={{ placeholder: 'Password (required)', type: "password" }}
                         onChange={this.onChangePassword}
                       />
 
                       <CustomInput
                         id={`confirmPwd `}
-                        inputProps={{ placeholder:  'Confirm password (required)', type: "password" }}
+                        inputProps={{ placeholder: 'Confirm password (required)', type: "password" }}
                         onChange={this.onChangeConfirmPwd}
                       />
                     </div>
@@ -172,8 +174,8 @@ class ForceChangePassword extends React.Component {
                   Submit
                 </Button>
                 <Link to={`/calendar`}>
-                <Button onClick={this.onDialogClose}>
-                  Close
+                  <Button onClick={this.onDialogClose}>
+                    Close
                 </Button>
                 </Link>
               </div>

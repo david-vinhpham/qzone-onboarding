@@ -76,12 +76,6 @@ const dashboardRoutes = [
 
 const otherRoutes = [
   {
-    path: '/profile',
-    name: 'Profile',
-    icon: Person,
-    component: Profile
-  },
-  {
     path: '/location/edit/:id',
     name: 'Location Edit',
     icon: Person,
@@ -229,4 +223,11 @@ const providerRoutes = [
   '/customer-service'
 ];
 
-export { dashboardRoutes, otherRoutes, providerRoutes };
+const profileRouteComponent = {
+  path: '/profile',
+  name: 'Profile',
+  icon: Person,
+  component: Profile
+};
+
+export { dashboardRoutes, otherRoutes, providerRoutes, profileRouteComponent };

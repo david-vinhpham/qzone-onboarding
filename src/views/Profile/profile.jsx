@@ -155,7 +155,7 @@ class Profile extends React.Component {
       account: { email },
       id,
     } = this.state;
-    const { resetPassword: resetPasswordAction, editUser } = this.props;
+    const { resetPassword: resetPasswordAction, editUser, history } = this.props;
     return (
       <React.Fragment>
         <label> {editUser.id !== undefined && editUser.id !== null ? "Update user successfully" : ''} </label>
@@ -182,6 +182,7 @@ class Profile extends React.Component {
             closeChangePassword={this.handleClose}
             email={email}
             userId={id}
+            history={history}
           />
         )}
       </React.Fragment>

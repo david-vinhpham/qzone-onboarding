@@ -3,7 +3,7 @@ import axios from "axios";
 import { Auth } from "aws-amplify";
 import { URL } from "../config/config";
 import { auth } from "../constants/Auth.constants";
-import { eUserType } from "constants.js";
+import { eUserType, userStatus } from "constants.js";
 import Alert from 'react-s-alert';
 import AlertMessage from 'components/Alert/Message';
 import { resetAllStates } from './common';
@@ -136,37 +136,43 @@ export function loginUser(values, history) {
     Auth.signIn(values.loginEmail, values.loginPassword)
       .then(json => {
         if (json) {
-          const { idToken: { jwtToken, payload } } = json.signInUserSession;
-          if (payload.email_verified) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
-            localStorage.setItem('userSub', json.username);
+          if (json.signInUserSession) {
+            const { idToken: { jwtToken, payload } } = json.signInUserSession;
+            if (payload.email_verified) {
+              axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+            } else {
+              Alert.error(<AlertMessage>Your email is not verified!</AlertMessage>);
+              dispatch(registerUserFailure('Email is not verified'));
+            }
+          }
 
-            axios.get(`${URL.USER}/${json.username}`)
-              .then(resp => {
-                if (resp.data.success) {
-                  const userDetail = resp.data.object;
-                  if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
-                    dispatch(registerUserSuccess(userDetail));
-                    localStorage.setItem('user', JSON.stringify(userDetail));
-                    localStorage.setItem('loginEmail', userDetail.email);
-                    localStorage.setItem('userStatus', userDetail.userStatus);
-                    history.push('/dashboard');
+          localStorage.setItem('userSub', json.username);
+          axios.get(`${URL.USER}/${json.username}`)
+            .then(resp => {
+              if (resp.data.success) {
+                const userDetail = resp.data.object;
+                if (userDetail.userType !== eUserType.customer && userDetail.userType !== eUserType.guest) {
+                  dispatch(registerUserSuccess(userDetail));
+                  localStorage.setItem('user', JSON.stringify(userDetail));
+                  localStorage.setItem('loginEmail', userDetail.email);
+                  localStorage.setItem('userStatus', userDetail.userStatus);
+                  if (userDetail.userStatus === userStatus.changePassword) {
+                    history.push('/profile');
                   } else {
-                    Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
-                    dispatch(registerUserFailure('Unauthorized'));
+                    history.push('/dashboard');
                   }
                 } else {
-                  Alert.error(<AlertMessage>User is not existed!</AlertMessage>);
-                  dispatch(registerUserFailure('fetch user failed'));
+                  Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
+                  dispatch(registerUserFailure('Unauthorized'));
                 }
-              })
-              .catch(err => {
-                dispatch(registerUserFailure(err));
-              });
-          } else {
-            Alert.error(<AlertMessage>Your email is not verified!</AlertMessage>);
-            dispatch(registerUserFailure('Email is not verified'));
-          }
+              } else {
+                Alert.error(<AlertMessage>User is not existed!</AlertMessage>);
+                dispatch(registerUserFailure('fetch user failed'));
+              }
+            })
+            .catch(err => {
+              dispatch(registerUserFailure(err));
+            });
         } else {
           Alert.error(<AlertMessage>Your email or password is incorrect!</AlertMessage>);
           dispatch(registerUserFailure('Topology Error'));
@@ -362,28 +368,29 @@ export function facebookSignIn() {
   };
 }
 
-export function completeNewPasswordChallenge(values, callback) {
+export function completeNewPasswordChallenge(values, history) {
   return dispatch => {
     dispatch({ type: auth.FORCE_RESET_PASSWORD_LOADING });
     axios.post(URL.FORCE_CHANGE_PASSWORD, values)
       .then(({ data }) => {
         if (data.success) {
-          localStorage.setItem('userStatus', 'CONFIRMED ');
+          localStorage.setItem('userStatus', userStatus.confirmed);
           dispatch({
             type: auth.FORCE_RESET_PASSWORD_SUCCESS,
             payload: data
           });
-          Alert.success(<AlertMessage>Password is successfully updated</AlertMessage>, { effect: 'bouncyflip' });
+          Alert.success(<AlertMessage>Password is successfully updated</AlertMessage>);
+          logout(history);
         } else {
           dispatch({
             type: auth.FORCE_RESET_PASSWORD_FAILURE,
             payload: data
           });
-          Alert.error(<AlertMessage>{data.message}</AlertMessage>, { effect: 'bouncyflip' });
+          Alert.error(<AlertMessage>{data.message}</AlertMessage>);
         }
       })
       .catch(err => {
-        Alert.error(<AlertMessage>Cannot change password</AlertMessage>, { effect: 'bouncyflip' });
+        Alert.error(<AlertMessage>Cannot change password</AlertMessage>);
       });
   }
 };

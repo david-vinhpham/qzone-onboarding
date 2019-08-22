@@ -6,7 +6,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import PerfectScrollbar from 'perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { dashboardRoutes, otherRoutes } from '../routes/dashboard.js';
+import { dashboardRoutes, otherRoutes, profileRouteComponent } from '../routes/dashboard.js';
 import Sidebar from '../components/Sidebar/Sidebar.jsx';
 import Header from '../components/Header/Header.jsx';
 import appStyle from '../assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx';
@@ -15,6 +15,7 @@ import logo from '../assets/img/favicon.png';
 import withAuth from "../hoc/withAuth";
 import { refreshToken, fetchUser } from 'actions/auth.jsx';
 import axios from 'axios';
+import { userStatus } from 'constants.js';
 
 let ps;
 class Dashboard extends React.PureComponent {
@@ -31,8 +32,13 @@ class Dashboard extends React.PureComponent {
     const { history, userDetail } = this.props;
     const userSub = userDetail.id || localStorage.getItem('userSub');
 
-    await this.props.refreshToken(history);
-    if (userSub) this.props.fetchUser(userSub, history);
+    if (userDetail.userStatus !== userStatus.changePassword) {
+      await this.props.refreshToken(history);
+    }
+
+    if (userSub) {
+      this.props.fetchUser(userSub, history);
+    }
 
     if (this.mainPanelRef.current && navigator.platform.indexOf('Win') > -1) {
       ps = new PerfectScrollbar(this.mainPanelRef.current, {
@@ -101,12 +107,17 @@ class Dashboard extends React.PureComponent {
           />
           <div className={classes.content}>
             <div className={classes.container}>
-              {!!axios.defaults.headers.common['Authorization'] && <Switch>
-                {[...otherRoutes, ...dashboardRoutes].map((prop) => {
+              <Switch>
+                <Route
+                  path={profileRouteComponent.path}
+                  component={withAuth(profileRouteComponent.component, rest.userDetail)}
+                  key={profileRouteComponent.path}
+                />
+                {!!axios.defaults.headers.common['Authorization'] && [...otherRoutes, ...dashboardRoutes].map((prop) => {
                   if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={prop.path} />;
                   return <Route path={prop.path} component={withAuth(prop.component, rest.userDetail)} key={prop.path} />;
                 })}
-              </Switch>}
+              </Switch>
             </div>
           </div>
         </div>
