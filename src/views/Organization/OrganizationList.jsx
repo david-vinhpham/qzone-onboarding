@@ -69,45 +69,37 @@ class OrganizationList extends React.Component {
             return (
               <GridItem xs={12} sm={12} md={3}>
                 <Card product className={classes.cardHover}>
-                  {/* <CardHeader image className={classes.cardHeaderHover}>
-                    <a href="#pablo" onClick={e => e.preventDefault()}>
-                      <img src={priceImage1} alt="..." />
-                    </a>
-                  </CardHeader> */}
                   <CardBody>
                     <div className={classes.cardHoverUnder}>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Remove"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button
-                          color="danger"
-                          simple
-                          justIcon>
+                      <Button
+                        color="danger"
+                        simple
+                        justIcon>
+                        <Tooltip
+                          id="tooltip-top"
+                          title="Remove"
+                          placement="bottom"
+                          classes={{ tooltip: classes.tooltip }}
+                        >
                           <Delete className={classes.underChartIcons} />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Edit"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Link to={`/organization/edit/${organization.id}`}>
-                          <Button color="success" simple justIcon>
+                        </Tooltip>
+                      </Button>
+                      <Link to={`/organization/edit/${organization.id}`}>
+                        <Button color="success" simple justIcon>
+                          <Tooltip
+                            id="tooltip-top"
+                            title="Edit"
+                            placement="bottom"
+                            classes={{ tooltip: classes.tooltip }}
+                          >
                             <Edit className={classes.underChartIcons} />
-                          </Button>
-                        </Link>
-                      </Tooltip>
+                          </Tooltip>
+                        </Button>
+                      </Link>
                     </div>
                     <h4 className={classes.cardProductTitle}>
                       {organization.name}
                     </h4>
-                    <p className={classes.cardProductDesciprion}>
-                      {organization.id}
-                    </p>
                   </CardBody>
                 </Card>
               </GridItem>

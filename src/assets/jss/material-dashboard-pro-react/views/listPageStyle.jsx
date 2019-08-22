@@ -5,13 +5,10 @@ const listPageStyle = {
   cardTitle,
   cardProductTitle: {
     ...cardTitle,
+    color: 'black',
     marginTop: '0px',
     marginBottom: '3px',
     textAlign: 'center'
-  },
-  cardProductDesciprion: {
-    textAlign: 'center',
-    color: '#999999'
   },
   cardIconTitle: {
     ...cardTitle,
