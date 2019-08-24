@@ -9,7 +9,7 @@ describe('Calendar page', () => {
     });
 
     it('should create temporary service successfully', () => {
-      const nextDay = moment().add(1, 'd');
+      const firstDateNextMonth = moment().add(1, 'M').startOf('month');
       const avgServiceTime = 60;
       const description = 'This event is created from e2e tests';
 
@@ -17,10 +17,9 @@ describe('Calendar page', () => {
       cy.wait(1000);
       cy.get('[data-test-id="newCalendarEventBtn"]').click();
       cy.get('[data-test-id="startDatePicker"]').click();
-      cy.get('[data-test-id="startDateDialog"] .MuiPickersDay-daySelected')
-        .parent()
-        .next()
-        .children('.MuiPickersDay-day')
+      cy.get('[data-test-id="startDateDialog"] .MuiPickersCalendarHeader-iconButton').last().click();
+      cy.get('[data-test-id="startDateDialog"] button.MuiPickersDay-day')
+        .first()
         .click();
       cy.get('[data-test-id="startDateDialog"] .MuiDialogActions-root')
         .children()
@@ -33,11 +32,11 @@ describe('Calendar page', () => {
 
       cy.get('[data-test-id="tmpServiceStartTime"]').should(
         'contain',
-        `${nextDay.set('h', 8).set('m', 0).format('DD/MM/YYYY LT Z')}`
+        `${firstDateNextMonth.set('h', 8).set('m', 0).format('DD/MM/YYYY LT Z')}`
       );
       cy.get('[data-test-id="tmpServiceEndTime"]').should(
         'contain',
-        `${nextDay.set('h', 18).set('m', 0).format('DD/MM/YYYY LT Z')}`
+        `${firstDateNextMonth.set('h', 18).set('m', 0).format('DD/MM/YYYY LT Z')}`
       );
       cy.get('[data-test-id="tmpServiceDescription"]').should('contain', description);
 
