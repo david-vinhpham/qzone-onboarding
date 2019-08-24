@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Search from '@material-ui/icons/Search';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Tooltip from '@material-ui/core/Tooltip';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 
@@ -20,10 +19,9 @@ import { fetchLocations, delLocation } from '../../actions/location';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
 
-import {BeatLoader} from "react-spinners";
-import {css} from "@emotion/core";
-import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
-import ArtTrack from "@material-ui/core/SvgIcon/SvgIcon";
+import { BeatLoader } from "react-spinners";
+import { css } from "@emotion/core";
+import { Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Paper } from "@material-ui/core";
 import DeletionModal from "../../shared/deletion-modal";
 
 const override = css`
@@ -38,18 +36,11 @@ class LocationList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       deletedLocation: {
         id: 0,
         isDel: false
       }
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.locations != null) {
-      this.setState({ data: nextProps.locations });
-    }
   }
 
   cancelDelete = () => {
@@ -85,10 +76,11 @@ class LocationList extends React.Component {
       fetchLocationsLoading,
       fetchLocationError,
       delLoadingLoading,
-      delLocationError
+      delLocationError,
+      locations
     } = this.props;
-    let data = [];
     const { deletedLocation } = this.state;
+
     if (fetchLocationsLoading) {
       return (
         <BeatLoader
@@ -100,9 +92,11 @@ class LocationList extends React.Component {
         />
       );
     }
-    if (fetchLocationError) {
+
+    if (fetchLocationError || delLocationError) {
       return <div className="alert alert-danger">Error</div>;
     }
+
     if (delLoadingLoading) {
       return (
         <BeatLoader
@@ -114,11 +108,9 @@ class LocationList extends React.Component {
         />
       );
     }
-    if (delLocationError) {
-      return <div className="alert alert-danger">Error</div>;
-    }
-    data = (
-      <GridContainer>
+
+    const data = (
+      <Paper>
         <Table aria-labelledby="Location List">
           <TableHead>
             <TableRow>
@@ -131,7 +123,7 @@ class LocationList extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.data.map((location, index) => (
+            {locations.map((location, index) => (
               <TableRow key={location.id} classes={{ root: classes.row }}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{location.streetAddress}</TableCell>
@@ -139,59 +131,50 @@ class LocationList extends React.Component {
                 <TableCell>{location.state}</TableCell>
                 <TableCell>{location.country}</TableCell>
                 <TableCell>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="View"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Button color="transparent" simple justIcon>
-                      <ArtTrack className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Link to={`/location/edit/${location.id}`}>
-                      <Button color="success" simple justIcon>
+                  <Link to={`/location/edit/${location.id}`}>
+                    <Button color="success" simple justIcon>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Edit"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
                         <Edit className={classes.underChartIcons} />
-                      </Button>
-                    </Link>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Remove"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
+                      </Tooltip>
+                    </Button>
+                  </Link>
+                  <Button
+                    onClick={() => this.deleteLocation(location.id)}
+                    color="danger"
+                    simple
+                    justIcon
                   >
-                    <Button
-                      onClick={() => this.deleteLocation(location.id)}
-                      color="danger"
-                      simple
-                      justIcon
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Remove"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Delete className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
+                    </Tooltip>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </GridContainer>
+      </Paper>
     );
 
-    const deletionPopup = deletedLocation.isDel ? (
+    const deletionPopup = deletedLocation.isDel && (
       <DeletionModal
         openDialog={deletedLocation.isDel}
         closeDialog={this.cancelDelete}
         itemDeleteHandler={this.confirmDelete}
         itemId={deletedLocation.id}
       />
-    ) : null;
+    );
+
     return (
       <div>
         <GridContainer>
@@ -239,7 +222,8 @@ class LocationList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { locations: state.location.locations,
+  return {
+    locations: state.location.locations,
     fetchLocationLoading: state.location.fetchLocationLoading,
     fetchLocationError: state.location.fetchLocationError,
     delLocationLoading: state.location.delLocationLoading,
@@ -257,7 +241,7 @@ const mapDispatchToProps = dispatch => {
 LocationList.propTypes = {
   classes: classesType.isRequired,
   delLocation: PropTypes.func.isRequired,
-  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object).isRequired,
   history: historyType.isRequired,
   fetchLocationLoading: PropTypes.bool.isRequired,
   fetchLocationError: PropTypes.string.isRequired,

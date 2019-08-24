@@ -30,17 +30,6 @@ const override = css`
 `;
 
 class OrganizationList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.organizations })
-  }
-
   componentDidMount() {
     const userSub = localStorage.getItem('userSub');
     if (userSub) {
@@ -50,7 +39,7 @@ class OrganizationList extends React.Component {
 
   render() {
     const { classes, fetchOrganizationsLoading, fetchOrganizationsError, organizations } = this.props;
-    let data = [];
+
     if (fetchOrganizationsLoading) {
       return < BeatLoader
         css={override}
@@ -60,57 +49,56 @@ class OrganizationList extends React.Component {
         loading={fetchOrganizationsError}
       />;
     }
-    else if (fetchOrganizationsError) {
+
+    if (fetchOrganizationsError) {
       return <div className="alert alert-danger">Error: {organizations}</div>
-    } else {
-      data = (
-        <GridContainer>
-          {this.state.data.map((organization, index) => {
-            return (
-              <GridItem xs={12} sm={12} md={3}>
-                <Card product className={classes.cardHover}>
-                  <CardBody>
-                    <div className={classes.cardHoverUnder}>
-                      <Button
-                        color="danger"
-                        simple
-                        justIcon>
+    }
+
+    const data = (
+      <GridContainer>
+        {organizations.map((organization, index) => {
+          return (
+            <GridItem key={organization.id} xs={12} sm={12} md={3}>
+              <Card product className={classes.cardHover}>
+                <CardBody>
+                  <div className={classes.cardHoverUnder}>
+                    <Button
+                      color="danger"
+                      simple
+                      justIcon>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Remove"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Delete className={classes.underChartIcons} />
+                      </Tooltip>
+                    </Button>
+                    <Link to={`/organization/edit/${organization.id}`}>
+                      <Button color="success" simple justIcon>
                         <Tooltip
                           id="tooltip-top"
-                          title="Remove"
+                          title="Edit"
                           placement="bottom"
                           classes={{ tooltip: classes.tooltip }}
                         >
-                          <Delete className={classes.underChartIcons} />
+                          <Edit className={classes.underChartIcons} />
                         </Tooltip>
                       </Button>
-                      <Link to={`/organization/edit/${organization.id}`}>
-                        <Button color="success" simple justIcon>
-                          <Tooltip
-                            id="tooltip-top"
-                            title="Edit"
-                            placement="bottom"
-                            classes={{ tooltip: classes.tooltip }}
-                          >
-                            <Edit className={classes.underChartIcons} />
-                          </Tooltip>
-                        </Button>
-                      </Link>
-                    </div>
-                    <h4 className={classes.cardProductTitle}>
-                      {organization.name}
-                    </h4>
-                  </CardBody>
-                </Card>
-              </GridItem>
-            )
-          })}
-        </GridContainer>
-
-      )
-    }
+                    </Link>
+                  </div>
+                  <h4 className={classes.cardProductTitle}>
+                    {organization.name}
+                  </h4>
+                </CardBody>
+              </Card>
+            </GridItem>
+          )
+        })}
+      </GridContainer>
+    )
     return (
-
       <div>
         <GridContainer>
           <GridItem xs={12}>
@@ -140,13 +128,12 @@ class OrganizationList extends React.Component {
                     <Search />
                   </Button>
                 </div>
-                {this.state.data.length > 0 ? '' :
+                {organizations.length === 0 &&
                   <Link to={`/organization/create`}>
                     <Button size="sm" className={classes.buttonDisplay}>
                       New Organization
                     </Button>
-                  </Link>
-                }
+                  </Link>}
               </CardHeader>
             </Card>
           </GridItem>

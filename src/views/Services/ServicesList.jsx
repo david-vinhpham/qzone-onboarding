@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Tooltip from '@material-ui/core/Tooltip';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import ArtTrack from '@material-ui/icons/ArtTrack';
@@ -11,7 +10,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Tooltip } from '@material-ui/core';
 import { classesType } from 'types/global.js';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -95,7 +94,7 @@ class ServicesList extends React.Component {
     }
 
     const data = (
-      <GridContainer>
+      <Paper>
         <Table aria-labelledby="servicesList">
           <TableHead>
             <TableRow>
@@ -116,49 +115,49 @@ class ServicesList extends React.Component {
                 <TableCell>{`${service.description.substring(0, 150)}...`}</TableCell>
                 <TableCell>{service.bookingHorizon}</TableCell>
                 <TableCell>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="View"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Button color="transparent" simple justIcon>
+                  <Button color="transparent" simple justIcon>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="View"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
                       <ArtTrack className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Link to={`/service/edit/${service.id}`}>
-                      <Button color="success" simple justIcon>
+                    </Tooltip>
+                  </Button>
+                  <Link to={`/service/edit/${service.id}`}>
+                    <Button color="success" simple justIcon>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Edit"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
                         <Edit className={classes.underChartIcons} />
-                      </Button>
-                    </Link>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Remove"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
+                      </Tooltip>
+                    </Button>
+                  </Link>
+                  <Button
+                    onClick={() => this.deleteService(service.id)}
+                    color="danger"
+                    simple
+                    justIcon
                   >
-                    <Button
-                      onClick={() => this.deleteService(service.id)}
-                      color="danger"
-                      simple
-                      justIcon
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Remove"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Delete className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
+                    </Tooltip>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </GridContainer>
+      </Paper>
     );
 
     const deletionPopup = deletedService.isDel ? (
@@ -237,7 +236,6 @@ ServicesList.propTypes = {
   services: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchServicesLoading: PropTypes.bool.isRequired,
   fetchServiceError: PropTypes.string.isRequired,
-  delServiceLoading: PropTypes.bool.isRequired,
   classes: classesType.isRequired
 };
 

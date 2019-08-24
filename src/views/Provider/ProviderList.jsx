@@ -5,13 +5,12 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Search from '@material-ui/icons/Search';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Tooltip from '@material-ui/core/Tooltip';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import ArtTrack from '@material-ui/icons/ArtTrack';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Paper } from '@material-ui/core';
 import { classesType } from 'types/global.js';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -115,7 +114,7 @@ class ProviderList extends React.Component {
     }
 
     const data = (
-      <GridContainer>
+      <Paper>
         <Table aria-labelledby="providerList">
           <TableHead>
             <TableRow>
@@ -140,49 +139,49 @@ class ProviderList extends React.Component {
                     : ''}
                 </TableCell>
                 <TableCell>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="View"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Button color="transparent" simple justIcon>
+                  <Button color="transparent" simple justIcon>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="View"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
                       <ArtTrack className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Link to={`/provider/edit/${provider.id}`}>
-                      <Button color="success" simple justIcon>
+                    </Tooltip>
+                  </Button>
+                  <Link to={`/provider/edit/${provider.id}`}>
+                    <Button color="success" simple justIcon>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Edit"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
                         <Edit className={classes.underChartIcons} />
-                      </Button>
-                    </Link>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Remove"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
+                      </Tooltip>
+                    </Button>
+                  </Link>
+                  <Button
+                    onClick={() => this.deleteProvider(provider.id)}
+                    color="danger"
+                    simple
+                    justIcon
                   >
-                    <Button
-                      onClick={() => this.deleteProvider(provider.id)}
-                      color="danger"
-                      simple
-                      justIcon
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Remove"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Delete className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
+                    </Tooltip>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </GridContainer>
+      </Paper>
     );
 
     const deletionPopup = deletedProvider.isDel ? (
