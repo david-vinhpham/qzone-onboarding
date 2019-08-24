@@ -40,13 +40,10 @@ class ForgotPasswordPage extends React.PureComponent {
       errorMessage: '',
       isOpen: false
     };
-    this.handleChangePassword = this.handleChangePassword.bind(this);
   }
 
-  componentDidMount() {}
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ isOpen: nextProps.open });
+  static getDerivedStateFromProps(props) {
+    return { isOpen: props.open };
   }
 
   handleChangeClose = () => {
@@ -79,8 +76,6 @@ class ForgotPasswordPage extends React.PureComponent {
     };
     this.props.changePassword(changePasswordData, history);
   };
-
-  cbAfterResend = () => {};
 
   render() {
     const {
@@ -120,20 +115,20 @@ class ForgotPasswordPage extends React.PureComponent {
                         : 'Code was sent to your email'}
                     </DialogContentText>
                   ) : (
-                    <div className={classes.justifyContentCenter}>
-                      <div style={{ color: 'blue' }}>
-                        {' '}
-                        {changePasswordRsp.success === true
-                          ? 'Changed password successfully!'
-                          : ''}{' '}
-                      </div>
-                    </div>
-                  )}{' '}
+                        <div className={classes.justifyContentCenter}>
+                          <div style={{ color: 'blue' }}>
+                            {' '}
+                            {changePasswordRsp.success === true
+                              ? 'Changed password successfully!'
+                              : ''}{' '}
+                          </div>
+                        </div>
+                      )}{' '}
                 </div>
               </div>
             ) : (
-              <div className={classes.justifyContentCenter} />
-            )}
+                <div className={classes.justifyContentCenter} />
+              )}
             <FormControl fullWidth error={errorCode} aria-describedby="code-input-wrapper">
               <InputLabel htmlFor="code-input">Enter code</InputLabel>
               <Input
@@ -184,8 +179,8 @@ class ForgotPasswordPage extends React.PureComponent {
                 <div style={{ color: 'red' }}> {errorMessage} </div>
               </div>
             ) : (
-              <div className={classes.justifyContentCenter} />
-            )}
+                <div className={classes.justifyContentCenter} />
+              )}
           </DialogContent>
           <DialogActions className={classes.dialogActions}>
             <div>
