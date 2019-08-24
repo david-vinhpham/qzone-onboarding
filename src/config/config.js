@@ -19,6 +19,7 @@ export const URL = {
   FETCH_SERVICES_OPTION_BY_BUSINESS_ADMIN_ID: 'services-option-by-business-admin-id/',
   SERVICE: 'services',
   FETCH_SERVICE_CATEGORIES: 'service-categories',
+  FETCH_SERVICE_CATEGORIES_BY_BUSINESS_ADMIN_ID: 'service-categories/business-admin/',
   FETCH_SERVICE_BY_ID: 'services/',
 
   GEO_LOCATIONS: 'geo-locations',

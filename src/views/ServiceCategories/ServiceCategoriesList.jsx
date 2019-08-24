@@ -78,7 +78,8 @@ class ServiceCategoriesList extends PureComponent {
 
   handleAddServiceCategory = (name) => {
     this.props.createServiceCategory({
-      name: name
+      name,
+      businessAdminId: this.props.userId
     });
 
     this.handleServiceCategoryDialogClose();
@@ -86,9 +87,10 @@ class ServiceCategoriesList extends PureComponent {
 
   handleEditServiceCategory = (id, name, parentCategoryId) => {
     this.props.editServiceCategory({
-      id: id,
-      name: name,
-      parentCategoryId: parentCategoryId
+      id,
+      name,
+      parentCategoryId,
+      businessAdminId: this.props.userId
     });
 
     this.handleServiceCategoryDialogClose();
@@ -254,12 +256,14 @@ ServiceCategoriesList.propTypes = {
   fetchServiceCategories: PropTypes.func.isRequired,
   deleteServiceCategory: PropTypes.func.isRequired,
   createServiceCategory: PropTypes.func.isRequired,
-  editServiceCategory: PropTypes.func.isRequired
+  editServiceCategory: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   serviceCategory: state.serviceCategory.list,
   isLoading: state.serviceCategory.isLoading,
+  userId: state.user.userDetail.id
 });
 
 const mapDispatchToProps = {

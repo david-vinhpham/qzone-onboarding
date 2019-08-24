@@ -12,9 +12,11 @@ export const setServiceCategoriesSuccess = payload => ({
   payload
 });
 
-export const fetchServiceCategories = () => dispatch => {
+export const fetchServiceCategories = () => (dispatch, getState) => {
+  const { userDetail } = getState().user;
+
   dispatch(setServiceCategoriesLoading(true));
-  axios.get(URL.FETCH_SERVICE_CATEGORIES)
+  axios.get(`${URL.FETCH_SERVICE_CATEGORIES_BY_BUSINESS_ADMIN_ID}${userDetail.id}`)
     .then(resp => {
       if (resp.status === 200 && resp.data.success) {
         dispatch(setServiceCategoriesSuccess(resp.data.objects));

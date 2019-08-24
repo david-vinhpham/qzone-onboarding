@@ -118,9 +118,11 @@ export const fetchServiceCategoriesFailure = error => {
 };
 
 export const fetchServiceCategories = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { userDetail } = getState().user;
+
     dispatch(fetchServiceCategoriesLoading());
-    axios.get(URL.FETCH_SERVICE_CATEGORIES)
+    axios.get(`${URL.FETCH_SERVICE_CATEGORIES_BY_BUSINESS_ADMIN_ID}${userDetail.id}`)
       .then(({ data }) => {
         dispatch(fetchServiceCategoriesSuccess(data.objects));
       })
