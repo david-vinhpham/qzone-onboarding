@@ -1,7 +1,7 @@
 import { service } from '../constants/Service.constants';
 
 const initialState = {
-  service: [],
+  service: null,
   fetchServiceLoading: false,
   fetchServiceError: null,
 
@@ -44,7 +44,7 @@ const reducer = (state = initialState, action) => {
     case service.CREATE_SERVICE_FAILURE:
       return {
         ...state,
-        service: [],
+        service: null,
         createServiceError: action.payload.error,
         createServiceLoading: false
       };
@@ -55,7 +55,7 @@ const reducer = (state = initialState, action) => {
     case service.EDIT_SERVICE_FAILURE:
       return {
         ...state,
-        service: [],
+        service: null,
         editServiceError: action.payload.error,
         fetchServiceLoading: false
       };
@@ -67,7 +67,7 @@ const reducer = (state = initialState, action) => {
     case service.DEL_SERVICE_FAILURE:
       return {
         ...state,
-        service: [],
+        service: null,
         fetchServicesError: action.payload.error,
         delServiceLoading: false
       };
@@ -95,7 +95,7 @@ const reducer = (state = initialState, action) => {
     case service.FETCH_SERVICE_FAILURE:
       return {
         ...state,
-        service: [],
+        service: null,
         fetchServiceCategoryError: action.payload.error,
         fetchServiceLoading: false
       };

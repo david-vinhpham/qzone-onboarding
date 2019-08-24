@@ -24,15 +24,23 @@ class ImageUpload extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.imageLoading) {
-      this.setState({ imagePreviewUrlOrg: nextProps.imagePreviewUrl });
-      this.setState({ imagePreviewUrl: nextProps.imagePreviewUrl });
-      if (nextProps.imageObject != null && this.state.isUploadImage === 1) {
-        this.setState({ imagePreviewUrl: nextProps.imageObject.fileUrl });
-        localStorage.setItem('imageObject', JSON.stringify(nextProps.imageObject));
+  static getDerivedStateFromProps(props, state) {
+    let newState = null;
+
+    if (!props.imageLoading) {
+      newState = {
+        imagePreviewUrlOrg: props.imagePreviewUrl,
+        imagePreviewUrl: !!props.imageObject && state.isUploadImage === 1
+          ? props.imageObject.fileUrl
+          : props.imagePreviewUrl
+      };
+
+      if (!!props.imageObject && state.isUploadImage === 1) {
+        localStorage.setItem('imageObject', JSON.stringify(props.imageObject));
       }
     }
+
+    return newState;
   }
 
   componentDidMount() {
