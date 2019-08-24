@@ -18,7 +18,12 @@ class CalendarV2 extends React.PureComponent {
     super(props);
     this.state = {
       selectedProvider: props.userDetail.userType === eUserType.provider
-        ? props.userDetail.id : 'none'
+        ? {
+          id: props.userDetail.id,
+          name: `${props.userDetail.familyName || ''} ${props.userDetail.givenName}`,
+          timezone: props.userDetail.providerInformation.timeZoneId
+        }
+        : 'none'
     };
   }
 

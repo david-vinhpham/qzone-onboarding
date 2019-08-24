@@ -126,7 +126,6 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
           scheduleView={['time']}
           disableDblClick
           useDetailPopup
-          height={'calc(100vh - 214px)'}
           template={{
             time(schedule) {
               return `${
