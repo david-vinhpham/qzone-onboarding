@@ -60,7 +60,7 @@ describe('Home page', () => {
   describe('Provider user', () => {
     beforeEach(() => {
       cy.visit('/');
-      cy.login('provider20@gmail.com', 'Test@2020');
+      cy.login('provider1@gmail.com', 'Test@2020');
     });
 
     it('should navigate to all pages in sidebar successfully', () => {
