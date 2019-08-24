@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import {
   Dialog, DialogContent, DialogActions, DialogTitle,
   Typography, LinearProgress
-} from '@material-ui/core/index';
-import { makeStyles } from '@material-ui/styles/index';
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 import Button from 'components/CustomButtons/Button';
 import { CSVLink } from 'react-csv';
 

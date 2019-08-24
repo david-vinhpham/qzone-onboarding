@@ -14,7 +14,7 @@ import MomentUtils from '@date-io/moment';
 
 import thunk from 'redux-thunk';
 
-import indexRoutes from './routes/index';
+import indexRoutes from './routes';
 import reducers from './reducers';
 import './utils/responseHandler';
 import './assets/scss/material-dashboard-pro-react.css';
