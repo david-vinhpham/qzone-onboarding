@@ -1,4 +1,10 @@
 const customerServiceStyle = {
+  bookingCodeWrapper: {
+    marginTop: 0
+  },
+  customerFlowBoardWrapper: {
+    marginBottom: 0
+  },
   verifyButton: {
     marginTop: 20
   },
@@ -30,7 +36,7 @@ const customerServiceStyle = {
     alignItems: 'center'
   },
   gridContainerPadding: {
-    padding: '10px'
+    padding: '10px 24px'
   },
   loadingCenter: {
     position: 'absolute',

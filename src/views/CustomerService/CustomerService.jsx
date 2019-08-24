@@ -195,7 +195,7 @@ class CustomerService extends PureComponent {
     } = this.state;
 
     let data = (
-      <Card className={classnames({ [classes.loadingEffect]: isBoardLoading })}>
+      <Card className={classnames(classes.customerFlowBoardWrapper, { [classes.loadingEffect]: isBoardLoading })}>
         {!confirmChangeStatusDialogOpen || <Dialog
           open
           onClose={this.handleConfirmChangeStatusDialogClose}
@@ -323,8 +323,8 @@ class CustomerService extends PureComponent {
       </Card>
     );
     return (
-      <div>
-        <Card className={classnames({ [classes.loadingEffect]: isLoading })}>
+      <React.Fragment>
+        <Card className={classnames(classes.bookingCodeWrapper, { [classes.loadingEffect]: isLoading })}>
           <GridContainer className={classes.gridContainerPadding}>
             {isLoading && <CircularProgress className={classes.loadingCenter} />}
             <GridItem xs={4} className={classes.gridItemPadding}>
@@ -366,7 +366,7 @@ class CustomerService extends PureComponent {
           </GridContainer>
         </Card>
         {data}
-      </div>
+      </React.Fragment>
     )
   }
 }
