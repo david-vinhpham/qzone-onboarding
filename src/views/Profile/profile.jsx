@@ -89,6 +89,7 @@ class Profile extends React.Component {
       });
     }
   }
+
   saveProfile = () => {
     const {
       id,

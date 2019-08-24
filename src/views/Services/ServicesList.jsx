@@ -37,7 +37,6 @@ class ServicesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       imageLoadError: true,
       deletedService: {
         id: 0,
@@ -47,16 +46,9 @@ class ServicesList extends React.Component {
   }
 
   componentDidMount() {
-      const businessAdminId = localStorage.getItem('userSub');
-      if (businessAdminId) {
-        this.props.getServicesByBusinessAdminId(businessAdminId);
-      }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.services != null && !nextProps.delServiceLoading) {
-      this.setState({ data: nextProps.services });
-      localStorage.setItem('serviceCached', JSON.stringify(nextProps.services));
+    const businessAdminId = localStorage.getItem('userSub');
+    if (businessAdminId) {
+      this.props.getServicesByBusinessAdminId(businessAdminId);
     }
   }
 
@@ -86,7 +78,7 @@ class ServicesList extends React.Component {
   render() {
     const { classes, fetchServicesLoading, fetchServiceError, services } = this.props;
     const { deletedService } = this.state;
-    let data = [];
+
     if (fetchServicesLoading) {
       return (
         <BeatLoader
@@ -102,7 +94,7 @@ class ServicesList extends React.Component {
       return <div className="alert alert-danger">Error: {services}</div>;
     }
 
-    data = (
+    const data = (
       <GridContainer>
         <Table aria-labelledby="servicesList">
           <TableHead>
@@ -116,7 +108,7 @@ class ServicesList extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.data.map((service, index) => (
+            {services.map((service, index) => (
               <TableRow key={service.id} classes={{ root: classes.row }}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{service.name}</TableCell>
@@ -250,7 +242,7 @@ ServicesList.propTypes = {
 };
 
 export default compose(
-  withStyles({...tableStyle, ...listPageStyle}),
+  withStyles({ ...tableStyle, ...listPageStyle }),
   connect(
     mapStateToProps,
     mapDispatchToProps

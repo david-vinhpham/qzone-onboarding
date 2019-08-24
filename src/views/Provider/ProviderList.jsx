@@ -37,7 +37,6 @@ class ProviderList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       deletedProvider: {
         id: 0,
         isDel: false
@@ -50,10 +49,6 @@ class ProviderList extends React.Component {
     if (sub) {
       this.props.fetchProvidersByBusinessAdminId(sub);
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.providers });
   }
 
   cancelDelete = () => {
@@ -85,10 +80,11 @@ class ProviderList extends React.Component {
       fetchProvidersLoading,
       fetchProviderError,
       delProviderLoading,
-      delProviderError
+      delProviderError,
+      providers
     } = this.props;
-    let data = [];
     const { deletedProvider } = this.state;
+
     if (fetchProvidersLoading) {
       return (
         <BeatLoader
@@ -118,7 +114,7 @@ class ProviderList extends React.Component {
       return <div className="alert alert-danger">Error</div>;
     }
 
-    data = (
+    const data = (
       <GridContainer>
         <Table aria-labelledby="providerList">
           <TableHead>
@@ -132,7 +128,7 @@ class ProviderList extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.data.map((provider, index) => (
+            {providers.map((provider, index) => (
               <TableRow key={provider.id} classes={{ root: classes.row }}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{provider.givenName}</TableCell>
@@ -272,7 +268,7 @@ ProviderList.propTypes = {
 };
 
 export default compose(
-  withStyles({...tableStyle, ...listPageStyle}),
+  withStyles({ ...tableStyle, ...listPageStyle }),
   connect(
     mapStateToProps,
     mapDispatchToProps

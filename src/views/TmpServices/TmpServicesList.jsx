@@ -53,7 +53,6 @@ class TmpServicesList extends PureComponent {
     const { history: { location } } = props;
     this.state = {
       isOpenScheduleReport: false,
-      data: [],
       deletedTmpService: {
         id: 0,
         isDel: false
@@ -68,15 +67,6 @@ class TmpServicesList extends PureComponent {
         }
       ),
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.tmpServices != null && nextProps.tmpServices.length > 0 && !nextProps.delTmpServiceLoading) {
-      this.setState({ data: nextProps.tmpServices });
-    }
-    else {
-      this.setState({ data: nextProps.tmpServices });
-    }
   }
 
   componentDidMount() {
@@ -301,7 +291,7 @@ class TmpServicesList extends PureComponent {
     const {
       classes, history, isLoading,
       providers, tzOptions, serviceOptions,
-       userDetail
+      userDetail, tmpServices
     } = this.props;
     const {
       deletedTmpService, isOpenAddEventDialog, eventLevel,
@@ -336,7 +326,7 @@ class TmpServicesList extends PureComponent {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.data.map((event, index) => (
+            {tmpServices.map((event, index) => (
               <TableRow key={event.id} classes={{ root: classes.row }}>
                 <TableCell size="small">{index + 1}</TableCell>
                 <TableCell>{event.providerName}</TableCell>

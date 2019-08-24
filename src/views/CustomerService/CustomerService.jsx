@@ -62,21 +62,21 @@ class CustomerService extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state.defaultService === ''
-      && nextProps.serviceOptions.length > 0
-      && this.state.defaultProvider === ''
-      && nextProps.providerOptions.length > 0) {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.defaultService === ''
+      && this.props.serviceOptions.length > 0
+      && prevState.defaultProvider === ''
+      && this.props.providerOptions.length > 0) {
       this.setState({
-        defaultService: nextProps.serviceOptions[0].value,
-        defaultProvider: nextProps.providerOptions[0].value
+        defaultService: this.props.serviceOptions[0].value,
+        defaultProvider: this.props.providerOptions[0].value
       });
       this.getFlowBoardData({
-        providerId: nextProps.providerOptions[0].value,
-        serviceId: nextProps.serviceOptions[0].value
+        providerId: this.props.providerOptions[0].value,
+        serviceId: this.props.serviceOptions[0].value
       });
     }
-  };
+  }
 
   onChangeProviderOrService = (e, stateKey) => {
     this.setState({

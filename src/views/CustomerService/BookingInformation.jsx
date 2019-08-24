@@ -31,9 +31,9 @@ const BookingInformation = ({
   classes, verifyData, isVerifyBookingCodeSuccess,
   updateStatus, getDisplayStatus, editGuestInfo
 }) => {
-  const [givenName, setGivenName] = useState(verifyData.givenName || '');
-  const [email, setEmail] = useState(verifyData.email || '');
-  const [phoneNumber, setPhoneNumber] = useState(verifyData.phoneNumber || '');
+  const [givenName, setGivenName] = useState(verifyData.givenName);
+  const [email, setEmail] = useState(verifyData.email);
+  const [phoneNumber, setPhoneNumber] = useState(verifyData.phoneNumber);
   useUpdateState(verifyData, setGivenName, setEmail, setPhoneNumber);
 
   return (
