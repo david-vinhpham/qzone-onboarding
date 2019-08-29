@@ -1,6 +1,6 @@
 export const API_ROOT = process.env.NODE_ENV === 'development'
   ? 'http://54.252.134.87:8080/api/' : 'https://api.quezone.com.au/api/';
-export const API_SURVEY = `surveys`;
+export const API_SURVEY = 'surveys';
 export const API_MEDIA_URL = 'https://communication.quezone.com.au/api/media/medias';
 export const URL = {
   ORGANIZATION_NAME_VALIDATE: 'validate?name=',
@@ -63,6 +63,9 @@ export const URL = {
   UPDATE_GUEST_INFO: 'guest-users',
 
   SCHEDULE_REPORT: 'availabilities/temporary/report',
+
+  FETCH_SURVEY_OPTIONS_BY_ASSESSOR_ID: 'surveys/option/',
+  FIND_SURVEYS_BY_ASSESSOR_ID: 'find-survey-by-assessor-id/'
 };
 
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';

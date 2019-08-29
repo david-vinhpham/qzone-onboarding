@@ -1,7 +1,7 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
   BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd,
-  FilterVintage, Star
+  FilterVintage, Star, Assignment
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Administration from '../views/Administration/Administration';
@@ -34,6 +34,8 @@ import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategori
 import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesList';
 import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
 import ScheduleReportList from "../views/ScheduleReport/ScheduleReportList";
+import CreateAssessment from 'views/Surveys/CreateAssessment';
+import Assessments from 'views/Surveys/Assessments';
 
 const dashboardRoutes = [
   {
@@ -70,6 +72,13 @@ const dashboardRoutes = [
     guarded: true,
     component: EmailTemplates,
     dataTestId: 'emailTemplatesNavLink'
+  },
+  {
+    path: '/assessments',
+    name: 'Assessments',
+    icon: Assignment,
+    component: Assessments,
+    dataTestId: 'assessmentsNavLink'
   },
   { redirect: true, path: '/', pathTo: '/login', name: 'Login' }
 ];
@@ -214,7 +223,13 @@ const otherRoutes = [
     name: 'Schedule Report Detail',
     short: 'Schedule Report Detail',
     component: ScheduleReportList
-  }
+  },
+  {
+    path: '/assessments/new',
+    name: 'Create new assessment',
+    short: 'Create new assignment',
+    component: CreateAssessment,
+  },
 ];
 
 const providerRoutes = [

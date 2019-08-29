@@ -1,24 +1,25 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Loading from 'components/Loading/Loading';
 import Alert from 'react-s-alert';
-import {InsertLink} from '@material-ui/icons';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { InsertLink } from '@material-ui/icons';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import tableStyle from '../../assets/jss/material-dashboard-pro-react/components/tableStyle';
 import listPageStyle from '../../assets/jss/material-dashboard-pro-react/views/listPageStyle';
 import Card from '../../components/Card/Card.jsx';
 import CardText from '../../components/Card/CardText.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
 import CardBody from '../../components/Card/CardBody';
-import {deleteSurveyByIdAction, resetSurveyStatus, setSurveysAction} from '../../actions/surveys';
-import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from '@material-ui/core';
+import { deleteSurveyByIdAction, resetSurveyStatus, setSurveysAction } from '../../actions/surveys';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import Delete from '@material-ui/icons/Delete';
+import { eUserType } from 'constants.js';
 
 class Survey extends Component {
   static getDerivedStateFromProps(props, state) {
@@ -65,8 +66,11 @@ class Survey extends Component {
   };
 
   componentDidMount() {
-    const { setSurveysAction: setSurveys } = this.props;
-    setSurveys();
+    const { userDetail } = this.props;
+    const assessorId = userDetail.userType === eUserType.provider
+      ? userDetail.providerInformation.businessId
+      : userDetail.id;
+    this.props.setSurveysAction(assessorId);
   }
 
   componentDidUpdate(prevProps) {
@@ -77,8 +81,12 @@ class Survey extends Component {
     const { isDeletedSurveyById } = prevProps;
     const { isDeletedSurveyById: cachedIsDeletedSurveyById } = this.state;
     if (cachedIsDeletedSurveyById && cachedIsDeletedSurveyById !== isDeletedSurveyById) {
+      const { userDetail } = this.props;
+      const assessorId = userDetail.userType === eUserType.provider
+        ? userDetail.providerInformation.businessId
+        : userDetail.id;
       resetSurveyStatusAction();
-      setSurveys();
+      setSurveys(assessorId);
     }
   }
 
@@ -95,7 +103,7 @@ class Survey extends Component {
 
   handleCopyLink = event => {
     event.preventDefault();
-    Alert.success('Survey link is copied to clipboard!')
+    Alert.success('Survey link is copied to your clipboard!')
   };
 
   render() {
@@ -122,12 +130,12 @@ class Survey extends Component {
                 </Link>
               </CardHeader>
               <CardBody>
-                { surveys && surveys.length > 0 && (
+                {surveys && surveys.length > 0 && (
                   <Paper>
                     <Table aria-labelledby="businessCategories">
                       <TableHead>
                         <TableRow>
-                          <TableCell className={classes.cellHeaderBold} padding="dense">No</TableCell>
+                          <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
                           <TableCell className={classes.cellHeaderBold}>Name</TableCell>
                           <TableCell className={classes.cellHeaderBold} align="center">Actions</TableCell>
                         </TableRow>
@@ -135,25 +143,25 @@ class Survey extends Component {
                       <TableBody>
                         {surveys.map((survey, index) => (
                           <TableRow key={survey.id} classes={{ root: classes.row }}>
-                            <TableCell padding="dense">{index + 1}</TableCell>
+                            <TableCell size="small">{index + 1}</TableCell>
                             <TableCell>{survey.title}</TableCell>
                             <TableCell align="center">
-                              <Tooltip
-                                id="tooltip-top"
-                                title="Copy Link"
-                                placement="bottom"
-                                classes={{ tooltip: classes.tooltip }}
-                              >
-                                <CopyToClipboard text={survey.url}>
-                                  <Button
-                                    color="success"
-                                    simple justIcon
-                                    onClick={this.handleCopyLink}
+                              <CopyToClipboard text={survey.url}>
+                                <Button
+                                  color="success"
+                                  simple justIcon
+                                  onClick={this.handleCopyLink}
+                                >
+                                  <Tooltip
+                                    id="tooltip-top"
+                                    title="Copy Link"
+                                    placement="bottom"
+                                    classes={{ tooltip: classes.tooltip }}
                                   >
                                     <InsertLink />
-                                  </Button>
-                                </CopyToClipboard>
-                              </Tooltip>
+                                  </Tooltip>
+                                </Button>
+                              </CopyToClipboard>
                               {/*<Tooltip*/}
                               {/*  id="tooltip-top"*/}
                               {/*  title="Edit"*/}
@@ -168,21 +176,21 @@ class Survey extends Component {
                               {/*    <Edit className={classes.underChartIcons} />*/}
                               {/*  </Button>*/}
                               {/*</Tooltip>*/}
-                              <Tooltip
-                                id="tooltip-top"
-                                title="Remove"
-                                placement="bottom"
-                                classes={{ tooltip: classes.tooltip }}
+                              <Button
+                                onClick={this.handleDeleteSurvey(survey.id)}
+                                color="danger"
+                                simple
+                                justIcon
                               >
-                                <Button
-                                  onClick={this.handleDeleteSurvey(survey.id)}
-                                  color="danger"
-                                  simple
-                                  justIcon
+                                <Tooltip
+                                  id="tooltip-top"
+                                  title="Remove"
+                                  placement="bottom"
+                                  classes={{ tooltip: classes.tooltip }}
                                 >
                                   <Delete className={classes.underChartIcons} />
-                                </Button>
-                              </Tooltip>
+                                </Tooltip>
+                              </Button>
                             </TableCell>
                           </TableRow>
                         ))}
@@ -199,12 +207,13 @@ class Survey extends Component {
   }
 }
 
-const mapStateToProps = ({ common, surveys }) => ({
+const mapStateToProps = ({ common, surveys, user }) => ({
   isLoading: common.isLoading,
   isError: common.isError,
   errorMessage: common.errorMessage,
   surveys: surveys.surveys,
   isDeletedSurveyById: surveys.isDeletedSurveyById,
+  userDetail: user.userDetail
 });
 
 export default connect(
@@ -218,5 +227,5 @@ export default connect(
   theme => ({
     ...tableStyle(theme),
     ...listPageStyle,
-  }), {withTheme: true}
+  }), { withTheme: true }
 )(Survey));

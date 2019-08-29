@@ -32,9 +32,9 @@ export const resetSurveyStatus = () => ({
   type: RESET_SURVEY_STATUS,
 });
 
-export const setSurveysAction = () => async dispatch => {
+export const setSurveysAction = assessorId => async dispatch => {
   dispatch(setLoading(true));
-  const [surveys, error] = await handleRequest(getSurveys, []);
+  const [surveys, error] = await handleRequest(getSurveys, [assessorId]);
   if (error) {
     dispatch(setError(error));
   } else {

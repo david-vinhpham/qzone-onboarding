@@ -10,7 +10,8 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
     breakTimeEnd,
     geoLocationId,
     numberOfParallelCustomer,
-    serviceId
+    serviceId,
+    surveyId
   } = tmpService;
   return {
     additionalInfo: additionalInfo || undefined,
@@ -22,6 +23,7 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
     geoLocationId,
     numberOfParallelCustomer,
     serviceId,
+    surveyId: !surveyId || surveyId === 'none' ? undefined : surveyId
   };
 };
 

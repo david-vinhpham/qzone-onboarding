@@ -22,7 +22,8 @@ export default function TmpServiceContent({
   onChangeTmpServiceDateTime,
   onBlurParallelCustomer,
   addNewLocation,
-  userDetail
+  userDetail,
+  surveyOptions,
 }) {
   const breakStartTime = moment(tmpService.breakTimeStart).toDate();
   const breakEndTime = moment(tmpService.breakTimeEnd).toDate();
@@ -30,6 +31,32 @@ export default function TmpServiceContent({
 
   return (
     <Grid container spacing={1} className={addEventDialogStyles.calendarDatetimePicker}>
+      <Grid item md={12}>
+        <Grid container spacing={1}>
+          <Grid item md={2} className={addEventDialogStyles.label}>
+            <Typography variant="body2" display="inline" noWrap>
+              Assessment:
+            </Typography>
+          </Grid>
+          <Grid item md={10}>
+            <Select
+              name="addEventData.tmpService.surveyId"
+              value={tmpService.surveyId}
+              onChange={handleChange}
+              className={addEventDialogStyles.eventTypeSelect}
+            >
+              <MenuItem value="none">
+                None
+              </MenuItem>
+              {surveyOptions.map(svc => (
+                <MenuItem value={svc.value} key={svc.value}>
+                  {svc.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+        </Grid>
+      </Grid>
       <Grid item md={12}>
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
@@ -192,5 +219,6 @@ TmpServiceContent.propTypes = {
   onChangeTmpServiceDateTime: PropTypes.func.isRequired,
   onBlurParallelCustomer: PropTypes.func.isRequired,
   addNewLocation: PropTypes.func.isRequired,
-  userDetail: userDetailType.isRequired
+  userDetail: userDetailType.isRequired,
+  surveyOptions: PropTypes.arrayOf(optionType).isRequired,
 }

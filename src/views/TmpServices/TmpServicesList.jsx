@@ -37,6 +37,7 @@ import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptio
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
 import { defaultDateTimeFormat, eUserType } from "constants.js";
+import { fetchSurveyOptionsByAssessorId } from "actions/surveyOptions";
 
 const override = css`
   margin: 0 auto;
@@ -76,11 +77,13 @@ class TmpServicesList extends PureComponent {
       if (userDetail.userType === eUserType.provider) {
         this.props.fetchTmpServicesByProviderId(this.userId);
         this.props.fetchServiceOptionsByBusinessAdminId(userDetail.providerInformation.businessId);
+        this.props.fetchSurveyOptionsByAssessorId(userDetail.providerInformation.businessId);
         this.props.fetchProvidersByBusinessIdSuccess([userDetail]);
       } else {
         this.props.fetchTmpServicesByAdminId(this.userId);
         this.props.fetchProvidersByBusinessId(this.userId);
         this.props.fetchServiceOptionsByBusinessAdminId(this.userId);
+        this.props.fetchSurveyOptionsByAssessorId(this.userId);
       }
     }
     this.props.fetchTimezoneOptions();
@@ -180,6 +183,7 @@ class TmpServicesList extends PureComponent {
           geoLocationId: event.geoLocation.id,
           numberOfParallelCustomer: event.numberOfParallelCustomer,
           serviceId: event.serviceId,
+          surveyId: event.surveyId || 'none'
         }
       }
     })
@@ -261,6 +265,7 @@ class TmpServicesList extends PureComponent {
           geoLocationId: get(this.props.geoOptions, '0.value', 0),
           numberOfParallelCustomer: 1,
           serviceId,
+          surveyId: 'none'          
         }
       };
 
@@ -290,7 +295,6 @@ class TmpServicesList extends PureComponent {
   render() {
     const {
       classes, history, isLoading,
-      providers, tzOptions, serviceOptions,
       userDetail, tmpServices
     } = this.props;
     const {
@@ -453,13 +457,10 @@ class TmpServicesList extends PureComponent {
             isProviderReadOnly={isEditMode}
             isEditMode={isEditMode}
             eventLevel={eventLevel}
-            providers={providers}
             isOpenAddDialog={isOpenAddEventDialog}
             closeAddDialog={this.closeAddEventDialog}
             addEventData={addEventData}
             createNewEvent={isEditMode ? this.editTmpService : this.onCreateNewEvent}
-            tzOptions={tzOptions}
-            serviceOptions={serviceOptions}
             history={history}
           />
         )}
@@ -503,7 +504,8 @@ TmpServicesList.propTypes = {
   isReportLoading: PropTypes.bool.isRequired,
   fetchProvidersByBusinessIdSuccess: PropTypes.func.isRequired,
   fetchTmpServicesByProviderId: PropTypes.func.isRequired,
-  userDetail: userDetailType.isRequired
+  userDetail: userDetailType.isRequired,
+  fetchSurveyOptionsByAssessorId: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -532,7 +534,8 @@ const mapDispatchToProps = {
   getScheduleReport,
   setScheduleReportData,
   fetchProvidersByBusinessIdSuccess,
-  fetchTmpServicesByProviderId
+  fetchTmpServicesByProviderId,
+  fetchSurveyOptionsByAssessorId
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

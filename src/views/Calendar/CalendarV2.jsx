@@ -98,6 +98,7 @@ CalendarV2.propTypes = {
 
 const mapStateToProps = state => ({
   calendarData: state.calendarManage.calendarData,
+  providers: state.calendarManage.providers,
   userDetail: state.user.userDetail,
 });
 
