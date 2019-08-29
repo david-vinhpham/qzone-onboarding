@@ -20,6 +20,7 @@ import scheduleReportsReducer from './scheduleReport.reducer';
 import timezoneOptionsReducer from './timezoneOptions.reducer';
 import surveysReducer from './surveys';
 import geoOptionsReducer from './geoOptions.reducer';
+import surveyOptionsReducer from './surveyOptions.reducer';
 
 const rootReducer = combineReducers({
   common: commonReducer,
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
     geo: geoOptionsReducer,
     timezone: timezoneOptionsReducer,
     service: serviceOptionsReducer,
+    survey: surveyOptionsReducer
   })
 });
 

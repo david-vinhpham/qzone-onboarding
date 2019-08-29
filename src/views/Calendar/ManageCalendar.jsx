@@ -19,6 +19,7 @@ import { fetchGeoLocationOptions } from 'actions/geoOptions';
 import { fetchServiceOptionsByBusinessAdminId } from 'actions/serviceOptions';
 import { fetchTimezoneOptions } from 'actions/timezoneOptions';
 import { eUserType } from 'constants.js';
+import { fetchSurveyOptionsByAssessorId } from 'actions/surveyOptions';
 
 class ManageCalendar extends React.PureComponent {
   constructor(props) {
@@ -51,10 +52,12 @@ class ManageCalendar extends React.PureComponent {
       if (this.props.userDetail.userType === eUserType.provider) {
         this.props.fetchEventsByProviderId(userId);
         this.props.fetchServiceOptionsByBusinessAdminId(this.props.userDetail.providerInformation.businessId);
+        this.props.fetchSurveyOptionsByAssessorId(this.props.userDetail.providerInformation.businessId);
         this.props.fetchProvidersByBusinessIdSuccess([this.props.userDetail]);
       } else {
         this.props.fetchProvidersByBusinessId(userId);
         this.props.fetchServiceOptionsByBusinessAdminId(userId);
+        this.props.fetchSurveyOptionsByAssessorId(userId);
       }
       this.props.fetchGeoLocationOptions();
       this.props.fetchTimezoneOptions();
@@ -84,6 +87,7 @@ class ManageCalendar extends React.PureComponent {
           geoLocationId: get(this.props.geoOptions, '0.value', 0),
           numberOfParallelCustomer: 1,
           serviceId,
+          surveyId: 'none'
         },
         startTime: moment(startTime).format(),
         endTime: moment(endTime).format(),
@@ -103,23 +107,20 @@ class ManageCalendar extends React.PureComponent {
   };
 
   render() {
-    const { providers, tzOptions, serviceOptions, isLoading, history } = this.props;
+    const { isLoading, history } = this.props;
     const { isOpenAddDialog, eventLevel, addEventData } = this.state;
 
     return (
       <>
-        <Calendar providers={providers} onClickNewEvent={this.onClickNewEvent} />
+        <Calendar onClickNewEvent={this.onClickNewEvent} />
         <CalendarLoading isLoading={isLoading} />
         {isOpenAddDialog && (
           <AddEventDialog
             eventLevel={eventLevel}
-            providers={providers}
             isOpenAddDialog={isOpenAddDialog}
             closeAddDialog={this.closeAddDialog}
             addEventData={addEventData}
             createNewEvent={this.onCreateNewEvent}
-            tzOptions={tzOptions}
-            serviceOptions={serviceOptions}
             history={history}
           />
         )}
@@ -141,7 +142,8 @@ ManageCalendar.propTypes = {
   userDetail: userDetailType.isRequired,
   fetchEventsByProviderId: func.isRequired,
   fetchProvidersByBusinessIdSuccess: func.isRequired,
-  history: historyType.isRequired
+  history: historyType.isRequired,
+  fetchSurveyOptionsByAssessorId: func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -160,7 +162,8 @@ const mapDispatchToProps = {
   fetchTimezoneOptions,
   fetchProvidersByBusinessId,
   fetchEventsByProviderId,
-  fetchProvidersByBusinessIdSuccess
+  fetchProvidersByBusinessIdSuccess,
+  fetchSurveyOptionsByAssessorId
 };
 
 export default connect(

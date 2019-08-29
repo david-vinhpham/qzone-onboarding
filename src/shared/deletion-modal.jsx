@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle,
-  Slide
 } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from 'components/CustomButtons/Button';
@@ -11,10 +10,6 @@ export const CTA = {
   DELETE: 'delete',
   DELETE_CONFIRMED: 'deleted',
 };
-
-function Transition(props) {
-  return <Slide direction="down" {...props} />;
-}
 
 class DeletionModal extends Component {
   static defaultProps = {
@@ -69,19 +64,17 @@ class DeletionModal extends Component {
       : `${itemName}s permanently deleted from DataBase!`;
 
     const isDeleteButtonVisible = cancelButtonLabel === 'Cancel';
-    const deleteButton = isDeleteButtonVisible ? (
-      <div>
-        <Button data-test-id="confirmDeleteBtn" onClick={this.deleteItemHandler} color="rose">Delete</Button>
-      </div>
-    ) : null;
+    const deleteButton = isDeleteButtonVisible && (
+      <Button data-test-id="confirmDeleteBtn" onClick={this.deleteItemHandler} color="rose">Delete</Button>
+    );
+
     return (
       <Dialog
-        TransitionComponent={Transition}
-        keepMounted
+        disableBackdropClick
+        disableEscapeKeyDown
         open={openDialog}
         onClose={this.onDialogClose}
         aria-labelledby="delete-item-dialog"
-        disableBackdropClick
         classes={{ paper: classes.paper }}
       >
         <DialogTitle id="delete-item-title">
@@ -93,9 +86,7 @@ class DeletionModal extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <div>
-            <Button onClick={this.onDialogClose}>{cancelButtonLabel}</Button>
-          </div>
+          <Button onClick={this.onDialogClose}>{cancelButtonLabel}</Button>
           {deleteButton}
         </DialogActions>
       </Dialog>

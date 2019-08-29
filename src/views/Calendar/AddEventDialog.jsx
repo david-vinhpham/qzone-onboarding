@@ -195,7 +195,7 @@ class AddEventDialog extends PureComponent {
       isEventTypeReadOnly,
       isEventLevelReadOnly,
       isProviderReadOnly,
-      userDetail,
+      userDetail, surveyOptions,
     } = this.props;
 
     return (
@@ -261,6 +261,7 @@ class AddEventDialog extends PureComponent {
                     onBlurParallelCustomer={this.onBlurParallelCustomer(setFieldValue)}
                     addNewLocation={this.addNewLocation(values)}
                     userDetail={userDetail}
+                    surveyOptions={surveyOptions}
                   />}
                 </DialogContent>
                 <DialogActions classes={{ root: styles.calendarDialogFooter }}>
@@ -306,7 +307,8 @@ AddEventDialog.propTypes = {
   isEventLevelReadOnly: PropTypes.bool,
   isProviderReadOnly: PropTypes.bool,
   userDetail: userDetailType.isRequired,
-  history: historyType.isRequired
+  history: historyType.isRequired,
+  surveyOptions: PropTypes.arrayOf(optionType).isRequired,
 };
 
 AddEventDialog.defaultProps = {
@@ -318,5 +320,9 @@ AddEventDialog.defaultProps = {
 
 export default connect(state => ({
   geoOptions: state.options.geo.geoOptions,
+  serviceOptions: state.options.service.serviceOptions,
+  tzOptions: state.options.timezone.tzOptions,
+  surveyOptions: state.options.survey.surveyOptions,
+  providers: state.calendarManage.providers,
   userDetail: state.user.userDetail,
 }))(AddEventDialog);
