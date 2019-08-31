@@ -35,7 +35,7 @@ export default function CommonContent({
   const isProvider = userDetail.userType === eUserType.provider;
 
   return (
-    <Grid container spacing={1} className={addEventDialogStyles.calendarDatetimePicker}>
+    <Grid container spacing={1} className={addEventDialogStyles.wrapper}>
       <Grid item md={12}>
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>

@@ -11,7 +11,8 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
     geoLocationId,
     numberOfParallelCustomer,
     serviceId,
-    surveyId
+    surveyId,
+    privacy
   } = tmpService;
   return {
     additionalInfo: additionalInfo || undefined,
@@ -23,7 +24,8 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
     geoLocationId,
     numberOfParallelCustomer,
     serviceId,
-    surveyId: !surveyId || surveyId === 'none' ? undefined : surveyId
+    surveyId: !surveyId || surveyId === 'none' ? undefined : surveyId,
+    privacy
   };
 };
 

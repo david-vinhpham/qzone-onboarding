@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import { classesType, historyType, tmpServiceType, optionType, providerType, userDetailType } from "types/global";
 import { connect } from "react-redux";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import { ArtTrack, Delete, Edit, Search, BarChart } from "@material-ui/icons";
+import { ArtTrack, Delete, Edit, Search, BarChart, CheckCircleOutlined } from "@material-ui/icons";
 import moment from "moment-timezone";
 import {
   deleteTmpService,
@@ -183,7 +183,8 @@ class TmpServicesList extends PureComponent {
           geoLocationId: event.geoLocation.id,
           numberOfParallelCustomer: event.numberOfParallelCustomer,
           serviceId: event.serviceId,
-          surveyId: event.surveyId || 'none'
+          surveyId: event.surveyId || 'none',
+          privacy: event.privacy
         }
       }
     })
@@ -265,7 +266,8 @@ class TmpServicesList extends PureComponent {
           geoLocationId: get(this.props.geoOptions, '0.value', 0),
           numberOfParallelCustomer: 1,
           serviceId,
-          surveyId: 'none'          
+          surveyId: 'none',
+          privacy: true
         }
       };
 
@@ -321,18 +323,22 @@ class TmpServicesList extends PureComponent {
           <TableHead>
             <TableRow>
               <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
+              <TableCell className={classes.cellHeaderBold} size="small">Privacy</TableCell>
               <TableCell className={classes.cellHeaderBold}>Provider</TableCell>
               <TableCell className={classes.cellHeaderBold}>Service</TableCell>
               <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
               <TableCell className={classes.cellHeaderBold}>End time</TableCell>
               <TableCell className={classes.cellHeaderBold}>Description</TableCell>
-              <TableCell className={classes.cellHeaderBold}>Actions</TableCell>
+              <TableCell className={classes.cellHeaderBold} align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {tmpServices.map((event, index) => (
               <TableRow key={event.id} classes={{ root: classes.row }}>
-                <TableCell size="small">{index + 1}</TableCell>
+                <TableCell size="small" align="center">{index + 1}</TableCell>
+                <TableCell size="small" align="center">
+                  {event.privacy && <CheckCircleOutlined color="secondary" />}
+                </TableCell>
                 <TableCell>{event.providerName}</TableCell>
                 <TableCell>{event.serviceName}</TableCell>
                 <TableCell data-test-id="tmpServiceStartTime">{moment.tz(event.slot.startTime * 1000, event.timezoneId).format(defaultDateTimeFormat)}</TableCell>

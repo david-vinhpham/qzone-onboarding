@@ -87,7 +87,8 @@ class ManageCalendar extends React.PureComponent {
           geoLocationId: get(this.props.geoOptions, '0.value', 0),
           numberOfParallelCustomer: 1,
           serviceId,
-          surveyId: 'none'
+          surveyId: 'none',
+          privacy: true
         },
         startTime: moment(startTime).format(),
         endTime: moment(endTime).format(),
