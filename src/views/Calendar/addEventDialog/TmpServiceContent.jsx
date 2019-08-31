@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   Typography, Grid,
   Select, MenuItem,
-  TextField, Tooltip, Button
+  TextField, Tooltip, Button, Switch, Link
 } from '@material-ui/core';
 import moment from 'moment-timezone';
 import { LiveHelp } from '@material-ui/icons';
@@ -30,7 +30,38 @@ export default function TmpServiceContent({
   const isAdmin = userDetail.userType === eUserType.business_admin;
 
   return (
-    <Grid container spacing={1} className={addEventDialogStyles.calendarDatetimePicker}>
+    <Grid container spacing={1} className={addEventDialogStyles.wrapper}>
+      <Grid item md={12}>
+        <Grid container spacing={1}>
+          <Grid item md={2} className={addEventDialogStyles.label}>
+            <Typography variant="body2" display="inline" noWrap>
+              Privacy:
+            </Typography>
+          </Grid>
+          <Grid item md={10}>
+            <Switch
+              name="addEventData.tmpService.privacy"
+              checked={tmpService.privacy}
+              onChange={handleChange}
+            />
+            <Typography variant="caption" display="inline">
+              {
+                tmpService.privacy
+                  ? 'Service is not available in '
+                  : 'Service is available in '
+              }
+              <Link
+                title="Custweb"
+                href="https://custweb.quezone.com.au"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Custweb
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
       <Grid item md={12}>
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>

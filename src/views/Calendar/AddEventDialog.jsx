@@ -251,18 +251,23 @@ class AddEventDialog extends PureComponent {
                     isEventLevelReadOnly={isEventLevelReadOnly}
                     isProviderReadOnly={isProviderReadOnly}
                   />
-                  {values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && <TmpServiceContent
-                    geoOptions={geoOptions}
-                    serviceOptions={serviceOptions}
-                    addEventData={values.addEventData}
-                    handleChange={handleChange}
-                    onBlurServiceTime={this.onBlurServiceTime(setFieldValue, values)}
-                    onChangeTmpServiceDateTime={this.onChangeTmpServiceDateTime(setFieldValue, values)}
-                    onBlurParallelCustomer={this.onBlurParallelCustomer(setFieldValue)}
-                    addNewLocation={this.addNewLocation(values)}
-                    userDetail={userDetail}
-                    surveyOptions={surveyOptions}
-                  />}
+                  {values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && (
+                    <>
+                      <div className={styles.tmpServiceContentDivider}><hr /></div>
+                      <TmpServiceContent
+                        geoOptions={geoOptions}
+                        serviceOptions={serviceOptions}
+                        addEventData={values.addEventData}
+                        handleChange={handleChange}
+                        onBlurServiceTime={this.onBlurServiceTime(setFieldValue, values)}
+                        onChangeTmpServiceDateTime={this.onChangeTmpServiceDateTime(setFieldValue, values)}
+                        onBlurParallelCustomer={this.onBlurParallelCustomer(setFieldValue)}
+                        addNewLocation={this.addNewLocation(values)}
+                        userDetail={userDetail}
+                        surveyOptions={surveyOptions}
+                      />
+                    </>
+                  )}
                 </DialogContent>
                 <DialogActions classes={{ root: styles.calendarDialogFooter }}>
                   <Button

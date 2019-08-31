@@ -162,17 +162,15 @@ class ScheduleReportList extends PureComponent {
                 <TableCell className={classes.cellHeaderBold}>Customer Name</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Customer Email</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Customer Phone</TableCell>
-                <TableCell className={classes.cellHeaderBold}> Booking Code</TableCell>
-                <TableCell className={classes.cellHeaderBold}>
-                  Start time
-                </TableCell>
+                <TableCell className={classes.cellHeaderBold}>Booking Code</TableCell>
+                <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {reportList.map((report, idx) => (
                 <TableRow key={report.id} classes={{ root: classes.row }}>
-                  <TableCell>{idx + 1}</TableCell>
+                  <TableCell size="small">{idx + 1}</TableCell>
                   <TableCell>{report.customerName}</TableCell>
                   <TableCell>{report.customerEmail}</TableCell>
                   <TableCell>{report.customerPhone}</TableCell>

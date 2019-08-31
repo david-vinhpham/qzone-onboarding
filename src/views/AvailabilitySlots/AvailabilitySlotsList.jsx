@@ -21,9 +21,9 @@ import tableStyle from 'assets/jss/material-dashboard-pro-react/components/table
 import { fetchAvailability } from 'actions/availabilitySlots';
 import { historyType, availabilitySlotType, classesType, userDetailType } from 'types/global';
 import { fetchProvidersByBusinessAdminId, fetchProvidersSuccess } from 'actions/provider';
-import {BeatLoader} from "react-spinners";
-import {css} from "@emotion/core";
-import {fetchTmpServiceDetail} from "../../actions/tmpServiceDetail";
+import { BeatLoader } from "react-spinners";
+import { css } from "@emotion/core";
+import { fetchTmpServiceDetail } from "../../actions/tmpServiceDetail";
 import Loading from 'components/Loading/Loading';
 
 const override = css`
@@ -62,111 +62,108 @@ class AvailabilitySlotsList extends PureComponent {
     return (
       <div>
         <Card>
-        <Paper>
-          <div className={classes.customPage}>
-            <div className={classes.headerPage}>
-              <div style={{ flexGrow: 1, display: 'flex' }}>
-                <Button size="small" color="primary" onClick={this.props.history.goBack}>
-                  <ArrowBack />
-                </Button>
-                <Typography display="inline" variant="h6">Event detail</Typography>
+          <Paper>
+            <div className={classes.customPage}>
+              <div className={classes.headerPage}>
+                <div style={{ flexGrow: 1, display: 'flex' }}>
+                  <Button size="small" color="primary" onClick={this.props.history.goBack}>
+                    <ArrowBack />
+                  </Button>
+                  <Typography display="inline" variant="h6">Event detail</Typography>
+                </div>
               </div>
-            </div>
-            {tmpServiceId ?
-              <Grid container spacing={2}>
-                <Grid item sm={3} xs={12}>
-                  <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
-                    Provider name:
-                  </Typography>
-                </Grid>
-                <Grid item sm={9} xs={12}>
-                  <Typography variant="body2">
-                    {providerName}
-                  </Typography>
-                </Grid>
-                <Grid item sm={3} xs={12}>
-                  <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
-                    Service name:
-                  </Typography>
-                </Grid>
-                <Grid item sm={9} xs={12}>
-                  <Typography variant="body2">
-                    {serviceName}
-                  </Typography>
-                </Grid>
-                <Grid item sm={3} xs={12}>
-                  <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
-                    Unique Link:
-                  </Typography>
-                </Grid>
-                <Grid item sm={9} xs={12}>
-                  <Link
-                    className={classes.custUrl}
-                    title={uniqueLink}
-                    href={uniqueLink}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {uniqueLink || ''}
-                  </Link>
-                </Grid>
-                <Grid item sm={3} xs={12}>
-                <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
-                  When:
-                </Typography>
-              </Grid>
-                <Grid item sm={9} xs={12}>
-                  <Typography variant="body2"> {eventDate}
-                  </Typography>
-                </Grid>
-                <Grid item sm={3} xs={12}>
-                  <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
-                    TimezoneId:
-                  </Typography>
-                </Grid>
-                <Grid item sm={9} xs={12}>
-                  <Typography variant="body2"> {timezoneId}
-                  </Typography>
-                </Grid>
-                {repeatType &&
-                <>
+              {tmpServiceId ?
+                <Grid container spacing={2}>
                   <Grid item sm={3} xs={12}>
                     <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
-                      Repeat :
-                    </Typography>
+                      Provider name:
+                  </Typography>
                   </Grid>
                   <Grid item sm={9} xs={12}>
                     <Typography variant="body2">
-                      {repeatType}
+                      {providerName}
                     </Typography>
                   </Grid>
-                </>
-                }
-                <Grid item sm={3} xs={12}>
-                  <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
-                    Location:
+                  <Grid item sm={3} xs={12}>
+                    <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
+                      Service name:
                   </Typography>
-                </Grid>
-                <Grid item sm={9} xs={12}>
-                  <Typography variant="body2">
-                    {geoLocation}
+                  </Grid>
+                  <Grid item sm={9} xs={12}>
+                    <Typography variant="body2">
+                      {serviceName}
+                    </Typography>
+                  </Grid>
+                  <Grid item sm={3} xs={12}>
+                    <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
+                      Unique Link:
                   </Typography>
-                </Grid>
-              </Grid> :
-              <Loading />
-            }
-          </div>
-        </Paper>
+                  </Grid>
+                  <Grid item sm={9} xs={12}>
+                    <Link
+                      className={classes.custUrl}
+                      title={uniqueLink}
+                      href={uniqueLink}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {uniqueLink || ''}
+                    </Link>
+                  </Grid>
+                  <Grid item sm={3} xs={12}>
+                    <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
+                      When:
+                </Typography>
+                  </Grid>
+                  <Grid item sm={9} xs={12}>
+                    <Typography variant="body2"> {eventDate}
+                    </Typography>
+                  </Grid>
+                  <Grid item sm={3} xs={12}>
+                    <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
+                      TimezoneId:
+                  </Typography>
+                  </Grid>
+                  <Grid item sm={9} xs={12}>
+                    <Typography variant="body2"> {timezoneId}
+                    </Typography>
+                  </Grid>
+                  {repeatType &&
+                    <>
+                      <Grid item sm={3} xs={12}>
+                        <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
+                          Repeat :
+                    </Typography>
+                      </Grid>
+                      <Grid item sm={9} xs={12}>
+                        <Typography variant="body2">
+                          {repeatType}
+                        </Typography>
+                      </Grid>
+                    </>
+                  }
+                  <Grid item sm={3} xs={12}>
+                    <Typography variant="body2" gutterBottom align="right" className={classes.customTitle}>
+                      Location:
+                  </Typography>
+                  </Grid>
+                  <Grid item sm={9} xs={12}>
+                    <Typography variant="body2">
+                      {geoLocation}
+                    </Typography>
+                  </Grid>
+                </Grid> :
+                <Loading />
+              }
+            </div>
+          </Paper>
         </Card>
         <Paper>
           <Table aria-labelledby="availabilityTable">
             <TableHead>
               <TableRow>
                 <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
-                <TableCell className={classes.cellHeaderBold}>
-                  Start time
-                  <br />
-                </TableCell>
+                <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Duration (minutes)</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Available slots</TableCell>
                 <TableCell className={classes.cellHeaderBold}>Total slots</TableCell>
@@ -175,7 +172,7 @@ class AvailabilitySlotsList extends PureComponent {
             <TableBody>
               {availabilitySlots.map((slot, idx) => (
                 <TableRow key={slot.id} classes={{ root: classes.row }}>
-                  <TableCell>{idx + 1}</TableCell>
+                  <TableCell size="small">{idx + 1}</TableCell>
                   <TableCell>{slot.providerStartSec}</TableCell>
                   <TableCell>{slot.durationSec}</TableCell>
                   <TableCell>{slot.spotsOpen}</TableCell>
