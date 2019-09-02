@@ -131,7 +131,7 @@ export const createOrganization = (values, history) => {
             .then(({ data }) => {
               if (data.status === 200 || data.status === 201 || data.success) {
                 dispatch(createOrganizationSuccess(data));
-                history.push('/organization/list');
+                history.goBack();
               } else {
                 dispatch(createOrganizationFailure(data));
               }

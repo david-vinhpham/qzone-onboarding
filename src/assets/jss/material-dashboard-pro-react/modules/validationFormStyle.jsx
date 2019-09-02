@@ -57,10 +57,18 @@ const validationFormsStyle = theme => ({
     paddingBottom: '1.5em !important',
   },
   selectForm: {
-    marginTop: 29
+    marginTop: 25
   },
   selectFormIcon: {
-    top: 'calc(50% + 2px)'
+    top: '50%'
+  },
+  surveyEditorArea: {
+    marginTop: 8
+  },
+  createNewOrgLink: {
+    display: 'inline-flex',
+    marginTop: 39,
+    marginLeft: 8
   },
   ...modalStyle(theme),
 });

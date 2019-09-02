@@ -112,7 +112,7 @@ class CreateAssessment extends React.Component {
     const { surveyInfo, mode } = this.state;
     const { title, description } = surveyInfo;
     const userId = get(user, 'userDetail.userSub', localStorage.getItem('userSub'));
-    if (!isEmpty(title) && !isEmpty(description) && !isEmpty(userId)) {
+    if (!isEmpty(title) && !isEmpty(description) && !isEmpty(userId) && organizationOptions.length > 0) {
       const orgId = organizationOptions[0].value;
 
       if (mode === 'create') {

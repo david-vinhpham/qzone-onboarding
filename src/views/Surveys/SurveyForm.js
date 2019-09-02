@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { objectOf, any, func } from 'prop-types';
-import { FormLabel, Select, MenuItem, Link } from '@material-ui/core';
+import { FormLabel, Select, MenuItem, Link, FormControl, FormHelperText } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
@@ -29,7 +29,7 @@ class SurveyForm extends Component {
       classes, survey, change, onSave, organizationOptions
     } = this.props;
     const {
-      surveyInfo, titleState, descriptionState, mode,
+      surveyInfo, titleState, descriptionState, mode
     } = survey;
 
     if (mode === 'create' || surveyInfo.survey) { editor = true; }
@@ -87,19 +87,23 @@ class SurveyForm extends Component {
             </FormLabel>
           </GridItem>
           <GridItem xs={12} sm={7}>
-            <Select
-              readOnly
-              classes={{ root: classes.selectForm, icon: classes.selectFormIcon }}
-              value={organizationOptions.length > 0 ? organizationOptions[0].value : ''}
-            >
-              {organizationOptions.map(org => (
-                <MenuItem key={org.value} value={org.value}>{org.label}</MenuItem>
-              ))}
-            </Select>
-            {organizationOptions.length === 0 && <Link href="#" onClick={this.createNewOrg}>Create new organization</Link>}
+            <FormControl error={organizationOptions.length === 0}>
+              <Select
+                classes={{ root: classes.selectForm, icon: classes.selectFormIcon }}
+                value={organizationOptions.length > 0 ? organizationOptions[0].value : ''}
+              >
+                {organizationOptions.map(org => (
+                  <MenuItem key={org.value} value={org.value}>{org.label}</MenuItem>
+                ))}
+              </Select>
+              {organizationOptions.length === 0 && <FormHelperText>Organization is required</FormHelperText>}
+            </FormControl>
+            {organizationOptions.length === 0 && <div className={classes.createNewOrgLink}>
+              <Link href="#" onClick={this.createNewOrg}>Create new organization</Link>
+            </div>}
           </GridItem>
         </GridContainer>
-        <GridContainer>
+        <GridContainer className={classes.surveyEditorArea}>
           {editor && <SurveyEditor onSave={onSave} data={surveyInfo.survey} />}
         </GridContainer>
       </form>
