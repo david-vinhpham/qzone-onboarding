@@ -9,6 +9,7 @@ import {
   getSurveys,
   postSurvey,
   deleteSurveyById,
+  editSurvey,
 } from '../apiActions/surveys';
 
 export const SET_SURVEYS = 'SURVEY.SET_SURVEYS';
@@ -42,6 +43,7 @@ export const setSurveysAction = assessorId => async dispatch => {
   }
   dispatch(setLoading(false));
 };
+
 export const saveSurveyAction = data => async dispatch => {
   dispatch(setLoading(true));
   const [result, error] = await handleRequest(postSurvey, [data]);
@@ -60,6 +62,17 @@ export const deleteSurveyByIdAction = data => async dispatch => {
     dispatch(setError(error));
   } else {
     dispatch(deleteSurvey(result || true));
+  }
+  dispatch(setLoading(false));
+};
+
+export const editSurveyAction = data => async dispatch => {
+  dispatch(setLoading(true));
+  const [result, error] = await handleRequest(editSurvey, [data]);
+  if (error) {
+    dispatch(setError(error));
+  } else {
+    dispatch(saveSurvey(result));
   }
   dispatch(setLoading(false));
 };

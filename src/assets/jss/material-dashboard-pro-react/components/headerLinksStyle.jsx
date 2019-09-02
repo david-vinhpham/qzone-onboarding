@@ -10,9 +10,6 @@ import {
 } from "../../material-dashboard-pro-react";
 
 const headerLinksStyle = theme => ({
-  popperClose: {
-    pointerEvents: "none"
-  },
   search: {
     [theme.breakpoints.down("sm")]: {
       margin: "10px 15px",
@@ -122,19 +119,6 @@ const headerLinksStyle = theme => ({
     backgroundColor: "#fff",
     backgroundClip: "padding-box"
   },
-  pooperResponsive: {
-    [theme.breakpoints.down("sm")]: {
-      zIndex: "1640",
-      position: "static",
-      float: "none",
-      width: "auto",
-      marginTop: "0",
-      backgroundColor: "transparent",
-      border: "0",
-      boxShadow: "none",
-      color: "black"
-    }
-  },
   dropdownItem: {
     ...defaultFont,
     fontSize: "13px",
@@ -185,11 +169,6 @@ const headerLinksStyle = theme => ({
     [theme.breakpoints.down("sm")]: {
       marginRight: "-5px !important",
       marginLeft: "16px !important"
-    }
-  },
-  managerClasses: {
-    [theme.breakpoints.up("md")]: {
-      display: "inline-block"
     }
   },
   headerLinksSvg: {

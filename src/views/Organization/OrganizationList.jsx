@@ -72,7 +72,7 @@ class OrganizationList extends React.Component {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Delete className={classes.underChartIcons} />
+                        <Delete />
                       </Tooltip>
                     </Button>
                     <Link to={`/organization/edit/${organization.id}`}>
@@ -83,7 +83,7 @@ class OrganizationList extends React.Component {
                           placement="bottom"
                           classes={{ tooltip: classes.tooltip }}
                         >
-                          <Edit className={classes.underChartIcons} />
+                          <Edit />
                         </Tooltip>
                       </Button>
                     </Link>

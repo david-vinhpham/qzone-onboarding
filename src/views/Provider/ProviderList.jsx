@@ -146,7 +146,7 @@ class ProviderList extends React.Component {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <ArtTrack className={classes.underChartIcons} />
+                      <ArtTrack />
                     </Tooltip>
                   </Button>
                   <Link to={`/provider/edit/${provider.id}`}>
@@ -157,7 +157,7 @@ class ProviderList extends React.Component {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Edit className={classes.underChartIcons} />
+                        <Edit />
                       </Tooltip>
                     </Button>
                   </Link>
@@ -173,7 +173,7 @@ class ProviderList extends React.Component {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Delete className={classes.underChartIcons} />
+                      <Delete />
                     </Tooltip>
                   </Button>
                 </TableCell>

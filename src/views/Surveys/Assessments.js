@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'components/Loading/Loading';
 import Alert from 'react-s-alert';
-import { InsertLink } from '@material-ui/icons';
+import { InsertLink, Delete, Edit } from '@material-ui/icons';
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from '@material-ui/core';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
@@ -16,10 +17,8 @@ import CardText from '../../components/Card/CardText.jsx';
 import CardHeader from '../../components/Card/CardHeader.jsx';
 import CardBody from '../../components/Card/CardBody';
 import { deleteSurveyByIdAction, resetSurveyStatus, setSurveysAction } from '../../actions/surveys';
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
-import Tooltip from '@material-ui/core/Tooltip';
-import Delete from '@material-ui/icons/Delete';
 import { eUserType } from 'constants.js';
+import DeletionModal from "../../shared/deletion-modal";
 
 class Survey extends Component {
   static getDerivedStateFromProps(props, state) {
@@ -63,6 +62,7 @@ class Survey extends Component {
     errorMessage: '',
     surveys: null,
     isDeletedSurveyById: null,
+    deletedSurveyId: null,
   };
 
   componentDidMount() {
@@ -91,14 +91,15 @@ class Survey extends Component {
   }
 
   handleEditSurvey = id => () => {
-    console.log('Edit Survey', id);
+    const { history } = this.props;
+    const { surveys } = this.state;
+    history.push('/assessments/new', {
+      survey: surveys.find(s => s.id === id)
+    });
   };
 
   handleDeleteSurvey = id => () => {
-    const { deleteSurveyByIdAction: deleteSurveyById } = this.props;
-    const { surveys } = this.state;
-    const newSurveys = surveys.filter(survey => survey.id !== id);
-    this.setState({ surveys: newSurveys }, () => deleteSurveyById(id));
+    this.setState({ deletedSurveyId: id });
   };
 
   handleCopyLink = event => {
@@ -106,13 +107,27 @@ class Survey extends Component {
     Alert.success('Survey link is copied to your clipboard!')
   };
 
+  cancelDelete = () => {
+    this.setState({ deletedSurveyId: null });
+  }
+
+  confirmDelete = (id) => {
+    this.setState({ deletedSurveyId: null }, () => { this.props.deleteSurveyByIdAction(id); });
+  }
+
   render() {
     const { classes } = this.props;
-    const { surveys, isLoading } = this.state;
+    const { surveys, isLoading, deletedSurveyId } = this.state;
 
     return (
       <div>
         {isLoading && <Loading />}
+        {<DeletionModal
+          openDialog={!!deletedSurveyId}
+          closeDialog={this.cancelDelete}
+          itemDeleteHandler={this.confirmDelete}
+          itemId={deletedSurveyId}
+        />}
         <GridContainer>
           <GridItem xs={12}>
             <Card>
@@ -148,8 +163,9 @@ class Survey extends Component {
                             <TableCell align="center">
                               <CopyToClipboard text={survey.url}>
                                 <Button
-                                  color="success"
-                                  simple justIcon
+                                  simple
+                                  justIcon
+                                  color="primary"
                                   onClick={this.handleCopyLink}
                                 >
                                   <Tooltip
@@ -162,20 +178,20 @@ class Survey extends Component {
                                   </Tooltip>
                                 </Button>
                               </CopyToClipboard>
-                              {/*<Tooltip*/}
-                              {/*  id="tooltip-top"*/}
-                              {/*  title="Edit"*/}
-                              {/*  placement="bottom"*/}
-                              {/*  classes={{ tooltip: classes.tooltip }}*/}
-                              {/*>*/}
-                              {/*  <Button*/}
-                              {/*    color="success"*/}
-                              {/*    simple justIcon*/}
-                              {/*    onClick={this.handleEditSurvey(survey.id)}*/}
-                              {/*  >*/}
-                              {/*    <Edit className={classes.underChartIcons} />*/}
-                              {/*  </Button>*/}
-                              {/*</Tooltip>*/}
+                              <Button
+                                color="success"
+                                simple justIcon
+                                onClick={this.handleEditSurvey(survey.id)}
+                              >
+                                <Tooltip
+                                  id="tooltip-top"
+                                  title="Edit"
+                                  placement="bottom"
+                                  classes={{ tooltip: classes.tooltip }}
+                                >
+                                  <Edit />
+                                </Tooltip>
+                              </Button>
                               <Button
                                 onClick={this.handleDeleteSurvey(survey.id)}
                                 color="danger"
@@ -188,7 +204,7 @@ class Survey extends Component {
                                   placement="bottom"
                                   classes={{ tooltip: classes.tooltip }}
                                 >
-                                  <Delete className={classes.underChartIcons} />
+                                  <Delete />
                                 </Tooltip>
                               </Button>
                             </TableCell>

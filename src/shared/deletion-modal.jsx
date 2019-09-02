@@ -59,9 +59,10 @@ class DeletionModal extends Component {
       cancelButtonLabel = 'OK';
     }
 
-    const dialogContent = type === 'delete' ? `Do you want to delete ${itemCount}? You cannot recovery as
-                         ${itemDeterminer} permanently purged from the ${itemName} Database.`
-      : `${itemName}s permanently deleted from DataBase!`;
+    const dialogContent = type === 'delete'
+      ? `Do you want to delete ${itemCount}?
+      You cannot recovery as ${itemDeterminer} permanently deleted.`
+      : `${itemName}s permanently deleted!`;
 
     const isDeleteButtonVisible = cancelButtonLabel === 'Cancel';
     const deleteButton = isDeleteButtonVisible && (

@@ -160,7 +160,7 @@ class ServiceCategoriesList extends PureComponent {
                     onClick={() => this.handleEditServiceCategoryDialogOpen(svc)}
                   >
                     <Button color="success" simple justIcon>
-                      <Edit className={classes.underChartIcons} />
+                      <Edit />
                     </Button>
                   </Tooltip>
                   <Tooltip
@@ -175,7 +175,7 @@ class ServiceCategoriesList extends PureComponent {
                       simple
                       justIcon
                     >
-                      <Delete className={classes.underChartIcons} />
+                      <Delete />
                     </Button>
                   </Tooltip>
                 </TableCell>

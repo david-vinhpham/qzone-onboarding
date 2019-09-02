@@ -139,7 +139,7 @@ class LocationList extends React.Component {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Edit className={classes.underChartIcons} />
+                        <Edit />
                       </Tooltip>
                     </Button>
                   </Link>
@@ -155,7 +155,7 @@ class LocationList extends React.Component {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Delete className={classes.underChartIcons} />
+                      <Delete />
                     </Tooltip>
                   </Button>
                 </TableCell>
