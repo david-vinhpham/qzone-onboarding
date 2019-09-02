@@ -632,7 +632,7 @@ class OrganizationCreate extends React.Component {
                   <Button color="rose" onClick={handleSubmit}>
                     Create
                   </Button>
-                  <Link to={`/organization/list`}>
+                  <Link to="#" onClick={this.props.history.goBack}>
                     <Button color="rose" >
                       Close
                     </Button>

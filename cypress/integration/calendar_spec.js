@@ -18,7 +18,7 @@ describe('Calendar page', () => {
       cy.get('[data-test-id="newCalendarEventBtn"]').click();
       cy.get('[data-test-id="startDatePicker"]').click();
       cy.get('[data-test-id="startDateDialog"] .MuiPickersCalendarHeader-iconButton').last().click();
-      cy.get('[data-test-id="startDateDialog"] button.MuiPickersDay-day')
+      cy.get('[data-test-id="startDateDialog"] button.MuiPickersDay-day[tabindex="0"]')
         .first()
         .click();
       cy.get('[data-test-id="startDateDialog"] .MuiDialogActions-root')
@@ -70,7 +70,7 @@ describe('Calendar page', () => {
       cy.get('[data-test-id="newCalendarEventBtn"]').click();
       cy.get('[data-test-id="startDatePicker"]').click();
       cy.get('[data-test-id="startDateDialog"] .MuiPickersCalendarHeader-iconButton').last().click();
-      cy.get('[data-test-id="startDateDialog"] button.MuiPickersDay-day')
+      cy.get('[data-test-id="startDateDialog"] button.MuiPickersDay-day[tabindex="0"]')
         .first()
         .click();
       cy.get('[data-test-id="startDateDialog"] .MuiDialogActions-root')

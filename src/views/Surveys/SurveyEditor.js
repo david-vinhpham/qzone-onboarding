@@ -27,7 +27,6 @@ class SurveyEditor extends Component {
 
   handleSave = () => {
     const { onSave } = this.props;
-    console.log('editor text', this.editor.text);
     onSave(JSON.parse(this.editor.text));
   };
 

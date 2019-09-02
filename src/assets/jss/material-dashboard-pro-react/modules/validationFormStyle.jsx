@@ -56,6 +56,12 @@ const validationFormsStyle = theme => ({
   addAssessor: {
     paddingBottom: '1.5em !important',
   },
+  selectForm: {
+    marginTop: 29
+  },
+  selectFormIcon: {
+    top: 'calc(50% + 2px)'
+  },
   ...modalStyle(theme),
 });
 

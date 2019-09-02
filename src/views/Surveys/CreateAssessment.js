@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { isEmpty, get } from 'lodash';
 import { Poll } from '@material-ui/icons';
-import { saveSurveyAction, resetSurveyStatus } from '../../actions/surveys';
+import { saveSurveyAction, resetSurveyStatus, editSurveyAction } from '../../actions/surveys';
 import withStyles from '@material-ui/core/styles/withStyles';
 import validationFormStyle from 'assets/jss/material-dashboard-pro-react/modules/validationFormStyle';
 import Card from '../../components/Card/Card';
@@ -14,11 +14,13 @@ import CardIcon from '../../components/Card/CardIcon';
 import CardBody from '../../components/Card/CardBody';
 import SurveyForm from './SurveyForm';
 import { Button } from '@material-ui/core';
+import { fetchOrganizationsOptionByBusinessAdminId } from 'actions/organization';
+import { historyType } from 'types/global';
 
 class CreateAssessment extends React.Component {
   static propTypes = {
     classes: objectOf(any).isRequired,
-    history: objectOf(any).isRequired,
+    history: historyType.isRequired,
     saveSurveyAction: func.isRequired,
     resetSurveyStatus: func.isRequired,
     user: objectOf(any).isRequired,
@@ -47,20 +49,39 @@ class CreateAssessment extends React.Component {
 
   constructor(props) {
     super(props);
+
+    const { location: { state } } = props.history;
+    let surveyInfo = {
+      userId: '',
+      title: '',
+      description: '',
+      orgId: '',
+      privacy: true,
+      survey: '',
+    };
+    let titleState = '';
+    let descriptionState = '';
+    let mode = 'create';
+
+    if (state && state.survey) {
+      surveyInfo = { ...state.survey, survey: JSON.parse(state.survey.survey) };
+      titleState = 'success';
+      descriptionState = 'success';
+      mode = 'edit';
+    }
+
     this.state = {
-      surveyInfo: {
-        userId: '',
-        title: '',
-        description: '',
-        logo: '',
-        privacy: true,
-        survey: '',
-      },
-      titleState: '',
-      descriptionState: '',
-      mode: 'create',
+      surveyInfo,
+      titleState,
+      descriptionState,
+      mode,
       isSavedSurvey: null,
     };
+  }
+
+  componentDidMount() {
+    const userId = get(this.props.user, 'userDetail.userSub', localStorage.getItem('userSub'));
+    this.props.fetchOrganizationsOptionByBusinessAdminId(userId);
   }
 
   componentDidUpdate(prevProps) {
@@ -87,17 +108,30 @@ class CreateAssessment extends React.Component {
   };
 
   handleSaveSurvey = (newSurvey) => {
-    const { saveSurveyAction: saveSurvey, user } = this.props;
-    const { surveyInfo } = this.state;
+    const { saveSurveyAction: saveSurvey, user, editSurveyAction: editSurvey, organizationOptions } = this.props;
+    const { surveyInfo, mode } = this.state;
     const { title, description } = surveyInfo;
-    const userId = get(user, 'userDetail.userSub') || localStorage.getItem('userSub');
+    const userId = get(user, 'userDetail.userSub', localStorage.getItem('userSub'));
     if (!isEmpty(title) && !isEmpty(description) && !isEmpty(userId)) {
-      saveSurvey({
-        ...surveyInfo,
-        survey: JSON.stringify(newSurvey),
-        userId,
-        url: '',
-      });
+      const orgId = organizationOptions[0].value;
+
+      if (mode === 'create') {
+        saveSurvey({
+          ...surveyInfo,
+          survey: JSON.stringify(newSurvey),
+          userId,
+          orgId,
+          url: '',
+        });
+      }
+
+      if (mode === 'edit') {
+        editSurvey({
+          ...surveyInfo,
+          survey: JSON.stringify(newSurvey),
+          orgId,
+        });
+      }
     } else {
       this.setState(oldState => ({
         titleState: isEmpty(title) ? 'error' : 'success',
@@ -108,7 +142,7 @@ class CreateAssessment extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, organizationOptions, history } = this.props;
     const {
       surveyInfo, titleState, descriptionState, mode,
     } = this.state;
@@ -133,6 +167,8 @@ class CreateAssessment extends React.Component {
             change={this.handleChangeField}
             classes={classes}
             onSave={this.handleSaveSurvey}
+            organizationOptions={organizationOptions}
+            history={history}
           />
         </CardBody>
       </Card>
@@ -140,12 +176,18 @@ class CreateAssessment extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user, surveys }) => ({
+const mapStateToProps = ({ user, surveys, organization }) => ({
   user,
   isSavedSurvey: surveys.isSavedSurvey,
+  organizationOptions: organization.organizations,
 });
 
 export default compose(
   withStyles(validationFormStyle),
-  connect(mapStateToProps, { saveSurveyAction, resetSurveyStatus }),
+  connect(mapStateToProps, {
+    saveSurveyAction,
+    resetSurveyStatus,
+    editSurveyAction,
+    fetchOrganizationsOptionByBusinessAdminId
+  }),
 )(CreateAssessment);
