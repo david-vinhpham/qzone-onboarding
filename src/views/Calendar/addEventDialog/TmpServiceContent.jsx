@@ -35,37 +35,6 @@ export default function TmpServiceContent({
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" display="inline" noWrap>
-              Privacy:
-            </Typography>
-          </Grid>
-          <Grid item md={10}>
-            <Switch
-              name="addEventData.tmpService.privacy"
-              checked={tmpService.privacy}
-              onChange={handleChange}
-            />
-            <Typography variant="caption" display="inline">
-              {
-                tmpService.privacy
-                  ? 'Service is not available in '
-                  : 'Service is available in '
-              }
-              <Link
-                title="Custweb"
-                href="https://custweb.quezone.com.au"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Custweb
-              </Link>
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item md={12}>
-        <Grid container spacing={1}>
-          <Grid item md={2} className={addEventDialogStyles.label}>
-            <Typography variant="body2" display="inline" noWrap>
               Assessment:
             </Typography>
           </Grid>
@@ -220,17 +189,35 @@ export default function TmpServiceContent({
         </Grid>
       </Grid>
       <Grid item md={12}>
-        <TextField
-          name="addEventData.tmpService.additionalInfo"
-          value={tmpService.additionalInfo}
-          className={addEventDialogStyles.calendarDesc}
-          label="Additional Data"
-          margin="normal"
-          variant="outlined"
-          onChange={handleChange}
-          multiline
-          rows={3}
-        />
+        <Grid container spacing={1}>
+          <Grid item md={2} className={addEventDialogStyles.label}>
+            <Typography variant="body2" display="inline" noWrap>
+              Privacy:
+            </Typography>
+          </Grid>
+          <Grid item md={10}>
+            <Switch
+              name="addEventData.tmpService.privacy"
+              checked={tmpService.privacy}
+              onChange={handleChange}
+            />
+            <Typography variant="caption" display="inline">
+              {
+                tmpService.privacy
+                  ? 'Service is not available in '
+                  : 'Service is available in '
+              }
+              <Link
+                title="Custweb"
+                href="https://custweb.quezone.com.au"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Custweb
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

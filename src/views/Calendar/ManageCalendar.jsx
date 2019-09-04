@@ -88,7 +88,7 @@ class ManageCalendar extends React.PureComponent {
           numberOfParallelCustomer: 1,
           serviceId,
           surveyId: 'none',
-          privacy: true
+          privacy: false
         },
         startTime: moment(startTime).format(),
         endTime: moment(endTime).format(),
