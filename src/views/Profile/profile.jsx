@@ -6,7 +6,15 @@ import Account from './account';
 import Personal from './personal';
 import { userStatus as eUserStatus } from '../../constants';
 import { editProfile, fetchUser } from "../../actions/auth";
-
+import {BeatLoader} from "react-spinners";
+import {css} from "@emotion/core";
+const override = css`
+    margin: 0 auto;
+    border-color: red;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+`;
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -49,45 +57,6 @@ class Profile extends React.Component {
         emailState: '',
       }
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { user: { userStatus } } = nextProps;
-    if (nextProps.user.email !== '') {
-      this.setState(prevState => ({
-        openResetPasswordStatus: userStatus === eUserStatus.changePassword,
-        id: nextProps.user.id,
-        personal: {
-          ...prevState.personal,
-          address: nextProps.user.address,
-          email: nextProps.user.email,
-          givenName: nextProps.user.givenName,
-          familyName: nextProps.user.familyName,
-          userType: nextProps.user.userType,
-          telephone: nextProps.user.telephone,
-          userStatus: nextProps.user.userStatus,
-          streetAddress: nextProps.user.address === null || nextProps.user.address === undefined ? ''
-            : nextProps.user.address.streetAddress === null ? '' : nextProps.user.address.streetAddress,
-          city: nextProps.user.address === null || nextProps.user.address === undefined ? ''
-            : nextProps.user.address.city === null ? '' : nextProps.user.address.city,
-          state: nextProps.user.address === null || nextProps.user.address === undefined ? ''
-            : nextProps.user.address.state === null ? '' : nextProps.user.address.state,
-          postCode: nextProps.user.address === null || nextProps.user.address === undefined ? ''
-            : nextProps.user.address.postCode === null ? '' : nextProps.user.address.postCode,
-          country: nextProps.user.address === null || nextProps.user.address === undefined ? ''
-            : nextProps.user.address.country === null ? '' : nextProps.user.address.country,
-          userSub: nextProps.user.userSub,
-        },
-        account: {
-          ...prevState.account,
-          email: nextProps.user.email,
-        },
-      }));
-    } else {
-      this.setState({
-        openResetPasswordStatus: userStatus === eUserStatus.changePassword,
-      });
-    }
   }
 
   saveProfile = () => {
@@ -156,7 +125,16 @@ class Profile extends React.Component {
       account: { email },
       id,
     } = this.state;
-    const { resetPassword: resetPasswordAction, editUser, history } = this.props;
+    const { resetPassword: resetPasswordAction, editUser, history, fetchUserLoading } = this.props;
+    if (fetchUserLoading) {
+      return < BeatLoader
+        className={override}
+        sizeUnit={"px"}
+        size={100}
+        color={'#123abc'}
+        loading={fetchUserLoading}
+      />;
+    }
     return (
       <React.Fragment>
         <label> {editUser.id !== undefined && editUser.id !== null ? "Update user successfully" : ''} </label>
@@ -194,6 +172,7 @@ class Profile extends React.Component {
 const mapStateToProps = state => ({
   user: state.user.userDetail,
   editUser: state.user.editUser,
+  fetchUserLoading:state.user.fetchUserLoading,
   isDefaultPwdChanged: state.user.isDefaultPwdChanged,
 });
 
