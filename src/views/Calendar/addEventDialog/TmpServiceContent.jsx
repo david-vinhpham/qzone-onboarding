@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Typography, Grid,
-  Select, MenuItem,
-  TextField, Tooltip, Button, Switch, Link
-} from '@material-ui/core';
+import {Button, Grid, Link, MenuItem, Select, TextField, Tooltip, Typography} from '@material-ui/core';
 import moment from 'moment-timezone';
-import { LiveHelp } from '@material-ui/icons';
-import { TimePicker } from '@material-ui/pickers'
+import {LiveHelp} from '@material-ui/icons';
+import {TimePicker} from '@material-ui/pickers'
 import addEventDialogStyles from '../AddEventDialog.module.scss';
 import styles from './TmpServiceContent.module.scss';
-import { optionType, userDetailType } from 'types/global';
-import { eUserType } from 'constants.js';
+import {optionType, userDetailType} from 'types/global';
+import {eUserType} from 'constants.js';
+import Checkbox from "@material-ui/core/Checkbox";
 
 export default function TmpServiceContent({
   geoOptions,
@@ -196,7 +193,7 @@ export default function TmpServiceContent({
             </Typography>
           </Grid>
           <Grid item md={10}>
-            <Switch
+            <Checkbox
               name="addEventData.tmpService.privacy"
               checked={tmpService.privacy}
               onChange={handleChange}
@@ -204,8 +201,8 @@ export default function TmpServiceContent({
             <Typography variant="caption" display="inline">
               {
                 tmpService.privacy
-                  ? 'Service is not available in '
-                  : 'Service is available in '
+                  ? 'The service is not visible in '
+                  : 'The service is visible in '
               }
               <Link
                 title="Custweb"
