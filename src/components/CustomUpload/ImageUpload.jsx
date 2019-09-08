@@ -6,7 +6,6 @@ import { css } from '@emotion/core';
 import { BeatLoader } from 'react-spinners';
 import Button from "../../components/CustomButtons/Button.jsx";
 import { uploadImage } from '../../actions/imageUpload';
-
 const override = css`
     display: block;
     margin: 0 auto;
@@ -24,23 +23,15 @@ class ImageUpload extends React.Component {
     };
   }
 
-  static getDerivedStateFromProps(props, state) {
-    let newState = null;
-
-    if (!props.imageLoading) {
-      newState = {
-        imagePreviewUrlOrg: props.imagePreviewUrl,
-        imagePreviewUrl: !!props.imageObject && state.isUploadImage === 1
-          ? props.imageObject.fileUrl
-          : props.imagePreviewUrl
-      };
-
-      if (!!props.imageObject && state.isUploadImage === 1) {
-        localStorage.setItem('imageObject', JSON.stringify(props.imageObject));
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.imageLoading) {
+      this.setState({ imagePreviewUrlOrg: nextProps.imagePreviewUrl });
+      this.setState({ imagePreviewUrl: nextProps.imagePreviewUrl });
+      if (nextProps.imageObject != null && this.state.isUploadImage === 1) {
+        this.setState({ imagePreviewUrl: nextProps.imageObject.fileUrl });
+        localStorage.setItem('imageObject', JSON.stringify(nextProps.imageObject));
       }
     }
-
-    return newState;
   }
 
   componentDidMount() {
