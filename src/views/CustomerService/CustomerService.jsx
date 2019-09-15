@@ -273,10 +273,10 @@ class CustomerService extends PureComponent {
               {(boardData.customerFlowDetailList || []).map((svc) => (
                 <TableRow key={svc.bookingCode} classes={{ root: classes.row }}>
                   {boardData.mode.toUpperCase() === boardMode.queue && <TableCell>{svc.position}</TableCell>}
-                  <TableCell>{moment.tz(svc.sslot, svc.timezoneId).format(defaultDateTimeFormat)}</TableCell>
+                  <TableCell>{svc.sslot}</TableCell>
                   <TableCell>{svc.bookingCode}</TableCell>
                   <TableCell>{svc.name}</TableCell>
-                  <TableCell>{svc.scheckingTime ? moment.tz(svc.scheckingTime, svc.timezoneId).format(defaultDateTimeFormat) :
+                  <TableCell>{svc.scheckingTime ? svc.scheckingTime :
                     <FormControlLabel
                       control={<Checkbox color="primary"
                         checked={false}
@@ -286,7 +286,7 @@ class CustomerService extends PureComponent {
                         )}
                         disabled={!!svc.sserviceTime} />}
                     />}</TableCell>
-                  <TableCell>{svc.sserviceTime ? moment.tz(svc.sserviceTime, svc.timezoneId).format(defaultDateTimeFormat) :
+                  <TableCell>{svc.sserviceTime ? svc.sserviceTime :
                     <FormControlLabel
                       control={<Checkbox color="primary"
                         checked={false}
@@ -296,7 +296,7 @@ class CustomerService extends PureComponent {
                         )}
                         disabled={!svc.scheckingTime || !!svc.scompletedTime} />}
                     />}</TableCell>
-                  <TableCell>{svc.scompletedTime ? moment.tz(svc.scompletedTime, svc.timezoneId).format(defaultDateTimeFormat) :
+                  <TableCell>{svc.scompletedTime ? svc.scompletedTime :
                     <FormControlLabel
                       control={<Checkbox color="primary"
                         checked={false}
