@@ -89,7 +89,7 @@ const BookingInformation = ({
             formControlProps={{ fullWidth: true }}
             inputProps={{ disabled: true }}
             value={verifyData.sslot
-              ? moment.tz(verifyData.sslot, verifyData.timezoneId).format(defaultDateTimeFormat)
+              ? verifyData.sslot
               : ''
             }
           />

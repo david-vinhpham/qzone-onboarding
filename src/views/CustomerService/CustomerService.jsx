@@ -33,8 +33,7 @@ import {
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import PropTypes from "prop-types";
 import CustomInput from "../../components/CustomInput/CustomInput";
-import { defaultDateTimeFormat, eventStatus, boardMode, eUserType } from "constants.js";
-import moment from "moment-timezone";
+import { eventStatus, boardMode, eUserType } from "constants.js";
 import { verifyBookingCodeType, customerFlowBoardType, optionType, userDetailType } from "types/global";
 import customerServiceStyle from 'assets/jss/material-dashboard-pro-react/views/customerService';
 import BookingInformation from './BookingInformation';
