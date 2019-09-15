@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
 import classnames from 'classnames';
 import GridItem from "../../components/Grid/GridItem";
 import GridContainer from "../../components/Grid/GridContainer";
 import CustomInput from "../../components/CustomInput/CustomInput";
-import moment from "moment-timezone";
-import { defaultDateTimeFormat, eventStatus, boardMode, eUserType } from "constants.js";
+import {boardMode, eUserType, eventStatus} from "constants.js";
 import Button from "../../components/CustomButtons/Button";
-import { classesType, verifyBookingCodeType } from 'types/global';
+import {classesType, verifyBookingCodeType} from 'types/global';
 
 const useUpdateState = (verifyData, setGivenName, setEmail, setPhoneNumber) => {
   useEffect(() => {
