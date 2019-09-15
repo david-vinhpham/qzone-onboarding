@@ -42,7 +42,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         isUpdateStatusSuccess: true,
         updateData: action.payload,
-        verifyData: action.payload
+        verifyData: action.payload,
+        isVerifyBookingCodeSuccess: false
       };
     case customer_service.FETCH_FLOW_BOARD_SUCCESS:
       return {

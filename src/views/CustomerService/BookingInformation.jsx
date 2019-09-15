@@ -111,7 +111,7 @@ const BookingInformation = ({
             value={verifyData.serviceName || ''}
           />
         </GridItem>
-        {isVerifyBookingCodeSuccess &&
+        {isVerifyBookingCodeSuccess && verifyData.status !== null &&
           [eventStatus.unspecified, eventStatus.confirmed].includes(verifyData.status.toUpperCase())
           ? <GridItem md={12} className={classes.bookingInformationActions}>
             {verifyData.userType === eUserType.guest &&
