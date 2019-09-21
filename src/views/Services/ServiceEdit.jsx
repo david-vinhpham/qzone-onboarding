@@ -396,30 +396,7 @@ class ServiceEdit extends React.Component {
                                   Service Mode
                             </FormLabel>
                               </GridItem>
-                              <GridItem xs={12} sm={2}>
-                                <FormControlLabel
-                                  control={
-                                    <Radio
-                                      checked={values.mode === 'QUEUE'}
-                                      onChange={handleChange}
-                                      value="QUEUE"
-                                      name="mode"
-                                      aria-label="Queue"
-                                      icon={<FiberManualRecord className={classes.radioUnchecked} />}
-                                      checkedIcon={
-                                        <FiberManualRecord className={classes.radioChecked} />
-                                      }
-                                      classes={{
-                                        checked: classes.radio
-                                      }}
-                                    />
-                                  }
-                                  classes={{
-                                    label: classes.label
-                                  }}
-                                  label="Queue"
-                                />
-                              </GridItem>
+
                               <GridItem xs={12} sm={2}>
                                 <FormControlLabel
                                   control={
@@ -442,6 +419,30 @@ class ServiceEdit extends React.Component {
                                     label: classes.label
                                   }}
                                   label="Appointment"
+                                />
+                              </GridItem>
+                              <GridItem xs={12} sm={2}>
+                                <FormControlLabel
+                                  control={
+                                    <Radio
+                                      checked={values.mode === 'QUEUE'}
+                                      onChange={handleChange}
+                                      value="QUEUE"
+                                      name="mode"
+                                      aria-label="Queue"
+                                      icon={<FiberManualRecord className={classes.radioUnchecked} />}
+                                      checkedIcon={
+                                        <FiberManualRecord className={classes.radioChecked} />
+                                      }
+                                      classes={{
+                                        checked: classes.radio
+                                      }}
+                                    />
+                                  }
+                                  classes={{
+                                    label: classes.label
+                                  }}
+                                  label="Queue"
                                 />
                               </GridItem>
                             </GridContainer>

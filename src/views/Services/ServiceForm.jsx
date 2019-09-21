@@ -188,6 +188,15 @@ class ServiceForm extends React.Component {
                         Service Mode
                         </FormLabel>
                     </GridItem>
+                  <GridItem xs={12} sm={2}>
+                    <CustomRadio
+                      checkedValue={serviceInfo.serviceMode}
+                      label="Appointment"
+                      value="appointment"
+                      classes={classes}
+                      onClick={event =>
+                        this.props.change(event, "serviceMode")} />
+                  </GridItem>
                     <GridItem xs={12} sm={2}>
                         <CustomRadio
                             checkedValue={serviceInfo.serviceMode}
@@ -198,15 +207,7 @@ class ServiceForm extends React.Component {
                             this.props.change(event, "serviceMode")} 
                         />
                     </GridItem>
-                    <GridItem xs={12} sm={2}>
-                        <CustomRadio
-                            checkedValue={serviceInfo.serviceMode}
-                            label="Appointment"
-                            value="appointment"
-                            classes={classes}
-                            onClick={event =>
-                                this.props.change(event, "serviceMode")} />
-                    </GridItem>
+
                 </GridContainer>
                 <GridContainer>
                     <GridItem xs={12} sm={3}>
