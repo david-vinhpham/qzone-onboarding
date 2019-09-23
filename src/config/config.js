@@ -65,7 +65,9 @@ export const URL = {
   SCHEDULE_REPORT: 'availabilities/temporary/report',
 
   FETCH_SURVEY_OPTIONS_BY_ASSESSOR_ID: 'surveys/option/',
-  FIND_SURVEYS_BY_ASSESSOR_ID: 'find-survey-by-assessor-id/'
+  FIND_SURVEYS_BY_ASSESSOR_ID: 'find-survey-by-assessor-id/',
+
+  FETCH_CHART_BY_SURVEY_ID: 'chart/',
 };
 
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';

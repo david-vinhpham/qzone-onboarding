@@ -363,12 +363,7 @@ class ServiceCreate extends React.Component {
                             }
                           >
                             Service Mode
-                           </FormLabel>
-                          <GridItem xs={12} sm={3}>
-                            <FormLabel className={classes.labelHorizontal}>
-                              Service Mode
-                            </FormLabel>
-                          </GridItem>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={2}>
                           <FormControlLabel

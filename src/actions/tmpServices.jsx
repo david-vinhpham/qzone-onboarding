@@ -37,7 +37,7 @@ export const fetchTmpServicesByAdminId = businessId => dispatch => {
   axios.get(`${URL.FIND_TMP_SERVICES_BY_BUSINESS_ID}${businessId}`)
     .then(resp => {
       if (resp && resp.status === 200 && resp.data.success) {
-        dispatch(setTmpServices(resp.data.objects));
+        dispatch(setTmpServices(resp.data.objects || []));
       }
     })
     .finally(() => {
@@ -86,7 +86,7 @@ export const fetchTmpServicesByProviderId = providerId => dispatch => {
   axios.get(`${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}${providerId}`)
     .then(resp => {
       if (resp && resp.status === 200 && resp.data.success) {
-        dispatch(setTmpServices(resp.data.objects));
+        dispatch(setTmpServices(resp.data.objects || []));
       }
     })
     .finally(() => {
