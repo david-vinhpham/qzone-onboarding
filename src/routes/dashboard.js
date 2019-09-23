@@ -1,7 +1,7 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
   BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd,
-  FilterVintage, Star, Assignment
+  FilterVintage, Star, Assignment, BarChart
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Administration from '../views/Administration/Administration';
@@ -36,6 +36,7 @@ import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsL
 import ScheduleReportList from "../views/ScheduleReport/ScheduleReportList";
 import CreateAssessment from 'views/Surveys/CreateAssessment';
 import Assessments from 'views/Surveys/Assessments';
+import ChartBoard from 'views/Chart/ChartBoard';
 
 const dashboardRoutes = [
   {
@@ -79,6 +80,13 @@ const dashboardRoutes = [
     icon: Assignment,
     component: Assessments,
     dataTestId: 'assessmentsNavLink'
+  },
+  {
+    path: '/chart',
+    name: 'Chart',
+    icon: BarChart,
+    component: ChartBoard,
+    dataTestId: 'chartNavLink'
   },
   { redirect: true, path: '/', pathTo: '/login', name: 'Login' }
 ];

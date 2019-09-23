@@ -54,6 +54,16 @@ describe('Home page', () => {
       cy.get('[data-test-id="emailTemplatesNavLink"]').click();
       cy.url().should('include', '/email-templates');
       cy.get('[data-test-id="pageTitle"]').should('contain', 'Email Templates');
+
+      // assessments page
+      cy.get('[data-test-id="assessmentsNavLink"]').click();
+      cy.url().should('include', '/assessments');
+      cy.get('[data-test-id="pageTitle"]').should('contain', 'Assessments');
+
+      // chart page
+      cy.get('[data-test-id="chartNavLink"]').click();
+      cy.url().should('include', '/chart');
+      cy.get('[data-test-id="pageTitle"]').should('contain', 'Chart');
     });
   });
 

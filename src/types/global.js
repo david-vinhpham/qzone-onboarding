@@ -172,3 +172,15 @@ export const scheduleReportType = PropTypes.shape({
     iStartTime: PropTypes.number
   }))
 });
+
+export const surveyType = PropTypes.shape({
+  description: PropTypes.string,
+  id: PropTypes.string,
+  logo: PropTypes.string,
+  orgId: PropTypes.string,
+  privacy: PropTypes.bool,
+  survey: PropTypes.string,
+  title: PropTypes.string,
+  url: PropTypes.string,
+  userId: PropTypes.string,
+});

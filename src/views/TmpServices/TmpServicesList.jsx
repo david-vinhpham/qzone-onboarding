@@ -413,7 +413,7 @@ class TmpServicesList extends PureComponent {
             <Card>
               <CardHeader color="primary" icon>
                 <CardText color="rose">
-                  <h4 className={classes.cardTitle}>Temporary Services</h4>
+                  <h4 className={classes.cardTitle} data-test-id="tableHeader">Temporary Services</h4>
                 </CardText>
                 <div>
                   <CustomInput

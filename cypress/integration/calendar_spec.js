@@ -11,7 +11,7 @@ describe('Calendar page', () => {
     it('should create temporary service successfully', () => {
       const firstDateNextMonth = moment().add(1, 'M').startOf('month');
       const avgServiceTime = 60;
-      const description = 'This event is created from e2e tests';
+      const description = 'This event is created from e2e tests by admin';
 
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(1000);
@@ -42,6 +42,7 @@ describe('Calendar page', () => {
 
       cy.get('[data-test-id="tmpServiceDeleteBtn"]').click();
       cy.get('[data-test-id="confirmDeleteBtn"]').click();
+      cy.get('[data-test-id="tableHeader"]').should('contain', 'Temporary Services');
     });
   });
 
@@ -58,12 +59,13 @@ describe('Calendar page', () => {
       cy.get('[data-test-id="tmpServicesNavLink"]').click();
       cy.get('[data-test-id="tmpServiceDeleteBtn"]').click();
       cy.get('[data-test-id="confirmDeleteBtn"]').click();
-    })
+      cy.get('[data-test-id="tableHeader"]').should('contain', 'Temporary Services');
+    });
 
     it('should create temporary service successfully', () => {
       const firstDateNextMonth = moment().add(1, 'M').startOf('month');
       const avgServiceTime = 60;
-      const description = 'This event is created from e2e tests';
+      const description = 'This event is created from e2e tests by provider';
 
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(1000);
