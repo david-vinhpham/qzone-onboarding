@@ -7,6 +7,7 @@ import GridItem from '../../components/Grid/GridItem.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
+import {Link} from "react-router-dom";
 
 class LocationForm extends React.Component {
   render() {
@@ -18,7 +19,6 @@ class LocationForm extends React.Component {
       handleSubmit,
       errors,
       touched,
-      exitForm
     } = this.props;
     return (
       <form>
@@ -212,7 +212,9 @@ class LocationForm extends React.Component {
           <Button color="rose" onClick={handleSubmit}>
             {this.props.buttonName}
           </Button>
-          <Button color="rose" onClick={exitForm}>Exit</Button>
+          <Link to="/location/list">
+            <Button color="rose">Exit</Button>
+          </Link>
         </GridContainer>
       </form>
     );
