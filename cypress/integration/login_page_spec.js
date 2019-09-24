@@ -16,6 +16,6 @@ describe('Login page', () => {
     cy.get('#loginPassword').type('Test@2020');
     cy.get('[data-test-id="loginBtn"]').click();
 
-    cy.get('.s-alert-wrapper').children().should('have.length', 1);
+    cy.get('[data-test-id="alert"] #client-snackbar').should('contain', 'Your email or password is incorrect!');
   });
 });

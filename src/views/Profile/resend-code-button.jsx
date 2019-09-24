@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Alert from 'react-s-alert';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 //import { verifyResendUser } from 'services/api/user';
 import { classesType } from '../../types/global';
+import { showAlert } from 'actions/alert';
 
 class ResendCodeButton extends PureComponent {
     static propTypes = {
@@ -23,7 +23,7 @@ class ResendCodeButton extends PureComponent {
         const { email, cbAfterResend, verifyResendUser: verifyResendUserAction } = this.props;
         verifyResendUserAction({ email }, (response) => {
           if (response.status !== 200 || !response.data.success) {
-            Alert.error(response.data.message);
+            this.props.showAlert('error', response.data.message);
           }
           cbAfterResend();
         });
@@ -51,4 +51,5 @@ class ResendCodeButton extends PureComponent {
 
 export default connect(null, {
   /*verifyResendUser*/
+  showAlert
 })(ResendCodeButton);

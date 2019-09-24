@@ -44,15 +44,25 @@ class SidebarWrapper extends React.Component {
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
+
+    this.adminNavItemLinks = [
+      '/organization/list',
+      '/location/list',
+      '/services/list',
+      '/service-categories',
+      '/business-categories',
+      '/provider/list',
+    ];
     this.state = {
-      openAvatar: false,
+      openAvatar: this.adminNavItemLinks.some(link => this.activeRoute(link)),
       miniActive: true
     };
-    this.activeRoute.bind(this);
   }
-  activeRoute(routeName) {
-    return this.props.location.pathname.indexOf(routeName) > -1 ? true : false;
+
+  activeRoute = (routeName) => {
+    return this.props.location.pathname.indexOf(routeName) > -1;
   }
+
   openCollapse(collapse) {
     var st = {};
     st[collapse] = !this.state[collapse];
@@ -89,7 +99,9 @@ class Sidebar extends React.Component {
           <NavLink
             to="/organization/list"
             data-test-id="orgListNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
+            className={cx(classes.itemLink, classes.userCollapseLinks, {
+              [classes[color]]: this.activeRoute('/organization/list')
+            })}
           >
             <span className={classes.collapseItemMini}>
               {"OL"}
@@ -107,7 +119,9 @@ class Sidebar extends React.Component {
           <NavLink
             to="/location/list"
             data-test-id="businessLocationListNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
+            className={cx(classes.itemLink, classes.userCollapseLinks, {
+              [classes[color]]: this.activeRoute('/location/list')
+            })}
           >
             <span className={classes.collapseItemMini}>
               {"BL"}
@@ -123,7 +137,9 @@ class Sidebar extends React.Component {
           <NavLink
             to="/services/list"
             data-test-id="manageServicesNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
+            className={cx(classes.itemLink, classes.userCollapseLinks, {
+              [classes[color]]: this.activeRoute('/services/list')
+            })}
           >
             <span className={classes.collapseItemMini}>
               {"MS"}
@@ -138,7 +154,9 @@ class Sidebar extends React.Component {
         <ListItem className={classes.collapseItem}>
           <NavLink
             to="/service-categories"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
+            className={cx(classes.itemLink, classes.userCollapseLinks, {
+              [classes[color]]: this.activeRoute('/service-categories')
+            })}
           >
             <span className={classes.collapseItemMini}>
               {"SC"}
@@ -154,7 +172,9 @@ class Sidebar extends React.Component {
           <NavLink
             to="/business-categories"
             data-test-id="businessCategoriesNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
+            className={cx(classes.itemLink, classes.userCollapseLinks, {
+              [classes[color]]: this.activeRoute('/business-categories')
+            })}
           >
             <span className={classes.collapseItemMini}>
               {"BC"}
@@ -172,7 +192,9 @@ class Sidebar extends React.Component {
           <NavLink
             to="/provider/list"
             data-test-id="providerListNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks)}
+            className={cx(classes.itemLink, classes.userCollapseLinks, {
+              [classes[color]]: this.activeRoute('/provider/list')
+            })}
           >
             <span className={classes.collapseItemMini}>
               {"PD"}

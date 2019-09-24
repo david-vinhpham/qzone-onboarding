@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { URL } from '../config/config';
 import { service } from '../constants/Service.constants';
-import React from "react";
-import Alert from 'react-s-alert';
-import AlertMessage from 'components/Alert/Message';
+import { showAlert } from './alert';
 export const editServiceLoading = () => {
   return {
     type: service.EDIT_SERVICE_LOADING
@@ -55,11 +53,11 @@ export const editService = (body, history) => {
           dispatch(editServiceSuccess(data.object));
           history.push('/services/list');
         } else {
-          Alert.error(<AlertMessage>Cannot edit the service, missing image !</AlertMessage>);
+          dispatch(showAlert('error', 'Cannot edit the service, missing image !'));
         }
       })
       .catch(err => {
-        Alert.error(<AlertMessage>Cannot edit the service !</AlertMessage>);
+        dispatch(showAlert('error', 'Cannot edit the service !'));
       });
   };
 };
