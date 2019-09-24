@@ -22,6 +22,7 @@ import surveysReducer from './surveys';
 import geoOptionsReducer from './geoOptions.reducer';
 import surveyOptionsReducer from './surveyOptions.reducer';
 import chartReducer from './chart.reducer';
+import alertReducer from './alert.reducer';
 
 const rootReducer = combineReducers({
   common: commonReducer,
@@ -42,6 +43,7 @@ const rootReducer = combineReducers({
   customerService: customerServiceReducer,
   surveys: surveysReducer,
   chart: chartReducer,
+  alert: alertReducer,
   options: combineReducers({
     geo: geoOptionsReducer,
     timezone: timezoneOptionsReducer,

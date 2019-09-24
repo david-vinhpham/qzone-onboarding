@@ -1,6 +1,5 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import Alert from 'react-s-alert';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -11,11 +10,11 @@ import GridItem from '../../components/Grid/GridItem';
 import validatePassword from '../../utils/validatePassword';
 import verificationPageStyle from '../../assets/jss/material-dashboard-pro-react/modules/verificationPageStyle';
 import { classesType } from '../../types/global';
-import AlertMessage from '../../components/Alert/Message';
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import { completeNewPasswordChallenge } from "../../actions/auth";
 import { userStatus as eUserStatus } from "../../constants";
 import { Link } from "react-router-dom";
+import { showAlert } from 'actions/alert';
 
 class ForceChangePassword extends React.Component {
   static propTypes = {
@@ -23,6 +22,7 @@ class ForceChangePassword extends React.Component {
     email: PropTypes.string.isRequired,
     completeNewPasswordChallenge: PropTypes.func.isRequired,
     userId: PropTypes.string,
+    showAlert: PropTypes.func.isRequired,
   };
 
 
@@ -62,7 +62,7 @@ class ForceChangePassword extends React.Component {
     const isValid = (defaultPwdState === 'success' && confirmPwdState === 'success'
       && newPasswordState === 'success');
     if (!isValid) {
-      Alert.success(<AlertMessage>Invalid input data!</AlertMessage>, { effect: 'bouncyflip' });
+      this.props.showAlert('error', 'Invalid input data!');
       return;
     }
     const {
@@ -194,5 +194,5 @@ const mapStateToProps = state => {
 
 export default compose(
   withStyles(verificationPageStyle),
-  connect(mapStateToProps, { completeNewPasswordChallenge }),
+  connect(mapStateToProps, { completeNewPasswordChallenge, showAlert }),
 )(ForceChangePassword);

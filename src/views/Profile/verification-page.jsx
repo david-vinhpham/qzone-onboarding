@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { compose } from 'redux';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Alert from 'react-s-alert';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from 'components/CustomButtons/Button';
@@ -22,6 +21,7 @@ import { exactLength } from 'utils/validateLength';
 import { classesType, historyType } from 'types/global';
 import ResendCodeButton from './resend-code-button';
 import { logout } from "../../actions/auth";
+import { showAlert } from 'actions/alert';
 
 const codeLength = exactLength(6);
 
@@ -34,6 +34,7 @@ class VerificationPage extends React.PureComponent {
     page: PropTypes.string.isRequired,
     actionAfterSubmit: PropTypes.func,
     verifyUser: PropTypes.func.isRequired,
+    showAlert: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -102,7 +103,7 @@ class VerificationPage extends React.PureComponent {
           actionAfterSubmit();
         } else {
           logout(history);
-          Alert.success('Register successfully! Please login with your new account');
+          this.props.showAlert('success', 'Register successfully! Please login with your new account');
         }
       } else {
         this.setState({ errorCode: true });
@@ -203,5 +204,5 @@ class VerificationPage extends React.PureComponent {
 
 export default compose(
   withStyles(verificationPageStyle),
-  connect(null, { verifyUser }),
+  connect(null, { verifyUser, showAlert }),
 )(VerificationPage);

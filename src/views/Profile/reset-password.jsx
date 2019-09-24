@@ -2,8 +2,6 @@ import React from 'react';
 import {
   Dialog, DialogContent, DialogTitle, DialogActions, DialogContentText,
 } from '@material-ui/core';
-import Alert from 'react-s-alert';
-import AlertMessage from 'components/Alert/Message';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -15,11 +13,13 @@ import ChangePassword from 'modules/auth/change-password';
 import CustomInput from 'components/CustomInput/CustomInput';
 import { classesType } from 'types/global';
 import validateEmail from '../../utils/validateEmail';
+import { showAlert } from 'actions/alert';
 
 class ResetPassword extends React.Component {
   static propTypes = {
     classes: classesType.isRequired,
     resetPassword: PropTypes.func.isRequired,
+    showAlert: PropTypes.func.isRequired,
   };
 
   defaultState = {
@@ -39,13 +39,13 @@ class ResetPassword extends React.Component {
     resetPasswordAction(this.state, (response) => {
       if (response.status === 200 && response.data.success) {
         this.setState({ open: false, openChangePassword: true });
-        Alert.success(<AlertMessage>Code is successfully send to your email</AlertMessage>);
+        this.props.showAlert('success', 'Code is successfully send to your email');
       } else {
         const { data: { message } } = response;
         if (/emailMessage/.test(message)) {
-          Alert.error(<AlertMessage>Email address is required!</AlertMessage>);
+          this.props.showAlert('error', 'Email address is required!');
         } else {
-          Alert.error(<AlertMessage>{message}</AlertMessage>);
+          this.props.showAlert('error', message);
         }
       }
     });
@@ -127,4 +127,4 @@ class ResetPassword extends React.Component {
   }
 }
 
-export default connect(null, { resetPassword })(ResetPassword);
+export default connect(null, { resetPassword, showAlert })(ResetPassword);

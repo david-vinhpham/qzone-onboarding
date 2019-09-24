@@ -1,9 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   TextField, Dialog, DialogContent, DialogTitle, DialogActions, DialogContentText,
 } from '@material-ui/core';
-import Alert from 'react-s-alert';
-import AlertMessage from '../../components/Alert/Message';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -16,6 +15,7 @@ import { classesType } from '../../types/global';
 import { exactLength } from '../../utils/validateLength';
 import PasswordField from './password-field';
 import ResendCodeButton from './resend-code-button';
+import { showAlert } from 'actions/alert';
 
 const codeLength = exactLength(6);
 
@@ -25,6 +25,7 @@ class ChangePassword extends React.Component {
     email: PropTypes.string.isRequired,
     openChangePassword: PropTypes.bool.isRequired,
     closeChangePassword: PropTypes.func.isRequired,
+    showAlert: PropTypes.func.isRequired,
   };
 
   defaultState = {
@@ -92,12 +93,12 @@ class ChangePassword extends React.Component {
       if (response.status === 200 && response.data.success) {
         const { closeChangePassword } = this.props;
         closeChangePassword();
-        Alert.success(<AlertMessage>Password is successfully updated</AlertMessage>);
+        this.props.showAlert('success', 'Password is successfully updated');
       } else {
         this.setState({
           errorCode: true,
         });
-        Alert.error(<AlertMessage>{response.data.message}</AlertMessage>);
+        this.props.showAlert('error', response.data.message);
       }
     });
   };
@@ -214,5 +215,5 @@ class ChangePassword extends React.Component {
 
 export default compose(
   withStyles(verificationPageStyle),
-  //connect(null, { changePassword }),
+  connect(null, { showAlert }),
 )(ChangePassword);

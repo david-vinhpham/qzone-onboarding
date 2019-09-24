@@ -11,14 +11,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/CancelOutlined';
 import SaveIcon from '@material-ui/icons/CheckCircleOutlined';
 import withStyles from '@material-ui/core/styles/withStyles';
-/*import Alert from 'react-s-alert';*/
 import CustomInput from '../../components/CustomInput/CustomInput';
 import GridContainer from '../../components/Grid/GridContainer';
 import GridItem from '../../components/Grid/GridItem';
 import accountPageStyles from '../../assets/jss/material-dashboard-pro-react/modules/accountPageStyles';
 /*import ChangePassword from './change-password';*/
 import { classesType } from '../../types/global';
-/*import AlertMessage from '../../components/Alert/Message';*/
 
 class Account extends PureComponent {
   static propTypes = {

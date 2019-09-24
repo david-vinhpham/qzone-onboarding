@@ -8,7 +8,6 @@ import Amplify from 'aws-amplify';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blueColor from '@material-ui/core/colors/blue';
 import pinkColor from '@material-ui/core/colors/pink';
-import Alert from 'react-s-alert';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 
@@ -19,11 +18,10 @@ import reducers from './reducers';
 import './utils/responseHandler';
 import './assets/scss/material-dashboard-pro-react.css';
 import 'react-phone-number-input/style.css';
-import 'react-s-alert/dist/s-alert-default.css';
-import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import { RESET_ALL_STATES } from 'actions/common';
 import axios from 'axios';
 import { API_ROOT } from 'config/config';
+import Alert from 'components/Alert/Alert';
 
 axios.defaults.baseURL = API_ROOT;
 
@@ -87,9 +85,9 @@ ReactDOM.render(
             })}
           </Switch>
         </Router>
+        <Alert />
       </Provider>
     </MuiPickersUtilsProvider>
-    <Alert stack={{ limit: 3 }} position="bottom-right" />
   </MuiThemeProvider>,
   document.getElementById('root')
 );

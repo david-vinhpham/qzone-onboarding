@@ -1,13 +1,11 @@
-import React from 'react';
 import axios from "axios";
 import { Auth } from "aws-amplify";
 import { URL } from "../config/config";
 import { auth } from "../constants/Auth.constants";
 import { eUserType, userStatus } from "constants.js";
-import Alert from 'react-s-alert';
-import AlertMessage from 'components/Alert/Message';
 import { resetAllStates } from './common';
 import store from 'index.js';
+import { showAlert } from './alert';
 
 const clientId = '3ov1blo2eji4acnqfcv88tcidn';
 
@@ -141,7 +139,7 @@ export function loginUser(values, history) {
             if (payload.email_verified) {
               axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
             } else {
-              Alert.error(<AlertMessage>Your email is not verified!</AlertMessage>);
+              dispatch(showAlert('error', 'Your email is not verified!'));
               dispatch(registerUserFailure('Email is not verified'));
             }
           }
@@ -162,11 +160,11 @@ export function loginUser(values, history) {
                     history.push('/dashboard');
                   }
                 } else {
-                  Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
+                  dispatch(showAlert('error', 'You have attempted to access a page that you are not authorized to view'));
                   dispatch(registerUserFailure('Unauthorized'));
                 }
               } else {
-                Alert.error(<AlertMessage>User is not existed!</AlertMessage>);
+                dispatch(showAlert('error', 'User is not existed!'));
                 dispatch(registerUserFailure('fetch user failed'));
               }
             })
@@ -174,12 +172,12 @@ export function loginUser(values, history) {
               dispatch(registerUserFailure(err));
             });
         } else {
-          Alert.error(<AlertMessage>Your email or password is incorrect!</AlertMessage>);
+          dispatch(showAlert('error', 'Your email or password is incorrect!'));
           dispatch(registerUserFailure('Topology Error'));
         }
       })
       .catch(err => {
-        Alert.error(<AlertMessage>Your email or password is incorrect!</AlertMessage>);
+        dispatch(showAlert('error', 'Your email or password is incorrect!'));
         dispatch(registerUserFailure(err))
       });
   };
@@ -281,7 +279,7 @@ export function fetchUser(id, history) {
             localStorage.setItem('user', JSON.stringify(userDetail));
             localStorage.setItem('userSub', userDetail.userSub);
           } else {
-            Alert.error(<AlertMessage>You have attempted to access a page that you are not authorized to view</AlertMessage>);
+            dispatch(showAlert('error', 'You have attempted to access a page that you are not authorized to view'));
             dispatch(fetchUserFailure('Unauthorized'));
             logout(history);
           }
@@ -329,7 +327,7 @@ export function verifyUserCode(user, email, code, history) {
         if (json) {
           dispatch(verifyUserSuccess(json));
           history.push('/login');
-          Alert.success(<AlertMessage>Your email is verified successfully!</AlertMessage>);
+          dispatch(showAlert('success', 'Your email is verified successfully!'));
         } else {
           dispatch(verifyUserFailure('Topology Error'));
         }
@@ -379,18 +377,18 @@ export function completeNewPasswordChallenge(values, history) {
             type: auth.FORCE_RESET_PASSWORD_SUCCESS,
             payload: data
           });
-          Alert.success(<AlertMessage>Password is successfully updated</AlertMessage>);
+          dispatch(showAlert('success', 'Password is successfully updated'));
           logout(history);
         } else {
           dispatch({
             type: auth.FORCE_RESET_PASSWORD_FAILURE,
             payload: data
           });
-          Alert.error(<AlertMessage>{data.message}</AlertMessage>);
+          dispatch(showAlert('error', data.message));
         }
       })
       .catch(err => {
-        Alert.error(<AlertMessage>Cannot change password</AlertMessage>);
+        dispatch(showAlert('error', 'Cannot change password'));
       });
   }
 };
@@ -403,12 +401,12 @@ export const refreshToken = (history) => dispatch => {
         if (payload.email_verified) {
           axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
         } else {
-          Alert.error(<AlertMessage>Your email is not verified!</AlertMessage>);
+          dispatch(showAlert('error', 'Your email is not verified!'));
           history.push('/login');
         }
       })
       .catch(err => {
-        Alert.error(<AlertMessage>Your session is expired</AlertMessage>);
+        dispatch(showAlert('error', 'Your session is expired'));
         history.push('/login');
       });
   }
