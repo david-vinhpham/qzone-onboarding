@@ -5,7 +5,6 @@ import { compose } from 'redux';
 import Search from "@material-ui/icons/Search";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
-import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
@@ -62,19 +61,6 @@ class OrganizationList extends React.Component {
               <Card product className={classes.cardHover}>
                 <CardBody>
                   <div className={classes.cardHoverUnder}>
-                    <Button
-                      color="danger"
-                      simple
-                      justIcon>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Remove"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Delete />
-                      </Tooltip>
-                    </Button>
                     <Link to={`/organization/edit/${organization.id}`}>
                       <Button color="success" simple justIcon>
                         <Tooltip

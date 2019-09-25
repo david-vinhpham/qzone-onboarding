@@ -30,7 +30,7 @@ import PhoneInput from 'react-phone-number-input';
 import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import _ from 'lodash';
-import { classesType, historyType, matchType } from 'types/global.js';
+import { classesType, historyType, matchType, businessCategoryType } from 'types/global.js';
 import defaultImage from '../../assets/img/image_placeholder.jpg';
 import ImageUpload from '../../components/CustomUpload/ImageUpload';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
@@ -58,7 +58,7 @@ class OrganizationEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      data: {},
       imagePreviewUrl: defaultImage,
       imageObject: null
     };
@@ -74,7 +74,7 @@ class OrganizationEdit extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!nextProps.imageLoading) {
       this.setState({ data: nextProps.organization });
-      if (nextProps.organization != null && nextProps.organization.logo != null) {
+      if (nextProps.organization !== null && nextProps.organization.logo != null) {
         this.setState({ imagePreviewUrl: nextProps.organization.logo.fileUrl });
       } else {
         this.setState({ imagePreviewUrl: defaultImage });
@@ -288,7 +288,7 @@ class OrganizationEdit extends React.Component {
                               <GridItem>
                                 <FormLabel className={classes.labelHorizontal}>Name</FormLabel>
                               </GridItem>
-                              <GridItem xs={12} sm={4} style={{ 'flex-basis': '17.333%' }}>
+                              <GridItem xs={12} sm={4} style={{ 'flexBasis': '17.333%' }}>
                                 <CustomInput
                                   id="name"
                                   inputProps={{
@@ -303,12 +303,12 @@ class OrganizationEdit extends React.Component {
                                   <div style={{ color: 'red' }}>{errors.name}</div>
                                 ) : null}
                               </GridItem>
-                              <GridItem xs={12} sm={3} style={{ 'flex-basis': '18%' }}>
+                              <GridItem xs={12} sm={3} style={{ 'flexBasis': '18%' }}>
                                 <FormLabel className={classes.labelHorizontal}>
                                   Mode of Organization
                                 </FormLabel>
                               </GridItem>
-                              <GridItem xs={12} sm={3} style={{ 'flex-basis': '15%' }}>
+                              <GridItem xs={12} sm={3} style={{ 'flexBasis': '15%' }}>
                                 <Select
                                   value={values.orgMode}
                                   onChange={handleChange('orgMode')}
@@ -370,11 +370,11 @@ class OrganizationEdit extends React.Component {
                                   </FormLabel>
                                 </GridItem>
                                 {days.map((day, index) => (
-                                  <div>
-                                    <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                                  <div key={day}>
+                                    <GridItem xs={12} sm={3} style={{ 'maxWidth': '100%' }}>
                                       <FormLabel>{day}</FormLabel>
                                     </GridItem>
-                                    <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                                    <GridItem xs={12} sm={3} style={{ 'maxWidth': '100%' }}>
                                       <FormControl fullWidth style={{ margin: '-1px' }}>
                                         <CustomInput
                                           id={`preferences.serviceHours[${index}].startTime`}
@@ -387,7 +387,7 @@ class OrganizationEdit extends React.Component {
                                         />
                                       </FormControl>
                                     </GridItem>
-                                    <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
+                                    <GridItem xs={12} sm={3} style={{ 'maxWidth': '100%' }}>
                                       <FormControl fullWidth style={{ margin: '-1px' }}>
                                         <CustomInput
                                           id={`preferences.serviceHours[${index}].endTime`}
@@ -704,17 +704,24 @@ class OrganizationEdit extends React.Component {
 
 OrganizationEdit.propTypes = {
   classes: classesType.isRequired,
-  imageObject: PropTypes.string.isRequired,
+  imageObject: PropTypes.string,
   history: historyType.isRequired,
   match: matchType.isRequired,
   fetchBusinessCategories: PropTypes.func.isRequired,
   editOrganization: PropTypes.func.isRequired,
   fetchOrganization: PropTypes.func.isRequired,
   imageLoading: PropTypes.bool.isRequired,
-  organization: PropTypes.objectOf(PropTypes.object).isRequired,
-  businessCategories: PropTypes.objectOf(PropTypes.array).isRequired,
+  organization: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
+  businessCategories: PropTypes.arrayOf(businessCategoryType).isRequired,
   fetchOrganizationLoading: PropTypes.bool.isRequired,
-  editOrganizationError: PropTypes.objectOf(PropTypes.string).isRequired
+  editOrganizationError: PropTypes.objectOf(PropTypes.string)
+};
+
+OrganizationEdit.defaultProps = {
+  imageObject: null,
+  editOrganizationError: null
 };
 
 const mapsStateToProp = state => ({

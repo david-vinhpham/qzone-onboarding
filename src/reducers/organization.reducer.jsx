@@ -5,7 +5,7 @@ const initialState = {
   fetchOrganizationsLoading: null,
   fetchOrganizationsError: false,
 
-  organization: [],
+  organization: {},
   createOrganizationError: null,
   createOrganizationLoading: false,
 
