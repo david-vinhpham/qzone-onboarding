@@ -9,9 +9,8 @@ import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
-import ArtTrack from '@material-ui/icons/ArtTrack';
 import { Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Paper } from '@material-ui/core';
-import { classesType } from 'types/global.js';
+import { classesType, providerType } from 'types/global.js';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import Button from '../../components/CustomButtons/Button.jsx';
@@ -123,7 +122,7 @@ class ProviderList extends React.Component {
               <TableCell>Telephone</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>description</TableCell>
-              <TableCell>View|Edit|Delete</TableCell>
+              <TableCell>Edit|Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -139,16 +138,6 @@ class ProviderList extends React.Component {
                     : ''}
                 </TableCell>
                 <TableCell>
-                  <Button color="transparent" simple justIcon>
-                    <Tooltip
-                      id="tooltip-top"
-                      title="View"
-                      placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
-                    >
-                      <ArtTrack />
-                    </Tooltip>
-                  </Button>
                   <Link to={`/provider/edit/${provider.id}`}>
                     <Button color="success" simple justIcon>
                       <Tooltip
@@ -258,13 +247,18 @@ const mapDispatchToProps = dispatch => {
 ProviderList.propTypes = {
   fetchProvidersByBusinessAdminId: PropTypes.func.isRequired,
   deleteProvider: PropTypes.func.isRequired,
-  providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  providers: PropTypes.arrayOf(providerType).isRequired,
   classes: classesType.isRequired,
   fetchProvidersLoading: PropTypes.bool.isRequired,
-  fetchProviderError: PropTypes.string.isRequired,
+  fetchProviderError: PropTypes.string,
   delProviderLoading: PropTypes.bool.isRequired,
-  delProviderError: PropTypes.string.isRequired
+  delProviderError: PropTypes.string
 };
+
+ProviderList.defaultProps = {
+  fetchProviderError: null,
+  delProviderError: null,
+}
 
 export default compose(
   withStyles({ ...tableStyle, ...listPageStyle }),
