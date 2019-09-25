@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
-import ArtTrack from '@material-ui/icons/ArtTrack';
 import { Link } from 'react-router-dom';
 import Search from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
@@ -103,7 +102,7 @@ class ServicesList extends React.Component {
               <TableCell>Service Mode</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>BookingHorizon</TableCell>
-              <TableCell>View|Edit|Delete</TableCell>
+              <TableCell>Edit|Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -115,16 +114,6 @@ class ServicesList extends React.Component {
                 <TableCell>{`${service.description.substring(0, 150)}...`}</TableCell>
                 <TableCell>{service.bookingHorizon}</TableCell>
                 <TableCell>
-                  <Button color="transparent" simple justIcon>
-                    <Tooltip
-                      id="tooltip-top"
-                      title="View"
-                      placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
-                    >
-                      <ArtTrack />
-                    </Tooltip>
-                  </Button>
                   <Link to={`/service/edit/${service.id}`}>
                     <Button color="success" simple justIcon>
                       <Tooltip
@@ -235,8 +224,12 @@ ServicesList.propTypes = {
   deleteService: PropTypes.func.isRequired,
   services: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchServicesLoading: PropTypes.bool.isRequired,
-  fetchServiceError: PropTypes.string.isRequired,
+  fetchServiceError: PropTypes.string,
   classes: classesType.isRequired
+};
+
+ServicesList.defaultProps = {
+  fetchServiceError: null
 };
 
 export default compose(
