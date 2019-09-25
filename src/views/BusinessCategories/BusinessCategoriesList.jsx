@@ -53,7 +53,7 @@ class BusinessCategoriesList extends PureComponent {
   }
 
   componentDidMount() {
-      this.props.fetchBusinessCategories();
+    this.props.fetchBusinessCategories();
   }
 
   handleAddBusinessCategoryDialogOpen = () => {
@@ -137,32 +137,29 @@ class BusinessCategoriesList extends PureComponent {
                 <TableCell size="small">{index + 1}</TableCell>
                 <TableCell>{svc.name}</TableCell>
                 <TableCell align="center">
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                    onClick={() => this.handleEditBusinessCategoryDialogOpen(svc)}
-                  >
-                    <Button color="success" simple justIcon>
+                  <Button color="success" onClick={() => this.handleEditBusinessCategoryDialogOpen(svc)} simple justIcon>
+                    <Tooltip
+                      title="Edit"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
                       <Edit />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Remove"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
+                    </Tooltip>
+                  </Button>
+                  <Button
+                    onClick={() => this.deleteBusinessCategory(svc.id)}
+                    color="danger"
+                    simple
+                    justIcon
                   >
-                    <Button
-                      onClick={() => this.deleteBusinessCategory(svc.id)}
-                      color="danger"
-                      simple
-                      justIcon
+                    <Tooltip
+                      title="Remove"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Delete />
-                    </Button>
-                  </Tooltip>
+                    </Tooltip>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
