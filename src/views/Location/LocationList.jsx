@@ -244,9 +244,14 @@ LocationList.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.object).isRequired,
   history: historyType.isRequired,
   fetchLocationLoading: PropTypes.bool.isRequired,
-  fetchLocationError: PropTypes.string.isRequired,
+  fetchLocationError: PropTypes.string,
   delLocationLoading: PropTypes.bool.isRequired,
-  delLocationError: PropTypes.string.isRequired
+  delLocationError: PropTypes.string
+};
+
+LocationList.defaultProps = {
+  fetchLocationError: null,
+  delLocationError: null,
 };
 
 export default compose(
