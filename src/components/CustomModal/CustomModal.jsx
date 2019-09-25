@@ -1,52 +1,33 @@
-import React, {Component} from 'react';
-import Modal from '@material-ui/core/Modal';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import Button from 'components/CustomButtons/Button';
-import Card from 'components/Card/Card';
-import CardHeader from 'components/Card/CardHeader';
-import CardBody from 'components/Card/CardBody';
-import CardFooter from 'components/Card/CardFooter';
-import Typography from '@material-ui/core/Typography';
-
-const styles = (theme) => ({
-  root: {
-    width: '70%',
-    top: '30%',
-    left: '15%',
-    [theme.breakpoints.up('sm')]: {
-      width: '35%',
-      left: '40%',
-    }
-  },
-});
 
 class CustomModal extends Component {
   render() {
-    const { openModal, closeModal, confirmDeletion, classes } = this.props;
+    const { openModal, closeModal, confirmDeletion } = this.props;
     return (
-      <Modal
+      <Dialog
         aria-labelledby="custom-modal-label"
         aria-describedby="custom-modal-description"
         open={openModal}
         disableBackdropClick
         disableEscapeKeyDown
-        classes={classes}
       >
-        <Card>
-          <CardHeader>
-            <Typography variant="headline">Do you want to delete this email template?</Typography>
-          </CardHeader>
-          <CardBody>
-            <Typography variant="subheading" color="textSecondary">You will not be able to recovery this template anymore. As it is permanently deleted!</Typography>
-          </CardBody>
-          <CardFooter>
-            <Button onClick={confirmDeletion} color="rose">Delete</Button>
-            <Button onClick={closeModal}>Discard</Button>
-          </CardFooter>
-        </Card>
-      </Modal>
+        <DialogTitle>
+          Do you want to delete this email template?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You will not be able to recovery this template anymore. As it is permanently deleted!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeModal}>Discard</Button>
+          <Button onClick={confirmDeletion} color="rose">Delete</Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 }
 
-export default withStyles(styles)(CustomModal);
+export default CustomModal;
