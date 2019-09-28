@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import SweetAlert from 'react-bootstrap-sweetalert';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { verifyResendUser } from '../../actions/auth';
+import { showAlert } from 'actions/alert';
 
 class ResendCodeButton extends PureComponent {
   static propTypes = {
@@ -22,7 +22,7 @@ class ResendCodeButton extends PureComponent {
       const { email, cbAfterResend, verifyResendUser } = this.props;
       verifyResendUser({ email }, response => {
         if (response.status !== 200 || !response.data.success) {
-          SweetAlert.error(response.data.message, { effect: 'bouncyflip' });
+          this.props.showAlert('error', response.data.message);
         }
         cbAfterResend();
       });
@@ -49,5 +49,5 @@ class ResendCodeButton extends PureComponent {
 
 export default connect(
   null,
-  { verifyResendUser }
+  { verifyResendUser, showAlert }
 )(ResendCodeButton);
