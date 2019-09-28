@@ -201,7 +201,7 @@ export default function TmpServiceContent({
             <Typography variant="caption" display="inline">
               {
                 tmpService.privacy
-                  ? 'The service is not visible in '
+                  ? 'The service is visible in '
                   : 'The service is visible in '
               }
               <Link

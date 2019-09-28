@@ -267,7 +267,7 @@ class TmpServicesList extends PureComponent {
           numberOfParallelCustomer: 1,
           serviceId,
           surveyId: 'none',
-          privacy: false
+          privacy: true
         }
       };
 
