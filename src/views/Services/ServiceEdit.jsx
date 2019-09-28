@@ -532,18 +532,26 @@ class ServiceEdit extends React.Component {
 ServiceEdit.propTypes = {
   classes: classesType.isRequired,
   history: historyType.isRequired,
-  imageObject: PropTypes.string.isRequired,
+  imageObject: PropTypes.string,
   fetchOrganizationsByBusinessAdminId: PropTypes.func.isRequired,
   fetchServiceCategories: PropTypes.func.isRequired,
   fetchServiceById: PropTypes.func.isRequired,
   editService: PropTypes.func.isRequired,
   imageLoading: PropTypes.bool.isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
-  service: PropTypes.objectOf(PropTypes.object).isRequired,
+  service: PropTypes.shape({
+    id: PropTypes.string,
+  }),
   fetchServiceLoading: PropTypes.bool.isRequired,
   organizations: PropTypes.arrayOf(PropTypes.object).isRequired,
-  editServiceError: PropTypes.string.isRequired,
+  editServiceError: PropTypes.string,
   match: matchType.isRequired
+};
+
+ServiceEdit.defaultProps = {
+  imageObject: null,
+  service: null,
+  editServiceError: null,
 };
 
 const mapStateToProps = state => {

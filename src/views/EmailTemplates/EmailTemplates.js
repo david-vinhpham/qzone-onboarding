@@ -101,7 +101,7 @@ class EmailTemplates extends Component {
     const { isDeleting } = this.state;
     const templateList = templates.length ? (
       templates.map(template => (
-        <ExpansionPanel key={template.id}>
+        <ExpansionPanel key={template.name}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>{template.name}</Typography>
           </ExpansionPanelSummary>
@@ -117,23 +117,19 @@ class EmailTemplates extends Component {
               }}
             />
           </ExpansionPanelDetails>
-          {template.default === true ?   <ExpansionPanelActions/> :
+          {!template.default &&
             <ExpansionPanelActions>
-            <Link to={`/email-templates/edit/${template.id}`}>
-            <Button color="rose">Edit</Button>
-            </Link>
-            <Button onClick={() => this.deleteTemplateHandler(template.id)}>Delete</Button>
-            </ExpansionPanelActions>
-          }
+              <Link to={`/email-templates/edit/${template.id}`}>
+                <Button color="rose">Edit</Button>
+              </Link>
+              <Button onClick={() => this.deleteTemplateHandler(template.id)}>Delete</Button>
+            </ExpansionPanelActions>}
         </ExpansionPanel>
-      ))
-    ) : (
-      <Typography variant="display1">There is no email template!</Typography>
-    );
-    const emailTemplates = loading ? (
-      <Loading />
-    ) : (
-      <Card>
+      ))) :
+      (<Typography variant="subtitle1">There is no email template!</Typography>);
+
+    const emailTemplates = loading ? (<Loading />) :
+      (<Card>
         <CustomModal
           openModal={isDeleting}
           closeModal={this.closeModal}
@@ -150,9 +146,9 @@ class EmailTemplates extends Component {
             New template
           </Button>
         </CardFooter>
-      </Card>
-    );
-    return <React.Fragment>{emailTemplates}</React.Fragment>;
+      </Card>);
+
+    return emailTemplates;
   }
 }
 

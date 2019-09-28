@@ -2,7 +2,7 @@ import axios from 'axios';
 import { get } from 'lodash';
 import { scheduleReportConstant } from 'constants/ScheduleReport.constant';
 import { URL } from 'config/config';
-import Alert from "react-s-alert";
+import { showAlert } from './alert';
 
 const setScheduleReportLoading = payload => ({
   type: scheduleReportConstant.FETCH_SCHEDULE_REPORT_LOADING,
@@ -21,7 +21,7 @@ export const fetchScheduleReport = payload => dispatch => {
       if (resp && resp.data.success) {
         dispatch(setScheduleReportSuccess(get(resp, 'data.object', [])));
       } else {
-        Alert.error("Failed to load data");
+        dispatch(showAlert('error', 'Failed to load data'));
         window.location.replace("/dashboard");
       }
     })

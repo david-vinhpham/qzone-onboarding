@@ -29,7 +29,9 @@ const initialState = {
   loading: false,
   error: null,
   deleteStatus: 404,
-  isTemplateCreated: false
+  isTemplateCreated: false,
+  templateIdDeleted: '',
+  isTemplateEdited: false,
 };
 
 const reducer = (state = initialState, action) => {

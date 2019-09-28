@@ -2,7 +2,7 @@ import axios from 'axios';
 import { get } from 'lodash';
 import { availabilitySlots } from 'constants/AvailabilitySlots';
 import { URL } from 'config/config';
-import Alert from "react-s-alert";
+import { showAlert } from './alert';
 
 const setAvailabilityLoading = payload => ({
   type: availabilitySlots.FETCH_AVAILABILITY_LOADING,
@@ -20,9 +20,8 @@ export const fetchAvailability = payload => dispatch => {
     .then(resp => {
       if (resp && resp.data.success) {
         dispatch(setAvailabilitySlots(get(resp, 'data', [])));
-      }
-      else {
-        Alert.success("Failed to load data");
+      } else {
+        dispatch(showAlert('error', 'Failed to load data'));
         window.location.replace("/dashboard");
       }
     })

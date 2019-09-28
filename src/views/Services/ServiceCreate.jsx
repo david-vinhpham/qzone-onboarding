@@ -60,17 +60,17 @@ class ServiceCreate extends React.Component {
     super(props);
     this.state = {
       allowProviderSelection: true,
-      name: "",
-      nameState: "",
+      name: '',
+      nameState: '',
       bookingHorizon: 3,
-      description: "",
+      description: '',
       duration: 60,
       gapBetweenAppointments: 1,
       mode: "SCHEDULE",
       numberOfParallelCustomer: 1,
-      serviceCategoryId: null,
-      organizationId: null,
-      tags: "",
+      serviceCategoryId: '',
+      organizationId: '',
+      tags: '',
       imagePreviewUrl: defaultImage,
     }
   }
@@ -152,7 +152,7 @@ class ServiceCreate extends React.Component {
               mode: this.state.mode,
               serviceCategoryId: this.state.serviceCategoryId,
               tags: this.state.tags,
-              organizationId: organizationOptions !== null && organizationOptions.length > 0 ? organizationOptions[0].id : null,
+              organizationId: organizationOptions !== null && organizationOptions.length > 0 ? organizationOptions[0].id : '',
               organizationName: this.state.organizationName,
               businessAdminId: this.state.businessAdminId,
               imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
@@ -180,8 +180,7 @@ class ServiceCreate extends React.Component {
                   <CardBody>
                     {createServiceError !== null ? (<CardFooter className={classes.justifyContentCenter}>
                       <div style={{ color: "red" }} > {createServiceError.message} </div>
-                    </CardFooter>)
-                      :
+                    </CardFooter>) :
                       (<CardFooter className={classes.justifyContentCenter}>
                       </CardFooter>)}
                     <form>
@@ -189,7 +188,7 @@ class ServiceCreate extends React.Component {
                         <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                             Service Organization
-                                                </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={4}>
                           <FormControl
@@ -217,13 +216,12 @@ class ServiceCreate extends React.Component {
                         <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                             Service Category
-                                                    </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={4}>
                           <FormControl
                             fullWidth
                             className={classes.selectFormControl}>
-
                             <Select
                               value={values.serviceCategoryId}
                               onChange={handleChange('serviceCategoryId')}
@@ -246,7 +244,7 @@ class ServiceCreate extends React.Component {
                         <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                             Name
-                                              </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={4}>
                           <CustomInput
@@ -255,16 +253,16 @@ class ServiceCreate extends React.Component {
                             onChange={handleChange}
                             value={values.name}
                           />
-                          {errors.name && touched.name ? (
+                          {errors.name && touched.name && (
                             <div style={{ color: "red" }}>{errors.name}</div>
-                          ) : null}
+                          )}
                         </GridItem>
                       </GridContainer>
                       <GridContainer>
                         <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                             Description
-                                              </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={3}>
                           <CustomInput
@@ -279,16 +277,16 @@ class ServiceCreate extends React.Component {
                             value={values.description}
                             onChange={handleChange}
                           />
-                          {errors.description && touched.description ? (
+                          {errors.description && touched.description && (
                             <div style={{ color: "red" }}>{errors.description}</div>
-                          ) : null}
+                          )}
                         </GridItem>
                       </GridContainer>
                       <GridContainer>
                         <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                             Duration of Service
-                                            </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={4}>
                           <SlotCustomInput
@@ -303,16 +301,16 @@ class ServiceCreate extends React.Component {
                             value={values.duration}
                             onChange={handleChange}
                           />
-                          {errors.duration && touched.duration ? (
+                          {errors.duration && touched.duration && (
                             <div style={{ color: "red" }}>{errors.duration}</div>
-                          ) : null}
+                          )}
                         </GridItem>
                       </GridContainer>
                       <GridContainer>
                         <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                             Booking Horizon
-                                            </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={4}>
                           <SlotCustomInput
@@ -327,16 +325,16 @@ class ServiceCreate extends React.Component {
                             value={values.bookingHorizon}
                             onChange={handleChange}
                           />
-                          {errors.bookingHorizon && touched.bookingHorizon ? (
+                          {errors.bookingHorizon && touched.bookingHorizon && (
                             <div style={{ color: "red" }}>{errors.bookingHorizon}</div>
-                          ) : null}
+                          )}
                         </GridItem>
                       </GridContainer>
                       <GridContainer>
                         <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                             Tags
-                                            </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={4}>
                           <CustomInput
@@ -409,7 +407,6 @@ class ServiceCreate extends React.Component {
                             label="Queue"
                           />
                         </GridItem>
-
                       </GridContainer>
                       <GridContainer>
                         <GridItem xs={12} sm={3}>
@@ -421,7 +418,7 @@ class ServiceCreate extends React.Component {
                             }
                           >
                             Allow Provider Selection
-                                                    </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={2}>
                           <FormControlLabel
@@ -441,7 +438,7 @@ class ServiceCreate extends React.Component {
                         <GridItem xs={12} sm={3}>
                           <FormLabel className={classes.labelHorizontal}>
                             Gap between Appointments
-                                            </FormLabel>
+                          </FormLabel>
                         </GridItem>
                         <GridItem xs={12} sm={4}>
                           <CustomInput
@@ -472,10 +469,10 @@ class ServiceCreate extends React.Component {
                   <CardFooter className={classes.justifyContentCenter}>
                     <Button color="rose" onClick={handleSubmit}>
                       Create
-                                        </Button>
+                    </Button>
                     <Button color="rose" onClick={this.props.history.goBack}>
                       Exit
-                                        </Button>
+                    </Button>
                   </CardFooter>
                 </div>
               )

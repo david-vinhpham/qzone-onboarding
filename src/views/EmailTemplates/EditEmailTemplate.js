@@ -67,7 +67,7 @@ class EditEmailTemplate extends Component {
     }
     if (isTemplateEdited) {
       this.props.cleanEditTemplateStatus();
-      history.push(eTemplateUrl);
+      history.push(`/${eTemplateUrl}`);
     }
     this.setState({ ...newState, templateName, templateContent });
   }
@@ -75,7 +75,7 @@ class EditEmailTemplate extends Component {
   cancelEditHandler = () => {
     const { history } = this.props;
     this.props.cleanTemplateStatus();
-    history.push(eTemplateUrl);
+    history.push(`/${eTemplateUrl}`);
   };
 
   changeHandler = (event, type) => {

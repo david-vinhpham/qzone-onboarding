@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'components/Loading/Loading';
-import Alert from 'react-s-alert';
 import { InsertLink, Delete, Edit } from '@material-ui/icons';
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from '@material-ui/core';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -19,6 +18,7 @@ import CardBody from '../../components/Card/CardBody';
 import { deleteSurveyByIdAction, resetSurveyStatus, setSurveysAction } from '../../actions/surveys';
 import { eUserType } from 'constants.js';
 import DeletionModal from "../../shared/deletion-modal";
+import { showAlert } from 'actions/alert.jsx';
 
 class Survey extends Component {
   static getDerivedStateFromProps(props, state) {
@@ -104,7 +104,7 @@ class Survey extends Component {
 
   handleCopyLink = event => {
     event.preventDefault();
-    Alert.success('Survey link is copied to your clipboard!')
+    this.props.showAlert('success', 'Survey link is copied to your clipboard!');
   };
 
   cancelDelete = () => {
@@ -238,6 +238,7 @@ export default connect(
     setSurveysAction,
     deleteSurveyByIdAction,
     resetSurveyStatus,
+    showAlert
   },
 )(withStyles(
   theme => ({

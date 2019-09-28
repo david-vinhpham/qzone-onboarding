@@ -52,7 +52,7 @@ class ServiceCategoriesList extends PureComponent {
   }
 
   componentDidMount() {
-      this.props.fetchServiceCategories();
+    this.props.fetchServiceCategories();
   }
 
   handleAddServiceCategoryDialogOpen = () => {
@@ -152,38 +152,37 @@ class ServiceCategoriesList extends PureComponent {
                 <TableCell size="small">{index + 1}</TableCell>
                 <TableCell>{svc.name}</TableCell>
                 <TableCell align="center">
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                    onClick={() => this.handleEditServiceCategoryDialogOpen(svc)}
-                  >
-                    <Button color="success" simple justIcon>
+                  <Button color="success" onClick={() => this.handleEditServiceCategoryDialogOpen(svc)} simple justIcon>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Edit"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
                       <Edit />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Remove"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
+                    </Tooltip>
+                  </Button>
+                  <Button
+                    onClick={() => this.deleteServiceCategory(svc.id)}
+                    color="danger"
+                    simple
+                    justIcon
                   >
-                    <Button
-                      onClick={() => this.deleteServiceCategory(svc.id)}
-                      color="danger"
-                      simple
-                      justIcon
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Remove"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Delete />
-                    </Button>
-                  </Tooltip>
+                    </Tooltip>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </Paper>
+      </Paper >
     );
 
     const deletionPopup = deletedServiceCategory.isDel ? (
