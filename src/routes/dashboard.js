@@ -1,7 +1,9 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
-  BubbleChart, BusinessCenter, Email, LocationOn, Person, PersonAdd,
-  FilterVintage, Star, Assignment, BarChart
+  BubbleChart, Email,
+  FilterVintage, Star, Assignment, BarChart,
+  Business, Navigation, Schedule,
+  Category, BusinessCenter, People
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Administration from '../views/Administration/Administration';
@@ -43,28 +45,32 @@ const dashboardRoutes = [
     path: '/dashboard',
     name: 'Dashboard',
     icon: DashboardIcon,
-    component: Dashboard
+    component: Dashboard,
+    dataTestId: 'dashboardNavLink',
   },
   {
     path: '/customer-service',
     name: 'Customer Service',
     icon: FilterVintage,
     component: CustomerService,
-    dataTestId: 'customerServiceNavLink'
+    dataTestId: 'customerServiceNavLink',
+    iconColor: 'primary',
   },
   {
     path: '/calendar',
     name: 'Manage Calendar',
     icon: BubbleChart,
     component: ManageCalendar,
-    dataTestId: 'calendarNavLink'
+    dataTestId: 'calendarNavLink',
+    iconColor: 'primary',
   },
   {
     path: '/tmp-services',
     name: 'Temporary Services',
     icon: Star,
     component: TmpServicesList,
-    dataTestId: 'tmpServicesNavLink'
+    dataTestId: 'tmpServicesNavLink',
+    iconColor: 'primary',
   },
   {
     path: '/email-templates',
@@ -72,170 +78,183 @@ const dashboardRoutes = [
     icon: Email,
     guarded: true,
     component: EmailTemplates,
-    dataTestId: 'emailTemplatesNavLink'
+    dataTestId: 'emailTemplatesNavLink',
+    iconColor: 'primary',
   },
   {
     path: '/assessments',
     name: 'Assessments',
     icon: Assignment,
     component: Assessments,
-    dataTestId: 'assessmentsNavLink'
+    dataTestId: 'assessmentsNavLink',
+    iconColor: 'primary',
   },
   {
     path: '/chart',
     name: 'Chart',
     icon: BarChart,
     component: ChartBoard,
-    dataTestId: 'chartNavLink'
+    dataTestId: 'chartNavLink',
+    iconColor: 'primary',
   },
   { redirect: true, path: '/', pathTo: '/login', name: 'Login' }
 ];
 
+const managementRoutes = [
+  {
+    path: '/organization/list',
+    name: 'Organization',
+    shortName: 'OL',
+    component: OrganizationList,
+    icon: BusinessCenter,
+    iconColor: 'secondary',
+    dataTestId: 'orgListNavLink',
+  },
+  {
+    path: '/location/list',
+    name: 'Locations',
+    shortName: 'BL',
+    component: LocationList,
+    icon: Navigation,
+    iconColor: 'secondary',
+    dataTestId: 'locationListNavLink',
+  },
+  {
+    path: '/services/list',
+    name: 'Manage Services',
+    shortName: 'MS',
+    component: ServicesList,
+    icon: Schedule,
+    iconColor: 'secondary',
+    dataTestId: 'serviceListNavLink',
+  },
+  {
+    path: '/service-categories',
+    name: 'Service Categories',
+    shortName: 'SC',
+    component: ServiceCategoriesList,
+    icon: Category,
+    iconColor: 'secondary',
+    dataTestId: 'sCategoryNavLink',
+  },
+  {
+    path: '/business-categories',
+    name: 'Business Categories',
+    shortName: 'BC',
+    component: BusinessCategoriesList,
+    icon: Business,
+    iconColor: 'secondary',
+    dataTestId: 'bCategoryNavLink',
+  },
+  {
+    path: '/provider/list',
+    name: 'Provider Details',
+    shortName: 'PD',
+    component: ProviderList,
+    icon: People,
+    iconColor: 'secondary',
+    dataTestId: 'providerListNavLink',
+  },
+];
+
 const otherRoutes = [
+  ...managementRoutes,
   {
     path: '/location/edit/:id',
     name: 'Location Edit',
-    icon: Person,
     component: LocationEdit
   },
   {
     path: '/location/create',
     name: 'Location Create',
-    icon: LocationOn,
     component: LocationCreate
-  },
-  {
-    path: '/location/list',
-    name: 'Location List',
-    icon: LocationOn,
-    component: LocationList
   },
   {
     path: '/provider/create',
     name: 'Provider Create',
-    icon: Person,
     component: ProviderCreate
   },
   {
     path: '/provider/edit/:id',
     name: 'Provider Edit',
-    icon: Person,
     component: ProviderEdit
   },
   {
     path: '/organization/create',
     name: 'Create Organization',
-    icon: BusinessCenter,
     component: OrganizationCreate
   },
   {
     path: '/organization/edit/:id',
     name: 'Organization Edit',
-    icon: BusinessCenter,
     component: OrganizationEdit
-  },
-  {
-    path: '/organization/list',
-    name: 'Organization List',
-    icon: BusinessCenter,
-    component: OrganizationList
-  },
-  {
-    path: '/services/list',
-    name: 'Manage Services',
-    icon: BusinessCenter,
-    component: ServicesList
   },
   {
     path: '/services/create',
     name: 'Create Services',
-    icon: BusinessCenter,
     component: ServiceCreate
   },
   {
     path: '/service/edit/:id',
     name: 'Service Edit',
-    icon: BusinessCenter,
     component: ServiceEdit
   },
   {
     path: '/administration',
     name: 'Administration',
-    icon: LocationOn,
     component: Administration
-  },
-  {
-    path: '/provider/list',
-    name: 'Provider Details',
-    icon: Person,
-    component: ProviderList
   },
   {
     path: '/provider/card',
     name: 'Provider Card',
-    icon: Person,
     component: ProviderList
   },
   {
     path: '/organization/edit',
     name: 'Business Edit',
-    icon: BusinessCenter,
     component: OrganizationEdit
   },
   {
     path: '/register',
     name: 'Register Page',
-    short: 'Register',
+    shortName: 'Register',
     mini: 'RP',
-    icon: PersonAdd,
     component: RegisterPage
   },
   {
     path: '/email-templates/edit/:id',
     name: 'Edit Email Template',
-    short: 'Edit Email Template',
+    shortName: 'Edit Email Template',
     component: EditEmailTemplate
   },
   {
     path: '/email-templates/create',
     name: 'Create Email Template',
-    short: 'Create Template',
+    shortName: 'Create Template',
     component: CreateEmailTemplate
   },
   {
     path: '/tmp-services',
     name: 'Temporary Services',
-    short: 'Temporary Services',
+    shortName: 'Temporary Services',
     component: TmpServicesList
-  },
-  {
-    path: '/service-categories',
-    name: 'List Service Categories',
-    short: 'List Service Categories',
-    component: ServiceCategoriesList
-  },
-  {
-    path: '/business-categories',
-    name: 'List Business Categories',
-    short: 'List Business Categories',
-    component: BusinessCategoriesList
   },
   {
     path: '/availability/detail/:id',
     name: 'Availability Detail',
-    short: 'Availability Detail',
+    shortName: 'Availability Detail',
     component: AvailabilitySlotsList
   },
   {
     path: '/schedule-report/detail/:id',
     name: 'Schedule Report Detail',
-    short: 'Schedule Report Detail',
+    shortName: 'Schedule Report Detail',
     component: ScheduleReportList
   },
   {
     path: '/assessments/new',
     name: 'Create new assessment',
-    short: 'Create new assignment',
+    shortName: 'Create new assignment',
     component: CreateAssessment,
   },
 ];
@@ -249,8 +268,10 @@ const providerRoutes = [
 const profileRouteComponent = {
   path: '/profile',
   name: 'Profile',
-  icon: Person,
   component: Profile
 };
 
-export { dashboardRoutes, otherRoutes, providerRoutes, profileRouteComponent };
+export {
+  dashboardRoutes, otherRoutes, providerRoutes,
+  profileRouteComponent, managementRoutes
+};

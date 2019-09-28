@@ -11,7 +11,7 @@ import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText, A
 import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
 import sidebarStyle from "../../assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
 import { eUserType } from "constants.js";
-import { providerRoutes } from "routes/dashboard.js";
+import { providerRoutes, managementRoutes } from "routes/dashboard.js";
 
 var ps;
 
@@ -45,16 +45,8 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.adminNavItemLinks = [
-      '/organization/list',
-      '/location/list',
-      '/services/list',
-      '/service-categories',
-      '/business-categories',
-      '/provider/list',
-    ];
     this.state = {
-      openAvatar: this.adminNavItemLinks.some(link => this.activeRoute(link)),
+      openAvatar: managementRoutes.some(link => this.activeRoute(link.path)),
       miniActive: true
     };
   }
@@ -95,119 +87,26 @@ class Sidebar extends React.Component {
 
     const adminNavItems = (
       <List className={cx(classes.list, classes.collapseList)}>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/organization/list"
-            data-test-id="orgListNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks, {
-              [classes[color]]: this.activeRoute('/organization/list')
-            })}
-          >
-            <span className={classes.collapseItemMini}>
-              {"OL"}
-            </span>
-            <ListItemText
-              primary={
-                "Organization List"
-              }
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/location/list"
-            data-test-id="businessLocationListNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks, {
-              [classes[color]]: this.activeRoute('/location/list')
-            })}
-          >
-            <span className={classes.collapseItemMini}>
-              {"BL"}
-            </span>
-            <ListItemText
-              primary="Business Locations"
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/services/list"
-            data-test-id="manageServicesNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks, {
-              [classes[color]]: this.activeRoute('/services/list')
-            })}
-          >
-            <span className={classes.collapseItemMini}>
-              {"MS"}
-            </span>
-            <ListItemText
-              primary="Manage Services"
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/service-categories"
-            className={cx(classes.itemLink, classes.userCollapseLinks, {
-              [classes[color]]: this.activeRoute('/service-categories')
-            })}
-          >
-            <span className={classes.collapseItemMini}>
-              {"SC"}
-            </span>
-            <ListItemText
-              disableTypography
-              primary="Service Categories"
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/business-categories"
-            data-test-id="businessCategoriesNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks, {
-              [classes[color]]: this.activeRoute('/business-categories')
-            })}
-          >
-            <span className={classes.collapseItemMini}>
-              {"BC"}
-            </span>
-            <ListItemText
-              primary={
-                "Business Categories"
-              }
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.collapseItem}>
-          <NavLink
-            to="/provider/list"
-            data-test-id="providerListNavLink"
-            className={cx(classes.itemLink, classes.userCollapseLinks, {
-              [classes[color]]: this.activeRoute('/provider/list')
-            })}
-          >
-            <span className={classes.collapseItemMini}>
-              {"PD"}
-            </span>
-            <ListItemText
-              primary={
-                "Provider Details"
-              }
-              disableTypography={true}
-              className={collapseItemText}
-            />
-          </NavLink>
-        </ListItem>
+        {managementRoutes.map(route => (
+          <ListItem className={classes.collapseItem}>
+            <NavLink
+              to={route.path}
+              data-test-id={route.dataTestId}
+              className={cx(classes.itemLink, classes.userCollapseLinks, {
+                [classes[color]]: this.activeRoute(route.path)
+              })}
+            >
+              <span className={classes.collapseItemMini}>
+                {route.shortName}
+              </span>
+              <ListItemText
+                disableTypography
+                primary={route.name}
+                className={collapseItemText}
+              />
+            </NavLink>
+          </ListItem>
+        ))}
       </List>
     );
 

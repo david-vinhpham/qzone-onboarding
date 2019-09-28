@@ -1,0 +1,26 @@
+.wrapper {
+  padding: 16px;
+
+  .heading {
+    margin-bottom: 8px;
+    &Icon {
+      margin-right: 16px;
+    }
+  }
+  .divider {
+    margin: 40px 0 32px;
+  }
+}
+
+.route {
+  text-align: center;
+}
+
+.routeContent {
+  &:hover {
+    background-color: #00acc1;
+    p, svg {
+      color: white;
+    }
+  }
+}
