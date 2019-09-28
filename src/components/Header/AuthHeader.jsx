@@ -63,7 +63,7 @@ class AuthHeader extends React.Component {
                   <prop.icon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={prop.short}
+                  primary={prop.shortName}
                   disableTypography
                   className={classes.listItemText}
                 />
