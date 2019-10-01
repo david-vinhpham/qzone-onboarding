@@ -54,7 +54,7 @@ const ServiceEditSchema = Yup.object().shape({
     .required('this field is required'),
   duration: Yup.number().min(1),
   gapBetweenAppointments: Yup.number()
-    .min(1)
+    .min(0)
     .max(600),
   numberOfParallelCustomer: Yup.number().min(1).max(999),
   bookingHorizon: Yup.number()

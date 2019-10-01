@@ -44,7 +44,7 @@ const ServiceCreateSchema = Yup.object().shape({
   duration: Yup.number()
     .min(1),
   gapBetweenAppointments: Yup.number()
-    .min(1)
+    .min(0)
     .max(600),
   numberOfParallelCustomer: Yup.number()
     .min(1).max(999),
@@ -65,7 +65,7 @@ class ServiceCreate extends React.Component {
       bookingHorizon: 3,
       description: '',
       duration: 60,
-      gapBetweenAppointments: 1,
+      gapBetweenAppointments: 0,
       mode: "SCHEDULE",
       numberOfParallelCustomer: 1,
       serviceCategoryId: '',
