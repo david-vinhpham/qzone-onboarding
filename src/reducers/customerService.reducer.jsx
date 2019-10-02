@@ -10,9 +10,6 @@ const initialState = {
 
   isBoardLoading: false,
   boardData: {},
-
-  isFetchProviderOptionsByBusinessAdminIdSuccess: false,
-  providerOptions: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -31,12 +28,6 @@ const reducer = (state = initialState, action) => {
       }
     case customer_service.VERIFY_BOOKING_CODE_LOADING:
       return { ...state, isLoading: action.payload };
-    case customer_service.FETCH_PROVIDERS_OPTIONS_SUCCESS:
-      return {
-        ...state,
-        providerOptions: action.payload,
-        isFetchProviderOptionsByBusinessAdminIdSuccess: true
-      };
     case customer_service.UPDATE_STATUS_SUCCESS:
       return {
         ...state,

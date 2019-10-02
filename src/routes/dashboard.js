@@ -3,7 +3,7 @@ import {
   BubbleChart, Email,
   FilterVintage, Star, Assignment, BarChart,
   Business, Navigation, Schedule,
-  Category, BusinessCenter, People
+  Category, BusinessCenter, People, Web
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Administration from '../views/Administration/Administration';
@@ -39,6 +39,7 @@ import ScheduleReportList from "../views/ScheduleReport/ScheduleReportList";
 import CreateAssessment from 'views/Surveys/CreateAssessment';
 import Assessments from 'views/Surveys/Assessments';
 import ChartBoard from 'views/Chart/ChartBoard';
+import Reports from 'views/Reports/Reports';
 
 const dashboardRoutes = [
   {
@@ -95,6 +96,14 @@ const dashboardRoutes = [
     icon: BarChart,
     component: ChartBoard,
     dataTestId: 'chartNavLink',
+    iconColor: 'primary',
+  },
+  {
+    path: '/reports',
+    name: 'Reports',
+    icon: Web,
+    component: Reports,
+    dataTestId: 'reportsNavLink',
     iconColor: 'primary',
   },
   { redirect: true, path: '/', pathTo: '/login', name: 'Login' }

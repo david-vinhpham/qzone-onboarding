@@ -22,7 +22,7 @@ import { fetchScheduleReport } from 'actions/scheduleReport';
 import { historyType, classesType } from 'types/global';
 import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import ScheduleReportDialog from "./ScheduleReportDialog";
+import ReportDialog from "../../components/ReportDialog/ReportDialog";
 import {
   getScheduleReport,
   setScheduleReportData,
@@ -49,27 +49,27 @@ class ScheduleReportList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      isOpenScheduleReport: false,
+      isOpenReport: false,
       tempServiceId: ''
     };
   }
-  openScheduleReportDialog = () => {
+  openReportDialog = () => {
     const {
       tmpServiceId,
     } = this.state;
     this.props.getScheduleReport(tmpServiceId);
-    this.setState({ isOpenScheduleReport: true });
+    this.setState({ isOpenReport: true });
   }
-  closeScheduleReportDialog = () => {
+  closeReportDialog = () => {
     this.props.setScheduleReportData({ providerName: '', tmServiceReportList: [] });
-    this.setState({ isOpenScheduleReport: false });
+    this.setState({ isOpenReport: false });
   }
 
   render() {
     const { classes, providerName, dateEvent, reportList,
       reportData, isReportLoading, isLoading, timezone } = this.props;
     const {
-      isOpenScheduleReport,
+      isOpenReport,
     } = this.state;
     if (isLoading) {
       return (
@@ -84,9 +84,9 @@ class ScheduleReportList extends PureComponent {
     }
     return (
       <>
-        {isOpenScheduleReport && (
-          <ScheduleReportDialog
-            onDialogClose={this.closeScheduleReportDialog}
+        {isOpenReport && (
+          <ReportDialog
+            onDialogClose={this.closeReportDialog}
             reportData={reportData}
             isReportLoading={isReportLoading}
           />
@@ -132,7 +132,7 @@ class ScheduleReportList extends PureComponent {
               </Grid>
               <Grid item md={2} xs={12}></Grid>
               <Grid item md={10} xs={12}>
-                <CustomButton color="rose" onClick={this.openScheduleReportDialog}>
+                <CustomButton color="rose" onClick={this.openReportDialog}>
                   Export Schedule
                 </CustomButton>
               </Grid>

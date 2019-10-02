@@ -189,7 +189,7 @@ export default function TmpServiceContent({
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" display="inline" noWrap>
-              Privacy:
+              Publicity:
             </Typography>
           </Grid>
           <Grid item md={10}>
@@ -199,11 +199,7 @@ export default function TmpServiceContent({
               onChange={handleChange}
             />
             <Typography variant="caption" display="inline">
-              {
-                tmpService.privacy
-                  ? 'The service is visible in '
-                  : 'The service is visible in '
-              }
+              The service is visible in&nbsp;
               <Link
                 title="Custweb"
                 href="https://custweb.quezone.com.au"

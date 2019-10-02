@@ -284,16 +284,6 @@ class TmpServicesList extends PureComponent {
     createNewEventHelper(payload, this.props.providers, this.props.createNewEvent);
   };
 
-  openScheduleReportDialog = tmpServiceId => () => {
-    this.props.getScheduleReport(tmpServiceId);
-    this.setState({ isOpenScheduleReport: true });
-  }
-
-  closeScheduleReportDialog = () => {
-    this.props.setScheduleReportData({ providerName: '', tmServiceReportList: [] });
-    this.setState({ isOpenScheduleReport: false });
-  }
-
   render() {
     const {
       classes, history, isLoading,
