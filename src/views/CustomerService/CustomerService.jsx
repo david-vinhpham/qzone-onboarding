@@ -25,10 +25,8 @@ import {
   fetchFlowBoard,
   updateCustomerStatus,
   verifyBookingCode,
-  fetchProviderOptionsByBusinessAdminId,
   fetchProvidersAndServicesByBusinessAdminId,
   updateGuestInfo,
-  setProviderOptionsSuccess
 } from "../../actions/customerService";
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import PropTypes from "prop-types";
@@ -37,6 +35,7 @@ import { eventStatus, boardMode, eUserType } from "constants.js";
 import { verifyBookingCodeType, customerFlowBoardType, optionType, userDetailType } from "types/global";
 import customerServiceStyle from 'assets/jss/material-dashboard-pro-react/views/customerService';
 import BookingInformation from './BookingInformation';
+import { fetchProviderOptionsByBusinessAdminId, setProviderOptionsSuccess } from 'actions/providerOptions';
 
 class CustomerService extends PureComponent {
   constructor(props) {
@@ -399,8 +398,8 @@ const mapStateToProps = state => ({
   isBoardLoading: state.customerService.isBoardLoading,
   isFetchServiceOptionsSuccess: state.options.service.isFetchServiceOptionsSuccess,
   serviceOptions: state.options.service.serviceOptions,
-  isFetchProviderOptionsByBusinessAdminIdSuccess: state.customerService.isFetchProviderOptionsByBusinessAdminIdSuccess,
-  providerOptions: state.customerService.providerOptions,
+  isFetchProviderOptionsByBusinessAdminIdSuccess: state.options.provider.isFetchProviderOptionsSuccess,
+  providerOptions: state.options.provider.providerOptions,
   userDetail: state.user.userDetail
 });
 

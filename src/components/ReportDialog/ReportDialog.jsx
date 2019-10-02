@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 let timer = null;
 
-const ScheduleReportDialog = ({ onDialogClose, reportData, isReportLoading }) => {
+const ReportDialog = ({ onDialogClose, reportData, isReportLoading }) => {
   const classes = useStyles();
   const [completed, setCompleted] = useState(0);
 
@@ -71,11 +71,11 @@ const ScheduleReportDialog = ({ onDialogClose, reportData, isReportLoading }) =>
     <Dialog
       disableBackdropClick
       open
-      aria-labelledby="schedule-report-dialog"
+      aria-labelledby="report-dialog"
       onClose={onDialogClose}
     >
       <DialogTitle>
-        Schedule report
+        Report
       </DialogTitle>
       <DialogContent>
         {dialogContent}
@@ -87,23 +87,13 @@ const ScheduleReportDialog = ({ onDialogClose, reportData, isReportLoading }) =>
   )
 };
 
-ScheduleReportDialog.propTypes = {
+ReportDialog.propTypes = {
   onDialogClose: PropTypes.func.isRequired,
   reportData: PropTypes.shape({
     filename: PropTypes.string,
-    data: PropTypes.arrayOf(PropTypes.shape({
-      providerName: PropTypes.string,
-      dateEvent: PropTypes.string,
-      customerName: PropTypes.string,
-      customerEmail: PropTypes.string,
-      customerPhone: PropTypes.string,
-      bookingCode: PropTypes.string,
-      startTime: PropTypes.string,
-      toTime: PropTypes.string,
-      status: PropTypes.string,
-    })),
+    data: PropTypes.arrayOf(PropTypes.object),
   }),
   isReportLoading: PropTypes.bool.isRequired,
 }
 
-export default ScheduleReportDialog;
+export default ReportDialog;

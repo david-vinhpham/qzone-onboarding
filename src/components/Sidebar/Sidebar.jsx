@@ -88,7 +88,7 @@ class Sidebar extends React.Component {
     const adminNavItems = (
       <List className={cx(classes.list, classes.collapseList)}>
         {managementRoutes.map(route => (
-          <ListItem className={classes.collapseItem}>
+          <ListItem key={route.path} className={classes.collapseItem}>
             <NavLink
               to={route.path}
               data-test-id={route.dataTestId}

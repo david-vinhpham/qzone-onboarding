@@ -68,6 +68,8 @@ export const URL = {
   FIND_SURVEYS_BY_ASSESSOR_ID: 'find-survey-by-assessor-id/',
 
   FETCH_CHART_BY_SURVEY_ID: 'chart/',
+
+  FETCH_CUSTOMER_REPORT: 'customer/flow/report',
 };
 
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';

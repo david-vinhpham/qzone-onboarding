@@ -3,6 +3,7 @@ import { URL } from 'config/config';
 import { customer_service } from '../constants/CustomerService.constants';
 import { boardMode, eventStatus } from '../constants';
 import { fetchServiceOptionsByBusinessAdminId } from '../actions/serviceOptions';
+import { fetchProviderOptionsByBusinessAdminId } from './providerOptions';
 
 const setVerifyBookingCodeLoading = payload => ({
   type: customer_service.VERIFY_BOOKING_CODE_LOADING,
@@ -105,20 +106,6 @@ export const fetchFlowBoard = (data) => dispatch => {
     })
     .finally(() => {
       dispatch(setFetchFlowBoardLoading(false));
-    });
-};
-
-export const setProviderOptionsSuccess = payload => ({
-  type: customer_service.FETCH_PROVIDERS_OPTIONS_SUCCESS,
-  payload
-});
-
-export const fetchProviderOptionsByBusinessAdminId = (businessAdminId) => dispatch => {
-  return axios.get(`${URL.FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
-    .then(res => {
-      if (res && res.status === 200 && res.data.success) {
-        dispatch(setProviderOptionsSuccess(res.data.objects));
-      }
     });
 };
 

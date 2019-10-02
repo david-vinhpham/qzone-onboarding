@@ -1,0 +1,14 @@
+.wrapper {
+  .content {
+    padding: 64px 128px 0;
+  }
+  .reportField {
+    margin: 32px 0;
+    &Label {
+      margin-right: 16px;
+    }
+  }
+  .footer {
+    padding: 16px 128px;
+  }
+}

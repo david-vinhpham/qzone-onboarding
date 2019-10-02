@@ -24,7 +24,6 @@ const pagesHeaderStyle = theme => ({
     marginBottom: "0",
     position: "absolute",
     width: "100%",
-    paddingTop: "10px",
     zIndex: "1029",
     color: "#555555",
     border: "0",
@@ -86,11 +85,9 @@ const pagesHeaderStyle = theme => ({
     fontSize: "14px",
     margin: 0,
     marginRight: "-15px",
-    paddingLeft: "0",
     listStyle: "none",
     color: "#FFFFFF",
-    paddingTop: "0",
-    paddingBottom: "0"
+    padding: "0"
   },
   listItem: {
     float: "left",
@@ -108,8 +105,6 @@ const pagesHeaderStyle = theme => ({
   navLink: {
     color: "#FFFFFF",
     margin: "0 5px",
-    paddingTop: "15px",
-    paddingBottom: "15px",
     fontWeight: "500",
     fontSize: "12px",
     textTransform: "uppercase",
@@ -117,7 +112,7 @@ const pagesHeaderStyle = theme => ({
     lineHeight: "20px",
     position: "relative",
     display: "block",
-    padding: "10px 15px",
+    padding: "15px",
     textDecoration: "none",
     "&:hover,&:focus": {
       color: "#FFFFFF",
@@ -129,7 +124,7 @@ const pagesHeaderStyle = theme => ({
     top: "0px",
     position: "relative",
     marginRight: "3px",
-    width: "20px",
+    minWidth: "20px",
     height: "20px",
     verticalAlign: "middle",
     color: "inherit",

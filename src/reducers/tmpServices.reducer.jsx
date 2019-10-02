@@ -65,7 +65,7 @@ const reducer = (state = initialState, action) => {
           data: action.payload.tmServiceReportList.map(item => ({
             customerEmail: item.customerEmail,
             customerName: item.customerName,
-            bookingCode: item.bookingCode,
+            bookingCode: `=""${item.bookingCode}""`,
             customerPhone: `=""${item.customerPhone}""`,
             startTime: item.startTime,
             toTime: item.toTime,
