@@ -51,7 +51,7 @@ export const generateRepeatPayload = (repeat, providerTzOffset) => {
       repeat: {
         repeatWeekly: {
           repeatEveryNumWeeks: repeat.every,
-          repeatOn: repeat.everyDate[0]
+          repeatOn: repeat.everyDate
         }
       }
     };

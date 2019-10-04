@@ -387,11 +387,7 @@ export default function CommonContent({
                         {REPEAT_DATE_DEF.map(dateDef => (
                           <MenuItem key={`REPEAT_DATE_DEF-${dateDef}-Menu`} value={dateDef}>
                             <Checkbox
-                              checked={values.addEventData.repeat.everyDate.includes(dateDef)}
-                              disabled={
-                                values.addEventData.repeat.everyDate.includes(dateDef) &&
-                                values.addEventData.repeat.everyDate.length === 1
-                              }
+                              checked={values.addEventData.repeat.everyDate === dateDef}
                             />
                             <ListItemText>{dateDef}</ListItemText>
                           </MenuItem>

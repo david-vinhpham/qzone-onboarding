@@ -34,7 +34,7 @@ import { fetchProvidersByBusinessId, createNewEvent, fetchProvidersByBusinessIdS
 import { fetchGeoLocationOptions } from "../../actions/geoOptions";
 import { fetchTimezoneOptions } from "../../actions/timezoneOptions";
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
-import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE } from "constants/Calendar.constants";
+import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE, REPEAT_DATE_DEF } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
 import { defaultDateTimeFormat, eUserType } from "constants.js";
 import { fetchSurveyOptionsByAssessorId } from "actions/surveyOptions";
@@ -140,8 +140,8 @@ class TmpServicesList extends PureComponent {
           ? event.repeat.repeatDaily.repeatEvery
           : event.repeat.repeatWeekly.repeatEveryNumWeeks,
         everyDate: event.repeatType === EVENT_REPEAT_TYPE.WEEKLY
-          ? [event.repeat.repeatWeekly.repeatOn]
-          : [],
+          ? event.repeat.repeatWeekly.repeatOn
+          : REPEAT_DATE_DEF[0],
         repeatEnd: event.repeatEnd ? {
           afterOccur: event.repeatEnd.afterNumOccurrences,
           onDate: event.repeatEnd.repeatEndOn

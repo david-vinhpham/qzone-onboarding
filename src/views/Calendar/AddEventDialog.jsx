@@ -14,6 +14,7 @@ import {
   EVENT_REPEAT_TYPE,
   REPEAT_EVERY_DEF,
   REPEAT_END_TYPE,
+  REPEAT_DATE_DEF,
 } from 'constants/Calendar.constants';
 import { providerType, optionType, userDetailType, historyType } from 'types/global';
 import styles from './AddEventDialog.module.scss';
@@ -112,8 +113,8 @@ class AddEventDialog extends PureComponent {
     setFieldValue('addEventData.repeat.type', repeatType);
     setFieldValue('addEventData.repeat.every', repeatType === EVENT_REPEAT_TYPE.NEVER ? 0 : REPEAT_EVERY_DEF[repeatType][0]);
     setFieldValue('addEventData.repeat.everyDate', repeatType === EVENT_REPEAT_TYPE.WEEKLY
-      ? [moment(values.addEventData.startTime).format('dddd')]
-      : []);
+      ? moment(values.addEventData.startTime).format('dddd')
+      : values.addEventData.repeat.everyDate || REPEAT_DATE_DEF[0]);
     setFieldValue('addEventData.repeat.repeatEnd', {});
   }
 
