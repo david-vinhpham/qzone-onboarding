@@ -14,7 +14,6 @@ const getCustomerReports = (payload) => async (dispatch) => {
   const [result] = await handleRequest(axios.post, [URL.FETCH_CUSTOMER_REPORT, payload]);
 
   if (result) {
-    console.log(result);
     dispatch({
       type: SET_CUSTOMER_REPORTS,
       payload: result

@@ -70,6 +70,8 @@ export const URL = {
   FETCH_CHART_BY_SURVEY_ID: 'chart/',
 
   FETCH_CUSTOMER_REPORT: 'customer/flow/report',
+
+  FETCH_WAITLIST_REPORT: 'waitlists/report/',
 };
 
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';
