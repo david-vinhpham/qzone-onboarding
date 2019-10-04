@@ -313,7 +313,7 @@ class TmpServicesList extends PureComponent {
           <TableHead>
             <TableRow>
               <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
-              <TableCell className={classes.cellHeaderBold} size="small">Privacy</TableCell>
+              <TableCell className={classes.cellHeaderBold} size="small">Publicity</TableCell>
               <TableCell className={classes.cellHeaderBold}>Provider</TableCell>
               <TableCell className={classes.cellHeaderBold}>Service</TableCell>
               <TableCell className={classes.cellHeaderBold}>Start time</TableCell>
