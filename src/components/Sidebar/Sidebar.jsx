@@ -5,13 +5,12 @@ import { compose } from 'redux';
 import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
-import { get } from 'lodash';
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText, Avatar } from "@material-ui/core";
+import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
 import sidebarStyle from "../../assets/jss/material-dashboard-pro-react/components/sidebarStyle.jsx";
 import { eUserType } from "constants.js";
-import { providerRoutes, managementRoutes } from "routes/dashboard.js";
+import { providerRoutes } from "routes/dashboard.js";
 
 var ps;
 
@@ -30,10 +29,9 @@ class SidebarWrapper extends React.Component {
     }
   }
   render() {
-    const { className, user, headerLinks, links } = this.props;
+    const { className, headerLinks, links } = this.props;
     return (
       <div className={className} ref="sidebarWrapper">
-        {user}
         {headerLinks}
         {links}
       </div>
@@ -46,7 +44,6 @@ class Sidebar extends React.Component {
     super(props);
 
     this.state = {
-      openAvatar: managementRoutes.some(link => this.activeRoute(link.path)),
       miniActive: true
     };
   }
@@ -71,82 +68,17 @@ class Sidebar extends React.Component {
       routes,
       bgColor,
       userDetail,
+      miniActive,
+      open,
+      handleDrawerToggle
     } = this.props;
-    const userName = get(userDetail, 'fullName');
-    const userImage = get(userDetail, 'imageUrl');
     const isProvider = userDetail.userType ? userDetail.userType === eUserType.provider : true;
     const itemText = cx(classes.itemText, {
-      [classes.itemTextMini]: this.props.miniActive && this.state.miniActive,
+      [classes.itemTextMini]: miniActive && this.state.miniActive,
     });
     const collapseItemText = cx(classes.collapseItemText, {
-      [classes.collapseItemTextMini]: this.props.miniActive && this.state.miniActive
+      [classes.collapseItemTextMini]: miniActive && this.state.miniActive
     });
-    const userWrapperClass = cx(classes.user, {
-      [classes.whiteAfter]: bgColor === "white"
-    });
-
-    const adminNavItems = (
-      <List className={cx(classes.list, classes.collapseList)}>
-        {managementRoutes.map(route => (
-          <ListItem key={route.path} className={classes.collapseItem}>
-            <NavLink
-              to={route.path}
-              data-test-id={route.dataTestId}
-              className={cx(classes.itemLink, classes.userCollapseLinks, {
-                [classes[color]]: this.activeRoute(route.path)
-              })}
-            >
-              <span className={classes.collapseItemMini}>
-                {route.shortName}
-              </span>
-              <ListItemText
-                disableTypography
-                primary={route.name}
-                className={collapseItemText}
-              />
-            </NavLink>
-          </ListItem>
-        ))}
-      </List>
-    );
-
-    const user = (
-      <div className={userWrapperClass}>
-        <div className={classes.photo}>
-          {userImage && <img src={userImage} className={classes.avatarImg} alt="..." />}
-          {!userImage && <Avatar classes={{
-            colorDefault: classes.avatar,
-          }} component='div'>{userName && userName[0]}</Avatar>}
-        </div>
-        <List className={classes.list}>
-          <ListItem className={cx(classes.item, classes.userItem)}>
-            <NavLink
-              to="#"
-              data-test-id="openAvatar"
-              className={cx(classes.itemLink, classes.userCollapseButton)}
-              onClick={(e) => {
-                e.preventDefault();
-                if (!isProvider) this.openCollapse("openAvatar");
-              }}
-            >
-              <ListItemText
-                primary={userName}
-                secondary={
-                  !isProvider && <b className={cx(classes.caret, classes.userCaret, {
-                    [classes.caretActive]: !!this.state.openAvatar
-                  })} />
-                }
-                disableTypography={true}
-                className={cx(itemText, classes.userItemText)}
-              />
-            </NavLink>
-            {!isProvider && <Collapse in={this.state.openAvatar} unmountOnExit>
-              {adminNavItems}
-            </Collapse>}
-          </ListItem>
-        </List>
-      </div >
-    );
 
     const links = (
       <List className={classes.list}>
@@ -235,7 +167,7 @@ class Sidebar extends React.Component {
     );
 
     const logoNormal = cx(classes.logoNormal, {
-      [classes.logoNormalSidebarMini]: this.props.miniActive && this.state.miniActive
+      [classes.logoNormalSidebarMini]: miniActive && this.state.miniActive
     });
     const logoClasses = cx(classes.logo, {
       [classes.whiteAfter]: bgColor === "white"
@@ -252,10 +184,10 @@ class Sidebar extends React.Component {
       </div>
     );
     const drawerPaper = cx(classes.drawerPaper, {
-      [classes.drawerPaperMini]: this.props.miniActive && this.state.miniActive
+      [classes.drawerPaperMini]: miniActive && this.state.miniActive
     });
     const sidebarWrapper = cx(classes.sidebarWrapper, {
-      [classes.drawerPaperMini]: this.props.miniActive && this.state.miniActive,
+      [classes.drawerPaperMini]: miniActive && this.state.miniActive,
       [classes.sidebarWrapperWithPerfectScrollbar]: navigator.platform.indexOf("Win") > -1
     });
 
@@ -265,19 +197,19 @@ class Sidebar extends React.Component {
           <Drawer
             variant="temporary"
             anchor={"right"}
-            open={this.props.open}
+            open={open}
             classes={{
               paper: drawerPaper + " " + classes[bgColor + "Background"]
             }}
-            onClose={this.props.handleDrawerToggle}
+            onClose={handleDrawerToggle}
             ModalProps={{
-              keepMounted: true // Better open performance on mobile.
+              keepMounted: true
             }}
           >
             {brand}
             <SidebarWrapper
               className={sidebarWrapper}
-              user={user}
+              // user={user}
               headerLinks={<HeaderLinks />}
               links={links}
             />
@@ -303,7 +235,7 @@ class Sidebar extends React.Component {
             {brand}
             <SidebarWrapper
               className={sidebarWrapper}
-              user={user}
+              // user={user}
               links={links}
             />
             {image !== undefined ? (

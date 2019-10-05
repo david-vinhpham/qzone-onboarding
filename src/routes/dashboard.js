@@ -3,7 +3,7 @@ import {
   BubbleChart, Email,
   FilterVintage, Star, Assignment, BarChart,
   Business, Navigation, Schedule,
-  Category, BusinessCenter, People, Web
+  Category, BusinessCenter, People, Web, Person
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
 import Administration from '../views/Administration/Administration';
@@ -108,6 +108,28 @@ const managementRoutes = [
     dataTestId: 'providerListNavLink',
   },
   {
+    path: '/email-templates',
+    name: 'Email Templates',
+    shortName: 'ET',
+    icon: Email,
+    guarded: true,
+    component: EmailTemplates,
+    dataTestId: 'emailTemplatesNavLink',
+    iconColor: 'secondary',
+  },
+  {
+    path: '/assessments',
+    name: 'Assessments',
+    shortName: 'AS',
+    icon: Assignment,
+    component: Assessments,
+    dataTestId: 'assessmentsNavLink',
+    iconColor: 'secondary',
+  },
+];
+
+const operationRoutes = [
+  {
     path: '/customer-service',
     name: 'Customer Service',
     shortName: 'PD',
@@ -135,25 +157,6 @@ const managementRoutes = [
     iconColor: 'primary',
   },
   {
-    path: '/email-templates',
-    name: 'Email Templates',
-    shortName: 'ET',
-    icon: Email,
-    guarded: true,
-    component: EmailTemplates,
-    dataTestId: 'emailTemplatesNavLink',
-    iconColor: 'primary',
-  },
-  {
-    path: '/assessments',
-    name: 'Assessments',
-    shortName: 'AS',
-    icon: Assignment,
-    component: Assessments,
-    dataTestId: 'assessmentsNavLink',
-    iconColor: 'primary',
-  },
-  {
     path: '/chart',
     name: 'Chart',
     shortName: 'CH',
@@ -171,10 +174,11 @@ const managementRoutes = [
     dataTestId: 'reportsNavLink',
     iconColor: 'primary',
   },
-];
+]
 
 const otherRoutes = [
   ...managementRoutes,
+  ...operationRoutes,
   {
     path: '/location/edit/:id',
     name: 'Location Edit',
@@ -284,10 +288,13 @@ const providerRoutes = [
 const profileRouteComponent = {
   path: '/profile',
   name: 'Profile',
-  component: Profile
+  component: Profile,
+  icon: Person,
+  iconColor: 'error',
+  dataTestId: 'profileNavLink',
 };
 
 export {
   dashboardRoutes, otherRoutes, providerRoutes,
-  profileRouteComponent, managementRoutes
+  profileRouteComponent, managementRoutes, operationRoutes
 };

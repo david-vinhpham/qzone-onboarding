@@ -5,7 +5,7 @@ describe('Calendar page', () => {
     beforeEach(() => {
       cy.visit('/');
       cy.login('dqn1810@gmail.com', 'Test@2019');
-      cy.get('[data-test-id="calendarNavLink"]').click();
+      cy.get('[data-test-id="dashboard-calendarNavLink"]').click();
     });
 
     it('should create temporary service successfully', () => {
@@ -28,8 +28,9 @@ describe('Calendar page', () => {
       cy.get('[data-test-id="descriptionTextArea"] textarea').type(description);
       cy.get('[data-test-id="avgServiceTimeInput"] input').clear().type(avgServiceTime);
       cy.get('[data-test-id="createEventBtn"]').click();
-      cy.get('[data-test-id="tmpServicesNavLink"]').click();
-
+      
+      cy.get('[data-test-id="dashboardNavLink"]').click();
+      cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
       cy.get('[data-test-id="tmpServiceStartTime"]').should(
         'contain',
         `${firstDateNextMonth.set('h', 8).set('m', 0).format('DD/MM/YYYY LT Z')}`
@@ -50,13 +51,13 @@ describe('Calendar page', () => {
     beforeEach(() => {
       cy.visit('/');
       cy.login('provider1@gmail.com', 'Test@2020');
-      cy.get('[data-test-id="calendarNavLink"]').click();
+      cy.get('[data-test-id="dashboard-calendarNavLink"]').click();
     });
 
     afterEach(() => {
       cy.visit('/');
       cy.login('dqn1810@gmail.com', 'Test@2019');
-      cy.get('[data-test-id="tmpServicesNavLink"]').click();
+      cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
       cy.get('[data-test-id="tmpServiceDeleteBtn"]').click();
       cy.get('[data-test-id="confirmDeleteBtn"]').click();
       cy.get('[data-test-id="tableHeader"]').should('contain', 'Temporary Services');
@@ -82,8 +83,9 @@ describe('Calendar page', () => {
       cy.get('[data-test-id="descriptionTextArea"] textarea').type(description);
       cy.get('[data-test-id="avgServiceTimeInput"] input').clear().type(avgServiceTime);
       cy.get('[data-test-id="createEventBtn"]').click();
-      cy.get('[data-test-id="tmpServicesNavLink"]').click();
-
+      
+      cy.get('[data-test-id="dashboardNavLink"]').click();
+      cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
       cy.get('[data-test-id="tmpServiceStartTime"]').should(
         'contain',
         `${firstDateNextMonth.set('h', 8).set('m', 0).format('DD/MM/YYYY LT Z')}`
