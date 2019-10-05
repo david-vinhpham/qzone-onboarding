@@ -40,26 +40,6 @@ describe('Dasboard page', () => {
       cy.get('[data-test-id="dashboard-providerListNavLink"]').click();
       cy.url().should('include', '/provider/list');
       cy.get('h4').first().should('contain', 'Provider List');
-    });
-
-    it('should navigate to all customers pages successfully', () => {
-      // customer service page
-      cy.get('[data-test-id="dashboardNavLink"]').click();
-      cy.get('[data-test-id="dashboard-customerServiceNavLink"]').click();
-      cy.url().should('include', '/customer-service');
-      cy.get('[data-test-id="pageTitle"]').should('contain', 'Customer Service');
-
-      // calendar page
-      cy.get('[data-test-id="dashboardNavLink"]').click();
-      cy.get('[data-test-id="dashboard-calendarNavLink"]').click();
-      cy.url().should('include', '/calendar');
-      cy.get('[data-test-id="pageTitle"]').should('contain', 'Manage Calendar');
-
-      // temporary services page
-      cy.get('[data-test-id="dashboardNavLink"]').click();
-      cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
-      cy.url().should('include', '/tmp-services');
-      cy.get('[data-test-id="pageTitle"]').should('contain', 'Temporary Services');
 
       // email templates page
       cy.get('[data-test-id="dashboardNavLink"]').click();
@@ -72,12 +52,45 @@ describe('Dasboard page', () => {
       cy.get('[data-test-id="dashboard-assessmentsNavLink"]').click();
       cy.url().should('include', '/assessments');
       cy.get('[data-test-id="pageTitle"]').should('contain', 'Assessments');
+    });
+
+    it('should navigate to all operation pages successfully', () => {
+      // customer service page
+      cy.get('[data-test-id="dashboardNavLink"]').click();
+      cy.get('[data-test-id="dashboard-customerServiceNavLink"]').click();
+      cy.url().should('include', '/customer-service');
+      cy.get('[data-test-id="pageTitle"]').should('contain', 'Customer Service');
+
+      // calendar page
+      cy.get('[data-test-id="dashboardNavLink"]').click();
+      cy.get('[data-test-id="dashboard-calendarNavLink"]').click();
+      cy.url().should('include', '/calendar');
+      cy.get('[data-test-id="pageTitle"]').should('contain', 'Manage Calendar');
+
+      // temporary services page
+      cy.get('[data-test-id="dashboardNavLink"]').click();
+      cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
+      cy.url().should('include', '/tmp-services');
+      cy.get('[data-test-id="pageTitle"]').should('contain', 'Temporary Services');
 
       // chart page
       cy.get('[data-test-id="dashboardNavLink"]').click();
       cy.get('[data-test-id="dashboard-chartNavLink"]').click();
       cy.url().should('include', '/chart');
       cy.get('[data-test-id="pageTitle"]').should('contain', 'Chart');
+
+      // report page
+      cy.get('[data-test-id="dashboardNavLink"]').click();
+      cy.get('[data-test-id="dashboard-reportsNavLink"]').click();
+      cy.url().should('include', '/reports');
+      cy.get('[data-test-id="pageTitle"]').should('contain', 'Reports');
+    });
+
+    it('should navigate to profile pages successfully', () => {
+      cy.get('[data-test-id="dashboardNavLink"]').click();
+      cy.get('[data-test-id="dashboard-profileNavLink"]').click();
+      cy.url().should('include', '/profile');
+      cy.get('[data-test-id="pageTitle"]').should('contain', 'Profile');
     });
   });
 
@@ -87,7 +100,7 @@ describe('Dasboard page', () => {
       cy.login('provider1@gmail.com', 'Test@2020');
     });
 
-    it('should navigate to all customers pages successfully', () => {
+    it('should navigate to all operation pages successfully', () => {
       // customer service page
       cy.get('[data-test-id="dashboard-customerServiceNavLink"]').click();
       cy.url().should('include', '/customer-service');
@@ -104,6 +117,13 @@ describe('Dasboard page', () => {
       cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
       cy.url().should('include', '/tmp-services');
       cy.get('[data-test-id="pageTitle"]').should('contain', 'Temporary Services');
+    });
+
+    it('should navigate to profile pages successfully', () => {
+      cy.get('[data-test-id="dashboardNavLink"]').click();
+      cy.get('[data-test-id="dashboard-profileNavLink"]').click();
+      cy.url().should('include', '/profile');
+      cy.get('[data-test-id="pageTitle"]').should('contain', 'Profile');
     });
   });
 });

@@ -6,7 +6,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import PerfectScrollbar from 'perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { dashboardRoutes, otherRoutes, profileRouteComponent } from '../routes/dashboard.js';
+import { dashboardRoutes, otherRoutes, profileRouteComponent, managementRoutes, operationRoutes } from '../routes/dashboard.js';
 import Sidebar from '../components/Sidebar/Sidebar.jsx';
 import Header from '../components/Header/Header.jsx';
 import appStyle from '../assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx';
@@ -101,7 +101,7 @@ class Dashboard extends React.PureComponent {
           <Header
             sidebarMinimize={this.sidebarMinimize}
             miniActive={this.state.miniActive}
-            routes={dashboardRoutes}
+            routes={[...dashboardRoutes, ...managementRoutes, ...operationRoutes, profileRouteComponent]}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />

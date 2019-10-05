@@ -18,9 +18,6 @@ import {
 } from "../../material-dashboard-pro-react.jsx";
 
 const sidebarStyle = theme => ({
-  avatar: {
-    background: "linear-gradient(to bottom, #e91e63, #4d4739)",
-  },
   drawerPaperRTL: {
     [theme.breakpoints.up("md")]: {
       left: "auto !important",
@@ -209,11 +206,6 @@ const sidebarStyle = theme => ({
     margin: "0",
     padding: "0"
   },
-  userItem: {
-    "&:last-child": {
-      paddingBottom: "0px"
-    }
-  },
   itemLink: {
     paddingLeft: "10px",
     paddingRight: "10px",
@@ -265,12 +257,6 @@ const sidebarStyle = theme => ({
     display: "block",
     height: "auto",
     whiteSpace: "nowrap"
-  },
-  userItemText: {
-    lineHeight: "22px",
-    marginLeft: "70px",
-    width: "34px",
-    height: "34px",
   },
   itemTextRTL: {
     marginRight: "45px",
@@ -331,11 +317,6 @@ const sidebarStyle = theme => ({
     transition: "transform 300ms ease 0s, opacity 300ms ease 0s",
     fontSize: "14px"
   },
-  collapseItemMiniRTL: {
-    float: "right",
-    marginLeft: "30px",
-    marginRight: "1px"
-  },
   collapseItemText: {
     color: "inherit",
     ...defaultFont,
@@ -347,12 +328,6 @@ const sidebarStyle = theme => ({
     display: "block",
     transition: "transform 300ms ease 0s, opacity 300ms ease 0s",
     fontSize: "14px"
-  },
-  collapseItemTextRTL: {
-    textAlign: "right"
-  },
-  collapseItemTextMiniRTL: {
-    transform: "translate3d(25px, 0, 0) !important"
   },
   collapseItemTextMini: {
     transform: "translate3d(-25px, 0, 0)",
@@ -371,15 +346,6 @@ const sidebarStyle = theme => ({
     borderTop: "4px solid",
     borderRight: "4px solid transparent",
     borderLeft: "4px solid transparent"
-  },
-  userCaret: {
-    marginTop: "10px",
-    position: "absolute",
-    right: "-125px",
-  },
-  caretRTL: {
-    left: "11px",
-    right: "auto"
   },
   caretActive: {
     transform: "rotate(180deg)"
@@ -454,50 +420,6 @@ const sidebarStyle = theme => ({
   },
   sidebarWrapperWithPerfectScrollbar: {
     overflow: "hidden !important"
-  },
-  user: {
-    paddingBottom: "20px",
-    margin: "20px auto 0",
-    position: "relative",
-    "&:after": {
-      content: '""',
-      position: "absolute",
-      bottom: "0",
-      right: "15px",
-      height: "1px",
-      width: "calc(100% - 30px)",
-      backgroundColor: "hsla(0,0%,100%,.3)"
-    }
-  },
-  photo: {
-    position: "absolute",
-    marginLeft: "18px",
-    transition: "all 300ms linear",
-    width: "34px",
-    height: "34px",
-  },
-  photoRTL: {
-    float: "right",
-    marginLeft: "12px",
-    marginRight: "24px"
-  },
-  avatarImg: {
-    width: "100%",
-    verticalAlign: "middle",
-    border: "0"
-  },
-  userCollapseButton: {
-    margin: "0",
-    padding: "6px 15px",
-    "&:hover": {
-      background: "none"
-    }
-  },
-  userCollapseLinks: {
-    marginTop: "-4px",
-    "&:hover,&:focus": {
-      color: "#FFFFFF"
-    }
   }
 });
 
