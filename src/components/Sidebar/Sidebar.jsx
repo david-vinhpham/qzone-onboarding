@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PerfectScrollbar from "perfect-scrollbar";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import cx from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Collapse, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
@@ -169,18 +169,15 @@ class Sidebar extends React.Component {
     const logoNormal = cx(classes.logoNormal, {
       [classes.logoNormalSidebarMini]: miniActive && this.state.miniActive
     });
-    const logoClasses = cx(classes.logo, {
-      [classes.whiteAfter]: bgColor === "white"
-    });
 
     const brand = (
-      <div className={logoClasses}>
-        <a href="/" className={classes.logoMini}>
+      <div className={classes.logo}>
+        <Link to="/dashboard" className={classes.logoMini}>
           <img src={logo} alt="logo" width="26px" height="25px" />
-        </a>
-        <a href="/" className={logoNormal}>
+        </Link>
+        <Link to="/dashboard" className={logoNormal}>
           {logoText}
-        </a>
+        </Link>
       </div>
     );
     const drawerPaper = cx(classes.drawerPaper, {
