@@ -39,6 +39,7 @@ import {
   fetchOrganization
 } from '../../actions/organization.jsx';
 import { fetchBusinessCategories } from "../../actions/businessCategories";
+import { weekDays } from 'constants.js';
 
 const override = css`
   margin: 0 auto;
@@ -134,7 +135,6 @@ class OrganizationEdit extends React.Component {
     } = this.props;
 
     const { data } = this.state;
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     if (fetchOrganizationLoading || !this.state.data || this.state.data.length === 0) {
       return (
         <BeatLoader
@@ -369,7 +369,7 @@ class OrganizationEdit extends React.Component {
                                     Service Hours
                                   </FormLabel>
                                 </GridItem>
-                                {days.map((day, index) => (
+                                {weekDays.map((day, index) => (
                                   <div key={day}>
                                     <GridItem xs={12} sm={3} style={{ 'maxWidth': '100%' }}>
                                       <FormLabel>{day}</FormLabel>
