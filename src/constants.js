@@ -54,3 +54,15 @@ export const eTemplateContentMax = 15000;
 export const eTemplateApi = `${API_ROOT}${eTemplateUrl}`;
 
 export const defaultDateTimeFormat = 'DD/MM/YYYY LT Z';
+
+export const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+export const defaultWorkingHours = weekDays.reduce((acc, value) => {
+  return {
+    ...acc,
+    [value]: {
+      startTime: '08:00',
+      endTime: '18:00'
+    },
+  };
+}, {});
