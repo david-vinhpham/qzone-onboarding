@@ -25,6 +25,7 @@ import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/v
 import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import defaultImage from "../../assets/img/default-avatar.png";
+import { weekDays } from 'constants.js';
 
 const override = css`
     margin: 0 auto;
@@ -102,7 +103,6 @@ class OrganizationCreate extends React.Component {
 
   render() {
     const { classes, businessCategories, createOrganizationError, createOrganizationLoading } = this.props;
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     if (createOrganizationLoading) {
       return < BeatLoader
         className={override}
@@ -293,12 +293,12 @@ class OrganizationCreate extends React.Component {
                         content:
                           <div>
                             <GridContainer style={{ paddingBottom: '15px' }}>
-                              <GridItem >
+                              <GridItem>
                                 <FormLabel className={classes.labelHorizontal}>
                                   Service Hours
-                                            </FormLabel>
+                                </FormLabel>
                               </GridItem>
-                              {days.map((day, index) => (
+                              {weekDays.map((day, index) => (
                                 <div>
                                   <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
                                     <FormLabel >

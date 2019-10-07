@@ -17,7 +17,7 @@ import CardText from '../../components/Card/CardText.jsx';
 import CardBody from '../../components/Card/CardBody.jsx';
 import CardFooter from '../../components/Card/CardFooter.jsx';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
-import { editProvider, fetchProvider} from '../../actions/provider';
+import { editProvider, fetchProvider } from '../../actions/provider';
 import { fetchTimezoneOptions } from '../../actions/timezoneOptions';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
@@ -26,6 +26,7 @@ import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organiz
 import defaultImage from "../../assets/img/image_placeholder.jpg";
 import _ from "lodash";
 import ImageUpload from '../../components/CustomUpload/ImageUpload';
+import { weekDays, defaultWorkingHours } from 'constants.js';
 
 const override = css`
   margin: 0 auto;
@@ -43,26 +44,17 @@ const ProviderSchema = Yup.object().shape({
     .min(3, 'Name should be atleast 3 letters')
     .max(40, 'Too Long')
 });
+
 class ProviderEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      provider: null,
-      businessAdminId: null,
-      timezoneOption: null,
-      organizationOption: null,
-      imagePreviewUrl: defaultImage,
-      imageObject: null,
       data: {
         providerInformation: {
           image: null,
         }
       }
     };
-
-    this.doubleClick = this.doubleClick.bind(this);
-    this.handleTimezone = this.handleTimezone.bind(this);
-    this.handleOrgChange = this.handleOrgChange.bind(this);
   }
 
   componentDidMount() {
@@ -70,36 +62,17 @@ class ProviderEdit extends React.Component {
     const { id } = this.props.match.params;
     this.props.fetchProvider(id);
     const userSub = localStorage.getItem('userSub');
-    if(userSub) {
+    if (userSub) {
       this.props.fetchOrganizationsOptionByBusinessAdminId(userSub);
     }
     localStorage.removeItem('imageObject');
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.imageLoading) {
-      this.setState({ provider: nextProps.provider });
-      if (nextProps.provider != null && nextProps.provider.image != null) {
-        this.setState({ imagePreviewUrl: nextProps.service.image.fileUrl });
-      } else {
-        this.setState({ imagePreviewUrl: defaultImage });
-      }
-    }
-  }
-
-  handleOrgChange(selectedOption) {
-    this.setState({ organizationOption: selectedOption });
-  }
-
-  handleTimezone(selectedOption) {
-    this.setState({ timezoneOption: selectedOption });
-  }
-
-  doubleClick(fieldName) {
+  doubleClick = (fieldName) => {
     this.setState({ isEditMode: fieldName });
   }
 
-  change(event, stateName) {
+  change = (event, stateName) => {
     if (_.isEmpty(event.target.value)) this.setState({ [`${stateName}State`]: 'error' });
     else {
       this.setState({ [`${stateName}State`]: 'success' });
@@ -107,43 +80,42 @@ class ProviderEdit extends React.Component {
     this.setState({ [stateName]: event.target.value || event.target.checked });
   }
 
-  handleImageChange(e) {
-    const self = this;
-    e.preventDefault();
-    const reader = new FileReader();
-    const files = e.target.files[0];
-    reader.onloadend = () => {
-      self.setState({
-        imagePreviewUrl: reader.result
-        // provider: provider
-      });
+  handleProvider = (values) => {
+    const { provider: { data }, imageObject, history } = this.props;
+    values.imageUrl = imageObject
+      ? imageObject.fileUrl
+      : data.providerInformation.image.fileUrl;
+    values.providerInformation = {
+      ...values.providerInformation,
+      organizationId: values.providerInformation.organizationId.value,
+      timeZoneId: values.providerInformation.timeZoneId.label,
+      image: imageObject || data.providerInformation.image,
+      workingHours: Object.keys(values.providerInformation.workingHours).map(day => {
+        const startTime = values.providerInformation.workingHours[day].startTime.split(':');
+        const endTime = values.providerInformation.workingHours[day].endTime.split(':');
+        return {
+          day,
+          startTime: {
+            hour: parseInt(startTime[0], 10),
+            minute: parseInt(startTime[1], 10),
+          },
+          endTime: {
+            hour: parseInt(endTime[0], 10),
+            minute: parseInt(endTime[1], 10),
+          },
+        }
+      }),
     };
-    reader.readAsDataURL(files);
+
+    this.props.editProvider(values, history);
   }
 
-  handleProvider(values) {
-    let providerInformation  = values.providerInformation;
-    let imageObject = localStorage.getItem('imageObject');
-    if (imageObject === null) {
-      imageObject = this.state.imageObject;
-    } else {
-      imageObject = JSON.parse(imageObject);
-    }
-    if (imageObject != null) {
-      providerInformation.image = imageObject;
-    }
-    if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
-      if (Object.is(values.providerInformation.image, null) || Object.is(values.providerInformation.image, undefined)) {
-        providerInformation.image = values.imagePreviewUrl;
-      }
-    }
-    if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
-      if (values.image === null) {
-        values.image = values.imagePreviewUrl;
-      }
-    }
-    values.providerInformation = providerInformation;
-    this.props.editProvider(values, this.props.history);
+  formatTimeToString = (time) => {
+    return time < 10 ? `0${time}` : time;
+  }
+
+  selectTimeZoneAndOrg = (setFieldValue, key) => (value) => {
+    setFieldValue(key, value);
   }
 
   render() {
@@ -152,14 +124,10 @@ class ProviderEdit extends React.Component {
       timezones,
       organizations,
       fetchProviderLoading,
-      editProviderError
+      editProviderError,
+      provider
     } = this.props;
-    const { timezoneOption, organizationOption, provider } = this.state;
-    let organizationOptions = [];
-    if (organizations.length > 0) {
-      organizationOptions = organizations;
-    }
-    if (fetchProviderLoading || !this.state.provider || this.state.provider.length === 0) {
+    if (fetchProviderLoading || !provider || !provider.data || provider.length === 0) {
       return (
         <BeatLoader
           css={override}
@@ -170,6 +138,7 @@ class ProviderEdit extends React.Component {
         />
       );
     }
+
     return (
       <Formik
         initialValues={{
@@ -183,30 +152,33 @@ class ProviderEdit extends React.Component {
           userType: provider.data.userType,
           provider: 'aws',
           imageShow: provider.data.providerInformation.image ? provider.data.providerInformation.image.fileUrl : defaultImage,
-          imagePreviewUrl:
-            this.props.imageObject ||
-            (provider.data.providerInformation.image ? provider.data.providerInformation.image.fileUrl : this.state.imagePreviewUrl),
           providerInformation: {
-            image: provider.data.providerInformation.image,
-            description: provider.data.providerInformation.description,
-            qualifications: provider.data.providerInformation.qualifications,
-            tags: provider.data.providerInformation.tags,
-            organizationId:
-              organizationOption !== null
-                ? organizationOption.value
-                : provider.data.providerInformation.organizationId,
-            timeZoneId:
-              timezoneOption === null
-                ? provider.data.providerInformation.timeZoneId
-                : timezoneOption.label,
-            businessId: provider.data.providerInformation.businessId
+            ...provider.data.providerInformation,
+            organizationId: organizations.find(org => org.value === provider.data.providerInformation.organizationId),
+            timeZoneId: timezones.find(tz => tz.label === provider.data.providerInformation.timeZoneId),
+            workingHours: provider.data.providerInformation.workingHours.length > 0
+              ? provider.data.providerInformation.workingHours.reduce((acc, value) => {
+                return {
+                  ...acc,
+                  [value.day]: {
+                    startTime: `${
+                      this.formatTimeToString(value.startTime.hour)
+                      }:${
+                      this.formatTimeToString(value.startTime.minute)
+                      }`,
+                    endTime: `${
+                      this.formatTimeToString(value.endTime.hour)
+                      }:${
+                      this.formatTimeToString(value.endTime.minute)
+                      }`,
+                  },
+                };
+              }, {})
+              : { ...defaultWorkingHours },
           }
         }}
         validationSchema={ProviderSchema}
-        enableReinitialize
-        onSubmit={values => {
-          this.handleProvider(values);
-        }}
+        onSubmit={this.handleProvider}
         render={({
           values,
           errors,
@@ -218,206 +190,229 @@ class ProviderEdit extends React.Component {
           isSubmitting,
           setFieldValue
         }) => (
-          <Card>
-            <CardHeader color="rose" text>
-              <CardText color="rose">
-                <h4 className={classes.cardTitle}>Edit Provider</h4>
-              </CardText>
-            </CardHeader>
-            <CardBody>
-              {editProviderError !== null ? (
-                <CardFooter className={classes.justifyContentCenter}>
-                  <div style={{ color: 'red' }}> {editProviderError.message} </div>
-                </CardFooter>
-              ) : (
-                <CardFooter className={classes.justifyContentCenter} />
-              )}
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>Given Name</FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                  <CustomInput
-                    id="givenName"
-                    name="givenName"
-                    onChange={handleChange}
-                    value={values.givenName}
-                  />
-                  {errors.givenName && touched.givenName ? (
-                    <div style={{ color: 'red' }}>{errors.givenName}</div>
-                  ) : null}
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>Family Name</FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                  <CustomInput
-                    id="familyName"
-                    name="familyName"
-                    onChange={handleChange}
-                    value={values.familyName}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>Email</FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                  <CustomInput
-                    id="email"
-                    name="email"
-                    onChange={handleChange}
-                    value={values.email}
-                  />
-                  {errors.email && touched.email ? (
-                    <div style={{ color: 'red' }}>{errors.email}</div>
-                  ) : null}
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>Telephone</FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                  <PhoneInput
-                    id="telephone"
-                    placeholder="e.g.+61 3 xxxx xxxx"
-                    country="AU"
-                    name="telephone"
-                    value={values.telephone}
-                    onChange={e => setFieldValue('telephone', e)}
-                  />
-                  {errors.telephone && touched.telephone ? (
-                    <div style={{ color: 'red' }}>{errors.telephone}</div>
-                  ) : null}
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={3}>
-                  <CustomInput
-                    id="providerInformation.description"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 3
-                    }}
-                    value={values.providerInformation.description}
-                    onChange={handleChange}
-                  />
-                  {errors.description && touched.description ? (
-                    <div style={{ color: 'red' }}>{errors.description}</div>
-                  ) : null}
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel
-                    className={`${classes.labelHorizontal} ${classes.labelHorizontalRadioCheckbox}`}
-                  >
-                    Time Zone
+            <Card>
+              <CardHeader color="rose" text>
+                <CardText color="rose">
+                  <h4 className={classes.cardTitle}>Edit Provider</h4>
+                </CardText>
+              </CardHeader>
+              <CardBody>
+                {editProviderError !== null ? (
+                  <CardFooter className={classes.justifyContentCenter}>
+                    <div style={{ color: 'red' }}> {editProviderError.message} </div>
+                  </CardFooter>
+                ) : (
+                    <CardFooter className={classes.justifyContentCenter} />
+                  )}
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Given Name</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={4}>
+                    <CustomInput
+                      id="givenName"
+                      name="givenName"
+                      onChange={handleChange}
+                      value={values.givenName}
+                    />
+                    {errors.givenName && touched.givenName ? (
+                      <div style={{ color: 'red' }}>{errors.givenName}</div>
+                    ) : null}
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Family Name</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={4}>
+                    <CustomInput
+                      id="familyName"
+                      name="familyName"
+                      onChange={handleChange}
+                      value={values.familyName}
+                    />
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Email</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={4}>
+                    <CustomInput
+                      id="email"
+                      name="email"
+                      onChange={handleChange}
+                      value={values.email}
+                    />
+                    {errors.email && touched.email ? (
+                      <div style={{ color: 'red' }}>{errors.email}</div>
+                    ) : null}
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Telephone</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={4}>
+                    <PhoneInput
+                      id="telephone"
+                      placeholder="e.g.+61 3 xxxx xxxx"
+                      country="AU"
+                      name="telephone"
+                      value={values.telephone}
+                      onChange={e => setFieldValue('telephone', e)}
+                    />
+                    {errors.telephone && touched.telephone ? (
+                      <div style={{ color: 'red' }}>{errors.telephone}</div>
+                    ) : null}
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={3}>
+                    <CustomInput
+                      id="providerInformation.description"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        multiline: true,
+                        rows: 3
+                      }}
+                      value={values.providerInformation.description}
+                      onChange={handleChange}
+                    />
+                    {errors.description && touched.description ? (
+                      <div style={{ color: 'red' }}>{errors.description}</div>
+                    ) : null}
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel
+                      className={`${classes.labelHorizontal} ${classes.labelHorizontalRadioCheckbox}`}
+                    >
+                      Time Zone
                   </FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                  <FormControl fullWidth className={classes.selectFormControl}>
-                    <Select
-                      options={timezones}
-                      value={
-                        timezoneOption === null
-                          ? timezones.find(element => {
-                              return element.label === values.providerInformation.timeZoneId;
-                            })
-                          : timezoneOption
-                      }
-                      onChange={this.handleTimezone}
+                  </GridItem>
+                  <GridItem xs={12} sm={4}>
+                    <FormControl fullWidth className={classes.selectFormControl}>
+                      <Select
+                        options={timezones}
+                        value={values.providerInformation.timeZoneId}
+                        name="providerInformation.timeZoneId"
+                        onChange={this.selectTimeZoneAndOrg(setFieldValue, 'providerInformation.timeZoneId')}
+                      />
+                    </FormControl>
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Service Organization</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={4}>
+                    <FormControl fullWidth className={classes.selectFormControl}>
+                      <Select
+                        options={organizations}
+                        value={values.providerInformation.organizationId}
+                        name="providerInformation.organizationId"
+                        onChange={this.selectTimeZoneAndOrg(setFieldValue, 'providerInformation.organizationId')}
+                      />
+                    </FormControl>
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Working Hours
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem sm={9}>
+                    <GridContainer>
+                      {weekDays.map((day) => (
+                        <GridItem className={classes.workingHours} xs={3} lg={2} key={`providerInformation.workingHours[${day}]`}>
+                          <label>{day}</label>
+                          <CustomInput
+                            inputProps={{
+                              placeholder: "Start Time",
+                              type: "time",
+                              name: `providerInformation.workingHours[${day}].startTime`
+                            }}
+                            onChange={handleChange}
+                            value={values.providerInformation.workingHours[day].startTime}
+                          />
+                          <CustomInput
+                            inputProps={{
+                              placeholder: "End Time",
+                              type: "time",
+                              name: `providerInformation.workingHours[${day}].endTime`
+                            }}
+                            onChange={handleChange}
+                            value={values.providerInformation.workingHours[day].endTime}
+                          />
+                        </GridItem>
+                      ))}
+                    </GridContainer>
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={3}>
+                    <CustomInput
+                      id="providerInformation.tags"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        multiline: true,
+                        rows: 3
+                      }}
+                      placeholder="tag1,tag2,tag3,..."
+                      value={values.providerInformation.tags}
+                      onChange={handleChange}
                     />
-                  </FormControl>
-                </GridItem>
-              </GridContainer>
-
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>Service Organization</FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={4}>
-                  <FormControl fullWidth className={classes.selectFormControl}>
-                    <Select
-                      options={organizationOptions}
-                      value={
-                        organizationOption === null
-                          ? organizationOptions.find(element => {
-                              return element.value === values.providerInformation.organizationId;
-                            })
-                          : organizationOption
-                      }
-                      onChange={this.handleOrgChange}
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Qualifications</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={3}>
+                    <CustomInput
+                      id="providerInformation.qualifications"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        multiline: true,
+                        rows: 3
+                      }}
+                      placeholder="Empathy,Thick Skin,Flexibility,..."
+                      value={values.providerInformation.qualifications}
+                      onChange={handleChange}
                     />
-                  </FormControl>
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={3}>
-                  <CustomInput
-                    id="providerInformation.tags"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 3
-                    }}
-                    placeholder="tag1,tag2,tag3,..."
-                    value={values.providerInformation.tags}
-                    onChange={handleChange}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={3}>
-                  <FormLabel className={classes.labelHorizontal}>Qualifications</FormLabel>
-                </GridItem>
-                <GridItem xs={12} sm={3}>
-                  <CustomInput
-                    id="providerInformation.qualifications"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 3
-                    }}
-                    placeholder="Empathy,Thick Skin,Flexibility,..."
-                    value={values.providerInformation.qualifications}
-                    onChange={handleChange}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} md={12}>
-                  <ImageUpload imagePreviewUrl={values.imageShow} />
-                </GridItem>
-              </GridContainer>
-            </CardBody>
-            <CardFooter className={classes.justifyContentCenter}>
-              <Button color="rose" onClick={handleSubmit}>
-                Update
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} md={12}>
+                    <ImageUpload imagePreviewUrl={values.imageShow} />
+                  </GridItem>
+                </GridContainer>
+              </CardBody>
+              <CardFooter className={classes.justifyContentCenter}>
+                <Button color="rose" onClick={handleSubmit}>
+                  Update
               </Button>
-              <Button color="rose" onClick={this.props.history.goBack}>
-                Exit
+                <Button color="rose" onClick={this.props.history.goBack}>
+                  Exit
               </Button>
-            </CardFooter>
-          </Card>
-        )}
+              </CardFooter>
+            </Card>
+          )}
       />
     );
   }
@@ -439,14 +434,11 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchProvider: id => dispatch(fetchProvider(id)),
-    editProvider: (provider, history) => dispatch(editProvider(provider, history)),
-    fetchTimezoneOptions: () => dispatch(fetchTimezoneOptions()),
-    fetchOrganizationsOptionByBusinessAdminId: id =>
-      dispatch(fetchOrganizationsOptionByBusinessAdminId(id))
-  };
+const mapDispatchToProps = {
+  fetchProvider,
+  editProvider,
+  fetchTimezoneOptions,
+  fetchOrganizationsOptionByBusinessAdminId,
 };
 
 export default compose(

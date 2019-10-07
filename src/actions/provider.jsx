@@ -122,7 +122,7 @@ export function fetchProvidersByBusinessAdminId(businessAdminId) {
 
 export const editProviderLoading = () => {
   return {
-    type: provider.CREATE_PROVIDER_LOADING
+    type: provider.EDIT_PROVIDER_LOADING
   };
 };
 
@@ -194,12 +194,6 @@ export function createProviderFailure(error) {
 }
 
 export function createProvider(values, history) {
-  if (values.userType === null || values.userType === '' || values.userType !== 'PROVIDER') {
-    values.userType = 'PROVIDER';
-  }
-  const userSub = localStorage.getItem('userSub');
-  values.providerInformation.businessId = userSub;
-
   return dispatch => {
     dispatch({ type: provider.CREATE_PROVIDER_LOADING });
     axios.post(URL.ADMIN_CREATE_AWS_USER, values)

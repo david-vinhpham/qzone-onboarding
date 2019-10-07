@@ -35,7 +35,10 @@ const validationFormsStyle = theme => ({
   registerButton: {
     float: "right"
   },
-  ...modalStyle(theme)
+  ...modalStyle(theme),
+  workingHours: {
+    marginTop: 16
+  },
 });
 
 export default validationFormsStyle;
