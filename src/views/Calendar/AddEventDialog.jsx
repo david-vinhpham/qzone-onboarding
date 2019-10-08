@@ -22,8 +22,6 @@ import TmpServiceContent from './addEventDialog/TmpServiceContent';
 import CommonContent from './addEventDialog/CommonContent';
 import { weekDays } from 'constants.js';
 
-const today = weekDays[moment().day()];
-
 class AddEventDialog extends PureComponent {
   onSelectEventLevel = (setFieldValue, values) => ({ target: { value: level } }) => {
     setFieldValue('eventLevel', level);
@@ -36,18 +34,19 @@ class AddEventDialog extends PureComponent {
   onSelectProvider = (setFieldValue, values) => event => {
     const selectedProvider = this.props.providers.find(p => p.id === event.target.value);
     const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProvider.timezone.toLowerCase()).label;
-    const todayWorkingHour = selectedProvider.workingHours.find(wh => wh.day === today);
+    const weekDay = weekDays[moment(values.addEventData.startTime).day()];
+    const workingHour = selectedProvider.workingHours.find(wh => wh.day === weekDay);
     setFieldValue('addEventData.providerId', selectedProvider.id);
     setFieldValue('addEventData.providerName', selectedProvider.name);
     setFieldValue('addEventData.timezoneId', timezoneId);
     setFieldValue('addEventData.startTime', moment(values.addEventData.startTime)
-      .hour(todayWorkingHour.startTime.hour)
-      .minute(todayWorkingHour.startTime.minute)
+      .hour(workingHour.startTime.hour)
+      .minute(workingHour.startTime.minute)
       .second(0)
       .format());
     setFieldValue('addEventData.endTime', moment(values.addEventData.endTime)
-      .hour(todayWorkingHour.endTime.hour)
-      .minute(todayWorkingHour.endTime.minute)
+      .hour(workingHour.endTime.hour)
+      .minute(workingHour.endTime.minute)
       .second(0)
       .format());
   };
@@ -75,12 +74,19 @@ class AddEventDialog extends PureComponent {
     const momentData = moment(data);
 
     if (type === 'date') {
+      const selectedProvider = this.props.providers.find(p => p.id === values.addEventData.providerId);
+      const weekDay = weekDays[momentData.day()];
+      const workingHour = selectedProvider.workingHours.find(wh => wh.day === weekDay);
+
       setFieldValue(
         'addEventData.startTime',
         moment(values.addEventData.startTime)
           .year(momentData.year())
           .month(momentData.month())
           .date(momentData.date())
+          .hour(workingHour.startTime.hour)
+          .minute(workingHour.startTime.minute)
+          .second(0)
           .format()
       );
       setFieldValue(
@@ -89,6 +95,9 @@ class AddEventDialog extends PureComponent {
           .year(momentData.year())
           .month(momentData.month())
           .date(momentData.date())
+          .hour(workingHour.endTime.hour)
+          .minute(workingHour.endTime.minute)
+          .second(0)
           .format()
       );
 
