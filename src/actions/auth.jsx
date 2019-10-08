@@ -177,7 +177,7 @@ export function loginUser(values, history) {
         }
       })
       .catch(err => {
-        dispatch(showAlert('error', 'Your email or password is incorrect!'));
+        dispatch(showAlert('error', err.message || 'Your email or password is incorrect!'));
         dispatch(registerUserFailure(err))
       });
   };
