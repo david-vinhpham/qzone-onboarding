@@ -49,14 +49,6 @@ const dashboardRoutes = [
     component: Dashboard,
     dataTestId: 'dashboardNavLink',
   },
-  {
-    path: '/assessments',
-    name: 'Assessments',
-    icon: Assignment,
-    component: Assessments,
-    dataTestId: 'assessmentsNavLink',
-    iconColor: 'primary',
-  },
   { redirect: true, path: '/', pathTo: '/login', name: 'Login' }
 ];
 
@@ -120,10 +112,18 @@ const managementRoutes = [
     name: 'Email Templates',
     shortName: 'ET',
     icon: Email,
-    guarded: true,
     component: EmailTemplates,
     dataTestId: 'emailTemplatesNavLink',
     iconColor: 'secondary',
+  },
+  {
+    path: '/assessments',
+    name: 'Assessments',
+    shortName: 'AS',
+    icon: Assignment,
+    component: Assessments,
+    dataTestId: 'assessmentsNavLink',
+    iconColor: 'secondary'
   },
 ];
 
@@ -176,8 +176,6 @@ const operationRoutes = [
 ]
 
 const otherRoutes = [
-  ...managementRoutes,
-  ...operationRoutes,
   {
     path: '/location/edit/:id',
     name: 'Location Edit',

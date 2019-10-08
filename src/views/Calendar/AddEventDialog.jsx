@@ -20,6 +20,9 @@ import { providerType, optionType, userDetailType, historyType } from 'types/glo
 import styles from './AddEventDialog.module.scss';
 import TmpServiceContent from './addEventDialog/TmpServiceContent';
 import CommonContent from './addEventDialog/CommonContent';
+import { weekDays } from 'constants.js';
+
+const today = weekDays[moment().day()];
 
 class AddEventDialog extends PureComponent {
   onSelectEventLevel = (setFieldValue, values) => ({ target: { value: level } }) => {
@@ -30,12 +33,23 @@ class AddEventDialog extends PureComponent {
     }
   };
 
-  onSelectProvider = (setFieldValue) => event => {
+  onSelectProvider = (setFieldValue, values) => event => {
     const selectedProvider = this.props.providers.find(p => p.id === event.target.value);
     const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProvider.timezone.toLowerCase()).label;
+    const todayWorkingHour = selectedProvider.workingHours.find(wh => wh.day === today);
     setFieldValue('addEventData.providerId', selectedProvider.id);
     setFieldValue('addEventData.providerName', selectedProvider.name);
     setFieldValue('addEventData.timezoneId', timezoneId);
+    setFieldValue('addEventData.startTime', moment(values.addEventData.startTime)
+      .hour(todayWorkingHour.startTime.hour)
+      .minute(todayWorkingHour.startTime.minute)
+      .second(0)
+      .format());
+    setFieldValue('addEventData.endTime', moment(values.addEventData.endTime)
+      .hour(todayWorkingHour.endTime.hour)
+      .minute(todayWorkingHour.endTime.minute)
+      .second(0)
+      .format());
   };
 
   onChangeEventType = (setFieldValue, values) => ({ target: { value: eventType } }) => {

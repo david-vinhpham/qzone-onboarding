@@ -36,7 +36,7 @@ import { fetchTimezoneOptions } from "../../actions/timezoneOptions";
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
 import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE, REPEAT_DATE_DEF } from "constants/Calendar.constants";
 import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
-import { defaultDateTimeFormat, eUserType } from "constants.js";
+import { defaultDateTimeFormat, eUserType, weekDays } from "constants.js";
 import { fetchSurveyOptionsByAssessorId } from "actions/surveyOptions";
 
 const override = css`
@@ -47,6 +47,9 @@ const override = css`
   display: flex;
   justify-content: center;
 `;
+
+const todayWeekDay = weekDays[moment().day()];
+
 class TmpServicesList extends PureComponent {
   constructor(props) {
     super(props);
@@ -101,7 +104,6 @@ class TmpServicesList extends PureComponent {
   handleAvailabilityClick(event, history) {
     history.push('/availability/detail/' + event.id);
   }
-
 
   cancelDelete = () => {
     const data = {
@@ -236,8 +238,17 @@ class TmpServicesList extends PureComponent {
       );
       const timezoneId = tempTz ? tempTz.label : moment.tz.guess();
       const today = moment();
-      const startTime = today.hour(8).minute(0).second(0).format();
-      const endTime = today.hour(18).minute(0).second(0).format();
+      const todayWorkingHour = defaultProvider.workingHours.find(wh => wh.day === todayWeekDay);
+      const startTime = today
+        .hour(todayWorkingHour.startTime.hour)
+        .minute(todayWorkingHour.startTime.minute)
+        .second(0)
+        .format();
+      const endTime = today
+        .hour(todayWorkingHour.endTime.hour)
+        .minute(todayWorkingHour.endTime.minute)
+        .second(0)
+        .format();
       const breakTimeStart = today.hour(12).minute(0).second(0).format();
       const breakTimeEnd = today.hour(13).minute(0).second(0).format();
 
