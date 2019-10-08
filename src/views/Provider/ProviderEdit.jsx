@@ -27,6 +27,7 @@ import defaultImage from "../../assets/img/image_placeholder.jpg";
 import _ from "lodash";
 import ImageUpload from '../../components/CustomUpload/ImageUpload';
 import { weekDays, defaultWorkingHours } from 'constants.js';
+import { formatTimeToString } from 'utils/formatTime.js';
 
 const override = css`
   margin: 0 auto;
@@ -110,10 +111,6 @@ class ProviderEdit extends React.Component {
     this.props.editProvider(values, history);
   }
 
-  formatTimeToString = (time) => {
-    return time < 10 ? `0${time}` : time;
-  }
-
   selectTimeZoneAndOrg = (setFieldValue, key) => (value) => {
     setFieldValue(key, value);
   }
@@ -162,14 +159,14 @@ class ProviderEdit extends React.Component {
                   ...acc,
                   [value.day]: {
                     startTime: `${
-                      this.formatTimeToString(value.startTime.hour)
+                      formatTimeToString(value.startTime.hour)
                       }:${
-                      this.formatTimeToString(value.startTime.minute)
+                      formatTimeToString(value.startTime.minute)
                       }`,
                     endTime: `${
-                      this.formatTimeToString(value.endTime.hour)
+                      formatTimeToString(value.endTime.hour)
                       }:${
-                      this.formatTimeToString(value.endTime.minute)
+                      formatTimeToString(value.endTime.minute)
                       }`,
                   },
                 };

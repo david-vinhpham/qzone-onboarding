@@ -18,8 +18,10 @@ import { createNewEventHelper } from './helpers';
 import { fetchGeoLocationOptions } from 'actions/geoOptions';
 import { fetchServiceOptionsByBusinessAdminId } from 'actions/serviceOptions';
 import { fetchTimezoneOptions } from 'actions/timezoneOptions';
-import { eUserType } from 'constants.js';
+import { eUserType, weekDays } from 'constants.js';
 import { fetchSurveyOptionsByAssessorId } from 'actions/surveyOptions';
+
+const today = weekDays[moment().day()];
 
 class ManageCalendar extends React.PureComponent {
   constructor(props) {
@@ -70,6 +72,7 @@ class ManageCalendar extends React.PureComponent {
     this.setState(() => {
       const defaultProvider = this.props.providers[0];
       const chosenProvider = providerDetail === 'none' ? defaultProvider : providerDetail;
+      const todayWorkingHour = chosenProvider.workingHours.find(wh => wh.day === today);
       const serviceId = get(this.props.serviceOptions, '0.value', 0);
       const addEventData = {
         eventType: EVENT_TYPE.TMP_SERVICE,
@@ -90,8 +93,16 @@ class ManageCalendar extends React.PureComponent {
           surveyId: 'none',
           privacy: true
         },
-        startTime: moment(startTime).format(),
-        endTime: moment(endTime).format(),
+        startTime: moment(startTime)
+          .hour(todayWorkingHour.startTime.hour)
+          .minute(todayWorkingHour.startTime.minute)
+          .second(0)
+          .format(),
+        endTime: moment(endTime)
+          .hour(todayWorkingHour.endTime.hour)
+          .minute(todayWorkingHour.endTime.minute)
+          .second(0)
+          .format(),
       };
 
       return {

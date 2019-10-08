@@ -44,7 +44,8 @@ const reducer = (state = initialState, action) => {
             map(input, p => ({
               id: p.id,
               name: `${p.familyName || ''} ${p.givenName}`,
-              timezone: p.providerInformation.timeZoneId
+              timezone: p.providerInformation.timeZoneId,
+              workingHours: p.providerInformation.workingHours,
             })),
           input => sortBy(input, 'name')
         )(action.providers)
