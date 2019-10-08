@@ -112,7 +112,6 @@ const managementRoutes = [
     name: 'Email Templates',
     shortName: 'ET',
     icon: Email,
-    guarded: true,
     component: EmailTemplates,
     dataTestId: 'emailTemplatesNavLink',
     iconColor: 'secondary',
@@ -124,7 +123,7 @@ const managementRoutes = [
     icon: Assignment,
     component: Assessments,
     dataTestId: 'assessmentsNavLink',
-    iconColor: 'secondary',
+    iconColor: 'secondary'
   },
 ];
 
@@ -177,8 +176,6 @@ const operationRoutes = [
 ]
 
 const otherRoutes = [
-  ...managementRoutes,
-  ...operationRoutes,
   {
     path: '/location/edit/:id',
     name: 'Location Edit',

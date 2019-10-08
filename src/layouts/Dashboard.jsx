@@ -113,10 +113,16 @@ class Dashboard extends React.PureComponent {
                   component={withAuth(profileRouteComponent.component, rest.userDetail)}
                   key={profileRouteComponent.path}
                 />
-                {!!axios.defaults.headers.common['Authorization'] && [...otherRoutes, ...dashboardRoutes].map((prop) => {
-                  if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={prop.path} />;
-                  return <Route path={prop.path} component={withAuth(prop.component, rest.userDetail)} key={prop.path} />;
-                })}
+                {!!axios.defaults.headers.common['Authorization'] &&
+                  [
+                    ...otherRoutes,
+                    ...managementRoutes,
+                    ...operationRoutes,
+                    ...dashboardRoutes,
+                  ].map((prop) => {
+                    if (prop.redirect) return <Redirect from={prop.path} to={prop.pathTo} key={prop.path} />;
+                    return <Route path={prop.path} component={withAuth(prop.component, rest.userDetail)} key={prop.path} />;
+                  })}
               </Switch>
             </div>
           </div>
