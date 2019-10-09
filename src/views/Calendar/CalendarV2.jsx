@@ -21,7 +21,8 @@ class CalendarV2 extends React.PureComponent {
         ? {
           id: props.userDetail.id,
           name: `${props.userDetail.familyName || ''} ${props.userDetail.givenName}`,
-          timezone: props.userDetail.providerInformation.timeZoneId
+          timezone: props.userDetail.providerInformation.timeZoneId,
+          workingHours: props.userDetail.providerInformation.workingHours
         }
         : 'none'
     };
