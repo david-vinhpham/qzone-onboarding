@@ -30,8 +30,14 @@ const listPageStyle = {
   cardPadding: {
     padding: '10px'
   },
+  orgLogoWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: 16
+  },
   orgLogo: {
-    width: '100%',
+    width: 100,
+    height: 100
   },
   orgInfo: {
     textAlign: 'center'

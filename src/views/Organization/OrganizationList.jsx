@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import Search from "@material-ui/icons/Search";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from "@material-ui/core/Tooltip";
+import Avatar from "@material-ui/core/Avatar";
 import Edit from "@material-ui/icons/Edit";
 import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
@@ -60,7 +61,9 @@ class OrganizationList extends React.Component {
             <GridItem key={organization.id} xs={12} sm={12} md={3}>
               <Card product className={classes.cardHover}>
                 <CardBody>
-                  <img className={classes.orgLogo} src={organization.logo.fileUrl} alt={organization.name} />
+                  <div className={classes.orgLogoWrapper}>
+                    <Avatar className={classes.orgLogo} src={organization.logo.fileUrl} alt={organization.name} />
+                  </div>
                   <div className={classes.orgInfo}>
                     <h4 className={classes.cardProductTitle}>
                       {organization.name}
