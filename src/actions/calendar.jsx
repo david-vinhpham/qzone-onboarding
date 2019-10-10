@@ -50,6 +50,7 @@ export const fetchEventsByProviderId = providerId => dispatch => {
   const fetchEvents = [];
   fetchEvents.push(axios.get(`${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
   fetchEvents.push(axios.get(`${URL.FIND_TMP_EVENTS_BY_PROVIDER_ID}${providerId}`));
+  fetchEvents.push(axios.get(`${URL.FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID}${providerId}`));
 
   Promise.all(fetchEvents)
     .then((eventsResp) => {

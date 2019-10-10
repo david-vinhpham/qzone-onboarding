@@ -12,7 +12,7 @@ export const CREATE_CALENDAR_EVENT = {
 };
 export const CALENDAR_LOADING = 'CALENDAR_LOADING';
 
-export const PROVIDER_EVENT_TYPE = ['TMP_SERVICE', 'BREAK'];
+export const PROVIDER_EVENT_TYPE = ['TMP_SERVICE', 'BREAK', 'APPOINTMENT'];
 
 export const EVENT_TYPE = Object.freeze({
   APPOINTMENT: 'APPOINTMENT',
