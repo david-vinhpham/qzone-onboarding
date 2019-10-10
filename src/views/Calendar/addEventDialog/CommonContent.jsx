@@ -53,7 +53,7 @@ export default function CommonContent({
             >
               {Object.values(EVENT_TYPE)
                 .filter(e => {
-                  if (e === EVENT_TYPE.TMP_EVENTS || e === EVENT_TYPE.APPOINTMENT) {
+                  if (e === EVENT_TYPE.TMP_EVENTS) {
                     return false;
                   }
                   return isProvider ? PROVIDER_EVENT_TYPE.includes(e) : true;
@@ -194,6 +194,7 @@ export default function CommonContent({
                   <TextField
                     name="addEventData.customerEmail"
                     fullWidth
+                    label="Email"
                     value={values.addEventData.customerEmail || ''}
                     onChange={handleChange}
                   />
@@ -237,6 +238,7 @@ export default function CommonContent({
                 <Grid item md={10}>
                   <PhoneInput
                     country="AU"
+                    placeholder="Phone number"
                     name="addEventData.customerMobilePhone"
                     value={values.addEventData.customerMobilePhone || ''}
                     onChange={onChangeCustomerMobilePhone}
