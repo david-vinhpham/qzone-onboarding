@@ -83,7 +83,6 @@ class ManageCalendar extends React.PureComponent {
         providerName: chosenProvider.name,
         serviceId,
         tmpService: {
-          additionalInfo: '',
           avgServiceTime: 0,
           breakTimeStart: moment(startTime).hour(12).minute(0).second(0).format(),
           breakTimeEnd: moment(endTime).hour(13).minute(0).second(0).format(),

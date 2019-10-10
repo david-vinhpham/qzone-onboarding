@@ -174,7 +174,6 @@ class TmpServicesList extends PureComponent {
           .utcOffset(localTz, true)
           .format(),
         tmpService: {
-          additionalInfo: event.additionalInfo || '',
           avgServiceTime: event.avgServiceTime,
           breakTimeStart: moment.tz(event.breakTime.breakStart * 1000, event.timezoneId)
             .utcOffset(localTz, true)
@@ -270,7 +269,6 @@ class TmpServicesList extends PureComponent {
         startTime,
         endTime,
         tmpService: {
-          additionalInfo: '',
           avgServiceTime: 0,
           breakTimeStart,
           breakTimeEnd,

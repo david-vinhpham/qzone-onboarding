@@ -4,7 +4,6 @@ import { EVENT_REPEAT_TYPE, REPEAT_END_TYPE, EVENT_LEVEL, EVENT_TYPE } from 'con
 
 export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
   const {
-    additionalInfo,
     avgServiceTime,
     breakTimeStart,
     breakTimeEnd,
@@ -15,7 +14,6 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
     privacy
   } = tmpService;
   return {
-    additionalInfo: additionalInfo || undefined,
     avgServiceTime,
     breakTime: {
       breakStart: moment(breakTimeStart).utcOffset(providerTzOffset, true).unix(),

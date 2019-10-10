@@ -59,7 +59,6 @@ class AddEventDialog extends PureComponent {
       'addEventData.tmpService',
       eventType === EVENT_TYPE.TMP_SERVICE
         ? {
-          additionalInfo: '',
           avgServiceTime: 30,
           breakTimeStart: values.addEventData.startTime,
           breakTimeEnd: values.addEventData.endTime,
@@ -299,7 +298,19 @@ class AddEventDialog extends PureComponent {
                     variant="outlined"
                     color="primary"
                     onClick={this.onClickSubmit(values)}
-                    disabled={isSubmitting}
+                    disabled={
+                      isSubmitting ||
+                      (values.addEventData.eventType === EVENT_TYPE.APPOINTMENT &&
+                        (
+                          !values.addEventData.location ||
+                          !values.addEventData.serviceId ||
+                          !values.addEventData.customerEmail ||
+                          !values.addEventData.customerFirstName ||
+                          !values.addEventData.customerLastName ||
+                          !values.addEventData.customerMobilePhone
+                        )
+                      )
+                    }
                   >
                     {isEditMode ? 'Edit' : 'Create'}
                   </Button>
