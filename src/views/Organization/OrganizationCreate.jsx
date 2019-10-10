@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { FormLabel, MenuItem, Select, FormControlLabel, Switch, FormControl } from "@material-ui/core";
+import {FormLabel, MenuItem, Select, FormControlLabel, Switch} from "@material-ui/core";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Formik } from 'formik';
@@ -24,8 +24,9 @@ import { fetchBusinessCategories } from "../../actions/businessCategories";
 import validationFormStyle from "../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx";
 import { BeatLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import defaultImage from "../../assets/img/default-avatar.png";
-import { weekDays } from 'constants.js';
+import slide_default from "../../assets/img/slide_default.jpg";
+import your_logo from "../../assets/img/your_logo.png";
+import PictureUpload from "../../components/CustomUpload/PictureUpload";
 
 const override = css`
     margin: 0 auto;
@@ -53,14 +54,20 @@ class OrganizationCreate extends React.Component {
         userSub: localStorage.getItem('userSub'),
       },
       businessAdminEmail: localStorage.getItem('loginEmail'),
-      imagePreviewUrl: defaultImage,
+      imagePreviewUrl: your_logo,
       imageChange: false,
+      picturePreviewUrl: slide_default,
+      pictureChange: false,
+
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.imageLoading) {
       this.setState({ imageChange: true })
+    }
+    if (nextProps.pictureLoading) {
+      this.setState({ pictureChange: true })
     }
   }
 
@@ -75,6 +82,18 @@ class OrganizationCreate extends React.Component {
     reader.onloadend = () => {
       this.setState({
         imagePreviewUrl: reader.result
+      });
+    };
+    reader.readAsDataURL(files);
+  }
+
+  changeProfilePicture = (e) => {
+    e.preventDefault();
+    let reader = new FileReader();
+    let files = e.target.files[0];
+    reader.onloadend = () => {
+      this.setState({
+        picturePreviewUrl: reader.result
       });
     };
     reader.readAsDataURL(files);
@@ -96,6 +115,12 @@ class OrganizationCreate extends React.Component {
       imageObject = JSON.parse(imageObject)
     }
     values.logo = imageObject;
+    //Adv
+    let pictureObject = localStorage.getItem('pictureObject');
+    if (pictureObject !== null) {
+      pictureObject = JSON.parse(pictureObject)
+    }
+    values.advPic = pictureObject;
     values.businessAdminEmail = localStorage.getItem('loginEmail');
     values.userSub = localStorage.getItem('userSub');
     this.props.createOrganization(values, this.props.history);
@@ -129,50 +154,13 @@ class OrganizationCreate extends React.Component {
               trackManualTime: true,
               bookingHorizon: 0,
               dataRetention: 0,
-              serviceHours: [
-                {
-                  "day": "Monday",
-                  "endTime": "18:00",
-                  "startTime": "09:00"
-                },
-                {
-                  "day": "Tuesday",
-                  "endTime": "18:00",
-                  "startTime": "09:00"
-                },
-                {
-                  "day": "Wednesday",
-                  "endTime": "18:00",
-                  "startTime": "09:00"
-                },
-                {
-                  "day": "Thursday",
-                  "endTime": "18:00",
-                  "startTime": "09:00"
-                },
-                {
-                  "day": "Friday",
-                  "endTime": "18:00",
-                  "startTime": "09:00"
-                },
-                {
-                  "day": "Saturday",
-                  "endTime": "00:00",
-                  "startTime": "00:00"
-                },
-                {
-                  "day": "Sunday",
-                  "endTime": "00:00",
-                  "startTime": "00:00"
-                }
-              ],
             },
             telephone: '',
             website: '',
-            queueModel: '',
             businessAdminEmail: '',
             userSub: '',
-            imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl)
+            imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl),
+            picturePreviewUrl: this.props.pictureObject || (this.state.picture ? this.state.picture.fileUrl : this.state.picturePreviewUrl)
           }}
           validationSchema={OrganizationCreateSchema}
           enableReinitialize={true}
@@ -292,45 +280,6 @@ class OrganizationCreate extends React.Component {
                         title: "Preferences",
                         content:
                           <div>
-                            <GridContainer style={{ paddingBottom: '15px' }}>
-                              <GridItem>
-                                <FormLabel className={classes.labelHorizontal}>
-                                  Service Hours
-                                </FormLabel>
-                              </GridItem>
-                              {weekDays.map((day, index) => (
-                                <div>
-                                  <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
-                                    <FormLabel >
-                                      {day}
-                                    </FormLabel>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
-                                    <FormControl fullWidth style={{ margin: '-1px' }}>
-                                      <CustomInput
-                                        id={`preferences.serviceHours[${index}].startTime`}
-                                        inputProps={{
-                                          placeholder: "Start Time",
-                                          type: "time"
-                                        }}
-                                        onChange={handleChange}
-                                        value={values.preferences.serviceHours[index].startTime}
-                                      />
-                                    </FormControl>
-                                  </GridItem>
-                                  <GridItem xs={12} sm={3} style={{ 'max-width': '100%' }}>
-                                    <FormControl fullWidth style={{ margin: '-1px' }}>
-                                      <CustomInput
-                                        id={`preferences.serviceHours[${index}].endTime`}
-                                        value={values.preferences.serviceHours[index].endTime}
-                                        inputProps={{ placeholder: "End Time", type: "time" }}
-                                        onChange={handleChange}
-                                      />
-                                    </FormControl>
-                                  </GridItem>
-                                </div>
-                              ))}
-                            </GridContainer>
                             <GridContainer>
                               <GridItem xs={12} sm={2}>
                                 <FormLabel
@@ -587,7 +536,7 @@ class OrganizationCreate extends React.Component {
                             <GridItem>
                               <FormLabel className={classes.labelHorizontal}>
                                 Website
-                                            </FormLabel>
+                              </FormLabel>
                             </GridItem>
                             <GridItem >
                               <CustomInput
@@ -600,30 +549,27 @@ class OrganizationCreate extends React.Component {
                                 value={values.website}
                               />
                             </GridItem>
-
-                            {/* <GridItem>
+                            <GridContainer>
+                              <GridItem>
                                 <FormLabel className={classes.labelHorizontal}>
-                                  Queue Model
-                                            </FormLabel>
+                                  Organization Logo
+                                </FormLabel>
                               </GridItem>
-                              <GridItem >
-                                <CustomInput
-                                  id="queueModel"
-                                  inputProps={{
-                                    placeholder: "Queue Model",
-                                    type: "text"
-                                  }}
-                                  onChange={handleChange}
-                                  value={values.queueModel}
-                                />
-                              </GridItem>*/}
                             <GridItem xs={12} md={12}>
                               <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
                             </GridItem>
+                            </GridContainer>
+                            <GridContainer>
+                              <GridItem>
+                                <FormLabel className={classes.labelHorizontal}>
+                                  Select your marketing picture
+                                </FormLabel>
+                              </GridItem>
+                            <GridItem xs={12} md={12}>
+                              <PictureUpload picturePreviewUrl={values.picturePreviewUrl} />
+                            </GridItem>
                           </GridContainer>
-
-
-
+                          </GridContainer>
                       },
                     ]}
                   />

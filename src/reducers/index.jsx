@@ -7,6 +7,7 @@ import TemplateReducer from './email_templates';
 import OrganizationReducer from './organization.reducer';
 import ServiceReducer from './service.reducer';
 import ImageUploadReducer from './imageUpload.reducer';
+import PictureUploadReducer from './pictureUpload.reducer';
 import LocationReducer from './location.reducer';
 import calendarManageReducer from './calendar.reducer';
 import tmpServicesReducer from './tmpServices.reducer';
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   organization: OrganizationReducer,
   service: ServiceReducer,
   image: ImageUploadReducer,
+  picture: PictureUploadReducer,
   location: LocationReducer,
   calendarManage: calendarManageReducer,
   tmpServices: tmpServicesReducer,

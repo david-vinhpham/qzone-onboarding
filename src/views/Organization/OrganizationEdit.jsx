@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {
-  FormControl,
   FormControlLabel,
   FormLabel,
   Grid,
@@ -33,13 +32,13 @@ import _ from 'lodash';
 import { classesType, historyType, matchType, businessCategoryType } from 'types/global.js';
 import defaultImage from '../../assets/img/image_placeholder.jpg';
 import ImageUpload from '../../components/CustomUpload/ImageUpload';
+import PictureUpload from '../../components/CustomUpload/PictureUpload';
 import validationFormStyle from '../../assets/jss/material-dashboard-pro-react/views/validationFormStyle.jsx';
 import {
   editOrganization,
   fetchOrganization
 } from '../../actions/organization.jsx';
 import { fetchBusinessCategories } from "../../actions/businessCategories";
-import { weekDays } from 'constants.js';
 
 const override = css`
   margin: 0 auto;
@@ -61,7 +60,8 @@ class OrganizationEdit extends React.Component {
     this.state = {
       data: {},
       imagePreviewUrl: defaultImage,
-      imageObject: null
+      imageObject: null,
+      pictureObject: null
     };
   }
 
@@ -70,6 +70,7 @@ class OrganizationEdit extends React.Component {
     this.props.fetchOrganization(id);
     this.props.fetchBusinessCategories();
     localStorage.removeItem('imageObject');
+    localStorage.removeItem('pictureObject');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,6 +80,14 @@ class OrganizationEdit extends React.Component {
         this.setState({ imagePreviewUrl: nextProps.organization.logo.fileUrl });
       } else {
         this.setState({ imagePreviewUrl: defaultImage });
+      }
+    }
+    if (!nextProps.pictureLoading) {
+      this.setState({ data: nextProps.organization });
+      if (nextProps.organization !== null && nextProps.organization.advPic != null) {
+        this.setState({ picturePreviewUrl: nextProps.organization.advPic.fileUrl });
+      } else {
+        this.setState({ picturePreviewUrl: defaultImage });
       }
     }
   }
@@ -96,6 +105,21 @@ class OrganizationEdit extends React.Component {
     if (!Object.is(values.imagePreviewUrl, null) && !Object.is(values.imagePreviewUrl, undefined)) {
       if (values.logo === null) {
         values.logo = values.imagePreviewUrl;
+      }
+    }
+    //Adv Picture
+    let pictureObject = localStorage.getItem('pictureObject');
+    if (pictureObject === null) {
+      pictureObject = this.state.pictureObject;
+    } else {
+      pictureObject = JSON.parse(pictureObject);
+    }
+    if (pictureObject != null) {
+      values.advPic = pictureObject;
+    }
+    if (!Object.is(values.picturePreviewUrl, null) && !Object.is(values.picturePreviewUrl, undefined)) {
+      if (values.advPic === null) {
+        values.advPic = values.picturePreviewUrl;
       }
     }
     this.props.editOrganization(values, this.props.history);
@@ -126,6 +150,18 @@ class OrganizationEdit extends React.Component {
     reader.readAsDataURL(files);
   }
 
+  handlePictureChange(e) {
+    const self = this;
+    e.preventDefault();
+    const reader = new FileReader();
+    const files = e.target.files[0];
+    reader.onloadend = () => {
+      self.setState({
+        imagePreviewUrl: reader.result
+      });
+    };
+    reader.readAsDataURL(files);
+  }
   render() {
     const {
       classes,
@@ -162,6 +198,12 @@ class OrganizationEdit extends React.Component {
                   (this.state.data.logo
                     ? this.state.data.logo.fileUrl
                     : this.state.imagePreviewUrl),
+                pictureShow: data.advPic ? data.advPic.fileUrl : defaultImage,
+                picturePreviewUrl:
+                  this.props.pictureObject ||
+                  (this.state.data.advPic
+                    ? this.state.data.advPic.fileUrl
+                    : this.state.picturePreviewUrl),
                 preferences: {
                   allowListingOnQuezone: data.preferences.allowListingOnQuezone,
                   allowReschedule: data.preferences.allowReschedule,
@@ -173,88 +215,10 @@ class OrganizationEdit extends React.Component {
                   trackManualTime: data.preferences.trackManualTime,
                   bookingHorizon: data.preferences.bookingHorizon,
                   dataRetention: data.preferences.dataRetention,
-                  serviceHours: [
-                    {
-                      day: 'Monday',
-                      endTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[0].endTime
-                          : '',
-                      startTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[0].startTime
-                          : ''
-                    },
-                    {
-                      day: 'Tuesday',
-                      endTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[1].endTime
-                          : '',
-                      startTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[1].startTime
-                          : ''
-                    },
-                    {
-                      day: 'Wednesday',
-                      endTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[2].endTime
-                          : '',
-                      startTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[2].startTime
-                          : ''
-                    },
-                    {
-                      day: 'Thursday',
-                      endTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[3].endTime
-                          : '',
-                      startTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[3].startTime
-                          : ''
-                    },
-                    {
-                      day: 'Friday',
-                      endTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[4].endTime
-                          : '',
-                      startTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[4].startTime
-                          : ''
-                    },
-                    {
-                      day: 'Saturday',
-                      endTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[5].endTime
-                          : '',
-                      startTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[5].startTime
-                          : ''
-                    },
-                    {
-                      day: 'Sunday',
-                      endTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[6].endTime
-                          : '',
-                      startTime:
-                        data.preferences.serviceHours.length > 0
-                          ? data.preferences.serviceHours[6].startTime
-                          : ''
-                    }
-                  ]
                 },
                 telephone: data.telephone,
                 logo: data.logo,
+                advPic: data.advPic,
                 website: data.website,
                 queueModel: data.queueModel,
                 businessAdminEmail: data.businessAdminEmail,
@@ -363,43 +327,6 @@ class OrganizationEdit extends React.Component {
                           title: 'Preferences',
                           content: (
                             <div>
-                              <GridContainer style={{ paddingBottom: '15px' }}>
-                                <GridItem>
-                                  <FormLabel className={classes.labelHorizontal}>
-                                    Service Hours
-                                  </FormLabel>
-                                </GridItem>
-                                {weekDays.map((day, index) => (
-                                  <div key={day}>
-                                    <GridItem xs={12} sm={3} style={{ 'maxWidth': '100%' }}>
-                                      <FormLabel>{day}</FormLabel>
-                                    </GridItem>
-                                    <GridItem xs={12} sm={3} style={{ 'maxWidth': '100%' }}>
-                                      <FormControl fullWidth style={{ margin: '-1px' }}>
-                                        <CustomInput
-                                          id={`preferences.serviceHours[${index}].startTime`}
-                                          inputProps={{
-                                            placeholder: 'Start Time',
-                                            type: 'time'
-                                          }}
-                                          onChange={handleChange}
-                                          value={values.preferences.serviceHours[index].startTime}
-                                        />
-                                      </FormControl>
-                                    </GridItem>
-                                    <GridItem xs={12} sm={3} style={{ 'maxWidth': '100%' }}>
-                                      <FormControl fullWidth style={{ margin: '-1px' }}>
-                                        <CustomInput
-                                          id={`preferences.serviceHours[${index}].endTime`}
-                                          value={values.preferences.serviceHours[index].endTime}
-                                          inputProps={{ placeholder: 'End Time', type: 'time' }}
-                                          onChange={handleChange}
-                                        />
-                                      </FormControl>
-                                    </GridItem>
-                                  </div>
-                                ))}
-                              </GridContainer>
                               <GridContainer>
                                 <GridItem xs={12} sm={2}>
                                   <FormLabel
@@ -653,29 +580,23 @@ class OrganizationEdit extends React.Component {
                                 </GridItem>
                               </GridContainer>
                               <GridContainer>
-                                {/* <GridItem>
-                                              <FormLabel className={classes.labelHorizontal}>
-                                                Queue Model
-                                            </FormLabel>
-                                            </GridItem>
-                                            <GridItem >
-                                              <CustomInput
-                                                id="queueModel"
-                                                inputProps={{
-                                                  placeholder: "Queue Model",
-                                                  type: "text"
-                                                }}
-                                                onChange={handleChange}
-                                                value={values.queueModel}
-                                              />
-                                            </GridItem> */}
+                              <GridItem>
+                                <FormLabel className={classes.labelHorizontal}>
+                                  Organization Logo
+                                </FormLabel>
+                              </GridItem>
+                              <GridItem xs={12} md={12}>
+                                <ImageUpload imagePreviewUrl={values.imageShow} />
+                              </GridItem>
+                            </GridContainer>
+                              <GridContainer>
                                 <GridItem>
                                   <FormLabel className={classes.labelHorizontal}>
-                                    Organization Image
+                                    Select your marketing picture
                                   </FormLabel>
                                 </GridItem>
                                 <GridItem xs={12} md={12}>
-                                  <ImageUpload imagePreviewUrl={values.imageShow} />
+                                  <PictureUpload picturePreviewUrl={values.pictureShow} />
                                 </GridItem>
                               </GridContainer>
                             </Grid>
