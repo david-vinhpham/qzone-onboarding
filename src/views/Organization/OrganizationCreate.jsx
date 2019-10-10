@@ -41,6 +41,10 @@ const OrganizationCreateSchema = Yup.object().shape({
     .required("This is required Field"),
   businessCategoryId: Yup.string().required("Please select category"),
   telephone: Yup.string().required("Please enter a valid phone Number"),
+  description: Yup.string()
+    .min(50, "Description too short")
+    .max(1500, "Description too long")
+    .required("this field is required"),
 })
 
 
@@ -58,7 +62,7 @@ class OrganizationCreate extends React.Component {
       imageChange: false,
       picturePreviewUrl: slide_default,
       pictureChange: false,
-
+      description: '',
     };
   }
 
@@ -158,6 +162,7 @@ class OrganizationCreate extends React.Component {
             telephone: '',
             website: '',
             businessAdminEmail: '',
+            description: this.state.description,
             userSub: '',
             imagePreviewUrl: this.props.imageObject || (this.state.image ? this.state.image.fileUrl : this.state.imagePreviewUrl),
             picturePreviewUrl: this.props.pictureObject || (this.state.picture ? this.state.picture.fileUrl : this.state.picturePreviewUrl)
@@ -274,7 +279,31 @@ class OrganizationCreate extends React.Component {
                                 <div style={{ color: "red" }}>{errors.businessCategoryId}</div>
                               ) : null}
                             </GridItem>
+                            <GridItem>
+                              <FormLabel className={classes.labelHorizontal}>
+                                Description
+                              </FormLabel>
+                            </GridItem>
+                            <GridItem xs={12} sm={6}>
+                                <CustomInput
+                                  id="description"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    multiline: true,
+                                    rows: 5
+                                  }}
+                                  value={values.description}
+                                  onChange={handleChange}
+                                />
+                                {errors.description && touched.description && (
+                                  <div style={{ color: "red" }}>{errors.description}</div>
+                                )}
+                              </GridItem>
                           </GridContainer>
+
+
                       },
                       {
                         title: "Preferences",

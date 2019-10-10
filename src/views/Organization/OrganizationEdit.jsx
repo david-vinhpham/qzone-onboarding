@@ -222,7 +222,8 @@ class OrganizationEdit extends React.Component {
                 website: data.website,
                 queueModel: data.queueModel,
                 businessAdminEmail: data.businessAdminEmail,
-                userSub: data.userSub
+                userSub: data.userSub,
+                description: data.description,
               }}
               validationSchema={OrganizationEditSchema}
               enableReinitialize
@@ -319,6 +320,28 @@ class OrganizationEdit extends React.Component {
                                 {errors.businessCategoryId && touched.businessCategoryId ? (
                                   <div style={{ color: 'red' }}>{errors.businessCategoryId}</div>
                                 ) : null}
+                              </GridItem>
+                              <GridItem>
+                                <FormLabel className={classes.labelHorizontal}>
+                                  Description
+                                </FormLabel>
+                              </GridItem>
+                              <GridItem xs={12} sm={6}>
+                                <CustomInput
+                                  id="description"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    multiline: true,
+                                    rows: 5
+                                  }}
+                                  value={values.description}
+                                  onChange={handleChange}
+                                />
+                                {errors.description && touched.description && (
+                                  <div style={{ color: "red" }}>{errors.description}</div>
+                                )}
                               </GridItem>
                             </GridContainer>
                           )
