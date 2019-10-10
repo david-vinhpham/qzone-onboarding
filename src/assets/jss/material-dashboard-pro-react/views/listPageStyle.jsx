@@ -30,5 +30,11 @@ const listPageStyle = {
   cardPadding: {
     padding: '10px'
   },
+  orgLogo: {
+    width: '100%',
+  },
+  orgInfo: {
+    textAlign: 'center'
+  }
 };
 export default listPageStyle;

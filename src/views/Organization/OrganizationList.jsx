@@ -60,7 +60,11 @@ class OrganizationList extends React.Component {
             <GridItem key={organization.id} xs={12} sm={12} md={3}>
               <Card product className={classes.cardHover}>
                 <CardBody>
-                  <div className={classes.cardHoverUnder}>
+                  <img className={classes.orgLogo} src={organization.logo.fileUrl} alt={organization.name} />
+                  <div className={classes.orgInfo}>
+                    <h4 className={classes.cardProductTitle}>
+                      {organization.name}
+                    </h4>
                     <Link to={`/organization/edit/${organization.id}`}>
                       <Button color="success" simple justIcon>
                         <Tooltip
@@ -74,9 +78,6 @@ class OrganizationList extends React.Component {
                       </Button>
                     </Link>
                   </div>
-                  <h4 className={classes.cardProductTitle}>
-                    {organization.name}
-                  </h4>
                 </CardBody>
               </Card>
             </GridItem>
