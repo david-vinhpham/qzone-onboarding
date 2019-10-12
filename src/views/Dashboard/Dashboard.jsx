@@ -34,7 +34,7 @@ const Dashboard = ({ userDetail }) => {
 									return null;
 								}
 								return (
-									<Item routeInfo={route} />
+									<Item key={route.path} routeInfo={route} />
 								);
 							})}
 						</Grid>
@@ -56,7 +56,7 @@ const Dashboard = ({ userDetail }) => {
 								return null;
 							}
 							return (
-								<Item routeInfo={route} />
+								<Item key={route.path} routeInfo={route} />
 							);
 						})}
 					</Grid>
