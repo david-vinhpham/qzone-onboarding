@@ -1,0 +1,15 @@
+.route {
+  text-align: center;
+}
+
+.routeContent {
+  padding: 16px;
+  height: 100%;
+
+  &:hover {
+    background-color: #00acc1;
+    p, svg {
+      color: white;
+    }
+  }
+}

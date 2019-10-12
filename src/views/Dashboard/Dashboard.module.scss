@@ -3,16 +3,3 @@
     margin-right: 16px;
   }
 }
-
-.route {
-  text-align: center;
-}
-
-.routeContent {
-  &:hover {
-    background-color: #00acc1;
-    p, svg {
-      color: white;
-    }
-  }
-}
