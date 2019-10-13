@@ -20,8 +20,8 @@ const LocationSchema = Yup.object().shape({
   streetAddress: Yup.string().required('Please enter a streetAddress'),
   city: Yup.string().required('Please enter a city'),
   country: Yup.string().required('Please enter a valid Country'),
-  postCode: Yup.string().required('Please enter a valid Postal code'),
-  state: Yup.string().required('Please enter a valid State')
+  /*postCode: Yup.string().required('Please enter a valid Postal code'),*/
+  /*state: Yup.string().required('Please enter a valid State')*/
 });
 class LocationCreate extends React.Component {
   constructor(props) {
