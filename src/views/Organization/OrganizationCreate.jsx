@@ -204,7 +204,7 @@ class OrganizationCreate extends React.Component {
                                 Name
                               </FormLabel>
                             </GridItem >
-                            <GridItem xs={12} sm={4} style={{ 'flex-basis': '17.333%' }}>
+                            <GridItem xs={12} sm={4} style={{ 'flexBasis': '17.333%' }}>
                               <CustomInput
                                 id="name"
                                 inputProps={{
@@ -218,12 +218,12 @@ class OrganizationCreate extends React.Component {
                                 <div style={{ color: "red" }}>{errors.name}</div>
                               ) : null}
                             </GridItem>
-                            <GridItem xs={12} sm={3} style={{ 'flex-basis': '18%' }}>
+                            <GridItem xs={12} sm={3} style={{ 'flexBasis': '18%' }}>
                               <FormLabel className={classes.labelHorizontal}>
                                 Mode of Organization
                                             </FormLabel>
                             </GridItem>
-                            <GridItem xs={12} sm={3} style={{ 'flex-basis': '15%' }}>
+                            <GridItem xs={12} sm={3} style={{ 'flexBasis': '15%' }}>
 
                               <Select
                                 value={values.orgMode}
