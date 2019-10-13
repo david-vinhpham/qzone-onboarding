@@ -49,6 +49,9 @@ class LocationForm extends React.Component {
                   {values.streetAddress || 'Street address'}
                 </InputLabel>
               )}
+            {errors.streetAddress && touched.streetAddress ? (
+              <div style={{ color: 'red' }}>{errors.streetAddress}</div>
+            ) : null}
           </GridItem>
         </GridContainer>
 
@@ -65,7 +68,7 @@ class LocationForm extends React.Component {
                   fullWidth: true
                 }}
                 inputProps={{
-                  placeholder: 'district',
+                  placeholder: '',
                   type: 'text'
                 }}
                 onChange={handleChange}
@@ -95,7 +98,7 @@ class LocationForm extends React.Component {
                   fullWidth: true
                 }}
                 inputProps={{
-                  placeholder: 'City',
+                  placeholder: 'Avalon',
                   type: 'text'
                 }}
                 onChange={handleChange}
@@ -125,7 +128,7 @@ class LocationForm extends React.Component {
                   fullWidth: true
                 }}
                 inputProps={{
-                  placeholder: 'State',
+                  placeholder: 'NSW',
                   type: 'text'
                 }}
                 onChange={handleChange}
@@ -157,7 +160,7 @@ class LocationForm extends React.Component {
                   fullWidth: true
                 }}
                 inputProps={{
-                  placeholder: 'Post Code',
+                  placeholder: '2107',
                   type: 'text'
                 }}
                 onChange={handleChange}
@@ -189,7 +192,7 @@ class LocationForm extends React.Component {
                   fullWidth: true
                 }}
                 inputProps={{
-                  placeholder: 'Country',
+                  placeholder: 'Australia',
                   type: 'text'
                 }}
                 onChange={handleChange}
