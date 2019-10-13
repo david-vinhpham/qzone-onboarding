@@ -106,7 +106,7 @@ export const resetPassword = values => {
     dispatch({ type: auth.RESET_PASSWORD_LOADING });
     axios.post(URL.RESET_PASSWORD, values)
       .then(({ data }) => {
-        if (data.status === 200 || data.status === 201 || data.success) {
+        if ((data.status === 200 || data.status === 201) && data.success) {
           dispatch({
             type: auth.RESET_PASSWORD_SUCCESS,
             payload: data
@@ -188,7 +188,7 @@ export const changePassword = (values, history) => {
     dispatch({ type: auth.CHANGE_PASSWORD_LOADING });
     axios.post(URL.CHANGE_PASSWORD, values)
       .then(({ data }) => {
-        if (data.status === 200 || data.status === 201 || data.success) {
+        if ((data.status === 200 || data.status === 201) && data.success) {
           dispatch({
             type: auth.CHANGE_PASSWORD_SUCCESS,
             payload: data

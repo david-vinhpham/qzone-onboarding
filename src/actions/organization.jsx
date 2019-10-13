@@ -129,7 +129,7 @@ export const createOrganization = (values, history) => {
         if (resp.data.object === 'VALID') {
           axios.post(URL.ORGANIZATION, values)
             .then(({ data }) => {
-              if (data.status === 200 || data.status === 201 || data.success) {
+              if ((data.status === 200 || data.status === 201) && data.success) {
                 dispatch(createOrganizationSuccess(data));
                 history.goBack();
               } else {

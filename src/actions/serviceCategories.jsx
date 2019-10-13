@@ -31,7 +31,7 @@ export const deleteServiceCategory = serviceCategoryId => {
     dispatch(setServiceCategoriesLoading(true));
     axios.delete(`${URL.FETCH_SERVICE_CATEGORIES}/${serviceCategoryId}`)
       .then(res => {
-        if (res.status === 200 || res.status === 201 || res.data.success) {
+        if ((res.status === 200 || res.status === 201) && res.data.success) {
           const { serviceCategory } = getState();
           const newList = serviceCategory.list.filter(categoryObject => categoryObject.id !== serviceCategoryId);
           dispatch(setServiceCategoriesSuccess(newList));
@@ -48,7 +48,7 @@ export const createServiceCategory = (data) => {
     dispatch(setServiceCategoriesLoading(true));
     axios.post(URL.FETCH_SERVICE_CATEGORIES, data)
       .then((res) => {
-        if (res.status === 200 || res.status === 201 || res.data.success) {
+        if ((res.status === 200 || res.status === 201) && res.data.success) {
           const { serviceCategory } = getState();
           const newList = serviceCategory.list.concat([res.data.object]);
           dispatch(setServiceCategoriesSuccess(newList));
@@ -65,7 +65,7 @@ export const editServiceCategory = (data) => {
     dispatch(setServiceCategoriesLoading(true));
     axios.put(URL.FETCH_SERVICE_CATEGORIES, data)
       .then(res => {
-        if (res.status === 200 || res.status === 201 || res.data.success) {
+        if ((res.status === 200 || res.status === 201) && res.data.success) {
           const { serviceCategory } = getState();
           const newList = serviceCategory.list.map(s => s.id === res.data.object.id ? res.data.object : s);
           dispatch(setServiceCategoriesSuccess(newList));
