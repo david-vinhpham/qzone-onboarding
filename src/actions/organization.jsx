@@ -124,7 +124,7 @@ export const createOrganizationFailure = error => {
 export const createOrganization = (values, history) => {
   return dispatch => {
     dispatch(createOrganizationLoading());
-    axios.get(URL.ORGANIZATION_NAME_VALIDATE + values.registerOrganizationName)
+    axios.get(URL.ORGANIZATION_NAME_VALIDATE + values.name)
       .then((resp) => {
         if (resp.data.object === 'VALID') {
           axios.post(URL.ORGANIZATION, values)

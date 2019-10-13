@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {FormLabel, MenuItem, Select, FormControlLabel, Switch} from "@material-ui/core";
+import { FormLabel, MenuItem, Select, FormControlLabel, Switch } from "@material-ui/core";
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Formik } from 'formik';
@@ -38,14 +38,14 @@ const override = css`
 
 const OrganizationCreateSchema = Yup.object().shape({
   name: Yup.string()
-    .required("This is required Field"),
+    .required("Please enter an organisation name"),
   businessCategoryId: Yup.string().required("Please select category"),
   telephone: Yup.string().required("Please enter a valid phone Number"),
   description: Yup.string()
     .min(50, "Description too short")
     .max(1500, "Description too long")
-    .required("this field is required"),
-})
+    .required("Please enter a description"),
+});
 
 
 class OrganizationCreate extends React.Component {
@@ -285,22 +285,22 @@ class OrganizationCreate extends React.Component {
                               </FormLabel>
                             </GridItem>
                             <GridItem xs={12} sm={6}>
-                                <CustomInput
-                                  id="description"
-                                  formControlProps={{
-                                    fullWidth: true
-                                  }}
-                                  inputProps={{
-                                    multiline: true,
-                                    rows: 5
-                                  }}
-                                  value={values.description}
-                                  onChange={handleChange}
-                                />
-                                {errors.description && touched.description && (
-                                  <div style={{ color: "red" }}>{errors.description}</div>
-                                )}
-                              </GridItem>
+                              <CustomInput
+                                id="description"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  multiline: true,
+                                  rows: 5
+                                }}
+                                value={values.description}
+                                onChange={handleChange}
+                              />
+                              {errors.description && touched.description && (
+                                <div style={{ color: "red" }}>{errors.description}</div>
+                              )}
+                            </GridItem>
                           </GridContainer>
 
 
@@ -319,7 +319,7 @@ class OrganizationCreate extends React.Component {
                                   }
                                 >
                                   Allow listing on Quezone?
-                                          </FormLabel>
+                                </FormLabel>
                               </GridItem>
                               <GridItem xs={12} sm={2}>
                                 <FormControlLabel
@@ -333,7 +333,6 @@ class OrganizationCreate extends React.Component {
                                   }
                                 />
                               </GridItem>
-
                               <GridItem xs={12} sm={2}>
                                 <FormLabel
                                   className={
@@ -584,9 +583,9 @@ class OrganizationCreate extends React.Component {
                                   Organization Logo
                                 </FormLabel>
                               </GridItem>
-                            <GridItem xs={12} md={12}>
-                              <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
-                            </GridItem>
+                              <GridItem xs={12} md={12}>
+                                <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
+                              </GridItem>
                             </GridContainer>
                             <GridContainer>
                               <GridItem>
@@ -594,10 +593,10 @@ class OrganizationCreate extends React.Component {
                                   Select your marketing picture
                                 </FormLabel>
                               </GridItem>
-                            <GridItem xs={12} md={12}>
-                              <PictureUpload picturePreviewUrl={values.picturePreviewUrl} />
-                            </GridItem>
-                          </GridContainer>
+                              <GridItem xs={12} md={12}>
+                                <PictureUpload picturePreviewUrl={values.picturePreviewUrl} />
+                              </GridItem>
+                            </GridContainer>
                           </GridContainer>
                       },
                     ]}
