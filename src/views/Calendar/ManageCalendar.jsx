@@ -74,6 +74,7 @@ class ManageCalendar extends React.PureComponent {
       const chosenProvider = providerDetail === 'none' ? defaultProvider : providerDetail;
       const todayWorkingHour = chosenProvider.workingHours.find(wh => wh.day === today);
       const serviceId = get(this.props.serviceOptions, '0.value', 0);
+      const serviceDuration = get(this.props.serviceOptions, '0.duration', 0);
       const addEventData = {
         eventType: EVENT_TYPE.TMP_SERVICE,
         description: '',
@@ -83,7 +84,7 @@ class ManageCalendar extends React.PureComponent {
         providerName: chosenProvider.name,
         serviceId,
         tmpService: {
-          avgServiceTime: 0,
+          avgServiceTime: serviceDuration,
           breakTimeStart: moment(startTime).hour(12).minute(0).second(0).format(),
           breakTimeEnd: moment(endTime).hour(13).minute(0).second(0).format(),
           geoLocationId: get(this.props.geoOptions, '0.value', 0),

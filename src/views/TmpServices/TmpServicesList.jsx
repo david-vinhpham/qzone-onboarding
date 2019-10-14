@@ -255,6 +255,7 @@ class TmpServicesList extends PureComponent {
       const providerName = get(defaultProvider, 'name', '');
       const { serviceOptions } = this.props;
       const serviceId = get(serviceOptions, '0.value', 0);
+      const serviceDuration = get(serviceOptions, '0.duration', 0);
       const addEventData = {
         eventType: EVENT_TYPE.TMP_SERVICE,
         description: '',
@@ -269,7 +270,7 @@ class TmpServicesList extends PureComponent {
         startTime,
         endTime,
         tmpService: {
-          avgServiceTime: 0,
+          avgServiceTime: serviceDuration,
           breakTimeStart,
           breakTimeEnd,
           geoLocationId: get(this.props.geoOptions, '0.value', 0),
