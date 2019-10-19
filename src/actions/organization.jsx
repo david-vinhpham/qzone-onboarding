@@ -88,19 +88,6 @@ export const fetchOrganizationsByBusinessAdminId = adminId => {
   };
 };
 
-export const fetchOrganizationsOptionByBusinessAdminId = adminId => {
-  return dispatch => {
-    dispatch(fetchOrganizationsLoading());
-    axios.get(URL.FETCH_ORGANIZATIONS_OPTION_BY_BUSINESS_ADMIN_ID + adminId)
-      .then(({ data }) => {
-        dispatch(fetchOrganizationsSuccess(data.objects));
-      })
-      .catch(err => {
-        dispatch(fetchOrganizationsFailure('Cannot fetch organizations options'));
-      });
-  };
-};
-
 export const createOrganizationLoading = () => {
   return {
     type: organization.CREATE_ORGANIZATION_LOADING

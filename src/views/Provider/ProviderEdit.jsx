@@ -22,7 +22,7 @@ import { fetchTimezoneOptions } from '../../actions/timezoneOptions';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
-import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organization';
+import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organizationOptions';
 import defaultImage from "../../assets/img/image_placeholder.jpg";
 import _ from "lodash";
 import ImageUpload from '../../components/CustomUpload/ImageUpload';
@@ -419,13 +419,14 @@ ProviderEdit.propTypes = {
   classes: PropTypes.object.isRequired
 };
 const mapStateToProps = state => {
+  console.log(state.options);
   return {
     imageObject: state.image.image,
     imageError: state.image.imageError,
     imageLoading: state.image.imageLoading,
     provider: state.provider.provider,
     timezones: state.options.timezone.tzOptions,
-    organizations: state.organization.organizations,
+    organizations: state.options.organization.orgOptions,
     fetchProviderLoading: state.provider.fetchProviderLoading,
     editProviderError: state.provider.editProviderError
   };

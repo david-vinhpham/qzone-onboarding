@@ -14,7 +14,7 @@ import CardIcon from '../../components/Card/CardIcon';
 import CardBody from '../../components/Card/CardBody';
 import SurveyForm from './SurveyForm';
 import { Button } from '@material-ui/core';
-import { fetchOrganizationsOptionByBusinessAdminId } from 'actions/organization';
+import { fetchOrganizationsOptionByBusinessAdminId } from 'actions/organizationOptions';
 import { historyType } from 'types/global';
 
 class CreateAssessment extends React.Component {
@@ -176,10 +176,10 @@ class CreateAssessment extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user, surveys, organization }) => ({
+const mapStateToProps = ({ user, surveys, options }) => ({
   user,
   isSavedSurvey: surveys.isSavedSurvey,
-  organizationOptions: organization.organizations,
+  organizationOptions: options.organization.orgOptions,
 });
 
 export default compose(

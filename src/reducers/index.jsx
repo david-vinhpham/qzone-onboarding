@@ -26,6 +26,7 @@ import chartReducer from './chart.reducer';
 import alertReducer from './alert.reducer';
 import providerOptionsReducer from './providerOptions.reducer';
 import reportsReducer from './reports.reducer';
+import organizationOptionsReducer from './organizationOptions.reducer';
 
 const rootReducer = combineReducers({
   common: commonReducer,
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
     service: serviceOptionsReducer,
     survey: surveyOptionsReducer,
     provider: providerOptionsReducer,
+    organization: organizationOptionsReducer
   })
 });
 

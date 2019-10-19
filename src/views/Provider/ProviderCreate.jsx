@@ -20,7 +20,7 @@ import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import PhoneInput from 'react-phone-number-input';
-import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organization';
+import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organizationOptions';
 import Select from 'react-select';
 import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
@@ -467,7 +467,7 @@ const mapStateToProps = state => {
     imageError: state.image.imageError,
     imageLoading: state.image.imageLoading,
     timezones: state.options.timezone.tzOptions,
-    organizations: state.organization.organizations,
+    organizations: state.options.organization.orgOptions,
     createProviderLoading: state.provider.createProviderLoading,
     createProviderError: state.provider.createProviderError
   };
