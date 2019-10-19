@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Grid, Link, MenuItem, Select, TextField, Tooltip, Typography} from '@material-ui/core';
+import { Button, Grid, Link, MenuItem, Select, TextField, Tooltip, Typography } from '@material-ui/core';
 import moment from 'moment-timezone';
-import {LiveHelp} from '@material-ui/icons';
-import {TimePicker} from '@material-ui/pickers'
+import { LiveHelp } from '@material-ui/icons';
+import { TimePicker } from '@material-ui/pickers'
 import addEventDialogStyles from '../AddEventDialog.module.scss';
 import styles from './TmpServiceContent.module.scss';
-import {optionType, userDetailType} from 'types/global';
-import {eUserType} from 'constants.js';
+import { optionType, userDetailType } from 'types/global';
+import { eUserType } from 'constants.js';
 import Checkbox from "@material-ui/core/Checkbox";
 
 export default function TmpServiceContent({
@@ -189,7 +189,7 @@ export default function TmpServiceContent({
         <Grid container spacing={1}>
           <Grid item md={2} className={addEventDialogStyles.label}>
             <Typography variant="body2" display="inline" noWrap>
-              Publicity:
+              Visibility:
             </Typography>
           </Grid>
           <Grid item md={10}>
