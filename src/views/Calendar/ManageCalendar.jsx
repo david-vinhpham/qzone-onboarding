@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { arrayOf, func } from 'prop-types';
+import { arrayOf, func, string } from 'prop-types';
 import moment from 'moment-timezone';
 import { get } from 'lodash';
 
-import { createNewEvent, fetchProvidersByBusinessId, fetchEventsByProviderId, fetchProvidersByBusinessIdSuccess } from 'actions/calendar';
+import { createNewEvent, fetchProvidersByBusinessId, fetchEventsByProviderId, fetchProvidersByBusinessIdSuccess, setBookingSlots, rescheduleBookingEvent, cancelBookingEvent } from 'actions/calendar';
 import {
   EVENT_LEVEL,
   EVENT_TYPE,
@@ -20,6 +20,8 @@ import { fetchServiceOptionsByBusinessAdminId } from 'actions/serviceOptions';
 import { fetchTimezoneOptions } from 'actions/timezoneOptions';
 import { eUserType, weekDays } from 'constants.js';
 import { fetchSurveyOptionsByAssessorId } from 'actions/surveyOptions';
+import RescheduleDialog from './RescheduleDialog';
+import CustomModal from 'components/CustomModal/CustomModal';
 
 const today = weekDays[moment().day()];
 
@@ -39,13 +41,27 @@ class ManageCalendar extends React.PureComponent {
       eventLevel: EVENT_LEVEL.PROVIDER
     };
 
+    const selectedProvider = props.userDetail.userType === eUserType.provider
+      ? {
+        id: props.userDetail.id,
+        name: `${props.userDetail.familyName || ''} ${props.userDetail.givenName}`,
+        timezone: props.userDetail.providerInformation.timeZoneId,
+        workingHours: props.userDetail.providerInformation.workingHours
+      } : 'none';
+    const deletedBookingEventId = '';
+
     this.state = props.history.location.state
       ? {
         isOpenAddDialog: true,
         addEventData: props.history.location.state.prevState.addEventData,
         eventLevel: props.history.location.state.prevState.eventLevel,
-      }
-      : { ...this.initialState };
+        selectedProvider,
+        deletedBookingEventId
+      } : {
+        ...this.initialState,
+        selectedProvider,
+        deletedBookingEventId
+      };
   }
 
   componentDidMount() {
@@ -118,13 +134,63 @@ class ManageCalendar extends React.PureComponent {
     createNewEventHelper(payload, this.props.providers, this.props.createNewEvent);
   };
 
+  onCloseRescheduleDialog = () => {
+    this.props.setBookingSlots({ bookingSlots: [], bookingEventId: '' });
+  }
+
+  onRescheduleSlot = (selectedSlot) => () => {
+    const rescheduledData = { eventId: this.props.bookingEventId, newAvailabilityId: selectedSlot.id };
+    this.props.rescheduleBookingEvent(rescheduledData, this.state.selectedProvider.id);
+  }
+
+  onSelectProvider = ({ target: { value } }) => {
+    this.setState({ selectedProvider: value });
+    if (value !== 'none') { this.props.fetchEventsByProviderId(value.id); }
+  }
+
+  onCancelBookingEvent = (bookingEventId) => {
+    this.setState({ deletedBookingEventId: bookingEventId });
+  }
+
+  onCloseCancelBookingEventDialog = () => {
+    this.setState({ deletedBookingEventId: '' });
+  }
+
+  onConfirmCancelBookingEvent = () => {
+    this.props.cancelBookingEvent(this.state.deletedBookingEventId, this.state.selectedProvider.id);
+    this.onCloseCancelBookingEventDialog();
+  }
+
   render() {
-    const { isLoading, history } = this.props;
-    const { isOpenAddDialog, eventLevel, addEventData } = this.state;
+    const { isLoading, history, bookingSlots, userDetail, providers } = this.props;
+    const { isOpenAddDialog, eventLevel, addEventData, selectedProvider, deletedBookingEventId } = this.state;
 
     return (
       <>
-        <Calendar onClickNewEvent={this.onClickNewEvent} />
+        {bookingSlots.length > 0 &&
+          <RescheduleDialog
+            bookingSlots={bookingSlots}
+            onClose={this.onCloseRescheduleDialog}
+            onReschedule={this.onRescheduleSlot}
+          />}
+        {!!deletedBookingEventId &&
+          <CustomModal
+            openModal={!!deletedBookingEventId}
+            onClose={this.onCloseCancelBookingEventDialog}
+            onConfirm={this.onConfirmCancelBookingEvent}
+            title="Cancel booking event"
+            message="Are you sure to cancel this event?"
+            closeButtonLabel="Discard"
+            confirmButtonLabel="OK"
+          />}
+        <Calendar
+          onClickNewEvent={this.onClickNewEvent}
+          onSelectProvider={this.onSelectProvider}
+          selectedProvider={selectedProvider}
+          userDetail={userDetail}
+          providers={providers}
+          onCancelBookingEvent={this.onCancelBookingEvent}
+        />
         <CalendarLoading isLoading={isLoading} />
         {isOpenAddDialog && (
           <AddEventDialog
@@ -155,16 +221,22 @@ ManageCalendar.propTypes = {
   fetchEventsByProviderId: func.isRequired,
   fetchProvidersByBusinessIdSuccess: func.isRequired,
   history: historyType.isRequired,
-  fetchSurveyOptionsByAssessorId: func.isRequired
+  fetchSurveyOptionsByAssessorId: func.isRequired,
+  setBookingSlots: func.isRequired,
+  bookingEventId: string.isRequired,
+  rescheduleBookingEvent: func.isRequired,
+  cancelBookingEvent: func.isRequired
 };
 
 const mapStateToProps = state => ({
-  providers: state.calendarManage.providers,
-  isLoading: state.calendarManage.isLoading,
+  providers: state.manageCalendar.providers,
+  isLoading: state.manageCalendar.isLoading,
   tzOptions: state.options.timezone.tzOptions,
   serviceOptions: state.options.service.serviceOptions,
   geoOptions: state.options.geo.geoOptions,
   userDetail: state.user.userDetail,
+  bookingSlots: state.manageCalendar.bookingSlots.filter(slot => slot.spotsOpen > 0),
+  bookingEventId: state.manageCalendar.bookingEventId,
 });
 
 const mapDispatchToProps = {
@@ -175,7 +247,10 @@ const mapDispatchToProps = {
   fetchProvidersByBusinessId,
   fetchEventsByProviderId,
   fetchProvidersByBusinessIdSuccess,
-  fetchSurveyOptionsByAssessorId
+  fetchSurveyOptionsByAssessorId,
+  setBookingSlots,
+  rescheduleBookingEvent,
+  cancelBookingEvent
 };
 
 export default connect(

@@ -9,7 +9,6 @@ import CustomInput from "../../components/CustomInput/CustomInput";
 import GridContainer from "../../components/Grid/GridContainer";
 import GridItem from "../../components/Grid/GridItem";
 import personalPageStyles from "../../assets/jss/material-dashboard-pro-react/modules/personalPageStyles";
-import "react-phone-number-input/style.css";
 import PropTypes from "prop-types";
 import { classesType } from "../../types/global";
 

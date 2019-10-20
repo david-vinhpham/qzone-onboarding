@@ -111,7 +111,7 @@ class LocationList extends React.Component {
 
     const data = (
       <Paper>
-        <Table aria-labelledby="Location List">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>

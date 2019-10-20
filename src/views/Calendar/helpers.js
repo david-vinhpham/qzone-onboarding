@@ -122,7 +122,7 @@ const generatePayload = (addEventData, providers) => {
     payload = { ...payload, ...generateRepeatPayload(repeat, providerTzOffset) };
   }
 
-  if (eventType === EVENT_TYPE.APPOINTMENT) {
+  if (eventType === EVENT_TYPE.CUSTOMER_APPOINTMENT) {
     payload = {
       ...payload,
       timezoneId: providerTz,

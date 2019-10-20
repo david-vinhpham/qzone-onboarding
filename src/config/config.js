@@ -70,6 +70,9 @@ export const URL = {
   FETCH_CHART_BY_SURVEY_ID: 'chart/',
 
   FETCH_CUSTOMER_REPORT: 'customer/flow/report',
+
+  RESCHEDULE_BOOKING_EVENT: '/events/reschedule',
+  CANCEL_BOOKING_EVENT: '/events/cancel/',
 };
 
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';

@@ -147,7 +147,7 @@ class Survey extends Component {
               <CardBody>
                 {surveys && surveys.length > 0 && (
                   <Paper>
-                    <Table aria-labelledby="businessCategories">
+                    <Table>
                       <TableHead>
                         <TableRow>
                           <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>

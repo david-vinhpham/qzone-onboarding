@@ -139,7 +139,7 @@ class ScheduleReportList extends PureComponent {
             </Grid>}
         </Card>
         <Paper>
-          <Table aria-labelledby="scheduleReportTable">
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>

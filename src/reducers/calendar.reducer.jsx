@@ -1,11 +1,6 @@
 import { flow, map, sortBy } from 'lodash';
-import {
-  FETCH_PROVIDER_BY_BUSINESS_ID,
-  FETCH_EVENTS_BY_PROVIDERS,
-  CALENDAR_LOADING,
-  CREATE_CALENDAR_EVENT,
-  EVENT_TYPE_TITLE
-} from 'constants/Calendar.constants';
+import { EVENT_TYPE, EVENT_TYPE_TITLE } from 'constants/Calendar.constants';
+import { FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS, FETCH_EVENTS_BY_PROVIDERS_SUCCESS, CREATE_CALENDAR_EVENT_SUCCESS, CALENDAR_LOADING, FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS } from 'actions/calendar';
 
 const buildCalendarData = ({
   slot: { startTime, endTime } = {},
@@ -23,7 +18,7 @@ const buildCalendarData = ({
   title: title || EVENT_TYPE_TITLE[type],
   calendarId: type,
   category: 'time',
-  isReadOnly: true,
+  isReadOnly: type !== EVENT_TYPE.APPOINTMENT,
   providerId,
   raw
 });
@@ -31,12 +26,14 @@ const buildCalendarData = ({
 const initialState = {
   providers: [],
   calendarData: [],
-  isLoading: false
+  isLoading: false,
+  bookingSlots: [],
+  bookingEventId: '',
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_PROVIDER_BY_BUSINESS_ID.SUCCESS:
+    case FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS:
       return {
         ...state,
         providers: flow(
@@ -50,7 +47,7 @@ const reducer = (state = initialState, action) => {
           input => sortBy(input, 'name')
         )(action.providers)
       };
-    case FETCH_EVENTS_BY_PROVIDERS.SUCCESS:
+    case FETCH_EVENTS_BY_PROVIDERS_SUCCESS:
       return {
         ...state,
         calendarData: action.calendarData
@@ -59,7 +56,7 @@ const reducer = (state = initialState, action) => {
             return prev.start < next.start ? -1 : 1;
           })
       };
-    case CREATE_CALENDAR_EVENT.SUCCESS: {
+    case CREATE_CALENDAR_EVENT_SUCCESS: {
       return {
         ...state,
         calendarData: [buildCalendarData(action.newEvent), ...state.calendarData].sort((prev, next) => {
@@ -69,6 +66,8 @@ const reducer = (state = initialState, action) => {
     }
     case CALENDAR_LOADING:
       return { ...state, isLoading: action.isLoading };
+    case FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS:
+      return { ...state, ...action.payload };
     default:
       return state;
   }

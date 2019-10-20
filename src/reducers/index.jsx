@@ -9,7 +9,7 @@ import ServiceReducer from './service.reducer';
 import ImageUploadReducer from './imageUpload.reducer';
 import PictureUploadReducer from './pictureUpload.reducer';
 import LocationReducer from './location.reducer';
-import calendarManageReducer from './calendar.reducer';
+import manageCalendarReducer from './calendar.reducer';
 import tmpServicesReducer from './tmpServices.reducer';
 import customerServiceReducer from './customerService.reducer';
 import serviceOptionsReducer from './serviceOptions.reducer';
@@ -38,7 +38,7 @@ const rootReducer = combineReducers({
   image: ImageUploadReducer,
   picture: PictureUploadReducer,
   location: LocationReducer,
-  calendarManage: calendarManageReducer,
+  manageCalendar: manageCalendarReducer,
   tmpServices: tmpServicesReducer,
   serviceCategory: serviceCategoryReducer,
   businessCategory: businessCategoryReducer,

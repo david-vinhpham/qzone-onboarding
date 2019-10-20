@@ -114,7 +114,7 @@ class ProviderList extends React.Component {
 
     const data = (
       <Paper>
-        <Table aria-labelledby="providerList">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>
