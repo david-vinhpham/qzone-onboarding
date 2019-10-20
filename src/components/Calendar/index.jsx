@@ -127,14 +127,14 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader, onClickUpdateEve
           taskView={false}
           scheduleView={['time']}
           useDetailPopup
-          disableClick
-          disableDblClick
           template={{
             time(schedule) {
               return `${
                 truncateText(schedule.title)
                 }<br/>${
                 schedule.raw.resourceId
+                }<br/>${
+                schedule.raw.phone
                 }<br/>${
                 moment(schedule.start.getTime()).format('hh:mm a')
                 } - ${
