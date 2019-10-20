@@ -53,8 +53,22 @@ const onResize = (ref) => () => {
   ref.current.getInstance().render(true);
 }
 
-const onSelectCalendarView = (setCalendarView, ref) => ({ target: { value } }) => {
-  ref.current.getInstance().changeView(value);
+const getTimeTemplate = (calendarView) => (schedule) => {
+  return calendarView === 'month' ? truncateText(schedule.title) :
+    `${
+    truncateText(schedule.title)
+    }<br/>${
+    schedule.raw.resourceId
+    }<br/>${
+    schedule.raw.phone
+    }<br/>${
+    moment(schedule.start.getTime()).format('hh:mm a')
+    } - ${
+    moment(schedule.end.getTime()).format('hh:mm a')
+    }`;
+};
+
+const onSelectCalendarView = (setCalendarView) => ({ target: { value } }) => {
   setCalendarView(value);
 }
 
@@ -78,7 +92,7 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader, onClickUpdateEve
             </Typography>
             <Select
               value={calendarView}
-              onChange={onSelectCalendarView(setCalendarView, calendarRef)}
+              onChange={onSelectCalendarView(setCalendarView)}
             >
               <MenuItem value="week">
                 Week
@@ -119,6 +133,7 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader, onClickUpdateEve
           {rightCustomHeader && rightCustomHeader()}
         </div>
         <TUICalendar
+          view={calendarView}
           ref={calendarRef}
           onBeforeCreateSchedule={onClickNewEvent}
           onBeforeUpdateSchedule={onClickUpdateEvent}
@@ -130,17 +145,7 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader, onClickUpdateEve
           disableClick
           disableDblClick
           template={{
-            time(schedule) {
-              return `${
-                truncateText(schedule.title)
-                }<br/>${
-                schedule.raw.resourceId
-                }<br/>${
-                moment(schedule.start.getTime()).format('hh:mm a')
-                } - ${
-                moment(schedule.end.getTime()).format('hh:mm a')
-                }`;
-            },
+            time: getTimeTemplate(calendarView),
             popupEdit() {
               return 'Reschedule event';
             },

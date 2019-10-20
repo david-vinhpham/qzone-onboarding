@@ -70,7 +70,7 @@ export const fetchEventsByProviderId = providerId => dispatch => {
         title: e.title,
         type: e.type,
         slot: { startTime: e.istart, endTime: e.iend },
-        raw: { resourceId: e.resourceId, tempServiceId: e.tempServiceId },
+        raw: { resourceId: e.resourceId, tempServiceId: e.tempServiceId, phone: e.phone },
         description: '',
       }));
 
@@ -115,7 +115,7 @@ export const createNewEvent = newEvent => (dispatch, getState) => {
               title: event.title,
               type: event.type,
               slot: { startTime: event.istart, endTime: event.iend },
-              raw: { resourceId: event.resourceId, tempServiceId: event.tempServiceId },
+              raw: { resourceId: event.resourceId, tempServiceId: event.tempServiceId, phone: event.phone },
               description: '',
             }));
           }
