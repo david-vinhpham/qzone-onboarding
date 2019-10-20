@@ -4,7 +4,10 @@ import Button from 'components/CustomButtons/Button';
 
 class CustomModal extends Component {
   render() {
-    const { openModal, closeModal, confirmDeletion } = this.props;
+    const {
+      openModal, onClose, onConfirm, title, message,
+      closeButtonLabel, confirmButtonLabel
+    } = this.props;
     return (
       <Dialog
         aria-labelledby="custom-modal-label"
@@ -13,17 +16,17 @@ class CustomModal extends Component {
         disableBackdropClick
         disableEscapeKeyDown
       >
-        <DialogTitle>
-          Do you want to delete this email template?
+        <DialogTitle id="custom-modal-label">
+          {title}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You will not be able to recovery this template anymore. As it is permanently deleted!
+            {message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeModal}>Discard</Button>
-          <Button onClick={confirmDeletion} color="rose">Delete</Button>
+          <Button onClick={onClose}>{closeButtonLabel}</Button>
+          <Button onClick={onConfirm} color="rose">{confirmButtonLabel}</Button>
         </DialogActions>
       </Dialog>
     );

@@ -78,7 +78,7 @@ class DeletionModal extends Component {
         aria-labelledby="delete-item-dialog"
         classes={{ paper: classes.paper }}
       >
-        <DialogTitle id="delete-item-title">
+        <DialogTitle id="delete-item-dialog">
           {dialogTitle}
         </DialogTitle>
         <DialogContent>

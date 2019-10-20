@@ -138,7 +138,7 @@ class ServiceCategoriesList extends PureComponent {
 
     data = (
       <Paper>
-        <Table aria-labelledby="serviceCategories">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>

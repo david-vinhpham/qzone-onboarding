@@ -74,7 +74,7 @@ const ReportDialog = ({ onDialogClose, reportData, isReportLoading }) => {
       aria-labelledby="report-dialog"
       onClose={onDialogClose}
     >
-      <DialogTitle>
+      <DialogTitle id="report-dialog">
         Report
       </DialogTitle>
       <DialogContent>

@@ -132,8 +132,12 @@ class EmailTemplates extends Component {
       (<Card>
         <CustomModal
           openModal={isDeleting}
-          closeModal={this.closeModal}
-          confirmDeletion={this.confirmDeletion}
+          onClose={this.closeModal}
+          onConfirm={this.confirmDeletion}
+          title="Do you want to delete this email template?"
+          message="You will not be able to recovery this template anymore. As it is permanently deleted!"
+          closeButtonLabel="Discard"
+          confirmButtonLabel="Delete"
         />
         <CardHeader color="rose" icon>
           <CardText color="rose">

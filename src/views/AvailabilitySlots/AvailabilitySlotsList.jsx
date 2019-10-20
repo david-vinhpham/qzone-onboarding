@@ -147,7 +147,7 @@ class AvailabilitySlotsList extends PureComponent {
             </Grid>}
         </Card>
         <Paper>
-          <Table aria-labelledby="availabilityTable">
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>

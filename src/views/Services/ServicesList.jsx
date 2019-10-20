@@ -94,7 +94,7 @@ class ServicesList extends React.Component {
 
     const data = (
       <Paper>
-        <Table aria-labelledby="servicesList">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>

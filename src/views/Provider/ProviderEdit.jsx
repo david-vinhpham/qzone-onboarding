@@ -419,7 +419,6 @@ ProviderEdit.propTypes = {
   classes: PropTypes.object.isRequired
 };
 const mapStateToProps = state => {
-  console.log(state.options);
   return {
     imageObject: state.image.image,
     imageError: state.image.imageError,

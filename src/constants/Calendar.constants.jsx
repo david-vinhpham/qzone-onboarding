@@ -1,43 +1,31 @@
 import { range } from 'lodash';
 
-export const FETCH_PROVIDER_BY_BUSINESS_ID = {
-  SUCCESS: 'FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS'
-};
-export const FETCH_EVENTS_BY_PROVIDERS = {
-  SUCCESS: 'FETCH_EVENTS_BY_PROVIDERS_SUCCESS'
-};
-export const CREATE_CALENDAR_EVENT = {
-  SUCCESS: 'CREATE_CALENDAR_EVENT_SUCCESS',
-  FAILURE: 'CREATE_CALENDAR_EVENT_FAILURE'
-};
-export const CALENDAR_LOADING = 'CALENDAR_LOADING';
-
-export const PROVIDER_EVENT_TYPE = ['TMP_SERVICE', 'BREAK', 'APPOINTMENT'];
+export const PROVIDER_EVENT_TYPE = ['TMP_SERVICE', 'BREAK', 'CUSTOMER_APPOINTMENT'];
 
 export const EVENT_TYPE = Object.freeze({
-  APPOINTMENT: 'APPOINTMENT',
+  CUSTOMER_APPOINTMENT: 'CUSTOMER_APPOINTMENT',
   TMP_SERVICE: 'TMP_SERVICE',
   BREAK: 'BREAK',
   CLOSED: 'CLOSED',
   WEEKEND: 'WEEKEND',
   HOLIDAY: 'HOLIDAY',
   VACATION: 'VACATION',
-  TMP_EVENTS: 'TMP_EVENTS'
+  APPOINTMENT: 'APPOINTMENT'
 });
 
 export const EVENT_TYPE_TITLE = Object.freeze({
-  [EVENT_TYPE.APPOINTMENT]: 'Appointment',
+  [EVENT_TYPE.CUSTOMER_APPOINTMENT]: 'Appointment',
   [EVENT_TYPE.BREAK]: 'Break',
   [EVENT_TYPE.CLOSED]: 'Closed',
   [EVENT_TYPE.WEEKEND]: 'Weekend',
   [EVENT_TYPE.HOLIDAY]: 'Holiday',
   [EVENT_TYPE.TMP_SERVICE]: 'Temporary service',
   [EVENT_TYPE.VACATION]: 'Vacation',
-  [EVENT_TYPE.TMP_EVENTS]: 'Temporary event'
+  [EVENT_TYPE.APPOINTMENT]: 'Booking event'
 });
 
 export const EVENT_BG_COLOR = Object.freeze({
-  [EVENT_TYPE.APPOINTMENT]: {
+  [EVENT_TYPE.CUSTOMER_APPOINTMENT]: {
     color: '#fff',
     backgroundColor: '#1589ff'
   },
@@ -65,7 +53,7 @@ export const EVENT_BG_COLOR = Object.freeze({
     color: '#000',
     backgroundColor: '#ffeb3b'
   },
-  [EVENT_TYPE.TMP_EVENTS]: {
+  [EVENT_TYPE.APPOINTMENT]: {
     color: '#fff',
     backgroundColor: '#4caf50'
   }

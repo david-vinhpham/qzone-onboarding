@@ -53,7 +53,7 @@ export default function CommonContent({
             >
               {Object.values(EVENT_TYPE)
                 .filter(e => {
-                  if (e === EVENT_TYPE.TMP_EVENTS) {
+                  if (e === EVENT_TYPE.APPOINTMENT) {
                     return false;
                   }
                   return isProvider ? PROVIDER_EVENT_TYPE.includes(e) : true;
@@ -86,7 +86,7 @@ export default function CommonContent({
                 <MenuItem value={EVENT_LEVEL.PROVIDER}>
                   {EVENT_LEVEL.PROVIDER}
                 </MenuItem>
-                {values.addEventData.eventType !== EVENT_TYPE.APPOINTMENT
+                {values.addEventData.eventType !== EVENT_TYPE.CUSTOMER_APPOINTMENT
                   && values.addEventData.eventType !== EVENT_TYPE.TMP_SERVICE
                   && !isProvider &&
                   <MenuItem value={EVENT_LEVEL.BUSINESS}>
@@ -140,7 +140,7 @@ export default function CommonContent({
             </Grid>
           </>
         )}
-        {values.addEventData.eventType === EVENT_TYPE.APPOINTMENT &&
+        {values.addEventData.eventType === EVENT_TYPE.CUSTOMER_APPOINTMENT &&
           <>
             <Grid item md={12}>
               <Grid container spacing={1}>

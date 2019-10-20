@@ -319,7 +319,7 @@ class TmpServicesList extends PureComponent {
 
     const dataTable = (
       <Paper>
-        <Table aria-labelledby="tmpServicesList">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell className={classes.cellHeaderBold} size="small">No</TableCell>
@@ -518,7 +518,7 @@ const mapStateToProps = state => ({
   tmpServices: state.tmpServices.list,
   isLoading: state.tmpServices.isLoading,
   delTmpServiceLoading: state.tmpServices.delTmpServiceLoading,
-  providers: state.calendarManage.providers,
+  providers: state.manageCalendar.providers,
   tzOptions: state.options.timezone.tzOptions,
   serviceOptions: state.options.service.serviceOptions,
   geoOptions: state.options.geo.geoOptions,

@@ -58,7 +58,7 @@ const onSelectCalendarView = (setCalendarView, ref) => ({ target: { value } }) =
   setCalendarView(value);
 }
 
-const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
+const Calendar = ({ onClickNewEvent, events, rightCustomHeader, onClickUpdateEvent, onClickDeleteEvent }) => {
   const calendarRef = React.createRef();
   const [viewDate, setViewDate] = useState(new Date());
   const [calendarView, setCalendarView] = useState('week');
@@ -121,28 +121,36 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader }) => {
         <TUICalendar
           ref={calendarRef}
           onBeforeCreateSchedule={onClickNewEvent}
+          onBeforeUpdateSchedule={onClickUpdateEvent}
+          onBeforeDeleteSchedule={onClickDeleteEvent}
           usageStatistics={false}
           taskView={false}
           scheduleView={['time']}
-          disableDblClick
           useDetailPopup
+          disableClick
+          disableDblClick
           template={{
             time(schedule) {
               return `${
                 truncateText(schedule.title)
                 }<br/>${
-                schedule.raw
+                schedule.raw.resourceId
                 }<br/>${
                 moment(schedule.start.getTime()).format('hh:mm a')
                 } - ${
                 moment(schedule.end.getTime()).format('hh:mm a')
                 }`;
+            },
+            popupEdit() {
+              return 'Reschedule event';
+            },
+            popupDelete() {
+              return 'Cancel event';
             }
           }}
           theme={{
             'week.timegridHalfHour.height': '70px',
             'week.timegridOneHour.height': '140px',
-            'month.schedule.height': '70px',
           }}
           calendars={Object.keys(EVENT_TYPE).map(eventType => ({
             id: eventType,
@@ -162,6 +170,8 @@ Calendar.propTypes = {
   events: arrayOf(any).isRequired,
   onClickNewEvent: func.isRequired,
   rightCustomHeader: func,
+  onClickUpdateEvent: func.isRequired,
+  onClickDeleteEvent: func.isRequired
 };
 
 Calendar.defaultProps = {

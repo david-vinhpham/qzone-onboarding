@@ -53,7 +53,7 @@ class AddEventDialog extends PureComponent {
 
   onChangeEventType = (setFieldValue, values) => ({ target: { value: eventType } }) => {
     setFieldValue('eventLevel', eventType === EVENT_TYPE.TMP_SERVICE
-      || eventType === EVENT_TYPE.APPOINTMENT ? EVENT_LEVEL.PROVIDER : values.eventLevel);
+      || eventType === EVENT_TYPE.CUSTOMER_APPOINTMENT ? EVENT_LEVEL.PROVIDER : values.eventLevel);
     setFieldValue('addEventData.eventType', eventType);
     setFieldValue(
       'addEventData.tmpService',
@@ -300,7 +300,7 @@ class AddEventDialog extends PureComponent {
                     onClick={this.onClickSubmit(values)}
                     disabled={
                       isSubmitting ||
-                      (values.addEventData.eventType === EVENT_TYPE.APPOINTMENT &&
+                      (values.addEventData.eventType === EVENT_TYPE.CUSTOMER_APPOINTMENT &&
                         (
                           !values.addEventData.location ||
                           !values.addEventData.serviceId ||
@@ -363,6 +363,6 @@ export default connect(state => ({
   serviceOptions: state.options.service.serviceOptions,
   tzOptions: state.options.timezone.tzOptions,
   surveyOptions: state.options.survey.surveyOptions,
-  providers: state.calendarManage.providers,
+  providers: state.manageCalendar.providers,
   userDetail: state.user.userDetail,
 }))(AddEventDialog);
