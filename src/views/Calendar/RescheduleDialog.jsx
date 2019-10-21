@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
   Dialog, DialogTitle, Typography, IconButton, DialogContent,
-  Button, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ExpansionPanelActions
+  Button, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ExpansionPanelActions,
+  CircularProgress
 } from '@material-ui/core';
 import { ChevronRight, ChevronLeft, ExpandMore, Close } from '@material-ui/icons';
 import moment from 'moment-timezone';
@@ -15,20 +16,20 @@ const selectDateFormat = 'dddd, DD MMMM YYYY';
 const timeSlotFormat = 'hh:mm a';
 
 const handleChunkIndexLess = (date, setChunkIndex) => () => {
-  setChunkIndex(oldState => {
-    const oldIndex = oldState.chunkIndex[`${date}-index`] || 0;
+  setChunkIndex(oldChunkIndex => {
+    const oldIndex = oldChunkIndex[`${date}-index`] || 0;
     return {
-      ...oldState.chunkIndex,
+      ...oldChunkIndex,
       [`${date}-index`]: oldIndex > 0 ? oldIndex - 1 : 0,
     };
   });
 };
 
 const handleChunkIndexMore = (date, max, setChunkIndex) => () => {
-  setChunkIndex(oldState => {
-    const oldIndex = oldState.chunkIndex[`${date}-index`] || 0;
+  setChunkIndex(oldChunkIndex => {
+    const oldIndex = oldChunkIndex[`${date}-index`] || 0;
     return {
-      ...oldState.chunkIndex,
+      ...oldChunkIndex,
       [`${date}-index`]: oldIndex < max ? oldIndex + 1 : max,
     };
   });
@@ -42,7 +43,7 @@ const onCloseConfirmModal = (setSelectedSlot) => () => {
   setSelectedSlot(null);
 }
 
-const RescheduleDialog = ({ bookingSlots, onClose, onReschedule }) => {
+const RescheduleDialog = ({ bookingSlots, onClose, onReschedule, isFetchBookingSlots }) => {
   const [chunkIndex, setChunkIndex] = useState({});
   const [selectedSlot, setSelectedSlot] = useState(null);
 
@@ -94,7 +95,10 @@ const RescheduleDialog = ({ bookingSlots, onClose, onReschedule }) => {
           </IconButton>
         </DialogTitle>
         <DialogContent className={styles.content}>
-          {Object.keys(transformedSlot).map(date => moment(date).isValid() && (
+          {isFetchBookingSlots && <Grid container justify="center"><CircularProgress /></Grid>}
+          {!isFetchBookingSlots && bookingSlots.length === 0 &&
+            <Typography gutterBottom variant="subtitle1">There is no other available slots</Typography>}
+          {!isFetchBookingSlots && Object.keys(transformedSlot).map(date => moment(date).isValid() && (
             <ExpansionPanel key={date} defaultExpanded={isDefaultExpand}>
               <ExpansionPanelSummary expandIcon={<ExpandMore />}>
                 {date}

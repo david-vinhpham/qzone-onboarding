@@ -12,6 +12,7 @@ export const FETCH_EVENTS_BY_PROVIDERS_SUCCESS = 'FETCH_EVENTS_BY_PROVIDERS_SUCC
 export const FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS = 'FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS';
 export const CREATE_CALENDAR_EVENT_SUCCESS = 'CREATE_CALENDAR_EVENT_SUCCESS';
 export const CREATE_CALENDAR_EVENT_FAILURE = 'CREATE_CALENDAR_EVENT_FAILURE';
+export const FETCH_SLOTS_BY_TMP_SERVICE_LOADING = 'FETCH_SLOTS_BY_TMP_SERVICE_LOADING';
 export const FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS = 'FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS';
 
 const calendarLoading = isLoading => ({
@@ -133,14 +134,16 @@ export const setBookingSlots = (payload) => ({
 });
 
 export const getSlotsByTmpServiceId = (tmpServiceId, bookingEventId) => async dispatch => {
+  dispatch({ type: FETCH_SLOTS_BY_TMP_SERVICE_LOADING, payload: true });
   const [result] = await handleRequest(axios.get, [`${URL.FIND_AVAILABILITY_BY_TMP_SERVICE}/${tmpServiceId}`]);
   if (result) {
     dispatch(setBookingSlots({ bookingSlots: result, bookingEventId }));
   }
+  dispatch({ type: FETCH_SLOTS_BY_TMP_SERVICE_LOADING, payload: false });
 }
 
 export const rescheduleBookingEvent = (payload, providerId) => async dispatch => {
-  dispatch(setBookingSlots({ bookingSlots: [], bookingEventId: '' }));
+  dispatch(calendarLoading(true));
 
   const [result] = await handleRequest(axios.put, [URL.RESCHEDULE_BOOKING_EVENT, payload]);
   if (result) {
@@ -150,6 +153,8 @@ export const rescheduleBookingEvent = (payload, providerId) => async dispatch =>
 }
 
 export const cancelBookingEvent = (bookingEventId, providerId) => async dispatch => {
+  dispatch(calendarLoading(true));
+
   const [result] = await handleRequest(axios.delete, [`${URL.CANCEL_BOOKING_EVENT}${bookingEventId}`]);
   if (result) {
     dispatch(showAlert('success', 'Cancel the event successfully!'));
