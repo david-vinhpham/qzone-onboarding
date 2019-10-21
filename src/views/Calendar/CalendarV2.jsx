@@ -66,6 +66,7 @@ class CalendarV2 extends React.PureComponent {
   onClickUpdateEvent = ({ schedule, triggerEventName }) => {
     if (triggerEventName === 'click') {
       this.props.getSlotsByTmpServiceId(schedule.raw.tempServiceId, schedule.id);
+      this.props.onClickUpdateEvent();
     }
   }
 
@@ -100,7 +101,8 @@ CalendarV2.propTypes = {
     timezone: string,
     workingHours: arrayOf(any)
   }),
-  onCancelBookingEvent: func.isRequired
+  onCancelBookingEvent: func.isRequired,
+  onClickUpdateEvent: func.isRequired
 };
 
 const mapStateToProps = state => ({

@@ -1,6 +1,6 @@
 import { flow, map, sortBy } from 'lodash';
 import { EVENT_TYPE, EVENT_TYPE_TITLE } from 'constants/Calendar.constants';
-import { FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS, FETCH_EVENTS_BY_PROVIDERS_SUCCESS, CREATE_CALENDAR_EVENT_SUCCESS, CALENDAR_LOADING, FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS } from 'actions/calendar';
+import { FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS, FETCH_EVENTS_BY_PROVIDERS_SUCCESS, CREATE_CALENDAR_EVENT_SUCCESS, CALENDAR_LOADING, FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS, FETCH_SLOTS_BY_TMP_SERVICE_LOADING } from 'actions/calendar';
 
 const buildCalendarData = ({
   slot: { startTime, endTime } = {},
@@ -29,6 +29,7 @@ const initialState = {
   isLoading: false,
   bookingSlots: [],
   bookingEventId: '',
+  isFetchBookingSlots: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -68,6 +69,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, isLoading: action.isLoading };
     case FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS:
       return { ...state, ...action.payload };
+    case FETCH_SLOTS_BY_TMP_SERVICE_LOADING:
+        return { ...state, isFetchBookingSlots: action.payload };
     default:
       return state;
   }
