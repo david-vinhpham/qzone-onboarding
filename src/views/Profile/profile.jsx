@@ -22,6 +22,7 @@ class Profile extends React.Component {
       id: props.user.id,
       personal: {
         address: props.user.address,
+        orgLink: props.user.orgLink,
         givenName: props.user.givenName,
         familyName: props.user.familyName,
         userType: props.user.userType,

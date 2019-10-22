@@ -11,11 +11,13 @@ import GridItem from "../../components/Grid/GridItem";
 import personalPageStyles from "../../assets/jss/material-dashboard-pro-react/modules/personalPageStyles";
 import PropTypes from "prop-types";
 import { classesType } from "../../types/global";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 class Personal extends PureComponent {
   static propTypes = {
     classes: classesType.isRequired,
     givenName: PropTypes.string,
+    orgLink: PropTypes.string,
     userType: PropTypes.string.isRequired,
     givenNameState: PropTypes.string.isRequired,
     familyName: PropTypes.string,
@@ -42,6 +44,7 @@ class Personal extends PureComponent {
       address: props.address,
       isEditMode: false,
       givenName: props.givenName,
+      orgLink: props.orgLink,
       userType: props.userType,
       givenNameState: props.givenNameState,
       familyName: props.familyName === null ? '' :  props.familyName,
@@ -53,6 +56,7 @@ class Personal extends PureComponent {
       postCode: props.postCode === null ? '' :  props.postCode,
       country: props.country === null ? '' :  props.country,
       userSub: props.userSub,
+      copied: false,
     };
   }
 
@@ -120,6 +124,7 @@ class Personal extends PureComponent {
     const {
       classes,
       givenName,
+      orgLink,
       givenNameState,
       familyName,
       userType,
@@ -179,6 +184,27 @@ class Personal extends PureComponent {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <GridContainer>
+            <GridItem md={6}>
+              <CustomInput
+                labelText="Organization Link"
+                id="orgLink"
+                formControlProps={{ fullWidth: true }}
+                inputProps={{
+                  disabled: true,
+                }}
+                value={orgLink}
+              />
+
+              <CopyToClipboard text={orgLink}
+                               onCopy={() => this.setState({copied: true})}>
+                <button>Copy to clipboard</button>
+              </CopyToClipboard>
+
+              {this.state.copied ? <span style={{color: 'red'}}>Copied.</span> : null}
+
+            </GridItem>
+            <GridItem md={6}>
+            </GridItem>
             <GridItem md={6}>
               <CustomInput
                 labelText="First name (required)"
