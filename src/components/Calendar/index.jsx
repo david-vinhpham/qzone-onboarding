@@ -139,8 +139,8 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader, onClickUpdateEve
           taskView={false}
           scheduleView={['time']}
           useDetailPopup
-          disableClick
-          disableDblClick
+          /*disableClick
+          disableDblClick*/
           height="calc(100vh - 116px)"
           template={{
             time: getTimeTemplate(calendarView),
