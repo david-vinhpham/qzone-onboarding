@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { arrayOf, any, func, shape, string } from 'prop-types';
 import {
   Button,
@@ -11,7 +10,6 @@ import { debounce } from 'lodash';
 import Calendar from 'components/Calendar';
 import { providerType, userDetailType } from 'types/global';
 import styles from './CalendarV2.module.scss';
-import { getSlotsByTmpServiceId } from 'actions/calendar';
 import { eUserType } from 'constants.js';
 
 class CalendarV2 extends React.PureComponent {
@@ -65,8 +63,7 @@ class CalendarV2 extends React.PureComponent {
 
   onClickUpdateEvent = ({ schedule, triggerEventName }) => {
     if (triggerEventName === 'click') {
-      this.props.getSlotsByTmpServiceId(schedule.raw.tempServiceId, schedule.id);
-      this.props.onClickUpdateEvent();
+      this.props.onClickUpdateEvent(schedule.raw.tempServiceId, schedule.id);
     }
   }
 
@@ -94,7 +91,6 @@ CalendarV2.propTypes = {
   calendarData: arrayOf(any).isRequired,
   onClickNewEvent: func.isRequired,
   userDetail: userDetailType.isRequired,
-  getSlotsByTmpServiceId: func.isRequired,
   selectedProvider: shape({
     id: string,
     name: string,
@@ -105,8 +101,4 @@ CalendarV2.propTypes = {
   onClickUpdateEvent: func.isRequired
 };
 
-const mapStateToProps = state => ({
-  calendarData: state.manageCalendar.calendarData,
-});
-
-export default connect(mapStateToProps, { getSlotsByTmpServiceId })(CalendarV2);
+export default CalendarV2;

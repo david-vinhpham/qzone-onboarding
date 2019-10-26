@@ -9,11 +9,10 @@ import moment from 'moment-timezone';
 import chunk from 'lodash/chunk';
 import styles from './RescheduleDialog.module.scss';
 import CustomModal from 'components/CustomModal/CustomModal';
+import { selectDateFormat, timeSlotFormat } from 'constants.js';
 
 const NO_SLOTS_PER_ROW = 3;
 const NO_ROWS_PER_DATE = 3;
-const selectDateFormat = 'dddd, DD MMMM YYYY';
-const timeSlotFormat = 'hh:mm a';
 
 const handleChunkIndexLess = (date, setChunkIndex) => () => {
   setChunkIndex(oldChunkIndex => {

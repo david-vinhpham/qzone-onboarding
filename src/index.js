@@ -18,6 +18,7 @@ import reducers from './reducers';
 import './utils/responseHandler';
 import './assets/scss/material-dashboard-pro-react.css';
 import 'react-phone-number-input/style.css';
+import 'assets/scss/global.scss';
 import { RESET_ALL_STATES } from 'actions/common';
 import axios from 'axios';
 import { API_ROOT } from 'config/config';

@@ -54,6 +54,9 @@ export const eTemplateContentMax = 15000;
 export const eTemplateApi = `${API_ROOT}${eTemplateUrl}`;
 
 export const defaultDateTimeFormat = 'DD/MM/YYYY LT Z';
+export const selectDateFormat = 'dddd, DD MMMM YYYY';
+export const timeSlotFormat = 'hh:mm a';
+export const shortDateFormat = 'DD MMM YYYY';
 
 export const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
