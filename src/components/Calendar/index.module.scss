@@ -1,6 +1,7 @@
 .calendar {
   &Wrapper {
     padding: 16px;
+    flex-grow: 1;
   }
 
   &Header {
@@ -22,6 +23,10 @@
         margin-right: 32px;
       }
     }
+  }
+
+  &Navigation {
+    display: inline-flex;
   }
 }
 

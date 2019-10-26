@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import { arrayOf, any, func } from 'prop-types';
 import TUICalendar from '@toast-ui/react-calendar';
-import { Button, Paper, Typography, Select, MenuItem } from '@material-ui/core';
+import { Button, Paper, Typography, Select, MenuItem, ButtonGroup  } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import moment from 'moment-timezone';
 import ReactResizeDetector from 'react-resize-detector';
@@ -11,6 +11,7 @@ import 'tui-calendar/dist/tui-calendar.css';
 import { EVENT_TYPE, EVENT_TYPE_TITLE, EVENT_BG_COLOR } from 'constants/Calendar.constants';
 import styles from './index.module.scss';
 import truncateText from 'utils/truncateText';
+import { timeSlotFormat } from 'constants.js';
 
 const calendarViewToMomentUnitMapping = {
   week: 'w',
@@ -62,9 +63,9 @@ const getTimeTemplate = (calendarView) => (schedule) => {
     }<br/>${
     schedule.raw.phone
     }<br/>${
-    moment(schedule.start.getTime()).format('hh:mm a')
+    moment(schedule.start.getTime()).format(timeSlotFormat)
     } - ${
-    moment(schedule.end.getTime()).format('hh:mm a')
+    moment(schedule.end.getTime()).format(timeSlotFormat)
     }`;
 };
 
@@ -108,27 +109,23 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader, onClickUpdateEve
               value={viewDate}
               onChange={onChangeViewDate(setViewDate, calendarRef)}
             />
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={onClickToday(setViewDate, calendarRef)}
-            >
-              Today
-          </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={onClickPrev(viewDate, setViewDate, calendarRef)}
-            >
-              &lt;
-          </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={onClickNext(viewDate, setViewDate, calendarRef)}
-            >
-              &gt;
-          </Button>
+            <ButtonGroup color="primary" className={styles.calendarNavigation}>
+              <Button
+                onClick={onClickToday(setViewDate, calendarRef)}
+              >
+                Today
+              </Button>
+              <Button
+                onClick={onClickPrev(viewDate, setViewDate, calendarRef)}
+              >
+                &lt;
+              </Button>
+              <Button
+                onClick={onClickNext(viewDate, setViewDate, calendarRef)}
+              >
+                &gt;
+              </Button>
+            </ButtonGroup>
           </div>
           {rightCustomHeader && rightCustomHeader()}
         </div>
@@ -144,13 +141,14 @@ const Calendar = ({ onClickNewEvent, events, rightCustomHeader, onClickUpdateEve
           useDetailPopup
           disableClick
           disableDblClick
+          height="calc(100vh - 116px)"
           template={{
             time: getTimeTemplate(calendarView),
             popupEdit() {
-              return 'Reschedule event';
+              return 'Reschedule';
             },
             popupDelete() {
-              return 'Cancel event';
+              return 'Cancel';
             }
           }}
           theme={{

@@ -1,0 +1,27 @@
+::-webkit-scrollbar {
+  background: transparent;
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background: transparent;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  min-height: 40px;
+
+  &:hover {
+    background: #bdc1c6;
+  }
+
+  &:active {
+    background: #80868b;
+  }
+}
+
+:hover::-webkit-scrollbar-thumb {
+  background: #bdc1c6;
+}
