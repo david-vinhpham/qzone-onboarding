@@ -20,15 +20,18 @@ const onSetListViewOpen = (setListViewOpen) => () => {
   setListViewOpen(oldListViewOpen => !oldListViewOpen);
 }
 
-const ListView = ({ calendarData, onClickUpdateEvent, onCancelBookingEvent }) => {
+const onDeleteOtherEvents = (event, onDeleteEvent) => () => {
+  onDeleteEvent({ id: event.id, type: event.calendarId });
+}
+
+const ListView = ({ calendarData, onClickUpdateEvent, onCancelBookingEvent, onDeleteEvent }) => {
   const [listViewOpen, setListViewOpen] = useState(false);
-
-  if (calendarData.length === 0) return null;
-
   const today = moment();
   const events = calendarData.filter((data) => {
     return moment(data.start).isSameOrAfter(today);
   });
+
+  if (events.length === 0) return null;
 
   return (
     <div className={styles.wrapper}>
@@ -55,12 +58,17 @@ const ListView = ({ calendarData, onClickUpdateEvent, onCancelBookingEvent }) =>
                       <Typography gutterBottom variant="subtitle2">{data.raw.resourceId} {data.raw.phone}</Typography>
                       <Typography variant="caption">{moment(data.start).format(timeSlotFormat)} - {moment(data.end).format(timeSlotFormat)}</Typography>
                     </div>
-                    {data.calendarId === EVENT_TYPE.APPOINTMENT && (
-                      <ButtonGroup color="primary" size="small" className={styles.eventActions}>
-                        <Button onClick={onRescheduleBookingEvent(data, onClickUpdateEvent)}>Reschedule</Button>
-                        <Button onClick={onDeleteBookingEvent(data, onCancelBookingEvent)}>Cancel</Button>
-                      </ButtonGroup>
-                    )}
+                    <ButtonGroup color="primary" size="small" className={styles.eventActions}>
+                      {data.calendarId === EVENT_TYPE.APPOINTMENT && <Button onClick={onRescheduleBookingEvent(data, onClickUpdateEvent)}>Reschedule</Button>}
+                      <Button
+                        onClick={
+                          data.calendarId === EVENT_TYPE.APPOINTMENT
+                            ? onDeleteBookingEvent(data, onCancelBookingEvent)
+                            : onDeleteOtherEvents(data, onDeleteEvent)
+                        }>
+                        Cancel
+                      </Button>
+                    </ButtonGroup>
                   </>
                 ) : (
                     <>

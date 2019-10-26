@@ -46,9 +46,9 @@ export const URL = {
   FIND_NORMAL_EVENTS_BY_PROVIDER_ID: 'find-normal-events-by-provider-id/',
   FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID: 'find-appointment-customer-events-by-provider-id/',
   FIND_TMP_EVENTS_BY_PROVIDER_ID: 'find-events-calendar-by-provider-id/',
-  NEW_NORMAL_EVENT: 'normal-events',
+  NORMAL_EVENT: 'normal-events',
   NEW_TMP_SERVICE: 'temporary-services',
-  NEW_APPOINTMENTS_CUSTOMER_EVENT: 'appointment-customer-events',
+  APPOINTMENTS_CUSTOMER_EVENT: 'appointment-customer-events',
 
   FIND_TMP_SERVICES_BY_BUSINESS_ID: 'find-temporary-services-by-business-admin-id/',
   FIND_TMP_SERVICES_BY_PROVIDER_ID: 'find-temporary-services-by-provider-id/',
