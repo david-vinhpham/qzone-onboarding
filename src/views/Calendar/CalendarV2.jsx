@@ -11,12 +11,14 @@ import Calendar from 'components/Calendar';
 import { providerType, userDetailType } from 'types/global';
 import styles from './CalendarV2.module.scss';
 import { eUserType } from 'constants.js';
+import { EVENT_TYPE } from 'constants/Calendar.constants';
 
 class CalendarV2 extends React.PureComponent {
   constructor(props) {
     super(props);
     this.debouncedOnClickUpdateEvent = debounce(this.onClickUpdateEvent, 50);
     this.debouncedOnCancelBookingEvent = debounce(this.props.onCancelBookingEvent, 50);
+    this.debouncedOnDeleteEvent = debounce(this.props.onDeleteEvent, 50);
   }
 
   rightCustomHeader = () => {
@@ -63,12 +65,18 @@ class CalendarV2 extends React.PureComponent {
 
   onClickUpdateEvent = ({ schedule, triggerEventName }) => {
     if (triggerEventName === 'click') {
-      this.props.onClickUpdateEvent(schedule.raw.tempServiceId, schedule.id);
+      if (schedule.calendarId === EVENT_TYPE.APPOINTMENT) {
+        this.props.onClickUpdateEvent(schedule.raw.tempServiceId, schedule.id);
+      }
     }
   }
 
   onClickDeleteEvent = ({ schedule }) => {
-    this.debouncedOnCancelBookingEvent(schedule.id);
+    if (schedule.calendarId === EVENT_TYPE.APPOINTMENT) {
+      this.debouncedOnCancelBookingEvent(schedule.id);
+    } else {
+      this.debouncedOnDeleteEvent({ id: schedule.id, type: schedule.calendarId });
+    }
   }
 
   render() {
@@ -98,7 +106,8 @@ CalendarV2.propTypes = {
     workingHours: arrayOf(any)
   }),
   onCancelBookingEvent: func.isRequired,
-  onClickUpdateEvent: func.isRequired
+  onClickUpdateEvent: func.isRequired,
+  onDeleteEvent: func.isRequired
 };
 
 export default CalendarV2;

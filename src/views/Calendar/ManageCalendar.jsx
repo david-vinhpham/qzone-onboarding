@@ -4,7 +4,7 @@ import { arrayOf, func, string, bool, any } from 'prop-types';
 import moment from 'moment-timezone';
 import { get } from 'lodash';
 
-import { createNewEvent, fetchProvidersByBusinessId, fetchEventsByProviderId, fetchProvidersByBusinessIdSuccess, setBookingSlots, rescheduleBookingEvent, cancelBookingEvent, getSlotsByTmpServiceId } from 'actions/calendar';
+import { createNewEvent, fetchProvidersByBusinessId, fetchEventsByProviderId, fetchProvidersByBusinessIdSuccess, setBookingSlots, rescheduleBookingEvent, cancelBookingEvent, getSlotsByTmpServiceId, deleteEvent } from 'actions/calendar';
 import {
   EVENT_LEVEL,
   EVENT_TYPE,
@@ -50,7 +50,6 @@ class ManageCalendar extends React.PureComponent {
         timezone: props.userDetail.providerInformation.timeZoneId,
         workingHours: props.userDetail.providerInformation.workingHours
       } : 'none';
-    const deletedBookingEventId = '';
 
     this.state = props.history.location.state
       ? {
@@ -58,13 +57,15 @@ class ManageCalendar extends React.PureComponent {
         addEventData: props.history.location.state.prevState.addEventData,
         eventLevel: props.history.location.state.prevState.eventLevel,
         selectedProvider,
-        deletedBookingEventId,
+        deletedBookingEventId: '',
         showRescheduleDialog: false,
+        deletedEvent: null
       } : {
         ...this.initialState,
         selectedProvider,
-        deletedBookingEventId,
+        deletedBookingEventId: '',
         showRescheduleDialog: false,
+        deletedEvent: null
       };
   }
 
@@ -172,9 +173,26 @@ class ManageCalendar extends React.PureComponent {
     this.setState({ showRescheduleDialog: true });
   }
 
+  onCloseDeleteEventDialog = () => {
+    this.setState({ deletedEvent: null });
+  }
+
+  onConfirmDeleteEvent = () => {
+    this.props.deleteEvent(this.state.deletedEvent);
+    this.onCloseDeleteEventDialog();
+  }
+
+  onDeleteEvent = (event) => {
+    this.setState({ deletedEvent: event });
+  }
+
   render() {
     const { isLoading, history, bookingSlots, userDetail, providers, isFetchBookingSlots, calendarData } = this.props;
-    const { isOpenAddDialog, eventLevel, addEventData, selectedProvider, deletedBookingEventId, showRescheduleDialog } = this.state;
+    const {
+      isOpenAddDialog, eventLevel, addEventData,
+      selectedProvider, deletedBookingEventId, showRescheduleDialog,
+      deletedEvent
+    } = this.state;
 
     return (
       <div className={styles.wrapper}>
@@ -191,6 +209,16 @@ class ManageCalendar extends React.PureComponent {
             onClose={this.onCloseCancelBookingEventDialog}
             onConfirm={this.onConfirmCancelBookingEvent}
             title="Cancel booking event"
+            message="Are you sure to cancel this event?"
+            closeButtonLabel="Discard"
+            confirmButtonLabel="OK"
+          />}
+        {!!deletedEvent &&
+          <CustomModal
+            openModal={!!deletedEvent}
+            onClose={this.onCloseDeleteEventDialog}
+            onConfirm={this.onConfirmDeleteEvent}
+            title="Cancel event"
             message="Are you sure to cancel this event?"
             closeButtonLabel="Discard"
             confirmButtonLabel="OK"
@@ -213,11 +241,13 @@ class ManageCalendar extends React.PureComponent {
           providers={providers}
           onCancelBookingEvent={this.onCancelBookingEvent}
           calendarData={calendarData}
+          onDeleteEvent={this.onDeleteEvent}
         />
         <ListView
           calendarData={selectedProvider === 'none' ? [] : calendarData}
           onClickUpdateEvent={this.onClickUpdateEvent}
           onCancelBookingEvent={this.onCancelBookingEvent}
+          onDeleteEvent={this.onDeleteEvent}
         />
       </div>
     );
@@ -245,7 +275,8 @@ ManageCalendar.propTypes = {
   cancelBookingEvent: func.isRequired,
   isFetchBookingSlots: bool.isRequired,
   calendarData: arrayOf(any).isRequired,
-  getSlotsByTmpServiceId: func.isRequired
+  getSlotsByTmpServiceId: func.isRequired,
+  deletedEvent: func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -273,7 +304,8 @@ const mapDispatchToProps = {
   setBookingSlots,
   rescheduleBookingEvent,
   cancelBookingEvent,
-  getSlotsByTmpServiceId
+  getSlotsByTmpServiceId,
+  deleteEvent
 };
 
 export default connect(

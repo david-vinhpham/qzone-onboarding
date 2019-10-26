@@ -1,6 +1,6 @@
 import { flow, map, sortBy } from 'lodash';
-import { EVENT_TYPE, EVENT_TYPE_TITLE } from 'constants/Calendar.constants';
-import { FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS, FETCH_EVENTS_BY_PROVIDERS_SUCCESS, CREATE_CALENDAR_EVENT_SUCCESS, CALENDAR_LOADING, FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS, FETCH_SLOTS_BY_TMP_SERVICE_LOADING } from 'actions/calendar';
+import { EVENT_TYPE_TITLE } from 'constants/Calendar.constants';
+import { FETCH_PROVIDER_BY_BUSINESS_ID_SUCCESS, FETCH_EVENTS_BY_PROVIDERS_SUCCESS, CREATE_CALENDAR_EVENT_SUCCESS, CALENDAR_LOADING, FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS, FETCH_SLOTS_BY_TMP_SERVICE_LOADING, DELETE_EVENT_SUCCESS } from 'actions/calendar';
 
 const buildCalendarData = ({
   slot: { startTime, endTime } = {},
@@ -18,7 +18,6 @@ const buildCalendarData = ({
   title: title || EVENT_TYPE_TITLE[type],
   calendarId: type,
   category: 'time',
-  isReadOnly: type !== EVENT_TYPE.APPOINTMENT,
   providerId,
   raw
 });
@@ -70,7 +69,12 @@ const reducer = (state = initialState, action) => {
     case FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS:
       return { ...state, ...action.payload };
     case FETCH_SLOTS_BY_TMP_SERVICE_LOADING:
-        return { ...state, isFetchBookingSlots: action.payload };
+      return { ...state, isFetchBookingSlots: action.payload };
+    case DELETE_EVENT_SUCCESS:
+      return {
+        ...state,
+        calendarData: state.calendarData.filter(data => data.id !== action.payload),
+      }
     default:
       return state;
   }
