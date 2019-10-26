@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import { arrayOf, any, func } from 'prop-types';
 import TUICalendar from '@toast-ui/react-calendar';
-import { Button, Paper, Typography, Select, MenuItem, ButtonGroup  } from '@material-ui/core';
+import { Button, Paper, Typography, Select, MenuItem, ButtonGroup } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import moment from 'moment-timezone';
 import ReactResizeDetector from 'react-resize-detector';

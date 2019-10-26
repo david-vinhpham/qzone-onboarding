@@ -14,6 +14,7 @@ export const CREATE_CALENDAR_EVENT_SUCCESS = 'CREATE_CALENDAR_EVENT_SUCCESS';
 export const CREATE_CALENDAR_EVENT_FAILURE = 'CREATE_CALENDAR_EVENT_FAILURE';
 export const FETCH_SLOTS_BY_TMP_SERVICE_LOADING = 'FETCH_SLOTS_BY_TMP_SERVICE_LOADING';
 export const FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS = 'FETCH_SLOTS_BY_TMP_SERVICE_SUCCESS';
+export const DELETE_EVENT_SUCCESS = 'DELETE_EVENT_SUCCESS';
 
 const calendarLoading = isLoading => ({
   type: CALENDAR_LOADING,
@@ -82,14 +83,14 @@ export const fetchEventsByProviderId = providerId => dispatch => {
 export const createNewEvent = newEvent => (dispatch, getState) => {
   dispatch(calendarLoading(true));
 
-  let api = URL.NEW_NORMAL_EVENT;
+  let api = URL.NORMAL_EVENT;
 
   if (newEvent.type === EVENT_TYPE.TMP_SERVICE) {
     api = URL.NEW_TMP_SERVICE;
   }
 
   if (newEvent.type === EVENT_TYPE.CUSTOMER_APPOINTMENT) {
-    api = URL.NEW_APPOINTMENTS_CUSTOMER_EVENT;
+    api = URL.APPOINTMENTS_CUSTOMER_EVENT;
   }
 
   return axios
@@ -146,7 +147,7 @@ export const rescheduleBookingEvent = (payload, providerId) => async dispatch =>
 
   const [result] = await handleRequest(axios.put, [URL.RESCHEDULE_BOOKING_EVENT, payload]);
   if (result) {
-    dispatch(showAlert('success', 'Reschedule the event successfully!'));
+    dispatch(showAlert('success', 'The event is rescheduled successfully!'));
     dispatch(fetchEventsByProviderId(providerId));
   }
 }
@@ -156,7 +157,18 @@ export const cancelBookingEvent = (bookingEventId, providerId) => async dispatch
 
   const [result] = await handleRequest(axios.delete, [`${URL.CANCEL_BOOKING_EVENT}${bookingEventId}`]);
   if (result) {
-    dispatch(showAlert('success', 'Cancel the event successfully!'));
+    dispatch(showAlert('success', 'The event is canceled successfully!'));
     dispatch(fetchEventsByProviderId(providerId));
+  }
+}
+
+export const deleteEvent = (event) => async dispatch => {
+  const url = event.type === EVENT_TYPE.CUSTOMER_APPOINTMENT ? URL.APPOINTMENTS_CUSTOMER_EVENT : URL.NORMAL_EVENT;
+
+  const [result] = await handleRequest(axios.delete, [`${url}/${event.id}`]);
+
+  if (result) {
+    dispatch(showAlert('success', 'The event is deleted successfully!'));
+    dispatch({ type: DELETE_EVENT_SUCCESS, payload: event.id });
   }
 }
