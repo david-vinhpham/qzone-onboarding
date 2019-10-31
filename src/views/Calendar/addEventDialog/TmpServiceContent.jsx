@@ -40,7 +40,7 @@ export default function TmpServiceContent({
               name="addEventData.tmpService.surveyId"
               value={tmpService.surveyId}
               onChange={handleChange}
-              className={addEventDialogStyles.eventTypeSelect}
+              className={addEventDialogStyles.fullWidthSelect}
             >
               <MenuItem value="none">
                 None
@@ -66,7 +66,7 @@ export default function TmpServiceContent({
               name="addEventData.tmpService.serviceId"
               value={tmpService.serviceId}
               onChange={handleChange}
-              className={addEventDialogStyles.eventTypeSelect}
+              className={addEventDialogStyles.fullWidthSelect}
             >
               {serviceOptions.map(svc => (
                 <MenuItem value={svc.value} key={svc.value}>
@@ -151,7 +151,7 @@ export default function TmpServiceContent({
               name="addEventData.tmpService.geoLocationId"
               value={tmpService.geoLocationId}
               onChange={handleChange}
-              className={addEventDialogStyles.eventTypeSelect}
+              className={addEventDialogStyles.fullWidthSelect}
             >
               {geoOptions.map(geoOption => (
                 <MenuItem value={geoOption.value} key={geoOption.value}>

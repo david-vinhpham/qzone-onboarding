@@ -33,12 +33,10 @@ class AddEventDialog extends PureComponent {
 
   onSelectProvider = (setFieldValue, values) => event => {
     const selectedProvider = this.props.providers.find(p => p.id === event.target.value);
-    const timezoneId = this.props.tzOptions.find(tz => tz.label.toLowerCase() === selectedProvider.timezone.toLowerCase()).label;
     const weekDay = weekDays[moment(values.addEventData.startTime).day()];
     const workingHour = selectedProvider.workingHours.find(wh => wh.day === weekDay);
     setFieldValue('addEventData.providerId', selectedProvider.id);
     setFieldValue('addEventData.providerName', selectedProvider.name);
-    setFieldValue('addEventData.timezoneId', timezoneId);
     setFieldValue('addEventData.startTime', moment(values.addEventData.startTime)
       .hour(workingHour.startTime.hour)
       .minute(workingHour.startTime.minute)
@@ -218,7 +216,7 @@ class AddEventDialog extends PureComponent {
       isEventTypeReadOnly,
       isEventLevelReadOnly,
       isProviderReadOnly,
-      userDetail, surveyOptions,
+      userDetail, surveyOptions, tzOptions,
     } = this.props;
 
     return (
@@ -273,6 +271,7 @@ class AddEventDialog extends PureComponent {
                     isEventTypeReadOnly={isEventTypeReadOnly}
                     isEventLevelReadOnly={isEventLevelReadOnly}
                     isProviderReadOnly={isProviderReadOnly}
+                    tzOptions={tzOptions}
                   />
                   {values.addEventData.eventType === EVENT_TYPE.TMP_SERVICE && (
                     <>
