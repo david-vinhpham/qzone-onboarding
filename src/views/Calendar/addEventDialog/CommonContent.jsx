@@ -25,7 +25,7 @@ export default function CommonContent({
   onChangeNewEventDateTime, onSelectRepeatType, onRepeatEndSelect,
   onBlurOccurence, onChangeRepeatEndDate, onChangeCustomerMobilePhone,
   isEventTypeReadOnly, isEventLevelReadOnly, isProviderReadOnly,
-  userDetail
+  userDetail, tzOptions
 }) {
   const startTime = moment(values.addEventData.startTime).toDate();
   const endTime = moment(values.addEventData.endTime).toDate();
@@ -48,7 +48,7 @@ export default function CommonContent({
               name="addEventData.eventType"
               value={values.addEventData.eventType}
               onChange={onChangeEventType}
-              className={addEventDialogStyles.eventTypeSelect}
+              className={addEventDialogStyles.fullWidthSelect}
               readOnly={isEventTypeReadOnly}
             >
               {Object.values(EVENT_TYPE)
@@ -80,7 +80,7 @@ export default function CommonContent({
                 name="eventLevel"
                 value={values.eventLevel}
                 onChange={onSelectEventLevel}
-                className={addEventDialogStyles.eventTypeSelect}
+                className={addEventDialogStyles.fullWidthSelect}
                 readOnly={isEventLevelReadOnly}
               >
                 <MenuItem value={EVENT_LEVEL.PROVIDER}>
@@ -110,7 +110,7 @@ export default function CommonContent({
                     name="addEventData.providerId"
                     value={values.addEventData.providerId}
                     onChange={onSelectProvider}
-                    className={addEventDialogStyles.eventTypeSelect}
+                    className={addEventDialogStyles.fullWidthSelect}
                     readOnly={isProviderReadOnly}
                   >
                     {providers.map(provider => (
@@ -130,11 +130,19 @@ export default function CommonContent({
                   </Typography>
                 </Grid>
                 <Grid item md={10}>
-                  <TextField
-                    fullWidth
-                    readOnly
+                  <Select
+                    name="addEventData.timezoneId"
                     value={values.addEventData.timezoneId}
-                  />
+                    onChange={handleChange}
+                    className={addEventDialogStyles.fullWidthSelect}
+                    readOnly={values.addEventData.eventType !== EVENT_TYPE.TMP_SERVICE}
+                  >
+                    {tzOptions.map(svc => (
+                      <MenuItem value={svc.label} key={svc.label}>
+                        {svc.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </Grid>
               </Grid>
             </Grid>
@@ -172,7 +180,7 @@ export default function CommonContent({
                     name="addEventData.serviceId"
                     value={values.addEventData.serviceId}
                     onChange={handleChange}
-                    className={addEventDialogStyles.eventTypeSelect}
+                    className={addEventDialogStyles.fullWidthSelect}
                   >
                     {serviceOptions.map(svc => (
                       <MenuItem value={svc.value} key={svc.label}>
@@ -322,7 +330,7 @@ export default function CommonContent({
               name="addEventData.repeat.type"
               value={values.addEventData.repeat.type}
               onChange={onSelectRepeatType}
-              className={addEventDialogStyles.eventTypeSelect}
+              className={addEventDialogStyles.fullWidthSelect}
             >
               {map(EVENT_REPEAT_TYPE, value => (
                 <MenuItem value={value} key={`EVENT_REPEAT_TYPE-${value}`}>
@@ -343,7 +351,7 @@ export default function CommonContent({
                   name="addEventData.repeat.every"
                   value={values.addEventData.repeat.every}
                   onChange={handleChange}
-                  className={addEventDialogStyles.eventTypeSelect}
+                  className={addEventDialogStyles.fullWidthSelect}
                 >
                   {map(REPEAT_EVERY_DEF[values.addEventData.repeat.type], value => (
                     <MenuItem value={value} key={`REPEAT_EVERY_DEF-${value}`}>
@@ -384,7 +392,7 @@ export default function CommonContent({
                             />
                           </div>
                         )}
-                        className={addEventDialogStyles.eventTypeSelect}
+                        className={addEventDialogStyles.fullWidthSelect}
                       >
                         {REPEAT_DATE_DEF.map(dateDef => (
                           <MenuItem key={`REPEAT_DATE_DEF-${dateDef}-Menu`} value={dateDef}>
@@ -489,5 +497,6 @@ CommonContent.propTypes = {
   isEventTypeReadOnly: PropTypes.bool.isRequired,
   isEventLevelReadOnly: PropTypes.bool.isRequired,
   isProviderReadOnly: PropTypes.bool.isRequired,
-  userDetail: userDetailType.isRequired
+  userDetail: userDetailType.isRequired,
+  tzOptions: PropTypes.arrayOf(optionType).isRequired,
 }

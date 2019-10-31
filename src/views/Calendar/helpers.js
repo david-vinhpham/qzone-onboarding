@@ -2,7 +2,7 @@ import moment from 'moment-timezone';
 import { isEmpty } from 'lodash';
 import { EVENT_REPEAT_TYPE, REPEAT_END_TYPE, EVENT_LEVEL, EVENT_TYPE } from 'constants/Calendar.constants';
 
-export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
+export const generateTmpServicePayload = (tmpService, selectedTzOffset) => {
   const {
     avgServiceTime,
     breakTimeStart,
@@ -16,8 +16,8 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
   return {
     avgServiceTime,
     breakTime: {
-      breakStart: moment(breakTimeStart).utcOffset(providerTzOffset, true).unix(),
-      breakEnd: moment(breakTimeEnd).utcOffset(providerTzOffset, true).unix()
+      breakStart: moment(breakTimeStart).utcOffset(selectedTzOffset, true).unix(),
+      breakEnd: moment(breakTimeEnd).utcOffset(selectedTzOffset, true).unix()
     },
     geoLocationId,
     numberOfParallelCustomer,
@@ -27,7 +27,7 @@ export const generateTmpServicePayload = (tmpService, providerTzOffset) => {
   };
 };
 
-export const generateRepeatPayload = (repeat, providerTzOffset) => {
+export const generateRepeatPayload = (repeat, selectedTzOffset) => {
   let repeatPayload = {};
 
   if (repeat.type === EVENT_REPEAT_TYPE.DAILY) {
@@ -76,7 +76,7 @@ export const generateRepeatPayload = (repeat, providerTzOffset) => {
         ...repeatPayload,
         repeatEndType: REPEAT_END_TYPE.ON_DATE,
         repeatEnd: {
-          repeatEndOn: moment(repeat.repeatEnd.onDate).utcOffset(providerTzOffset, true).unix()
+          repeatEndOn: moment(repeat.repeatEnd.onDate).utcOffset(selectedTzOffset, true).unix()
         }
       };
     }
@@ -100,32 +100,32 @@ const generatePayload = (addEventData, providers) => {
     customerFirstName,
     customerLastName,
     customerMobilePhone,
+    timezoneId
   } = addEventData;
-  const providerTz = providers.find(p => p.id === providerId).timezone;
-  const providerTzOffset = moment().tz(providerTz).format('Z');
+  const selectedTzOffset = moment().tz(timezoneId).format('Z');
 
   let payload = {
     description,
     providerId,
     slot: {
-      startTime: moment(startTime).utcOffset(providerTzOffset, true).unix(),
-      endTime: moment(endTime).utcOffset(providerTzOffset, true).unix()
+      startTime: moment(startTime).utcOffset(selectedTzOffset, true).unix(),
+      endTime: moment(endTime).utcOffset(selectedTzOffset, true).unix()
     },
     type: eventType,
+    timezoneId
   };
 
   if (eventType === EVENT_TYPE.TMP_SERVICE) {
-    payload = { ...payload, ...generateTmpServicePayload(tmpService, providerTzOffset) };
+    payload = { ...payload, ...generateTmpServicePayload(tmpService, selectedTzOffset) };
   }
 
   if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
-    payload = { ...payload, ...generateRepeatPayload(repeat, providerTzOffset) };
+    payload = { ...payload, ...generateRepeatPayload(repeat, selectedTzOffset) };
   }
 
   if (eventType === EVENT_TYPE.CUSTOMER_APPOINTMENT) {
     payload = {
       ...payload,
-      timezoneId: providerTz,
       location,
       serviceId,
       customerEmail,

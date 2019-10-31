@@ -202,24 +202,26 @@ class TmpServicesList extends PureComponent {
       eventType,
       description,
       repeat,
-      tmpService
+      tmpService,
+      timezoneId
     } = addEventData;
-    const providerTzOffset = moment().tz(addEventData.timezoneId).format('Z');
+    const selectedTzOffset = moment().tz(timezoneId).format('Z');
 
     let payload = {
       id,
       description,
       providerId,
       slot: {
-        startTime: moment(startTime).utcOffset(providerTzOffset, true).unix(),
-        endTime: moment(endTime).utcOffset(providerTzOffset, true).unix()
+        startTime: moment(startTime).utcOffset(selectedTzOffset, true).unix(),
+        endTime: moment(endTime).utcOffset(selectedTzOffset, true).unix()
       },
       type: eventType,
-      ...generateTmpServicePayload(tmpService, providerTzOffset, this.businessId)
+      timezoneId,
+      ...generateTmpServicePayload(tmpService, selectedTzOffset, this.businessId)
     };
 
     if (repeat.type !== EVENT_REPEAT_TYPE.NEVER) {
-      payload = { ...payload, ...generateRepeatPayload(repeat, providerTzOffset) };
+      payload = { ...payload, ...generateRepeatPayload(repeat, selectedTzOffset) };
     }
 
     this.props.editTmpService(payload);
