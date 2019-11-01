@@ -187,7 +187,11 @@ class ManageCalendar extends React.PureComponent {
   }
 
   render() {
-    const { isLoading, history, bookingSlots, userDetail, providers, isFetchBookingSlots, calendarData } = this.props;
+    const {
+      isLoading, history, bookingSlots,
+      userDetail, providers, isFetchBookingSlots,
+      calendarData
+    } = this.props;
     const {
       isOpenAddDialog, eventLevel, addEventData,
       selectedProvider, deletedBookingEventId, showRescheduleDialog,
@@ -276,7 +280,7 @@ ManageCalendar.propTypes = {
   isFetchBookingSlots: bool.isRequired,
   calendarData: arrayOf(any).isRequired,
   getSlotsByTmpServiceId: func.isRequired,
-  deletedEvent: func.isRequired
+  deleteEvent: func.isRequired
 };
 
 const mapStateToProps = state => ({
