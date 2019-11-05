@@ -7,7 +7,7 @@ import Loading from '../../components/Loading/Loading';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Tooltip, Typography } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
@@ -85,6 +85,10 @@ class LoginPage extends React.Component {
       default:
         break;
     }
+    this.setState({ isForgotPassword: false });
+  }
+
+  closeForgotPasswordDialog = () => {
     this.setState({ isForgotPassword: false });
   }
 
@@ -182,25 +186,21 @@ class LoginPage extends React.Component {
                           open={isForgotPassword}
                           email={loginEmail}
                           history={history}
-                          page="register"
+                          closeDialog={this.closeForgotPasswordDialog}
                         />
-
-                        <div>
-                          <Tooltip
-                            title={forgotPasswordTitle}
-                            placement="top-end"
-                            classes={{ tooltip: 'tooltip-lg' }}
+                        <Tooltip
+                          title={forgotPasswordTitle}
+                          placement="top-end"
+                        >
+                          <Button
+                            color="transparent"
+                            size="sm"
+                            onClick={this.handleReqVerificationCode}
+                            className={forgotClass}
                           >
-                            <Typography
-                              onClick={this.handleReqVerificationCode}
-                              variant="subtitle2"
-                              color="textSecondary"
-                              className={forgotClass}
-                            >
-                              Forgot Password?
-                          </Typography>
-                          </Tooltip>
-                        </div>
+                            Forgot Password?
+                          </Button>
+                        </Tooltip>
                       </CardBody>
                     </Card>
                   </form>

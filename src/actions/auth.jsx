@@ -26,13 +26,14 @@ export const authGetToken = () => {
   };
 };
 
-export function logout(history) {
+export function logout(history, cb) {
   Auth.signOut({ global: true })
     .catch(console.log)
     .finally(() => {
       store.dispatch(resetAllStates());
       localStorage.clear();
       if (history) history.push('/login');
+      if (cb) cb();
     });
 }
 
@@ -187,17 +188,17 @@ export const changePassword = (values, history) => {
   return dispatch => {
     dispatch({ type: auth.CHANGE_PASSWORD_LOADING });
     axios.post(URL.CHANGE_PASSWORD, values)
-      .then(({ data }) => {
-        if ((data.status === 200 || data.status === 201) && data.success) {
+      .then((resp) => {
+        if ((resp.status === 200 || resp.status === 201) && resp.data.success) {
           dispatch({
             type: auth.CHANGE_PASSWORD_SUCCESS,
-            payload: data
+            payload: resp.data
           });
-          logout(history);
+          logout(history, () => dispatch(showAlert('success', 'Password is updated successfully')));
         } else {
           dispatch({
             type: auth.CHANGE_PASSWORD_FAILURE,
-            payload: data
+            payload: resp.data
           });
         }
       })
@@ -377,7 +378,7 @@ export function completeNewPasswordChallenge(values, history) {
             type: auth.FORCE_RESET_PASSWORD_SUCCESS,
             payload: data
           });
-          dispatch(showAlert('success', 'Password is successfully updated'));
+          dispatch(showAlert('success', 'Password is updated successfully'));
           logout(history);
         } else {
           dispatch({

@@ -33,22 +33,12 @@ class ForgotPasswordPage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
       code: '',
       newPassword: '',
       confirmedPassword: '',
       errorMessage: '',
-      isOpen: false
     };
   }
-
-  static getDerivedStateFromProps(props) {
-    return { isOpen: props.open };
-  }
-
-  handleChangeClose = () => {
-    this.setState({ isOpen: false });
-  };
 
   handleChangePassword = () => {
     const { code, confirmedPassword, newPassword } = this.state;
@@ -75,6 +65,7 @@ class ForgotPasswordPage extends React.PureComponent {
       email
     };
     this.props.changePassword(changePasswordData, history);
+    this.props.closeDialog();
   };
 
   render() {
@@ -83,9 +74,11 @@ class ForgotPasswordPage extends React.PureComponent {
       resetPasswordError,
       resetPasswordLoading,
       changePasswordRsp,
-      resetPasswordRsp
+      resetPasswordRsp,
+      closeDialog,
+      open
     } = this.props;
-    const { errorCode, errorMessage, isOpen } = this.state;
+    const { errorCode, errorMessage } = this.state;
     if (resetPasswordLoading) {
       return (
         <BeatLoader
@@ -98,112 +91,106 @@ class ForgotPasswordPage extends React.PureComponent {
       );
     }
     return (
-      <React.Fragment>
-        <Dialog open={isOpen} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
-          <DialogContent>
-            {resetPasswordError !== null ? (
-              <div className={classes.justifyContentCenter}>
-                <div style={{ color: 'red' }}>
-                  {' '}
-                  {resetPasswordError.status === 400 || resetPasswordError.status === 500 ? (
-                    resetPasswordError.message
-                  ) : changePasswordRsp.length === 0 ? (
-                    <DialogContentText id="alert-dialog-description">
-                      {!resetPasswordRsp && resetPasswordRsp.success !== true
-                        ? ''
-                        : 'Code was sent to your email'}
-                    </DialogContentText>
-                  ) : (
-                        <div className={classes.justifyContentCenter}>
-                          <div style={{ color: 'blue' }}>
-                            {' '}
-                            {changePasswordRsp.success === true
-                              ? 'Changed password successfully!'
-                              : ''}{' '}
-                          </div>
+      <Dialog open={open} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
+        <DialogContent>
+          {resetPasswordError !== null ? (
+            <div className={classes.justifyContentCenter}>
+              <div style={{ color: 'red' }}>
+                {' '}
+                {resetPasswordError.status === 400 || resetPasswordError.status === 500 ? (
+                  resetPasswordError.message
+                ) : changePasswordRsp.length === 0 ? (
+                  <DialogContentText id="alert-dialog-description">
+                    {!resetPasswordRsp && resetPasswordRsp.success !== true
+                      ? ''
+                      : 'Code was sent to your email'}
+                  </DialogContentText>
+                ) : (
+                      <div className={classes.justifyContentCenter}>
+                        <div style={{ color: 'blue' }}>
+                          {' '}
+                          {changePasswordRsp.success === true
+                            ? 'Changed password successfully!'
+                            : ''}{' '}
                         </div>
-                      )}{' '}
-                </div>
+                      </div>
+                    )}{' '}
               </div>
-            ) : (
-                <div className={classes.justifyContentCenter} />
-              )}
-            <FormControl fullWidth error={errorCode} aria-describedby="code-input-wrapper">
-              <InputLabel htmlFor="code-input">Enter code</InputLabel>
-              <Input
-                fullWidth
-                id="code-input"
-                onChange={event => {
-                  this.setState({ code: event.target.value });
-                }}
-              />
-              {errorCode && (
-                <FormHelperText id="code-input-wrapper">Please enter correct code!</FormHelperText>
-              )}
-            </FormControl>
-            <FormControl fullWidth error={errorCode} aria-describedby="code-input-wrapper">
-              <InputLabel htmlFor="new-password-input">Enter New Password</InputLabel>
-              <Input
-                fullWidth
-                id="new-password-input"
-                type="password"
-                onChange={event => {
-                  this.setState({ newPassword: event.target.value });
-                }}
-              />
-              {errorCode && (
-                <FormHelperText id="new-password-input-wrapper">
-                  Please enter correct new password
-                </FormHelperText>
-              )}
-            </FormControl>
-            <FormControl fullWidth error={errorCode} aria-describedby="code-input-wrapper">
-              <InputLabel htmlFor="code-input">Enter Confirmed Password</InputLabel>
-              <Input
-                fullWidth
-                id="confirm-password-input"
-                type="password"
-                onChange={event => {
-                  this.setState({ confirmedPassword: event.target.value });
-                }}
-              />
-              {errorCode && (
-                <FormHelperText id="confirm-password-input-wrapper">
-                  Please enter correct confirmed password
-                </FormHelperText>
-              )}
-            </FormControl>
-            {errorMessage.length > 0 ? (
-              <div className={classes.justifyContentCenter}>
-                <div style={{ color: 'red' }}> {errorMessage} </div>
-              </div>
-            ) : (
-                <div className={classes.justifyContentCenter} />
-              )}
-          </DialogContent>
-          <DialogActions className={classes.dialogActions}>
-            <div>
-              <Button
-                disabled={
-                  changePasswordRsp.success ||
-                  resetPasswordError.status === 400 ||
-                  resetPasswordError.status === 500
-                }
-                onClick={this.handleChangePassword}
-                color="rose"
-              >
-                Save
-              </Button>
             </div>
-            <div>
-              <Button onClick={this.handleChangeClose} color="rose">
-                Close
-              </Button>
+          ) : (
+              <div className={classes.justifyContentCenter} />
+            )}
+          <FormControl fullWidth error={errorCode} aria-describedby="code-input-wrapper">
+            <InputLabel htmlFor="code-input">Enter code</InputLabel>
+            <Input
+              fullWidth
+              id="code-input"
+              onChange={event => {
+                this.setState({ code: event.target.value });
+              }}
+            />
+            {errorCode && (
+              <FormHelperText id="code-input-wrapper">Please enter correct code!</FormHelperText>
+            )}
+          </FormControl>
+          <FormControl fullWidth error={errorCode} aria-describedby="code-input-wrapper">
+            <InputLabel htmlFor="new-password-input">Enter New Password</InputLabel>
+            <Input
+              fullWidth
+              id="new-password-input"
+              type="password"
+              onChange={event => {
+                this.setState({ newPassword: event.target.value });
+              }}
+            />
+            {errorCode && (
+              <FormHelperText id="new-password-input-wrapper">
+                Please enter correct new password
+              </FormHelperText>
+            )}
+          </FormControl>
+          <FormControl fullWidth error={errorCode} aria-describedby="code-input-wrapper">
+            <InputLabel htmlFor="code-input">Enter Confirmed Password</InputLabel>
+            <Input
+              fullWidth
+              id="confirm-password-input"
+              type="password"
+              onChange={event => {
+                this.setState({ confirmedPassword: event.target.value });
+              }}
+            />
+            {errorCode && (
+              <FormHelperText id="confirm-password-input-wrapper">
+                Please enter correct confirmed password
+              </FormHelperText>
+            )}
+          </FormControl>
+          {errorMessage.length > 0 ? (
+            <div className={classes.justifyContentCenter}>
+              <div style={{ color: 'red' }}> {errorMessage} </div>
             </div>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+          ) : (
+              <div className={classes.justifyContentCenter} />
+            )}
+        </DialogContent>
+        <DialogActions className={classes.dialogActions}>
+          <Button onClick={closeDialog} color="rose">
+            Close
+          </Button>
+          <Button
+            disabled={
+              changePasswordRsp.success ||
+              resetPasswordError.status === 400 ||
+              resetPasswordError.status === 500
+            }
+            onClick={this.handleChangePassword}
+            color="rose"
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 }
@@ -213,8 +200,8 @@ ForgotPasswordPage.propTypes = {
   history: PropTypes.object.isRequired,
   email: PropTypes.string,
   open: PropTypes.bool.isRequired,
-  page: PropTypes.string.isRequired,
-  actionAfterSubmit: PropTypes.func
+  actionAfterSubmit: PropTypes.func,
+  closeDialog: PropTypes.func.isRequired,
 };
 
 ForgotPasswordPage.defaultProps = {
@@ -229,17 +216,12 @@ const mapStateToProps = state => {
     resetPasswordError: state.user.resetPasswordError,
     changePasswordRsp: state.user.changePasswordRsp,
     resetPasswordRsp: state.user.resetPasswordRsp,
-    email: state.user.email,
     resetPasswordLoading: state.user.resetPasswordLoading
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    changePassword: (user, email, code, history) =>
-      dispatch(changePassword(user, email, code, history))
-  };
-};
+const mapDispatchToProps = { changePassword };
+
 export default compose(
   withStyles(verificationPageStyle),
   connect(
