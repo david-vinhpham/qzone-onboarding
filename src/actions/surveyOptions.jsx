@@ -9,7 +9,7 @@ const setSurveyOptionsSuccess = payload => ({
 });
 
 export const fetchSurveyOptionsByAssessorId = assessorId => dispatch => {
-  return axios.get(`${URL.FETCH_SURVEY_OPTIONS_BY_ASSESSOR_ID}${assessorId}`)
+  return axios.get(`${URL.FETCH_SURVEY_OPTIONS_BY_ASSESSOR_ID}/${assessorId}`)
     .then(res => {
       if (res && res.data.success) {
         dispatch(setSurveyOptionsSuccess(res.data.objects));

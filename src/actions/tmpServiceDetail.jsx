@@ -7,7 +7,7 @@ export const fetchTmpServiceDetail = eventId => {
     dispatch({
       type: tmpServiceDetail.FETCH_TMP_SERVICE_DETAIL_LOADING
     });
-    axios.get(URL.FIND_TMP_SERVICE_DETAIL_BY_TMP_SERVICE_ID + eventId)
+    axios.get(`${URL.FIND_TMP_SERVICE_DETAIL_BY_TMP_SERVICE_ID}/${eventId}`)
       .then(({ data }) => {
         dispatch({
           type: tmpServiceDetail.FETCH_TMP_SERVICE_DETAIL_SUCCESS,

@@ -9,7 +9,7 @@ const setProviderOptionsSuccess = payload => ({
 });
 
 const fetchProviderOptionsByBusinessAdminId = (businessAdminId) => dispatch => {
-  return axios.get(`${URL.FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID}${businessAdminId}`)
+  return axios.get(`${URL.FETCH_PROVIDERS_OPTION_BY_BUSINESS_ADMIN_ID}/${businessAdminId}`)
     .then(res => {
       if (res && res.status === 200 && res.data.success) {
         dispatch(setProviderOptionsSuccess(res.data.objects));

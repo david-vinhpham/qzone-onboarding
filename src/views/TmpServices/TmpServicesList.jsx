@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import { classesType, historyType, tmpServiceType, optionType, providerType, userDetailType } from "types/global";
 import { connect } from "react-redux";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import { ArtTrack, Delete, Edit, Search, BarChart, CheckCircleOutlined } from "@material-ui/icons";
+import { ArtTrack, Delete, Edit, Search, BarChart, CheckCircleOutlined, Block } from "@material-ui/icons";
 import moment from "moment-timezone";
 import {
   deleteTmpService,
@@ -13,7 +13,8 @@ import {
   setTmpServices,
   getScheduleReport,
   setScheduleReportData,
-  fetchTmpServicesByProviderId
+  fetchTmpServicesByProviderId,
+  disableSlot
 } from "../../actions/tmpServices";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle";
 import listPageStyle from 'assets/jss/material-dashboard-pro-react/views/listPageStyle.jsx';
@@ -30,7 +31,7 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import { css } from "@emotion/core";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import AddEventDialog from "views/Calendar/AddEventDialog";
-import { fetchProvidersByBusinessId, createNewEvent, fetchProvidersByBusinessIdSuccess } from "actions/calendar";
+import { fetchProvidersByBusinessId, createNewEvent, fetchProvidersByBusinessIdSuccess, getSlotsByTmpServiceId, setBookingSlots } from "actions/calendar";
 import { fetchGeoLocationOptions } from "../../actions/geoOptions";
 import { fetchTimezoneOptions } from "../../actions/timezoneOptions";
 import { fetchServiceOptionsByBusinessAdminId } from "../../actions/serviceOptions";
@@ -38,6 +39,7 @@ import { EVENT_LEVEL, EVENT_REPEAT_TYPE, EVENT_TYPE, REPEAT_DATE_DEF } from "con
 import { generateTmpServicePayload, generateRepeatPayload, createNewEventHelper } from "../Calendar/helpers";
 import { defaultDateTimeFormat, eUserType, weekDays } from "constants.js";
 import { fetchSurveyOptionsByAssessorId } from "actions/surveyOptions";
+import RescheduleDialog from "views/Calendar/RescheduleDialog";
 
 const override = css`
   margin: 0 auto;
@@ -48,7 +50,8 @@ const override = css`
   justify-content: center;
 `;
 
-const todayWeekDay = weekDays[moment().day()];
+const today = moment();
+const todayWeekDay = weekDays[today.day()];
 
 class TmpServicesList extends PureComponent {
   constructor(props) {
@@ -56,6 +59,7 @@ class TmpServicesList extends PureComponent {
 
     const { history: { location } } = props;
     this.state = {
+      showDisableSlotsDialog: false,
       isOpenScheduleReport: false,
       deletedTmpService: {
         id: 0,
@@ -296,14 +300,28 @@ class TmpServicesList extends PureComponent {
     createNewEventHelper(payload, this.props.providers, this.props.createNewEvent);
   };
 
+  onOpenDisableSlotsDialog = (tmpServiceId) => {
+    this.props.getSlotsByTmpServiceId(tmpServiceId, '');
+    this.setState({ showDisableSlotsDialog: true });
+  }
+
+  onCloseDisableSlotsDialog = () => {
+    this.props.setBookingSlots({ bookingSlots: [], bookingEventId: '' });
+    this.setState({ showDisableSlotsDialog: false });
+  }
+
+  onDisableSlot = (selectedSlot) => {
+    this.props.disableSlot(selectedSlot.id);
+  }
+
   render() {
     const {
       classes, history, isLoading,
-      userDetail, tmpServices
+      userDetail, tmpServices, isFetchBookingSlots, bookingSlots
     } = this.props;
     const {
       deletedTmpService, isOpenAddEventDialog, eventLevel,
-      addEventData, isEditMode
+      addEventData, isEditMode, showDisableSlotsDialog
     } = this.state;
     const isAdmin = userDetail.userType === eUserType.business_admin;
 
@@ -384,6 +402,16 @@ class TmpServicesList extends PureComponent {
                       <Edit />
                     </Tooltip>
                   </Button>
+                  <Button color="transparent" simple justIcon>
+                    <Tooltip onClick={() => this.onOpenDisableSlotsDialog(event.id)}
+                      id="tooltip-top"
+                      title="Disable slots"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Block />
+                    </Tooltip>
+                  </Button>
                   {isAdmin && <Button
                     onClick={() => this.deleteTmpService(event.id)}
                     color="danger"
@@ -409,7 +437,7 @@ class TmpServicesList extends PureComponent {
     );
 
     return (
-      <div>
+      <>
         <GridContainer>
           <GridItem xs={12}>
             <Card>
@@ -472,7 +500,18 @@ class TmpServicesList extends PureComponent {
             history={history}
           />
         )}
-      </div>
+        {showDisableSlotsDialog && (
+          <RescheduleDialog
+            isFetchBookingSlots={isFetchBookingSlots}
+            bookingSlots={bookingSlots}
+            onClose={this.onCloseDisableSlotsDialog}
+            onConfirmSlot={this.onDisableSlot}
+            title="Booking slots"
+            confirmDialogTitle="Confirmation"
+            confirmDialogMessage="Are you sure to disable this slot at"
+          />
+        )}
+      </>
     );
   }
 }
@@ -514,6 +553,11 @@ TmpServicesList.propTypes = {
   fetchTmpServicesByProviderId: PropTypes.func.isRequired,
   userDetail: userDetailType.isRequired,
   fetchSurveyOptionsByAssessorId: PropTypes.func.isRequired,
+  getSlotsByTmpServiceId: PropTypes.func.isRequired,
+  isFetchBookingSlots: PropTypes.bool.isRequired,
+  bookingSlots: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setBookingSlots: PropTypes.func.isRequired,
+  disableSlot: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -527,6 +571,10 @@ const mapStateToProps = state => ({
   reportData: state.tmpServices.reportData,
   isReportLoading: state.tmpServices.isReportLoading,
   userDetail: state.user.userDetail,
+  bookingSlots: state.manageCalendar.bookingSlots.filter(slot =>
+    slot.spotsOpen > 0 && moment(slot.startSec * 1000).isSameOrAfter(today)
+  ),
+  isFetchBookingSlots: state.manageCalendar.isFetchBookingSlots,
 });
 
 const mapDispatchToProps = {
@@ -543,7 +591,10 @@ const mapDispatchToProps = {
   setScheduleReportData,
   fetchProvidersByBusinessIdSuccess,
   fetchTmpServicesByProviderId,
-  fetchSurveyOptionsByAssessorId
+  fetchSurveyOptionsByAssessorId,
+  getSlotsByTmpServiceId,
+  setBookingSlots,
+  disableSlot,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
