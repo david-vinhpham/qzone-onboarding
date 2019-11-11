@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Dialog, DialogTitle, Typography, IconButton, DialogContent,
   Button, Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ExpansionPanelActions,
@@ -42,7 +43,15 @@ const onCloseConfirmModal = (setSelectedSlot) => () => {
   setSelectedSlot(null);
 }
 
-const RescheduleDialog = ({ bookingSlots, onClose, onReschedule, isFetchBookingSlots }) => {
+const onConfirmModal = (selectedSlot, setSelectedSlot, onConfirmSlot) => () => {
+  onCloseConfirmModal(setSelectedSlot)();
+  onConfirmSlot(selectedSlot);
+}
+
+const RescheduleDialog = ({
+  bookingSlots, onClose, onConfirmSlot, isFetchBookingSlots, confirmDialogTitle, confirmDialogMessage,
+  title
+}) => {
   const [chunkIndex, setChunkIndex] = useState({});
   const [selectedSlot, setSelectedSlot] = useState(null);
 
@@ -72,10 +81,10 @@ const RescheduleDialog = ({ bookingSlots, onClose, onReschedule, isFetchBookingS
       <CustomModal
         openModal={!!selectedSlot}
         onClose={onCloseConfirmModal(setSelectedSlot)}
-        onConfirm={onReschedule(selectedSlot)}
-        title="Reschedule confirmation"
+        onConfirm={onConfirmModal(selectedSlot, setSelectedSlot, onConfirmSlot)}
+        title={confirmDialogTitle}
         message={
-          `Are you sure to reschedule this event to other slot at '${moment(rescheduledTime).format(timeSlotFormat)}'`
+          `${confirmDialogMessage} '${moment(rescheduledTime).format(timeSlotFormat)}'`
         }
         closeButtonLabel="Cancel"
         confirmButtonLabel="OK"
@@ -88,7 +97,7 @@ const RescheduleDialog = ({ bookingSlots, onClose, onReschedule, isFetchBookingS
         maxWidth="xs"
       >
         <DialogTitle disableTypography id="reschedule-dialog" className={styles.header}>
-          <Typography className={styles.title} variant="subtitle1">Rescheduled slots</Typography>
+          <Typography className={styles.title} variant="subtitle1">{title}</Typography>
           <IconButton aria-label="close" onClick={onClose}>
             <Close />
           </IconButton>
@@ -114,6 +123,7 @@ const RescheduleDialog = ({ bookingSlots, onClose, onReschedule, isFetchBookingS
                               variant="outlined"
                               className={styles.slot}
                               key={slot.id}
+                              disabled={slot.disable}
                               onClick={onSelectSlot(slot, setSelectedSlot)}
                             >
                               {moment(slot.startSec * 1000).format(timeSlotFormat)}
@@ -154,5 +164,15 @@ const RescheduleDialog = ({ bookingSlots, onClose, onReschedule, isFetchBookingS
     </>
   )
 };
+
+RescheduleDialog.propTypes = {
+  bookingSlots: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onClose: PropTypes.func.isRequired,
+  onConfirmSlot: PropTypes.func.isRequired,
+  isFetchBookingSlots: PropTypes.bool.isRequired,
+  confirmDialogTitle: PropTypes.string.isRequired,
+  confirmDialogMessage: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+}
 
 export default RescheduleDialog;

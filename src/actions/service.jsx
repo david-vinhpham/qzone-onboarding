@@ -85,7 +85,7 @@ export const fetchServiceFailure = error => {
 export const fetchServiceById = id => {
   return dispatch => {
     dispatch(fetchServiceLoading());
-    axios.get(URL.FETCH_SERVICE_BY_ID + id)
+    axios.get(`${URL.SERVICE}/${id}`)
       .then(({ data }) => {
         dispatch(fetchServiceSuccess(data.object));
       })
@@ -120,7 +120,7 @@ export const fetchServiceCategories = () => {
     const { userDetail } = getState().user;
 
     dispatch(fetchServiceCategoriesLoading());
-    axios.get(`${URL.FETCH_SERVICE_CATEGORIES_BY_BUSINESS_ADMIN_ID}${userDetail.id}`)
+    axios.get(`${URL.FETCH_SERVICE_CATEGORIES_BY_BUSINESS_ADMIN_ID}/${userDetail.id}`)
       .then(({ data }) => {
         dispatch(fetchServiceCategoriesSuccess(data.objects));
       })
@@ -186,7 +186,7 @@ export const createServiceFailure = error => {
 export function fetchServicesByBusinessAdminId(businessAdminId) {
   return dispatch => {
     dispatch(fetchServicesLoading());
-    axios.get(URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID + businessAdminId)
+    axios.get(`${URL.FETCH_SERVICES_BY_BUSINESS_ADMIN_ID}/${businessAdminId}`)
       .then(({ data }) => {
         dispatch(fetchServicesSuccess(data.objects));
       })

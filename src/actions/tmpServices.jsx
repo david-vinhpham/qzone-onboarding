@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { URL } from 'config/config';
 import { tmp_service } from '../constants/TmpServices.constants';
+import { handleRequest } from 'utils/apiHelpers';
+import { FETCH_SLOTS_BY_TMP_SERVICE_LOADING, setBookingSlots } from './calendar';
+import { showAlert } from './alert';
 
 const setTmpServicesLoading = payload => ({
   type: tmp_service.FETCH_TMP_SERVICES_LOADING,
@@ -34,7 +37,7 @@ export const deleteTmpService = eventId => {
 
 export const fetchTmpServicesByAdminId = businessId => dispatch => {
   dispatch(setTmpServicesLoading(true));
-  axios.get(`${URL.FIND_TMP_SERVICES_BY_BUSINESS_ID}${businessId}`)
+  axios.get(`${URL.FIND_TMP_SERVICES_BY_BUSINESS_ID}/${businessId}`)
     .then(resp => {
       if (resp && resp.status === 200 && resp.data.success) {
         dispatch(setTmpServices(resp.data.objects || []));
@@ -83,7 +86,7 @@ export const getScheduleReport = tmpServiceId => dispatch => {
 
 export const fetchTmpServicesByProviderId = providerId => dispatch => {
   dispatch(setTmpServicesLoading(true));
-  axios.get(`${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}${providerId}`)
+  axios.get(`${URL.FIND_TMP_SERVICES_BY_PROVIDER_ID}/${providerId}`)
     .then(resp => {
       if (resp && resp.status === 200 && resp.data.success) {
         dispatch(setTmpServices(resp.data.objects || []));
@@ -92,4 +95,22 @@ export const fetchTmpServicesByProviderId = providerId => dispatch => {
     .finally(() => {
       dispatch(setTmpServicesLoading(false));
     });
+}
+
+export const disableSlot = slotId => async (dispatch, getState) => {
+  dispatch({ type: FETCH_SLOTS_BY_TMP_SERVICE_LOADING, payload: true });
+
+  const [result] = await handleRequest(axios.put, [URL.DISABLE_BOOKING_SLOTS, { slotId, status: true }]);
+  if (result && result.success) {
+    const { manageCalendar } = getState();
+    const newBookingSlots = manageCalendar.bookingSlots.map(slot => ({
+      ...slot,
+      disable: slot.id === slotId ? true : slot.disable
+    }));
+
+    dispatch(showAlert('success', 'The slot has been disabled!'));
+    dispatch(setBookingSlots({ bookingSlots: newBookingSlots, bookingEventId: '' }));
+  }
+
+  dispatch({ type: FETCH_SLOTS_BY_TMP_SERVICE_LOADING, payload: false });
 }

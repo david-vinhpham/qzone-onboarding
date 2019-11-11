@@ -1,5 +1,5 @@
 import React from 'react';
-import { arrayOf, any, func, shape, string } from 'prop-types';
+import { arrayOf, any, func, shape, string, oneOfType } from 'prop-types';
 import {
   Button,
   Select, MenuItem,
@@ -99,12 +99,15 @@ CalendarV2.propTypes = {
   calendarData: arrayOf(any).isRequired,
   onClickNewEvent: func.isRequired,
   userDetail: userDetailType.isRequired,
-  selectedProvider: shape({
-    id: string,
-    name: string,
-    timezone: string,
-    workingHours: arrayOf(any)
-  }),
+  selectedProvider: oneOfType([
+    shape({
+      id: string,
+      name: string,
+      timezone: string,
+      workingHours: arrayOf(any)
+    }),
+    string
+  ]),
   onCancelBookingEvent: func.isRequired,
   onClickUpdateEvent: func.isRequired,
   onDeleteEvent: func.isRequired
