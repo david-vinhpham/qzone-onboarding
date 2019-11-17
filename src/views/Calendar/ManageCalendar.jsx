@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { arrayOf, func, string, bool, any } from 'prop-types';
+import { arrayOf, func, string, bool, any, object } from 'prop-types';
 import moment from 'moment-timezone';
 import { get } from 'lodash';
 
@@ -144,7 +144,7 @@ class ManageCalendar extends React.PureComponent {
     this.setState({ showRescheduleDialog: false });
   }
 
-  onRescheduleSlot = (selectedSlot) => () => {
+  onRescheduleSlot = (selectedSlot) => {
     const rescheduledData = { eventId: this.props.bookingEventId, newAvailabilityId: selectedSlot.id };
     this.onCloseRescheduleDialog();
     this.props.rescheduleBookingEvent(rescheduledData, this.state.selectedProvider.id);
@@ -205,7 +205,10 @@ class ManageCalendar extends React.PureComponent {
           isFetchBookingSlots={isFetchBookingSlots}
           bookingSlots={bookingSlots}
           onClose={this.onCloseRescheduleDialog}
-          onReschedule={this.onRescheduleSlot}
+          onConfirmSlot={this.onRescheduleSlot}
+          title="Rescheduled slots"
+          confirmDialogTitle="Reschedule confirmation"
+          confirmDialogMessage="Are you sure to reschedule this event to other slot at"
         />}
         {!!deletedBookingEventId &&
           <CustomModal
@@ -280,7 +283,8 @@ ManageCalendar.propTypes = {
   isFetchBookingSlots: bool.isRequired,
   calendarData: arrayOf(any).isRequired,
   getSlotsByTmpServiceId: func.isRequired,
-  deleteEvent: func.isRequired
+  deleteEvent: func.isRequired,
+  bookingSlots: arrayOf(object).isRequired,
 };
 
 const mapStateToProps = state => ({

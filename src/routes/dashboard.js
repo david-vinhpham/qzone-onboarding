@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
   BubbleChart, Email,
@@ -6,40 +7,6 @@ import {
   Category, BusinessCenter, People, Web, Person
 } from '@material-ui/icons';
 import Dashboard from '../views/Dashboard/Dashboard';
-import Administration from '../views/Administration/Administration';
-import OrganizationCreate from '../views/Organization/OrganizationCreate';
-import OrganizationEdit from '../views/Organization/OrganizationEdit';
-import OrganizationList from '../views/Organization/OrganizationList';
-import ManageCalendar from '../views/Calendar/ManageCalendar';
-import CustomerService from '../views/CustomerService/CustomerService';
-import Profile from '../views/Profile/profile';
-
-import ProviderList from '../views/Provider/ProviderList';
-import ProviderCreate from '../views/Provider/ProviderCreate';
-import ProviderEdit from '../views/Provider/ProviderEdit';
-
-import ServicesList from '../views/Services/ServicesList';
-import ServiceCreate from '../views/Services/ServiceCreate';
-import ServiceEdit from '../views/Services/ServiceEdit';
-
-import LocationList from '../views/Location/LocationList';
-import LocationCreate from '../views/Location/LocationCreate';
-import LocationEdit from '../views/Location/LocationEdit';
-
-import RegisterPage from '../views/Auth/RegisterPage';
-
-import EmailTemplates from '../views/EmailTemplates/EmailTemplates';
-import EditEmailTemplate from '../views/EmailTemplates/EditEmailTemplate';
-import CreateEmailTemplate from '../views/EmailTemplates/CreateEmailTemplate';
-import TmpServicesList from '../views/TmpServices/TmpServicesList';
-import BusinessCategoriesList from '../views/BusinessCategories/BusinessCategoriesList';
-import ServiceCategoriesList from '../views/ServiceCategories/ServiceCategoriesList';
-import AvailabilitySlotsList from '../views/AvailabilitySlots/AvailabilitySlotsList';
-import ScheduleReportList from "../views/ScheduleReport/ScheduleReportList";
-import CreateAssessment from 'views/Surveys/CreateAssessment';
-import Assessments from 'views/Surveys/Assessments';
-import ChartBoard from 'views/Chart/ChartBoard';
-import Reports from 'views/Reports/Reports';
 
 const dashboardRoutes = [
   {
@@ -57,7 +24,7 @@ const managementRoutes = [
     path: '/organization/list',
     name: 'Organization',
     shortName: 'OL',
-    component: OrganizationList,
+    component: lazy(() => import('../views/Organization/OrganizationList')),
     icon: BusinessCenter,
     iconColor: 'secondary',
     dataTestId: 'orgListNavLink',
@@ -66,7 +33,7 @@ const managementRoutes = [
     path: '/location/list',
     name: 'Locations',
     shortName: 'BL',
-    component: LocationList,
+    component: lazy(() => import('../views/Location/LocationList')),
     icon: Navigation,
     iconColor: 'secondary',
     dataTestId: 'locationListNavLink',
@@ -75,7 +42,7 @@ const managementRoutes = [
     path: '/services/list',
     name: 'Manage Services',
     shortName: 'MS',
-    component: ServicesList,
+    component: lazy(() => import('../views/Services/ServicesList')),
     icon: Schedule,
     iconColor: 'secondary',
     dataTestId: 'serviceListNavLink',
@@ -84,7 +51,7 @@ const managementRoutes = [
     path: '/service-categories',
     name: 'Service Categories',
     shortName: 'SC',
-    component: ServiceCategoriesList,
+    component: lazy(() => import('../views/ServiceCategories/ServiceCategoriesList')),
     icon: Category,
     iconColor: 'secondary',
     dataTestId: 'sCategoryNavLink',
@@ -93,7 +60,7 @@ const managementRoutes = [
     path: '/business-categories',
     name: 'Business Categories',
     shortName: 'BC',
-    component: BusinessCategoriesList,
+    component: lazy(() => import('../views/BusinessCategories/BusinessCategoriesList')),
     icon: Business,
     iconColor: 'secondary',
     dataTestId: 'bCategoryNavLink',
@@ -102,7 +69,7 @@ const managementRoutes = [
     path: '/provider/list',
     name: 'Provider Details',
     shortName: 'PD',
-    component: ProviderList,
+    component: lazy(() => import('../views/Provider/ProviderList')),
     icon: People,
     iconColor: 'secondary',
     dataTestId: 'providerListNavLink',
@@ -112,7 +79,7 @@ const managementRoutes = [
     name: 'Email Templates',
     shortName: 'ET',
     icon: Email,
-    component: EmailTemplates,
+    component: lazy(() => import('../views/EmailTemplates/EmailTemplates')),
     dataTestId: 'emailTemplatesNavLink',
     iconColor: 'secondary',
   },
@@ -121,7 +88,7 @@ const managementRoutes = [
     name: 'Assessments',
     shortName: 'AS',
     icon: Assignment,
-    component: Assessments,
+    component: lazy(() => import('views/Surveys/Assessments')),
     dataTestId: 'assessmentsNavLink',
     iconColor: 'secondary'
   },
@@ -133,7 +100,7 @@ const operationRoutes = [
     name: 'Customer Service',
     shortName: 'PD',
     icon: FilterVintage,
-    component: CustomerService,
+    component: lazy(() => import('../views/CustomerService/CustomerService')),
     dataTestId: 'customerServiceNavLink',
     iconColor: 'primary',
   },
@@ -142,7 +109,7 @@ const operationRoutes = [
     name: 'Manage Calendar',
     shortName: 'MC',
     icon: BubbleChart,
-    component: ManageCalendar,
+    component: lazy(() => import('../views/Calendar/ManageCalendar')),
     dataTestId: 'calendarNavLink',
     iconColor: 'primary',
   },
@@ -151,7 +118,7 @@ const operationRoutes = [
     name: 'Temporary Services',
     shortName: 'TS',
     icon: Star,
-    component: TmpServicesList,
+    component: lazy(() => import('../views/TmpServices/TmpServicesList')),
     dataTestId: 'tmpServicesNavLink',
     iconColor: 'primary',
   },
@@ -160,7 +127,7 @@ const operationRoutes = [
     name: 'Chart',
     shortName: 'CH',
     icon: BarChart,
-    component: ChartBoard,
+    component: lazy(() => import('views/Chart/ChartBoard')),
     dataTestId: 'chartNavLink',
     iconColor: 'primary',
   },
@@ -169,7 +136,7 @@ const operationRoutes = [
     name: 'Reports',
     shortName: 'RP',
     icon: Web,
-    component: Reports,
+    component: lazy(() => import('views/Reports/Reports')),
     dataTestId: 'reportsNavLink',
     iconColor: 'primary',
   },
@@ -179,100 +146,79 @@ const otherRoutes = [
   {
     path: '/location/edit/:id',
     name: 'Location Edit',
-    component: LocationEdit
+    component: lazy(() => import('../views/Location/LocationEdit')),
   },
   {
     path: '/location/create',
     name: 'Location Create',
-    component: LocationCreate
+    component: lazy(() => import('../views/Location/LocationCreate')),
   },
   {
     path: '/provider/create',
     name: 'Provider Create',
-    component: ProviderCreate
+    component: lazy(() => import('../views/Provider/ProviderCreate')),
   },
   {
     path: '/provider/edit/:id',
     name: 'Provider Edit',
-    component: ProviderEdit
+    component: lazy(() => import('../views/Provider/ProviderEdit')),
   },
   {
     path: '/organization/create',
     name: 'Create Organization',
-    component: OrganizationCreate
+    component: lazy(() => import('../views/Organization/OrganizationCreate')),
   },
   {
     path: '/organization/edit/:id',
     name: 'Organization Edit',
-    component: OrganizationEdit
+    component: lazy(() => import('../views/Organization/OrganizationEdit.jsx')),
   },
   {
     path: '/services/create',
     name: 'Create Services',
-    component: ServiceCreate
+    component: lazy(() => import('../views/Services/ServiceCreate')),
   },
   {
     path: '/service/edit/:id',
     name: 'Service Edit',
-    component: ServiceEdit
-  },
-  {
-    path: '/administration',
-    name: 'Administration',
-    component: Administration
-  },
-  {
-    path: '/provider/card',
-    name: 'Provider Card',
-    component: ProviderList
-  },
-  {
-    path: '/organization/edit',
-    name: 'Business Edit',
-    component: OrganizationEdit
+    component: lazy(() => import('../views/Services/ServiceEdit')),
   },
   {
     path: '/register',
     name: 'Register Page',
     shortName: 'Register',
     mini: 'RP',
-    component: RegisterPage
+    component: lazy(() => import('../views/Auth/RegisterPage')),
   },
   {
     path: '/email-templates/edit/:id',
     name: 'Edit Email Template',
     shortName: 'Edit Email Template',
-    component: EditEmailTemplate
+    component: lazy(() => import('../views/EmailTemplates/EditEmailTemplate')),
   },
   {
     path: '/email-templates/create',
     name: 'Create Email Template',
     shortName: 'Create Template',
-    component: CreateEmailTemplate
-  },
-  {
-    path: '/tmp-services',
-    name: 'Temporary Services',
-    shortName: 'Temporary Services',
-    component: TmpServicesList
+    component: lazy(() => import('../views/EmailTemplates/CreateEmailTemplate')),
   },
   {
     path: '/availability/detail/:id',
     name: 'Availability Detail',
     shortName: 'Availability Detail',
-    component: AvailabilitySlotsList
+    component: lazy(() => import('../views/AvailabilitySlots/AvailabilitySlotsList')),
   },
   {
     path: '/schedule-report/detail/:id',
     name: 'Schedule Report Detail',
     shortName: 'Schedule Report Detail',
-    component: ScheduleReportList
+    component: lazy(() => import('../views/ScheduleReport/ScheduleReportList')),
   },
   {
     path: '/assessments/new',
     name: 'Create new assessment',
     shortName: 'Create new assignment',
-    component: CreateAssessment,
+    component: lazy(() => import('views/Surveys/CreateAssessment')),
   },
 ];
 
@@ -285,7 +231,7 @@ const providerRoutes = [
 const profileRouteComponent = {
   path: '/profile',
   name: 'Profile',
-  component: Profile,
+  component: lazy(() => import('../views/Profile/profile')),
   icon: Person,
   iconColor: 'error',
   dataTestId: 'profileNavLink',

@@ -39,7 +39,7 @@ const createEventSuccess = newEvent => ({
 export const fetchProvidersByBusinessId = businessId => dispatch => {
   dispatch(calendarLoading(true));
   return axios
-    .get(`${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}${businessId}`)
+    .get(`${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}/${businessId}`)
     .then((response) => {
       if (response && response.data.success) {
         const providers = get(response, 'data.objects', []);
@@ -53,9 +53,9 @@ export const fetchEventsByProviderId = providerId => dispatch => {
   dispatch(calendarLoading(true));
 
   const fetchEvents = [];
-  fetchEvents.push(axios.get(`${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}${providerId}`));
-  fetchEvents.push(axios.get(`${URL.FIND_TMP_EVENTS_BY_PROVIDER_ID}${providerId}`));
-  fetchEvents.push(axios.get(`${URL.FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID}${providerId}`));
+  fetchEvents.push(axios.get(`${URL.FIND_NORMAL_EVENTS_BY_PROVIDER_ID}/${providerId}`));
+  fetchEvents.push(axios.get(`${URL.FIND_TMP_EVENTS_BY_PROVIDER_ID}/${providerId}`));
+  fetchEvents.push(axios.get(`${URL.FIND_APPOINTMENTS_CUSTOMER_EVENTS_BY_PROVIDER_ID}/${providerId}`));
 
   Promise.all(fetchEvents)
     .then((eventsResp) => {
@@ -155,7 +155,7 @@ export const rescheduleBookingEvent = (payload, providerId) => async dispatch =>
 export const cancelBookingEvent = (bookingEventId, providerId) => async dispatch => {
   dispatch(calendarLoading(true));
 
-  const [result] = await handleRequest(axios.delete, [`${URL.CANCEL_BOOKING_EVENT}${bookingEventId}`]);
+  const [result] = await handleRequest(axios.delete, [`${URL.CANCEL_BOOKING_EVENT}/${bookingEventId}`]);
   if (result) {
     dispatch(showAlert('success', 'The event is canceled successfully!'));
     dispatch(fetchEventsByProviderId(providerId));

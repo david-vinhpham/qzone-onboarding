@@ -5,7 +5,7 @@ import { URL } from '../config/config';
 export const fetchOrganization = id => {
   return dispatch => {
     dispatch({ type: organization.FETCH_ORGANIZATION_LOADING });
-    axios.get(URL.FETCH_ORGANIZATION + id)
+    axios.get(`${URL.ORGANIZATION}/${id}`)
       .then(({ data }) => {
         dispatch({
           type: organization.FETCH_ORGANIZATION_SUCCESS,
@@ -78,7 +78,7 @@ export const fetchOrganizationsFailure = error => {
 export const fetchOrganizationsByBusinessAdminId = adminId => {
   return dispatch => {
     dispatch(fetchOrganizationsLoading());
-    axios.get(URL.FETCH_ORGANIZATIONS_BY_BUSINESS_ADMIN_ID + adminId)
+    axios.get(`${URL.FETCH_ORGANIZATIONS_BY_BUSINESS_ADMIN_ID}/${adminId}`)
       .then(({ data }) => {
         dispatch(fetchOrganizationsSuccess(data.objects));
       })

@@ -44,7 +44,7 @@ export function fetchProvidersFailure(error) {
 export function fetchProvidersByOrdId(orgId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    axios.get(URL.FETCH_PROVIDERS_BY_ORG_ID + orgId)
+    axios.get(`${URL.FETCH_PROVIDERS_BY_ORG_ID}/${orgId}`)
       .then(({ data }) => {
         if (data.objects) {
           dispatch(fetchProvidersSuccess(data.objects));
@@ -60,7 +60,7 @@ export function fetchProvidersByOrdId(orgId) {
 export function fetchProvidersOptionByServiceProviderId(serviceProviderId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    axios.get(URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID + serviceProviderId)
+    axios.get(`${URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_PROVIDER_ID}/${serviceProviderId}`)
       .then(({ data }) => {
         if (data.objects) {
           dispatch(fetchProvidersSuccess(data.objects));
@@ -76,7 +76,7 @@ export function fetchProvidersOptionByServiceProviderId(serviceProviderId) {
 export function fetchProvidersOptionByOrdId(orgId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    axios.get(URL.FETCH_PROVIDERS_OPTION_BY_ORG_ID + orgId)
+    axios.get(`${URL.FETCH_PROVIDERS_OPTION_BY_ORG_ID}/${orgId}`)
       .then(({ data }) => {
         if (data.objects) {
           dispatch(fetchProvidersSuccess(data.objects));
@@ -92,7 +92,7 @@ export function fetchProvidersOptionByOrdId(orgId) {
 export function fetchProvidersOptionByServiceId(serviceId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    axios.get(URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_ID + serviceId)
+    axios.get(`${URL.FETCH_PROVIDERS_OPTION_BY_SERVICE_ID}/${serviceId}`)
       .then(({ data }) => {
         if (data.objects) {
           dispatch(fetchProvidersSuccess(data.objects));
@@ -107,7 +107,7 @@ export function fetchProvidersOptionByServiceId(serviceId) {
 export function fetchProvidersByBusinessAdminId(businessAdminId) {
   return dispatch => {
     dispatch(fetchProvidersLoading());
-    axios.get(URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID + businessAdminId)
+    axios.get(`${URL.FETCH_PROVIDERS_BY_BUSINESS_ADMIN_ID}/${businessAdminId}`)
       .then(({ data }) => {
         if (data.objects) {
           dispatch(fetchProvidersSuccess(data.objects));
