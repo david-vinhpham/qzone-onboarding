@@ -14,7 +14,7 @@ describe('Calendar page', () => {
       const description = 'This event is created from e2e tests by admin';
 
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(1000);
+      cy.wait(2000); // wait for loading service and location options
       cy.get('[data-test-id="newCalendarEventBtn"]').click();
       cy.get('[data-test-id="startDatePicker"]').click();
       cy.get('[data-test-id="startDateDialog"] .MuiPickersCalendarHeader-iconButton').last().click();
@@ -28,7 +28,7 @@ describe('Calendar page', () => {
       cy.get('[data-test-id="descriptionTextArea"] textarea').type(description);
       cy.get('[data-test-id="avgServiceTimeInput"] input').clear().type(avgServiceTime);
       cy.get('[data-test-id="createEventBtn"]').click();
-      
+
       cy.get('[data-test-id="dashboardNavLink"]').click();
       cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
       cy.get('[data-test-id="tmpServiceStartTime"]').should(
@@ -41,7 +41,7 @@ describe('Calendar page', () => {
       );
       cy.get('[data-test-id="tmpServiceDescription"]').should('contain', description);
 
-      cy.get('[data-test-id="tmpServiceDeleteBtn"]').click();
+      cy.get('[data-test-id="tmpServiceDeleteBtn"]').click({ force: true });
       cy.get('[data-test-id="confirmDeleteBtn"]').click();
       cy.get('[data-test-id="tableHeader"]').should('contain', 'Temporary Services');
     });
@@ -58,7 +58,7 @@ describe('Calendar page', () => {
       cy.visit('/');
       cy.login('dqn1810@gmail.com', 'Test@2019');
       cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
-      cy.get('[data-test-id="tmpServiceDeleteBtn"]').click();
+      cy.get('[data-test-id="tmpServiceDeleteBtn"]').click({ force: true });
       cy.get('[data-test-id="confirmDeleteBtn"]').click();
       cy.get('[data-test-id="tableHeader"]').should('contain', 'Temporary Services');
     });
@@ -69,7 +69,7 @@ describe('Calendar page', () => {
       const description = 'This event is created from e2e tests by provider';
 
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(1000);
+      cy.wait(2000); // wait for loading service and location options
       cy.get('[data-test-id="newCalendarEventBtn"]').click();
       cy.get('[data-test-id="startDatePicker"]').click();
       cy.get('[data-test-id="startDateDialog"] .MuiPickersCalendarHeader-iconButton').last().click();
@@ -83,7 +83,7 @@ describe('Calendar page', () => {
       cy.get('[data-test-id="descriptionTextArea"] textarea').type(description);
       cy.get('[data-test-id="avgServiceTimeInput"] input').clear().type(avgServiceTime);
       cy.get('[data-test-id="createEventBtn"]').click();
-      
+
       cy.get('[data-test-id="dashboardNavLink"]').click();
       cy.get('[data-test-id="dashboard-tmpServicesNavLink"]').click();
       cy.get('[data-test-id="tmpServiceStartTime"]').should(

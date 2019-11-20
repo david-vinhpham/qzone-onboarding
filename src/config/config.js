@@ -71,3 +71,5 @@ export const URL = {
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';
 
 export const GEO_CODING_KEY = 'AIzaSyCM4fZfA-m2F6ekcl4IyN77YZJlAdydxlc';
+
+export const API_SUBSCRIBE_EVENTS = 'https://api.quezone.com.au/message';
