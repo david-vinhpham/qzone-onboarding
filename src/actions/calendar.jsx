@@ -21,7 +21,7 @@ const calendarLoading = isLoading => ({
   isLoading
 });
 
-const fetchEventsByProvidersSuccess = calendarData => ({
+export const fetchEventsByProvidersSuccess = calendarData => ({
   type: FETCH_EVENTS_BY_PROVIDERS_SUCCESS,
   calendarData
 });
@@ -49,7 +49,7 @@ export const fetchProvidersByBusinessId = businessId => dispatch => {
     .finally(() => { dispatch(calendarLoading(false)); });
 };
 
-export const fetchEventsByProviderId = providerId => dispatch => {
+const fetchEventsByProviderId = providerId => dispatch => {
   dispatch(calendarLoading(true));
 
   const fetchEvents = [];
@@ -148,8 +148,9 @@ export const rescheduleBookingEvent = (payload, providerId) => async dispatch =>
   const [result] = await handleRequest(axios.put, [URL.RESCHEDULE_BOOKING_EVENT, payload]);
   if (result) {
     dispatch(showAlert('success', 'The event is rescheduled successfully!'));
-    dispatch(fetchEventsByProviderId(providerId));
   }
+
+  dispatch(calendarLoading(false));
 }
 
 export const cancelBookingEvent = (bookingEventId, providerId) => async dispatch => {
@@ -163,6 +164,8 @@ export const cancelBookingEvent = (bookingEventId, providerId) => async dispatch
 }
 
 export const deleteEvent = (event) => async dispatch => {
+  dispatch(calendarLoading(true));
+
   const url = event.type === EVENT_TYPE.CUSTOMER_APPOINTMENT ? URL.APPOINTMENTS_CUSTOMER_EVENT : URL.NORMAL_EVENT;
 
   const [result] = await handleRequest(axios.delete, [`${url}/${event.id}`]);
@@ -171,4 +174,6 @@ export const deleteEvent = (event) => async dispatch => {
     dispatch(showAlert('success', 'The event is deleted successfully!'));
     dispatch({ type: DELETE_EVENT_SUCCESS, payload: event.id });
   }
+
+  dispatch(calendarLoading(false));
 }

@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { arrayOf, func, string, bool, any, object } from 'prop-types';
 import moment from 'moment-timezone';
 import { get } from 'lodash';
+import * as SockJS from 'sockjs-client';
+import * as StompJs from '@stomp/stompjs/esm6';
 
-import { createNewEvent, fetchProvidersByBusinessId, fetchEventsByProviderId, fetchProvidersByBusinessIdSuccess, setBookingSlots, rescheduleBookingEvent, cancelBookingEvent, getSlotsByTmpServiceId, deleteEvent } from 'actions/calendar';
+import { createNewEvent, fetchProvidersByBusinessId, fetchProvidersByBusinessIdSuccess, setBookingSlots, rescheduleBookingEvent, cancelBookingEvent, getSlotsByTmpServiceId, deleteEvent, fetchEventsByProvidersSuccess } from 'actions/calendar';
 import {
   EVENT_LEVEL,
   EVENT_TYPE,
@@ -24,6 +26,7 @@ import RescheduleDialog from './RescheduleDialog';
 import CustomModal from 'components/CustomModal/CustomModal';
 import ListView from './ListView';
 import styles from './ManageCalendar.module.scss';
+import { API_SUBSCRIBE_EVENTS } from 'config/config';
 
 const today = weekDays[moment().day()];
 
@@ -70,13 +73,13 @@ class ManageCalendar extends React.PureComponent {
   }
 
   componentDidMount() {
+    const { userDetail } = this.props;
     const userId = localStorage.getItem('userSub');
     if (userId) {
-      if (this.props.userDetail.userType === eUserType.provider) {
-        this.props.fetchEventsByProviderId(userId);
-        this.props.fetchServiceOptionsByBusinessAdminId(this.props.userDetail.providerInformation.businessId);
-        this.props.fetchSurveyOptionsByAssessorId(this.props.userDetail.providerInformation.businessId);
-        this.props.fetchProvidersByBusinessIdSuccess([this.props.userDetail]);
+      if (userDetail.userType === eUserType.provider) {
+        this.props.fetchServiceOptionsByBusinessAdminId(userDetail.providerInformation.businessId);
+        this.props.fetchSurveyOptionsByAssessorId(userDetail.providerInformation.businessId);
+        this.props.fetchProvidersByBusinessIdSuccess([userDetail]);
       } else {
         this.props.fetchProvidersByBusinessId(userId);
         this.props.fetchServiceOptionsByBusinessAdminId(userId);
@@ -85,6 +88,23 @@ class ManageCalendar extends React.PureComponent {
       this.props.fetchGeoLocationOptions();
       this.props.fetchTimezoneOptions();
     }
+
+    this.client = new StompJs.Client({
+      webSocketFactory: () => new SockJS(API_SUBSCRIBE_EVENTS),
+      onConnect: () => {
+        if (userDetail.userType === eUserType.provider) {
+          this.subscribeEventByProvider(userDetail.id);
+        }
+      }
+    });
+    this.client.activate();
+  }
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.client.deactivate();
   }
 
   closeAddDialog = () => this.setState(this.initialState);
@@ -150,9 +170,19 @@ class ManageCalendar extends React.PureComponent {
     this.props.rescheduleBookingEvent(rescheduledData, this.state.selectedProvider.id);
   }
 
+  subscribeEventByProvider = (providerId) => {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+
+    this.subscription = this.client.subscribe(`/topic/event/provider/${providerId}`, this.onCalendarUpdate);
+  }
+
   onSelectProvider = ({ target: { value } }) => {
     this.setState({ selectedProvider: value });
-    if (value !== 'none') { this.props.fetchEventsByProviderId(value.id); }
+    if (value !== 'none') {
+      this.subscribeEventByProvider(value.id);
+    }
   }
 
   onCancelBookingEvent = (bookingEventId) => {
@@ -184,6 +214,19 @@ class ManageCalendar extends React.PureComponent {
 
   onDeleteEvent = (event) => {
     this.setState({ deletedEvent: event });
+  }
+
+  onCalendarUpdate = (message) => {
+    const events = (JSON.parse(message.body)).objects;
+    const calendarData = events.map((e, index) => ({
+      id: e.id,
+      providerId: e.providerId,
+      title: e.title,
+      type: e.type,
+      slot: { startTime: e.istart, endTime: e.iend },
+      raw: { resourceId: e.resourceId, tempServiceId: e.tempServiceId, phone: e.phone },
+    }))
+    this.props.fetchEventsByProvidersSuccess(calendarData);
   }
 
   render() {
@@ -272,7 +315,6 @@ ManageCalendar.propTypes = {
   fetchServiceOptionsByBusinessAdminId: func.isRequired,
   fetchTimezoneOptions: func.isRequired,
   userDetail: userDetailType.isRequired,
-  fetchEventsByProviderId: func.isRequired,
   fetchProvidersByBusinessIdSuccess: func.isRequired,
   history: historyType.isRequired,
   fetchSurveyOptionsByAssessorId: func.isRequired,
@@ -285,6 +327,7 @@ ManageCalendar.propTypes = {
   getSlotsByTmpServiceId: func.isRequired,
   deleteEvent: func.isRequired,
   bookingSlots: arrayOf(object).isRequired,
+  fetchEventsByProvidersSuccess: func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -306,14 +349,14 @@ const mapDispatchToProps = {
   fetchServiceOptionsByBusinessAdminId,
   fetchTimezoneOptions,
   fetchProvidersByBusinessId,
-  fetchEventsByProviderId,
   fetchProvidersByBusinessIdSuccess,
   fetchSurveyOptionsByAssessorId,
   setBookingSlots,
   rescheduleBookingEvent,
   cancelBookingEvent,
   getSlotsByTmpServiceId,
-  deleteEvent
+  deleteEvent,
+  fetchEventsByProvidersSuccess
 };
 
 export default connect(
