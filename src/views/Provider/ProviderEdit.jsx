@@ -29,6 +29,7 @@ import ImageUpload from '../../components/CustomUpload/ImageUpload';
 import { weekDays, defaultWorkingHours } from 'constants.js';
 import { formatTimeToString } from 'utils/formatTime.js';
 import Checkbox from "@material-ui/core/Checkbox";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 const override = css`
   margin: 0 auto;
@@ -51,6 +52,8 @@ class ProviderEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showOtherAlert:false,
+      message:'',
       data: {
         providerInformation: {
           image: null,
@@ -90,12 +93,14 @@ class ProviderEdit extends React.Component {
       : data.providerInformation.image.fileUrl;
     if(values.providerInformation.organizationId === undefined
       || values.providerInformation.organizationId.value === undefined) {
-      alert('Please select organization');
+      this.setState({ message: 'Please select organization' })
+      this.setState({ showOtherAlert: true })
       return;
     }
     if(values.providerInformation.timeZoneId === undefined
       || values.providerInformation.timeZoneId.label === undefined) {
-      alert('Please select timezone');
+      this.setState({ message: 'Please select timezone' })
+      this.setState({ showOtherAlert: true })
       return;
     }
     values.providerInformation = {
@@ -397,6 +402,12 @@ class ProviderEdit extends React.Component {
                   Exit
               </Button>
               </CardFooter>
+              <SweetAlert
+                title={this.state.message}
+                show={this.state.showOtherAlert}
+                onConfirm={() => this.setState({ showOtherAlert: false })}
+                onCancel={() => this.setState({ showOtherAlert: false })}
+              />
             </Card>
           )}
       />

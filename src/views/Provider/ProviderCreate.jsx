@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
+import SweetAlert from 'react-bootstrap-sweetalert'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Formik } from 'formik';
@@ -52,6 +53,8 @@ class ProviderCreate extends React.Component {
       businessAdminId: null,
       imagePreviewUrl: defaultImage,
       imageChange: false,
+      showOtherAlert:false,
+      message:'',
       data: {
         email: '',
         familyName: '',
@@ -123,12 +126,14 @@ class ProviderCreate extends React.Component {
     }
     if(values.providerInformation.organizationId === undefined
       || values.providerInformation.organizationId.value === undefined) {
-      alert('Please select organization');
+      this.setState({ message: 'Please select organization' })
+      this.setState({ showOtherAlert: true })
       return;
     }
     if(values.providerInformation.timeZoneId === undefined
       || values.providerInformation.timeZoneId.label === undefined) {
-      alert('Please select timezone');
+      this.setState({ message: 'Please select timezone' })
+      this.setState({ showOtherAlert: true })
       return;
     }
     values.userType = 'PROVIDER';
@@ -421,6 +426,12 @@ class ProviderCreate extends React.Component {
                   Exit
               </Button>
               </CardFooter>
+              <SweetAlert
+                title={this.state.message}
+                show={this.state.showOtherAlert}
+                onConfirm={() => this.setState({ showOtherAlert: false })}
+                onCancel={() => this.setState({ showOtherAlert: false })}
+              />
             </Card>
           )}
       />
