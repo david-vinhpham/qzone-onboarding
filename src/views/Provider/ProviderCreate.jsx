@@ -121,7 +121,16 @@ class ProviderCreate extends React.Component {
     if (imageObject !== null) {
       imageObject = JSON.parse(imageObject);
     }
-
+    if(values.providerInformation.organizationId === undefined
+      || values.providerInformation.organizationId.value === undefined) {
+      alert('Please select organization');
+      return;
+    }
+    if(values.providerInformation.timeZoneId === undefined
+      || values.providerInformation.timeZoneId.label === undefined) {
+      alert('Please select timezone');
+      return;
+    }
     values.userType = 'PROVIDER';
     values.providerInformation = {
       ...values.providerInformation,

@@ -90,12 +90,12 @@ class ProviderEdit extends React.Component {
       : data.providerInformation.image.fileUrl;
     if(values.providerInformation.organizationId === undefined
       || values.providerInformation.organizationId.value === undefined) {
-      alert('You have not selected organization');
+      alert('Please select organization');
       return;
     }
     if(values.providerInformation.timeZoneId === undefined
       || values.providerInformation.timeZoneId.label === undefined) {
-      alert('You have not selected timezone');
+      alert('Please select timezone');
       return;
     }
     values.providerInformation = {
