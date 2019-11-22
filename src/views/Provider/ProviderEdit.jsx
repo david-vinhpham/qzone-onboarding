@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { FormControl, FormLabel } from '@material-ui/core';
+import {FormControl, FormLabel, Typography} from '@material-ui/core';
 import Select from 'react-select';
 import PhoneInput from 'react-phone-number-input';
 import { css } from '@emotion/core';
@@ -28,6 +28,7 @@ import _ from "lodash";
 import ImageUpload from '../../components/CustomUpload/ImageUpload';
 import { weekDays, defaultWorkingHours } from 'constants.js';
 import { formatTimeToString } from 'utils/formatTime.js';
+import Checkbox from "@material-ui/core/Checkbox";
 
 const override = css`
   margin: 0 auto;
@@ -59,6 +60,7 @@ class ProviderEdit extends React.Component {
   }
 
   componentDidMount() {
+    console.log('componentDidMount...')
     this.props.fetchTimezoneOptions();
     const { id } = this.props.match.params;
     this.props.fetchProvider(id);
@@ -86,6 +88,16 @@ class ProviderEdit extends React.Component {
     values.imageUrl = imageObject
       ? imageObject.fileUrl
       : data.providerInformation.image.fileUrl;
+    if(values.providerInformation.organizationId === undefined
+      || values.providerInformation.organizationId.value === undefined) {
+      alert('You have not selected organization');
+      return;
+    }
+    if(values.providerInformation.timeZoneId === undefined
+      || values.providerInformation.timeZoneId.label === undefined) {
+      alert('You have not selected timezone');
+      return;
+    }
     values.providerInformation = {
       ...values.providerInformation,
       organizationId: values.providerInformation.organizationId.value,
@@ -147,6 +159,7 @@ class ProviderEdit extends React.Component {
           userStatus: provider.data.userStatus,
           userSub: provider.data.userSub,
           userType: provider.data.userType,
+          isDisabled: provider.data.isDisabled,
           provider: 'aws',
           imageShow: provider.data.providerInformation.image ? provider.data.providerInformation.image.fileUrl : defaultImage,
           providerInformation: {
@@ -264,28 +277,7 @@ class ProviderEdit extends React.Component {
                     ) : null}
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={3}>
-                    <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
-                  </GridItem>
-                  <GridItem xs={12} sm={3}>
-                    <CustomInput
-                      id="providerInformation.description"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 3
-                      }}
-                      value={values.providerInformation.description}
-                      onChange={handleChange}
-                    />
-                    {errors.description && touched.description ? (
-                      <div style={{ color: 'red' }}>{errors.description}</div>
-                    ) : null}
-                  </GridItem>
-                </GridContainer>
+
                 <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel
@@ -356,11 +348,11 @@ class ProviderEdit extends React.Component {
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={3}>
-                    <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
+                    <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
                   </GridItem>
                   <GridItem xs={12} sm={3}>
                     <CustomInput
-                      id="providerInformation.tags"
+                      id="providerInformation.description"
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -368,30 +360,27 @@ class ProviderEdit extends React.Component {
                         multiline: true,
                         rows: 3
                       }}
-                      placeholder="tag1,tag2,tag3,..."
-                      value={values.providerInformation.tags}
+                      value={values.providerInformation.description}
                       onChange={handleChange}
                     />
+                    {errors.description && touched.description ? (
+                      <div style={{ color: 'red' }}>{errors.description}</div>
+                    ) : null}
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={3}>
-                    <FormLabel className={classes.labelHorizontal}>Qualifications</FormLabel>
                   </GridItem>
                   <GridItem xs={12} sm={3}>
-                    <CustomInput
-                      id="providerInformation.qualifications"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 3
-                      }}
-                      placeholder="Empathy,Thick Skin,Flexibility,..."
-                      value={values.providerInformation.qualifications}
-                      onChange={handleChange}
-                    />
+                  <Checkbox
+                    name="isDisabled"
+                    id="isDisabled"
+                    checked={values.isDisabled}
+                    onChange={handleChange}
+                  />
+                  <Typography variant="caption" display="inline">
+                    Disable this provider &nbsp;
+                  </Typography>
                   </GridItem>
                 </GridContainer>
                 <GridContainer>

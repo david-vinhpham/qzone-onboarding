@@ -399,46 +399,6 @@ class ProviderCreate extends React.Component {
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
-                  <GridItem xs={12} sm={3}>
-                    <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
-                  </GridItem>
-                  <GridItem xs={12} sm={3}>
-                    <CustomInput
-                      id="providerInformation.tags"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 3
-                      }}
-                      placeholder="tag1,tag2,tag3,..."
-                      value={values.providerInformation.tags}
-                      onChange={handleChange}
-                    />
-                  </GridItem>
-                </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={3}>
-                    <FormLabel className={classes.labelHorizontal}>Qualifications</FormLabel>
-                  </GridItem>
-                  <GridItem xs={12} sm={3}>
-                    <CustomInput
-                      id="providerInformation.qualifications"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 3
-                      }}
-                      placeholder="Empathy,Thick Skin,Flexibility,..."
-                      value={values.providerInformation.qualifications}
-                      onChange={handleChange}
-                    />
-                  </GridItem>
-                </GridContainer>
-                <GridContainer>
                   <GridItem xs={12} md={12}>
                     <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
                   </GridItem>
