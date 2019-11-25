@@ -1,5 +1,4 @@
-export const API_ROOT = process.env.NODE_ENV === 'development'
-  ? 'http://localhost:8080/api/' : 'https://api.quezone.com.au/api/';
+export const API_ROOT = 'https://api.quezone.com.au/api/';
 export const API_SURVEY = 'surveys';
 export const API_MEDIA_URL = 'https://communication.quezone.com.au/api/media/medias';
 export const URL = {
@@ -67,6 +66,8 @@ export const URL = {
   CANCEL_BOOKING_EVENT: 'events/cancel',
 
   DISABLE_BOOKING_SLOTS: 'availabilities',
+
+  BUSINESS_ADMINS: 'business-admins',
 };
 
 export const GOOGLE_ID = '166981643559-r54fbu1evv6cpfpphqjtlo4j950vdmvn.apps.googleusercontent.com';

@@ -2,13 +2,8 @@ import React from "react";
 import cx from "classnames";
 import PropTypes from "prop-types";
 
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle";
 
@@ -31,109 +26,60 @@ function CustomTable({ ...props }) {
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
-        {tableHead !== undefined ? (
+        {!!tableHead && (
           <TableHead className={classes[tableHeaderColor]}>
             <TableRow className={classes.tableRow}>
-              {tableHead.map((prop, key) => {
-                const tableCellClasses =
-                  classes.tableHeadCell +
-                  " " +
-                  classes.tableCell +
-                  " " +
-                  cx({
-                    [customHeadCellClasses[
-                      customHeadClassesForCells.indexOf(key)
-                    ]]:
-                      customHeadClassesForCells.indexOf(key) !== -1,
-                    [classes.tableShoppingHead]: tableShopping,
-                    [classes.tableHeadFontSize]: !tableShopping
-                  });
+              <TableCell
+                size="small"
+                className={cx(classes.tableHeadCell, classes.tableCell, classes.tableHeadFontSize)}
+              >
+                No
+              </TableCell>
+              {tableHead.map((head, key) => {
+                const tableCellClasses = cx(classes.tableHeadCell, classes.tableCell, {
+                  [customHeadCellClasses[customHeadClassesForCells.indexOf(key)]]: customHeadClassesForCells.includes(key),
+                  [classes.tableShoppingHead]: tableShopping,
+                  [classes.tableHeadFontSize]: !tableShopping
+                });
                 return (
-                  <TableCell className={tableCellClasses} key={key}>
-                    {prop}
+                  <TableCell className={tableCellClasses} key={head}>
+                    {head}
                   </TableCell>
                 );
               })}
             </TableRow>
           </TableHead>
-        ) : null}
+        )}
         <TableBody>
-          {tableData.map((prop, key) => {
-            var rowColor = "";
-            var rowColored = false;
-            if (prop.color !== undefined) {
-              rowColor = prop.color;
+          {tableData.map((row, key) => {
+            let rowColor = "";
+            let rowColored = false;
+            if (row.color) {
+              rowColor = row.color;
               rowColored = true;
-              prop = prop.data;
             }
             const tableRowClasses = cx({
               [classes.tableRowHover]: hover,
               [classes[rowColor + "Row"]]: rowColored,
               [classes.tableStripedRow]: striped && key % 2 === 0
             });
-            if (prop.total) {
-              return (
-                <TableRow key={key} hover={hover} className={tableRowClasses}>
-                  <TableCell
-                    className={classes.tableCell}
-                    colSpan={prop.colspan}
-                  />
-                  <TableCell
-                    className={classes.tableCell + " " + classes.tableCellTotal}
-                  >
-                    Total
-                  </TableCell>
-                  <TableCell
-                    className={
-                      classes.tableCell + " " + classes.tableCellAmount
-                    }
-                  >
-                    {prop.amount}
-                  </TableCell>
-                  {tableHead.length - (prop.colspan - 0 + 2) > 0 ? (
-                    <TableCell
-                      className={classes.tableCell}
-                      colSpan={tableHead.length - (prop.colspan - 0 + 2)}
-                    />
-                  ) : null}
-                </TableRow>
-              );
-            }
-            if (prop.purchase) {
-              return (
-                <TableRow key={key} hover={hover} className={tableRowClasses}>
-                  <TableCell
-                    className={classes.tableCell}
-                    colSpan={prop.colspan}
-                  />
-                  <TableCell
-                    className={classes.tableCell + " " + classes.right}
-                    colSpan={prop.col.colspan}
-                  >
-                    {prop.col.text}
-                  </TableCell>
-                </TableRow>
-              );
-            }
+
             return (
               <TableRow
-                key={key}
+                key={row.id || key}
                 hover={hover}
                 className={classes.tableRow + " " + tableRowClasses}
               >
-                {prop.map((prop, key) => {
+                <TableCell size="small" className={classes.tableCell}>{key + 1}</TableCell>
+                {row.data.map((cell, key) => {
                   const tableCellClasses =
-                    classes.tableCell +
-                    " " +
-                    cx({
-                      [classes[colorsColls[coloredColls.indexOf(key)]]]:
-                        coloredColls.indexOf(key) !== -1,
-                      [customCellClasses[customClassesForCells.indexOf(key)]]:
-                        customClassesForCells.indexOf(key) !== -1
+                    cx(classes.tableCell, {
+                      [classes[colorsColls[coloredColls.indexOf(key)]]]: coloredColls.includes(key),
+                      [customCellClasses[customClassesForCells.indexOf(key)]]: customClassesForCells.includes(key)
                     });
                   return (
                     <TableCell className={tableCellClasses} key={key}>
-                      {prop}
+                      {cell}
                     </TableCell>
                   );
                 })}

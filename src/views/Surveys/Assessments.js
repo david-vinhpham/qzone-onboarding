@@ -172,7 +172,6 @@ class Survey extends Component {
                                     id="tooltip-top"
                                     title="Copy Link"
                                     placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
                                   >
                                     <InsertLink />
                                   </Tooltip>
@@ -187,7 +186,6 @@ class Survey extends Component {
                                   id="tooltip-top"
                                   title="Edit"
                                   placement="bottom"
-                                  classes={{ tooltip: classes.tooltip }}
                                 >
                                   <Edit />
                                 </Tooltip>
@@ -202,7 +200,6 @@ class Survey extends Component {
                                   id="tooltip-top"
                                   title="Remove"
                                   placement="bottom"
-                                  classes={{ tooltip: classes.tooltip }}
                                 >
                                   <Delete />
                                 </Tooltip>

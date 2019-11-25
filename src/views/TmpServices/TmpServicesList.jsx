@@ -376,7 +376,6 @@ class TmpServicesList extends PureComponent {
                       id="tooltip-top"
                       title="Schedule report"
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
                     >
                       <BarChart />
                     </Tooltip>
@@ -386,7 +385,6 @@ class TmpServicesList extends PureComponent {
                       id="tooltip-top"
                       title="View"
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
                     >
                       <ArtTrack />
                     </Tooltip>
@@ -396,7 +394,6 @@ class TmpServicesList extends PureComponent {
                       id="tooltip-top"
                       title="Edit"
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
                       onClick={() => this.openEditDialog(event)}
                     >
                       <Edit />
@@ -407,7 +404,6 @@ class TmpServicesList extends PureComponent {
                       id="tooltip-top"
                       title="Disable slots"
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Block />
                     </Tooltip>
@@ -423,7 +419,6 @@ class TmpServicesList extends PureComponent {
                       id="tooltip-top"
                       title="Remove"
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Delete />
                     </Tooltip>

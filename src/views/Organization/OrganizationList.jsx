@@ -74,7 +74,6 @@ class OrganizationList extends React.Component {
                           id="tooltip-top"
                           title="Edit"
                           placement="bottom"
-                          classes={{ tooltip: classes.tooltip }}
                         >
                           <Edit />
                         </Tooltip>

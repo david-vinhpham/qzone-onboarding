@@ -141,7 +141,6 @@ class BusinessCategoriesList extends PureComponent {
                     <Tooltip
                       title="Edit"
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Edit />
                     </Tooltip>
@@ -155,7 +154,6 @@ class BusinessCategoriesList extends PureComponent {
                     <Tooltip
                       title="Remove"
                       placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
                     >
                       <Delete />
                     </Tooltip>

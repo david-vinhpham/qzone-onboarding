@@ -5,7 +5,7 @@ import {
 	ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary
 } from '@material-ui/core';
 import { SettingsOutlined, AccountCircleOutlined, ExpandMore, PersonOutlined } from '@material-ui/icons';
-import { managementRoutes, operationRoutes, providerRoutes, profileRouteComponent } from 'routes/dashboard';
+import { managementRoutes, operationRoutes, providerRoutes, profileRouteComponent, adminRoutes } from 'routes/dashboard';
 import styles from './Dashboard.module.scss';
 import { eUserType } from 'constants.js';
 import Item from './components/Item';
@@ -14,6 +14,7 @@ const Dashboard = ({ userDetail }) => {
 	if (!userDetail) return null;
 
 	const isProvider = userDetail.userType ? userDetail.userType === eUserType.provider : true;
+	const isAdmin = userDetail.userType ? userDetail.userType === eUserType.admin : false;
 
 	return (
 		<div className={styles.wrapper}>
@@ -31,6 +32,9 @@ const Dashboard = ({ userDetail }) => {
 						<Grid container spacing={2}>
 							{managementRoutes.map(route => {
 								if (isProvider && !providerRoutes.includes(route.path)) {
+									return null;
+								}
+								if (isAdmin && !adminRoutes.includes(route.path)) {
 									return null;
 								}
 								return (
@@ -53,6 +57,9 @@ const Dashboard = ({ userDetail }) => {
 					<Grid container spacing={2}>
 						{operationRoutes.map(route => {
 							if (isProvider && !providerRoutes.includes(route.path)) {
+								return null;
+							}
+							if (isAdmin && !adminRoutes.includes(route.path)) {
 								return null;
 							}
 							return (

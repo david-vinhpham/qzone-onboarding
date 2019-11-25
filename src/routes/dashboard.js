@@ -92,6 +92,15 @@ const managementRoutes = [
     dataTestId: 'assessmentsNavLink',
     iconColor: 'secondary'
   },
+  {
+    path: '/business-admin/list',
+    name: 'Business admin',
+    shortName: 'BA',
+    component: lazy(() => import('../views/BusinessAdmins/BusinessAdminList')),
+    icon: BusinessCenter,
+    iconColor: 'secondary',
+    dataTestId: 'businessAdminListNavLink',
+  },
 ];
 
 const operationRoutes = [
@@ -237,7 +246,11 @@ const profileRouteComponent = {
   dataTestId: 'profileNavLink',
 };
 
+const adminRoutes = [
+  '/business-admin/list'
+]
+
 export {
   dashboardRoutes, otherRoutes, providerRoutes,
-  profileRouteComponent, managementRoutes, operationRoutes
+  profileRouteComponent, managementRoutes, operationRoutes, adminRoutes
 };
