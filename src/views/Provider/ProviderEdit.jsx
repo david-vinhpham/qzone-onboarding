@@ -217,7 +217,7 @@ class ProviderEdit extends React.Component {
                     ) : null}
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
+               {/* <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Family Name</FormLabel>
                   </GridItem>
@@ -229,7 +229,7 @@ class ProviderEdit extends React.Component {
                       value={values.familyName}
                     />
                   </GridItem>
-                </GridContainer>
+                </GridContainer>*/}
                 <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Email</FormLabel>
@@ -264,7 +264,7 @@ class ProviderEdit extends React.Component {
                     ) : null}
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
+               {/* <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
                   </GridItem>
@@ -285,7 +285,7 @@ class ProviderEdit extends React.Component {
                       <div style={{ color: 'red' }}>{errors.description}</div>
                     ) : null}
                   </GridItem>
-                </GridContainer>
+                </GridContainer>*/}
                 <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel
@@ -354,7 +354,7 @@ class ProviderEdit extends React.Component {
                     </GridContainer>
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
+               {/* <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
                   </GridItem>
@@ -393,7 +393,7 @@ class ProviderEdit extends React.Component {
                       onChange={handleChange}
                     />
                   </GridItem>
-                </GridContainer>
+                </GridContainer>*/}
                 <GridContainer>
                   <GridItem xs={12} md={12}>
                     <ImageUpload imagePreviewUrl={values.imageShow} />

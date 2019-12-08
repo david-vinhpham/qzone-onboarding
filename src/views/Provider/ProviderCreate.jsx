@@ -41,7 +41,7 @@ const ProviderSchema = Yup.object().shape({
     .required('This field is required')
     .min(3, 'Name should be atleast 3 letters')
     .max(40, 'Too Long'),
-  telephone: Yup.string().required('Please enter a valid phone Number')
+ /* telephone: Yup.string().required('Please enter a valid phone Number')*/
 });
 
 class ProviderCreate extends React.Component {
@@ -329,7 +329,7 @@ class ProviderCreate extends React.Component {
                     ) : null}
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
+               {/* <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Family Name</FormLabel>
                   </GridItem>
@@ -341,7 +341,7 @@ class ProviderCreate extends React.Component {
                       value={values.familyName}
                     />
                   </GridItem>
-                </GridContainer>
+                </GridContainer>*/}
                 <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Email</FormLabel>
@@ -376,7 +376,7 @@ class ProviderCreate extends React.Component {
                     ) : null}
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
+             {/*   <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
                   </GridItem>
@@ -397,8 +397,8 @@ class ProviderCreate extends React.Component {
                       <div style={{ color: 'red' }}>{errors.description}</div>
                     )}
                   </GridItem>
-                </GridContainer>
-                <GridContainer>
+                </GridContainer>*/}
+            {/*    <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
                   </GridItem>
@@ -417,8 +417,8 @@ class ProviderCreate extends React.Component {
                       onChange={handleChange}
                     />
                   </GridItem>
-                </GridContainer>
-                <GridContainer>
+                </GridContainer>*/}
+              {/*  <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Qualifications</FormLabel>
                   </GridItem>
@@ -437,7 +437,7 @@ class ProviderCreate extends React.Component {
                       onChange={handleChange}
                     />
                   </GridItem>
-                </GridContainer>
+                </GridContainer>*/}
                 <GridContainer>
                   <GridItem xs={12} md={12}>
                     <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />

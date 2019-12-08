@@ -101,7 +101,7 @@ class ServicesList extends React.Component {
               <TableCell>Service Name</TableCell>
               <TableCell>Service Mode</TableCell>
               <TableCell>Description</TableCell>
-              <TableCell>BookingHorizon</TableCell>
+              <TableCell>Avg Service Time</TableCell>
               <TableCell>Edit|Delete</TableCell>
             </TableRow>
           </TableHead>
@@ -112,7 +112,7 @@ class ServicesList extends React.Component {
                 <TableCell>{service.name}</TableCell>
                 <TableCell>{service.mode}</TableCell>
                 <TableCell>{`${service.description.substring(0, 150)}...`}</TableCell>
-                <TableCell>{service.bookingHorizon}</TableCell>
+                <TableCell>{service.duration}</TableCell>
                 <TableCell>
                   <Link to={`/service/edit/${service.id}`}>
                     <Button color="success" simple justIcon>

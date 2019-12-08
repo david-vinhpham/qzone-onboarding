@@ -121,7 +121,7 @@ class ProviderList extends React.Component {
               <TableCell>Provider Name</TableCell>
               <TableCell>Telephone</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>description</TableCell>
+             {/* <TableCell>description</TableCell>*/}
               <TableCell>Edit|Delete</TableCell>
             </TableRow>
           </TableHead>
@@ -132,11 +132,11 @@ class ProviderList extends React.Component {
                 <TableCell>{provider.givenName}</TableCell>
                 <TableCell>{provider.telephone}</TableCell>
                 <TableCell>{provider.email}</TableCell>
-                <TableCell>
+              {/*  <TableCell>
                   {provider.providerInformation.description !== null
                     ? provider.providerInformation.description.substring(0, 150)
                     : ''}
-                </TableCell>
+                </TableCell>*/}
                 <TableCell>
                   <Link to={`/provider/edit/${provider.id}`}>
                     <Button color="success" simple justIcon>

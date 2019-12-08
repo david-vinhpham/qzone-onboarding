@@ -14,7 +14,7 @@ import {
   Select,
   Radio,
   FormControlLabel,
-  Switch
+  Switch,
 } from '@material-ui/core';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import { BeatLoader } from 'react-spinners';
@@ -322,7 +322,7 @@ class ServiceEdit extends React.Component {
                             <GridContainer>
                               <GridItem xs={12} sm={3}>
                                 <FormLabel className={classes.labelHorizontal}>
-                                  Duration of Service
+                                  Avg Service Time
                             </FormLabel>
                               </GridItem>
                               <GridItem xs={12} sm={4}>
@@ -343,7 +343,7 @@ class ServiceEdit extends React.Component {
                                 ) : null}
                               </GridItem>
                             </GridContainer>
-                            <GridContainer>
+                          {/*  <GridContainer>
                               <GridItem xs={12} sm={3}>
                                 <FormLabel className={classes.labelHorizontal}>
                                   Booking Horizon
@@ -366,8 +366,8 @@ class ServiceEdit extends React.Component {
                                   <div style={{ color: 'red' }}>{errors.bookingHorizon}</div>
                                 ) : null}
                               </GridItem>
-                            </GridContainer>
-                            <GridContainer>
+                            </GridContainer>*/}
+                           {/* <GridContainer>
                               <GridItem xs={12} sm={3}>
                                 <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
                               </GridItem>
@@ -385,7 +385,7 @@ class ServiceEdit extends React.Component {
                                   onChange={handleChange}
                                 />
                               </GridItem>
-                            </GridContainer>
+                            </GridContainer>*/}
                             <GridContainer>
                               <GridItem xs={12} sm={3}>
                                 <FormLabel
