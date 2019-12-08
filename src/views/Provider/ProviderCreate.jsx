@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import SweetAlert from 'react-bootstrap-sweetalert'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Formik } from 'formik';
@@ -21,7 +20,7 @@ import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
 import PhoneInput from 'react-phone-number-input';
-import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organizationOptions';
+import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organization';
 import Select from 'react-select';
 import { BeatLoader } from 'react-spinners';
 import { css } from '@emotion/core';
@@ -42,7 +41,7 @@ const ProviderSchema = Yup.object().shape({
     .required('This field is required')
     .min(3, 'Name should be atleast 3 letters')
     .max(40, 'Too Long'),
-  telephone: Yup.string().required('Please enter a valid phone Number')
+ /* telephone: Yup.string().required('Please enter a valid phone Number')*/
 });
 
 class ProviderCreate extends React.Component {
@@ -53,8 +52,6 @@ class ProviderCreate extends React.Component {
       businessAdminId: null,
       imagePreviewUrl: defaultImage,
       imageChange: false,
-      showOtherAlert:false,
-      message:'',
       data: {
         email: '',
         familyName: '',
@@ -124,18 +121,7 @@ class ProviderCreate extends React.Component {
     if (imageObject !== null) {
       imageObject = JSON.parse(imageObject);
     }
-    if(values.providerInformation.organizationId === undefined
-      || values.providerInformation.organizationId.value === undefined) {
-      this.setState({ message: 'Please select organization' })
-      this.setState({ showOtherAlert: true })
-      return;
-    }
-    if(values.providerInformation.timeZoneId === undefined
-      || values.providerInformation.timeZoneId.label === undefined) {
-      this.setState({ message: 'Please select timezone' })
-      this.setState({ showOtherAlert: true })
-      return;
-    }
+
     values.userType = 'PROVIDER';
     values.providerInformation = {
       ...values.providerInformation,
@@ -343,7 +329,7 @@ class ProviderCreate extends React.Component {
                     ) : null}
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
+               {/* <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Family Name</FormLabel>
                   </GridItem>
@@ -355,7 +341,7 @@ class ProviderCreate extends React.Component {
                       value={values.familyName}
                     />
                   </GridItem>
-                </GridContainer>
+                </GridContainer>*/}
                 <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Email</FormLabel>
@@ -390,7 +376,7 @@ class ProviderCreate extends React.Component {
                     ) : null}
                   </GridItem>
                 </GridContainer>
-                <GridContainer>
+             {/*   <GridContainer>
                   <GridItem xs={12} sm={3}>
                     <FormLabel className={classes.labelHorizontal}>Description</FormLabel>
                   </GridItem>
@@ -411,7 +397,47 @@ class ProviderCreate extends React.Component {
                       <div style={{ color: 'red' }}>{errors.description}</div>
                     )}
                   </GridItem>
-                </GridContainer>
+                </GridContainer>*/}
+            {/*    <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Tags</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={3}>
+                    <CustomInput
+                      id="providerInformation.tags"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        multiline: true,
+                        rows: 3
+                      }}
+                      placeholder="tag1,tag2,tag3,..."
+                      value={values.providerInformation.tags}
+                      onChange={handleChange}
+                    />
+                  </GridItem>
+                </GridContainer>*/}
+              {/*  <GridContainer>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>Qualifications</FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={3}>
+                    <CustomInput
+                      id="providerInformation.qualifications"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        multiline: true,
+                        rows: 3
+                      }}
+                      placeholder="Empathy,Thick Skin,Flexibility,..."
+                      value={values.providerInformation.qualifications}
+                      onChange={handleChange}
+                    />
+                  </GridItem>
+                </GridContainer>*/}
                 <GridContainer>
                   <GridItem xs={12} md={12}>
                     <ImageUpload imagePreviewUrl={values.imagePreviewUrl} />
@@ -426,12 +452,6 @@ class ProviderCreate extends React.Component {
                   Exit
               </Button>
               </CardFooter>
-              <SweetAlert
-                title={this.state.message}
-                show={this.state.showOtherAlert}
-                onConfirm={() => this.setState({ showOtherAlert: false })}
-                onCancel={() => this.setState({ showOtherAlert: false })}
-              />
             </Card>
           )}
       />
@@ -447,7 +467,7 @@ const mapStateToProps = state => {
     imageError: state.image.imageError,
     imageLoading: state.image.imageLoading,
     timezones: state.options.timezone.tzOptions,
-    organizations: state.options.organization.orgOptions,
+    organizations: state.organization.organizations,
     createProviderLoading: state.provider.createProviderLoading,
     createProviderError: state.provider.createProviderError
   };
