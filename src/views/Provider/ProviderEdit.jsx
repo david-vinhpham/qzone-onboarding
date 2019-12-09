@@ -22,7 +22,7 @@ import { fetchTimezoneOptions } from '../../actions/timezoneOptions';
 import GridContainer from '../../components/Grid/GridContainer.jsx';
 import CustomInput from '../../components/CustomInput/CustomInput.jsx';
 import GridItem from '../../components/Grid/GridItem.jsx';
-import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organization';
+import { fetchOrganizationsOptionByBusinessAdminId } from '../../actions/organizationOptions';
 import defaultImage from "../../assets/img/image_placeholder.jpg";
 import _ from "lodash";
 import ImageUpload from '../../components/CustomUpload/ImageUpload';
