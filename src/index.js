@@ -1,3 +1,5 @@
+import 'polyfill';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createBrowserHistory } from 'history';
@@ -10,7 +12,6 @@ import blueColor from '@material-ui/core/colors/blue';
 import pinkColor from '@material-ui/core/colors/pink';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
-
 import thunk from 'redux-thunk';
 
 import indexRoutes from './routes';

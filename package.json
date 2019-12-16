@@ -18,12 +18,14 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "ie 11"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "ie 11"
     ]
   },
   "dependencies": {
@@ -48,7 +50,7 @@
     "perfect-scrollbar": "^1.4.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
-    "react-bootstrap-sweetalert": "^5.1.7",
+    "react-app-polyfill": "^1.0.5",
     "react-chartist": "^0.13.3",
     "react-copy-to-clipboard": "^5.0.2",
     "react-csv": "^1.1.2",
@@ -67,7 +69,9 @@
     "redux-thunk": "^2.3.0",
     "sockjs-client": "^1.4.0",
     "surveyjs-editor": "^1.0.91",
+    "text-encoding": "^0.7.0",
     "tui-calendar": "^1.12.7",
+    "ws": "^7.2.0",
     "yup": "^0.27.0"
   },
   "devDependencies": {
